@@ -1,1 +1,1 @@
-conda create --name <env> --file requirements.txt
+conda create --name your_env --file requirements.txt
