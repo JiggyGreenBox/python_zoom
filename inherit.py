@@ -4,10 +4,13 @@ import math
 import warnings
 import tkinter as tk
 
-
 from tkinter import ttk
-from tkinter import *
 from PIL import Image, ImageTk
+
+# angle import
+import math
+point_counter = 0
+point_list = []
 
 class AutoScrollbar(ttk.Scrollbar):
 	""" A scrollbar that hides itself if it's not needed. Works only for grid geometry manager """
@@ -49,6 +52,7 @@ class CanvasImage:
 		vbar.configure(command=self.__scroll_y)
 		# Bind events to the Canvas
 		self.canvas.bind('<Configure>', lambda event: self.__show_image())  # canvas is resized
+		self.canvas.bind('<ButtonPress-1>', self.jiggy_click)  # remember canvas position
 		self.canvas.bind('<ButtonPress-2>', self.__move_from)  # remember canvas position
 		self.canvas.bind('<ButtonPress-3>', self.jiggy)  # remember canvas position
 		self.canvas.bind('<B2-Motion>',     self.__move_to)  # move canvas to the new position
@@ -94,21 +98,94 @@ class CanvasImage:
 		self.canvas.focus_set()  # set focus on the canvas
 
 	def jiggy(self, event):
-		x = self.canvas.canvasx(event.x)  # get coordinates of the event on the canvas
-		y = self.canvas.canvasy(event.y)
-		print("click:"+str(x)+","+str(y))
+		global point_counter
+		global point_list
 
-		if(self.outside(x, y)):
-			print("outside")
-		else:
-			bbox = self.canvas.coords(self.container)  # get image area
-			x1 = round((x - bbox[0]) / self.imscale)  # get real (x,y) on the image without zoom
-			y1 = round((y - bbox[1]) / self.imscale)
-			print("real:"+str(x1)+","+str(y1))
+		point_list.clear()
+		point_counter = 0
 
-		global cur_obj
-		cur_obj.click()
+		self.canvas.delete("del")
 
+		# x = self.canvas.canvasx(event.x)  # get coordinates of the event on the canvas
+		# y = self.canvas.canvasy(event.y)
+		# print("click:"+str(x)+","+str(y))
+
+		# if(self.outside(x, y)):
+		# 	print("outside")
+		# else:
+		# 	bbox = self.canvas.coords(self.container)  # get image area
+		# 	x1 = round((x - bbox[0]) / self.imscale)  # get real (x,y) on the image without zoom
+		# 	y1 = round((y - bbox[1]) / self.imscale)
+		# 	print("real:"+str(x1)+","+str(y1))
+
+
+	
+ 
+	def getAngle(self, a, b, c):
+		ang = math.degrees(math.atan2(c[1]-b[1], c[0]-b[0]) - math.atan2(a[1]-b[1], a[0]-b[0]))
+		return ang + 360 if ang < 0 else ang
+
+		
+
+	def jiggy_click(self, event):
+		print("jiggy click")
+		# x = self.canvas.canvasx(event.x)  # get coordinates of the event on the canvas
+		# y = self.canvas.canvasy(event.y)
+		# # print("click:"+str(x)+","+str(y))
+
+		# global point_counter
+		# global point_list
+
+
+
+		# if(self.outside(x, y)):
+		# 	# print("outside")
+		# 	pass
+		# else:
+
+			
+
+		# 	if( point_counter < 3):				
+		# 		# draw a circle
+		# 		point_list.append([x,y])
+		# 		self.canvas.create_oval(	x - 5, y - 5,
+		# 									x + 5, y + 5,
+		# 									width=0, fill="red",
+		# 									tags=("del"))
+
+		# 		# draw a dotted line between points
+		# 		if point_counter > 0:					
+		# 			x_prev = round(point_list[point_counter-1][0])
+		# 			y_prev = round(point_list[point_counter-1][1])
+		# 			print(str(x_prev)+" "+str(y_prev)+" "+str(x)+" "+str(y))
+		# 			self.canvas.create_line(x_prev, y_prev, x, y, fill="red",width=2, tags=("del"))
+		# 			# self.canvas.create_oval(round(x_prev), round(y_prev), x, y)
+
+			
+		# 	if( point_counter == 2):
+		# 		# angle = self.getAngle(
+		# 		# 		(5, 0), 
+		# 		# 		(0, 0), 
+		# 		# 		(0, 5))
+		# 		# print(angle)
+		# 		angle = self.getAngle(
+		# 				(point_list[0][0], point_list[0][1]), 
+		# 				(point_list[1][0], point_list[1][1]), 
+		# 				(point_list[2][0], point_list[2][1]))
+		# 		print(angle)
+		# 		# if angle > 180:
+		# 		# 	angle = angle-180
+		# 		# 	print(angle)
+		# 		print(point_list)
+
+
+		# 	bbox = self.canvas.coords(self.container)  # get image area
+		# 	x1 = round((x - bbox[0]) / self.imscale)  # get real (x,y) on the image without zoom
+		# 	y1 = round((y - bbox[1]) / self.imscale)
+		# 	# print("real:"+str(x1)+","+str(y1))
+
+		# 	# increment point counter
+		# 	point_counter = point_counter+1
 
 	def smaller(self):
 		""" Resize image proportionally and return smaller image """
@@ -306,6 +383,22 @@ class CanvasImage:
 		self.canvas.destroy()
 		self.__imframe.destroy()
 
+
+
+class Med(CanvasImage):
+	""" Class of Polygons. Inherit CanvasImage class """
+	def __init__(self, placeholder, path):
+		""" Initialize the Polygons """
+		CanvasImage.__init__(self, placeholder, path)  # call __init__ of the CanvasImage class
+		self.canvas.bind('<ButtonPress-1>', self.clickfunc)  # set new edge
+
+	def clickfunc(self, event):
+		print("Med Click")
+
+
+
+
+
 class MainWindow(ttk.Frame):
 	""" Main window class """
 	def __init__(self, mainframe, path):
@@ -313,65 +406,14 @@ class MainWindow(ttk.Frame):
 		ttk.Frame.__init__(self, master=mainframe)
 		self.master.title('Advanced Zoom v3.0')
 		self.master.geometry('800x600')  # size of the main window
-		# self.master.rowconfigure(0, weight=1)  # make the CanvasImage widget expandable
-		# self.master.columnconfigure(0, weight=1)
+		self.master.rowconfigure(0, weight=1)  # make the CanvasImage widget expandable
+		self.master.columnconfigure(0, weight=1)
+		# canvas = CanvasImage(self.master, path)  # create widget
+		# canvas.grid(row=0, column=0)  # show widget
 
+		med = Med(self.master, path)  # create widget
+		med.grid(row=0, column=0)  # show widget
 
-		navbar = Frame(self.master, width=100)
-		navbar.pack(anchor=W, fill=Y, expand=False, side=LEFT)  # <----
-
-
-
-		button = ttk.Button(navbar, text="object 1", command=self.object1)
-		button.grid(column=1, row=1)
-
-		button = ttk.Button(navbar, text="object 2", command=self.object2)
-		button.grid(column=1, row=2)
-
-
-
-		content_frame = Frame(self.master)
-		content_frame.pack(anchor=N, fill=BOTH, expand=True, side=LEFT )
-		content_frame.rowconfigure(0, weight=1)  # make the CanvasImage widget expandable
-		content_frame.columnconfigure(0, weight=1)
-
-		self.obj1 = Myobj1()
-		self.obj2 = Myobj2()
-
-
-		canvas = CanvasImage(content_frame, path)  # create widget
-		canvas.grid(row=0, column=0)  # show widget
-
-
-	def object1(self):
-		global cur_obj
-		cur_obj = self.obj1
-		print("set obj1")
-
-	def object2(self):
-		global cur_obj
-		cur_obj = self.obj2
-		print("set obj2")
-
-
-class Myobj1:
-	# instance attribute
-	def __init__(self):
-		self.name = "object1"
-
-	def click(self):
-		print("click from object1")
-
-class Myobj2:
-	# instance attribute
-	def __init__(self):
-		self.name = "object2"
-
-	def click(self):
-		print("click from object2")
-
-
-cur_obj = None
 # filename = './data/img_plg5.png'  # place path to your image here
 # filename = 'harold.jpg'  # place path to your image here
 filename = '500.jpg'  # place path to your image here
