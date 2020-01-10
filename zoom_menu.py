@@ -35,6 +35,20 @@ class MainWindow(ttk.Frame):
 		button.grid(column=1, row=2)
 
 
+		menubar = Menu(self.master)
+		filemenu = Menu(menubar, tearoff=0)
+		filemenu.add_command(label="New", command=self.donothing)
+		filemenu.add_command(label="Open", command=self.donothing)
+		filemenu.add_command(label="Save", command=self.donothing)
+		filemenu.add_separator()
+		filemenu.add_command(label="Exit", command=self.master.quit)
+		menubar.add_cascade(label="File", menu=filemenu)
+
+		helpmenu = Menu(menubar, tearoff=0)
+		helpmenu.add_command(label="Help Index", command=self.donothing)
+		helpmenu.add_command(label="About...", command=self.donothing)
+		menubar.add_cascade(label="Help", menu=helpmenu)
+		self.master.config(menu=menubar)
 
 		content_frame = Frame(self.master)
 		content_frame.pack(anchor=N, fill=BOTH, expand=True, side=LEFT )
@@ -50,6 +64,9 @@ class MainWindow(ttk.Frame):
 		self.obj1 = Myobj1(self.canvas)
 		self.obj2 = Myobj2(self.canvas)
 
+
+	def donothing(self):
+		x = 0
 
 	def btn1(self):
 		# global cur_obj

@@ -135,7 +135,7 @@ class CanvasImage:
 		global point_counter
 		global point_list
 
-
+		thickness = 10 * self.imscale
 
 		if(self.outside(x, y)):
 			# print("outside")
@@ -146,17 +146,23 @@ class CanvasImage:
 
 			if( point_counter < 3):				
 				# draw a circle
-				point_list.append([x,y])
-				self.canvas.create_oval(	x - 5, y - 5,
-											x + 5, y + 5,
+
+				bbox = self.canvas.coords(self.container)  # get image area
+				x_real = round((x - bbox[0]) / self.imscale)  # get real (x,y) on the image without zoom
+				y_real = round((y - bbox[1]) / self.imscale)
+
+				point_list.append([x_real,y_real])
+				self.canvas.create_oval(	x - thickness, y - thickness,
+											x + thickness, y + thickness,
 											width=0, fill="red",
 											tags=("del"))
 
 				# draw a dotted line between points
 				if point_counter > 0:					
-					x_prev = round(point_list[point_counter-1][0])
-					y_prev = round(point_list[point_counter-1][1])
-					print(str(x_prev)+" "+str(y_prev)+" "+str(x)+" "+str(y))
+
+					x_prev = (point_list[point_counter-1][0] * self.imscale) + bbox[0]
+					y_prev = (point_list[point_counter-1][1] * self.imscale) + bbox[1]
+					# print(str(x_prev)+" "+str(y_prev)+" "+str(x)+" "+str(y))
 					self.canvas.create_line(x_prev, y_prev, x, y, fill="red",width=2, tags=("del"))
 					# self.canvas.create_oval(round(x_prev), round(y_prev), x, y)
 
@@ -178,9 +184,9 @@ class CanvasImage:
 				print(point_list)
 
 
-			bbox = self.canvas.coords(self.container)  # get image area
-			x1 = round((x - bbox[0]) / self.imscale)  # get real (x,y) on the image without zoom
-			y1 = round((y - bbox[1]) / self.imscale)
+			# bbox = self.canvas.coords(self.container)  # get image area
+			# x1 = round((x - bbox[0]) / self.imscale)  # get real (x,y) on the image without zoom
+			# y1 = round((y - bbox[1]) / self.imscale)
 			# print("real:"+str(x1)+","+str(y1))
 
 			# increment point counter
