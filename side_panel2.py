@@ -25,14 +25,26 @@ class MainWindow(ttk.Frame):
 
 		# navbar
 		navbar = Frame(self.master, width=100)
-		navbar.pack(anchor=W, fill=Y, expand=False, side=LEFT)  # <----
+		navbar.pack(anchor=W, fill=Y, expand=False, side=LEFT)
 
-		# btn 1
-		button = ttk.Button(navbar, text="object 1", command=self.btn1)
-		button.grid(column=1, row=1)
-		# btn 2
-		button = ttk.Button(navbar, text="object 2", command=self.btn2)
-		button.grid(column=1, row=2)
+		self.frames = {}
+		for F in (Menu1, Menu2, Menu3):
+			page_name = F.__name__
+			frame = F(parent=navbar, controller=self)
+			self.frames[page_name] = frame
+
+			# put all of the pages in the same location;
+			# the one on the top of the stacking order
+			# will be the one that is visible.
+			frame.grid(row=0, column=0, sticky="nsew")
+
+
+		# # btn 1
+		# button = ttk.Button(navbar, text="object 1", command=self.btn1)
+		# button.grid(column=1, row=1)
+		# # btn 2
+		# button = ttk.Button(navbar, text="object 2", command=self.btn2)
+		# button.grid(column=1, row=2)
 
 
 		# add menu bar
@@ -70,6 +82,11 @@ class MainWindow(ttk.Frame):
 		x = 0
 
 
+	def show_frame(self, page_name):
+		'''Show a frame for the given page name'''
+		frame = self.frames[page_name]
+		frame.tkraise()
+
 	def btn1(self):
 		# global cur_obj
 		# cur_obj = self.obj1
@@ -102,6 +119,49 @@ class Myobj2:
 	def click(self, event):
 		print("click from object2")
 		self.canvas.create_token(event, "black")
+
+
+
+
+
+class Menu1(tk.Frame):
+
+	def __init__(self, parent, controller):
+		tk.Frame.__init__(self, parent)
+		self.controller = controller
+		label = tk.Label(self, text="This is the start page")
+		label.pack(side="top", fill="x", pady=10)
+
+		button1 = tk.Button(self, text="Go to Page One",
+							command=lambda: controller.show_frame("Menu2"))
+		button2 = tk.Button(self, text="Go to Page Two",
+							command=lambda: controller.show_frame("Menu3"))
+		button1.pack()
+		button2.pack()
+
+
+class Menu2(tk.Frame):
+
+	def __init__(self, parent, controller):
+		tk.Frame.__init__(self, parent)
+		self.controller = controller
+		label = tk.Label(self, text="This is page 1")
+		label.pack(side="top", fill="x", pady=10)
+		button = tk.Button(self, text="Go to the start page",
+						   command=lambda: controller.show_frame("Menu1"))
+		button.pack()
+
+
+class Menu3(tk.Frame):
+
+	def __init__(self, parent, controller):
+		tk.Frame.__init__(self, parent)
+		self.controller = controller
+		label = tk.Label(self, text="This is page 2")
+		label.pack(side="top", fill="x", pady=10)
+		button = tk.Button(self, text="Go to the start page",
+						   command=lambda: controller.show_frame("Menu1"))
+		button.pack()
 
 
 
