@@ -4,6 +4,7 @@ import math
 import warnings
 import tkinter as tk
 
+from tkinter import messagebox
 
 from tkinter import ttk
 from tkinter import *
@@ -11,6 +12,25 @@ from PIL import Image, ImageTk
 
 # from gui_canvas import CanvasImage
 from gui_draw_tools import DrawTools
+
+from menus.afta_menu import AFTA_Menu
+from menus.aldfa_menu import ALDFA_Menu
+from menus.hka_menu import HKA_Menu
+from menus.mldfa_menu import MLDFA_Menu
+from menus.mnsa_menu import MNSA_Menu
+from menus.mpta_menu import MPTA_Menu
+from menus.vca_menu import VCA_Menu
+from menus.main_menu import MAIN_Menu
+
+
+from objs.afta import AFTA
+from objs.hka import HKA
+from objs.mnsa import MNSA
+from objs.aldfa import ALDFA
+from objs.mldfa import MLDFA
+from objs.mpta import MPTA
+from objs.vca import VCA
+from objs.main_anatomy import MAIN
 
 class MainWindow(ttk.Frame):
 	""" Main window class """
@@ -23,16 +43,49 @@ class MainWindow(ttk.Frame):
 		# self.master.columnconfigure(0, weight=1)
 
 
+		# topbar
+		topbar = Frame(self.master, height=100,bg="red")
+		topbar.pack(anchor=E, fill=X, expand=False, side=TOP)  # <----
+
+		# make buttons in the topbar
+		for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","ALDFA","MLDFA","MPTA"]):
+			# print(text)
+			button = ttk.Button(topbar, text=text, command=lambda text=text: self.show_menu(text))
+			button.grid(column=x, row=1)
+
+
+		# left navbar
 		navbar = Frame(self.master, width=100)
 		navbar.pack(anchor=W, fill=Y, expand=False, side=LEFT)  # <----
 
 
+		# create menus
+		self.frames = {}
+		for F in (
+					AFTA_Menu, 
+					ALDFA_Menu, 
+					HKA_Menu, 
+					MLDFA_Menu, 
+					MNSA_Menu, 
+					MPTA_Menu, 
+					VCA_Menu,
+					MAIN_Menu
+				):
+			page_name = F.__name__
+			frame = F(parent=navbar, controller=self)
+			self.frames[page_name] = frame
 
-		button = ttk.Button(navbar, text="object 1", command=self.btn1)
-		button.grid(column=1, row=1)
+			# put all of the pages in the same location;
+			# the one on the top of the stacking order
+			# will be the one that is visible.
+			frame.grid(row=0, column=0, sticky="nsew")
 
-		button = ttk.Button(navbar, text="object 2", command=self.btn2)
-		button.grid(column=1, row=2)
+
+		# button = ttk.Button(navbar, text="object 1", command=self.btn1)
+		# button.grid(column=1, row=1)
+
+		# button = ttk.Button(navbar, text="object 2", command=self.btn2)
+		# button.grid(column=1, row=2)
 
 
 		menubar = Menu(self.master)
@@ -60,46 +113,66 @@ class MainWindow(ttk.Frame):
 
 		self.canvas = DrawTools(content_frame, path)  # create widget
 		self.canvas.grid(row=0, column=0)  # show widget
+		
 
-		self.obj1 = Myobj1(self.canvas)
-		self.obj2 = Myobj2(self.canvas)
+		self.master_dict = {}
+
+		self.objects = {}
+		for Obj in (
+					AFTA,
+					HKA,
+					MNSA,
+					ALDFA,
+					MLDFA,
+					MPTA,
+					VCA,
+					MAIN
+				):
+			obj_name = Obj.__name__			
+			print(obj_name)
+			self.objects[obj_name] = Obj(self.canvas, self.master_dict, controller=self)
 
 
 	def donothing(self):
 		x = 0
 
-	def btn1(self):
-		# global cur_obj
-		# cur_obj = self.obj1
-		print("set obj1")
-		self.canvas.setObject(self.obj1)
 
-	def btn2(self):
-		# global cur_obj
-		# cur_obj = self.obj2
-		print("set obj2")
-		self.canvas.setObject(self.obj2)
+	def show_menu(self, obj_name):
+		'''Show corresponding menu to the object and set cur_object in drawtools'''
+		menu = obj_name+"_Menu"
+		self.canvas.setObject(self.objects[obj_name])
+		self.unsetObjs(obj_name)
+		self.show_frame(menu)
 
 
-class Myobj1:
-	# instance attribute
-	def __init__(self, canvas):
-		self.name = "object1"
-		self.canvas = canvas
+	def show_frame(self, page_name):
+		'''Show a frame for the given page name'''
+		frame = self.frames[page_name]
+		frame.tkraise()
 
-	def click(self, event):
-		print("click from object1")			
-		self.canvas.create_token(event, "white")
 
-class Myobj2:
-	# instance attribute
-	def __init__(self, canvas):
-		self.name = "object2"
-		self.canvas = canvas
+	def menu_btn_click(self, obj_name, action):
+		'''Route menu click to object page'''		
+		self.objects[obj_name].menu_btn_click(action)
 
-	def click(self, event):
-		print("click from object2")
-		self.canvas.create_token(event, "black")
+
+	def updateMenuLabel(self, label_text, menu_obj):
+		'''Set label text for user instructions'''
+		self.frames[menu_obj].setLabelText(label_text)
+
+
+	def warningBox(self, message):
+		'''Display a warning box with message'''
+		messagebox.showwarning("Warning", message)
+
+
+
+	def unsetObjs(self, obj_name):
+		'''Reset variable for inactive objects'''
+		for obj in self.objects:
+			# except obj_name call unset
+			if obj == obj_name: continue
+			self.objects[obj].unset()
 
 
 

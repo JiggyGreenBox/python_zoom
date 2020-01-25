@@ -51,7 +51,7 @@ class DrawTools(CanvasImage):
 			item = self.canvas.find_closest(x_find, y_find)		
 			tags = self.canvas.itemcget(item, "tags")
 			# print(item)
-			print(tags)
+			# print(tags)
 			if "token" not in tags:	
 				# self.cur_obj.click(event)
 				if self.cur_obj != None:
