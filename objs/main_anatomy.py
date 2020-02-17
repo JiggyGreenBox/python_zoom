@@ -1,4 +1,4 @@
-
+import json
 
 class MAIN:
 	# instance attribute
@@ -35,7 +35,7 @@ class MAIN:
 										"RIGHT":{
 												"HIP":		{"type":"point","P1":None},
 												"KNEE":		{"type":"point","P1":None},
-												"ANKLE":	{"type":"point","P1":None},
+												"ANKLE":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 												"AXIS_FEM":	{
 																"type":	"axis",
 																"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
@@ -63,9 +63,14 @@ class MAIN:
 			# print("proceed")
 			ret =  self.addDict(event)
 			if ret:
-				self.draw_tools.create_token(event, "white", "main")
+				# self.draw_tools.create_token(event, "white", "main")
+				pass
 			else:
 				print(self.dict)
+				self.saveDict()
+
+			self.draw()
+
 			# self.controller.updateMenuLabel("jiggy", "MAIN_Menu")
 
 		# ret, cur_tag = self.addDict(event), cur_tag = self.addDict(event)	
@@ -76,6 +81,13 @@ class MAIN:
 		# else:
 		# 	print(self.dict)
 
+
+
+
+	# save dictionary to file
+	def saveDict(self):
+		with open('patient.json', 'w') as fp:
+			json.dump(self.dict, fp, indent=4)		
 
 	# menu button clicks are routed here
 	def menu_btn_click(self, action):
@@ -165,7 +177,7 @@ class MAIN:
 		return False, cur_tag
 
 
-
+ 
 	def addDict(self, event):
 
 		for item in self.dict["MAIN"][self.side]:
@@ -190,7 +202,7 @@ class MAIN:
 					return True
 
 
-				# check if P1 is None				
+				# check if P2 is None				
 				if self.dict["MAIN"][self.side][item]["P2"] == None:
 					P = self.draw_tools.getRealCoords(event)
 					self.dict["MAIN"][self.side][item]["P2"] = P
@@ -201,7 +213,39 @@ class MAIN:
 
 			# axis has two midpoints
 			if item_type == "axis":
-				pass
+				print("axis" + item)
+				# axis has a top and a bottom
+
+				# check if P1 is None
+				if self.dict["MAIN"][self.side][item]["TOP"]["P1"] == None:
+					P = self.draw_tools.getRealCoords(event)
+					self.dict["MAIN"][self.side][item]["TOP"]["P1"] = P
+					return True
+
+				# check if P2 is None				
+				if self.dict["MAIN"][self.side][item]["TOP"]["P2"] == None:
+					P = self.draw_tools.getRealCoords(event)
+					self.dict["MAIN"][self.side][item]["TOP"]["P2"] = P
+
+					M = self.draw_tools.midpoint(self.dict["MAIN"][self.side][item]["TOP"]["P1"], P)
+					self.dict["MAIN"][self.side][item]["TOP"]["M1"] = M
+					return True
+
+
+				# check if P1 is None
+				if self.dict["MAIN"][self.side][item]["BOT"]["P1"] == None:
+					P = self.draw_tools.getRealCoords(event)
+					self.dict["MAIN"][self.side][item]["BOT"]["P1"] = P
+					return True
+
+				# check if P2 is None				
+				if self.dict["MAIN"][self.side][item]["BOT"]["P2"] == None:
+					P = self.draw_tools.getRealCoords(event)
+					self.dict["MAIN"][self.side][item]["BOT"]["P2"] = P
+
+					M = self.draw_tools.midpoint(self.dict["MAIN"][self.side][item]["BOT"]["P1"], P)
+					self.dict["MAIN"][self.side][item]["BOT"]["M1"] = M
+					return True					
 
 		return False				
 
@@ -297,11 +341,56 @@ class MAIN:
 
 		# loop left and right
 		for side in ["LEFT","RIGHT"]:
-			for items in self.dict["MAIN"][side]:
-				print(items)
+			for item in self.dict["MAIN"][side]:
+
+				item_type = self.dict["MAIN"][side][item]["type"]
+
+				if item_type == "point":
+					if self.dict["MAIN"][side][item]["P1"] != None:
+						self.draw_tools.create_mypoint(self.dict["MAIN"][side][item]["P1"], "white", "main")
+
+
+				if item_type == "midpoint":
+					if self.dict["MAIN"][side][item]["P1"] != None:
+						self.draw_tools.create_mypoint(self.dict["MAIN"][side][item]["P1"], "white", "main")
+
+					if self.dict["MAIN"][side][item]["P2"] != None:
+						self.draw_tools.create_mypoint(self.dict["MAIN"][side][item]["P2"], "white", "main")
+
+
+					if self.dict["MAIN"][side][item]["P1"] != None and self.dict["MAIN"][side][item]["P2"] != None:
+						p1 = self.dict["MAIN"][side][item]["P1"]
+						p2 = self.dict["MAIN"][side][item]["P2"]
+						m1 = self.dict["MAIN"][side][item]["M1"]
+						self.draw_tools.create_midpoint_line(p1, p2, m1, "main")
 
 
 
+				if item_type == "axis":
+					if self.dict["MAIN"][side][item]["TOP"]["P1"] != None:
+						self.draw_tools.create_mypoint(self.dict["MAIN"][side][item]["TOP"]["P1"], "white", "main")
+
+					if self.dict["MAIN"][side][item]["TOP"]["P2"] != None:
+						self.draw_tools.create_mypoint(self.dict["MAIN"][side][item]["TOP"]["P2"], "white", "main")
+
+					if self.dict["MAIN"][side][item]["TOP"]["P1"] != None and self.dict["MAIN"][side][item]["TOP"]["P2"] != None:
+						p1 = self.dict["MAIN"][side][item]["TOP"]["P1"]
+						p2 = self.dict["MAIN"][side][item]["TOP"]["P2"]
+						m1 = self.dict["MAIN"][side][item]["TOP"]["M1"]
+						self.draw_tools.create_midpoint_line(p1, p2, m1, "main")
+
+
+					if self.dict["MAIN"][side][item]["BOT"]["P1"] != None:
+						self.draw_tools.create_mypoint(self.dict["MAIN"][side][item]["BOT"]["P1"], "white", "main")
+
+					if self.dict["MAIN"][side][item]["BOT"]["P2"] != None:
+						self.draw_tools.create_mypoint(self.dict["MAIN"][side][item]["BOT"]["P2"], "white", "main")
+
+					if self.dict["MAIN"][side][item]["BOT"]["P1"] != None and self.dict["MAIN"][side][item]["BOT"]["P2"] != None:
+						p1 = self.dict["MAIN"][side][item]["BOT"]["P1"]
+						p2 = self.dict["MAIN"][side][item]["BOT"]["P2"]
+						m1 = self.dict["MAIN"][side][item]["BOT"]["M1"]
+						self.draw_tools.create_midpoint_line(p1, p2, m1, "main")
 
 			# for points in self.dict[lines]:
 
@@ -325,4 +414,5 @@ class MAIN:
 
 	def unset(self):
 		print("unset from "+self.name)
-		self.side = None							
+		self.draw_tools.clear_by_tag("main")
+		self.side = None

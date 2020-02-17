@@ -1,0 +1,197 @@
+{
+    "MNSA": {
+        "LEFT": {
+            "NECK_AXIS": {
+                "type": "midpoint",
+                "P1": null,
+                "P2": null,
+                "M1": null
+            }
+        },
+        "RIGHT": {
+            "NECK_AXIS": {
+                "type": "midpoint",
+                "P1": null,
+                "P2": null,
+                "M1": null
+            }
+        }
+    },
+    "ALDFA": {
+        "LEFT": {
+            "FEM_JOINT_LINE": {
+                "type": "line",
+                "P1": null,
+                "P2": null
+            }
+        },
+        "RIGHT": {
+            "FEM_JOINT_LINE": {
+                "type": "line",
+                "P1": null,
+                "P2": null
+            }
+        }
+    },
+    "TAMD": {
+        "LEFT": {
+            "TIB_JOINT_LINE": {
+                "type": "line",
+                "P1": null,
+                "P2": null
+            }
+        },
+        "RIGHT": {
+            "TIB_JOINT_LINE": {
+                "type": "line",
+                "P1": null,
+                "P2": null
+            }
+        }
+    },
+    "MAIN": {
+        "LEFT": {
+            "HIP": {
+                "type": "point",
+                "P1": [
+                    532,
+                    982
+                ]
+            },
+            "KNEE": {
+                "type": "point",
+                "P1": [
+                    431,
+                    2324
+                ]
+            },
+            "ANKLE": {
+                "type": "midpoint",
+                "P1": [
+                    465,
+                    3422
+                ],
+                "P2": [
+                    547,
+                    3412
+                ],
+                "M1": [
+                    506.0,
+                    3417.0
+                ]
+            },
+            "AXIS_FEM": {
+                "type": "axis",
+                "TOP": {
+                    "type": "midpoint",
+                    "P1": [
+                        335,
+                        1246
+                    ],
+                    "P2": [
+                        439,
+                        1236
+                    ],
+                    "M1": [
+                        387.0,
+                        1241.0
+                    ]
+                },
+                "BOT": {
+                    "type": "midpoint",
+                    "P1": [
+                        388,
+                        1945
+                    ],
+                    "P2": [
+                        476,
+                        1940
+                    ],
+                    "M1": [
+                        432.0,
+                        1942.5
+                    ]
+                }
+            },
+            "AXIS_TIB": {
+                "type": "axis",
+                "TOP": {
+                    "type": "midpoint",
+                    "P1": [
+                        374,
+                        2537
+                    ],
+                    "P2": [
+                        467,
+                        2529
+                    ],
+                    "M1": [
+                        420.5,
+                        2533.0
+                    ]
+                },
+                "BOT": {
+                    "type": "midpoint",
+                    "P1": [
+                        453,
+                        3232
+                    ],
+                    "P2": [
+                        521,
+                        3224
+                    ],
+                    "M1": [
+                        487.0,
+                        3228.0
+                    ]
+                }
+            }
+        },
+        "RIGHT": {
+            "HIP": {
+                "type": "point",
+                "P1": null
+            },
+            "KNEE": {
+                "type": "point",
+                "P1": null
+            },
+            "ANKLE": {
+                "type": "midpoint",
+                "P1": null,
+                "P2": null,
+                "M1": null
+            },
+            "AXIS_FEM": {
+                "type": "axis",
+                "TOP": {
+                    "type": "midpoint",
+                    "P1": null,
+                    "P2": null,
+                    "M1": null
+                },
+                "BOT": {
+                    "type": "midpoint",
+                    "P1": null,
+                    "P2": null,
+                    "M1": null
+                }
+            },
+            "AXIS_TIB": {
+                "type": "axis",
+                "TOP": {
+                    "type": "midpoint",
+                    "P1": null,
+                    "P2": null,
+                    "M1": null
+                },
+                "BOT": {
+                    "type": "midpoint",
+                    "P1": null,
+                    "P2": null,
+                    "M1": null
+                }
+            }
+        }
+    }
+}

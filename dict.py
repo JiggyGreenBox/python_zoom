@@ -1,3 +1,5 @@
+import json
+
 myDict = {}
 
 myorder = ["L1","L2","L3","L4"]
@@ -20,7 +22,8 @@ myDict["L2"] = {"type":"midline","P1":None,"P2":None}
 print(myDict)
 
 
-
+with open('data.json', 'w') as fp:
+	json.dump(myDict, fp, indent=4)
 
 
 if "MAIN" in myDict.keys():
