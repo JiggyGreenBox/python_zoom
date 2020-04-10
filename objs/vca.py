@@ -68,6 +68,8 @@ class VCA():
 				self.draw_tools.create_myline(self.dict["MAIN"][side]["KNEE"]["P1"], p_top, self.tag)
 
 
+	def update_canvas(self, draw_tools):
+		self.draw_tools = draw_tools
 
 
 	def unset(self):

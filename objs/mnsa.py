@@ -187,6 +187,9 @@ class MNSA():
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"
 
+
+	def update_canvas(self, draw_tools):
+		self.draw_tools = draw_tools
  
 	def unset(self):
 		print("unset from "+self.name)

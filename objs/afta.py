@@ -106,6 +106,11 @@ class AFTA():
 
 				self.draw_tools.create_myline(self.dict["MAIN"][side]["AXIS_TIB"]["BOT"]["M1"], p_tib, self.tag)
 
+
+	def update_canvas(self, draw_tools):
+		self.draw_tools = draw_tools
+		print("updated canvas from" + self.tag)
+
 	def unset(self):
 		print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)

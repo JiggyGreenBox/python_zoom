@@ -98,6 +98,9 @@ class KJLO():
 					self.draw_tools.create_myline(m1, p_top, self.tag)
 
 
+	def update_canvas(self, draw_tools):
+		self.draw_tools = draw_tools
+
 
 	def unset(self):
 		print("unset from "+self.name)

@@ -111,6 +111,8 @@ class KAOL():
 			self.draw_tools.create_myline(p_right, p_top_R, self.tag)
 
 
+	def update_canvas(self, draw_tools):
+		self.draw_tools = draw_tools
 
 	def unset(self):
 		print("unset from "+self.name)

@@ -56,6 +56,8 @@ class HKA():
 					self.draw_tools.create_myline(self.dict["MAIN"][side]["HIP"]["P1"], self.dict["MAIN"][side]["KNEE"]["P1"], self.tag)
 
 
+	def update_canvas(self, draw_tools):
+		self.draw_tools = draw_tools
 
 	def unset(self):
 		print("unset from "+self.name)

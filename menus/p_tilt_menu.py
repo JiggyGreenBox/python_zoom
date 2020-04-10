@@ -4,13 +4,13 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import *
 
-class ACOR_Menu(tk.Frame):
+class P_TILT_Menu(tk.Frame):
 
 	def __init__(self, parent, controller):
 		tk.Frame.__init__(self, parent)
 		self.controller = controller
-		self.obj_name = "ACOR"		
-		
+		self.obj_name = "P_TILT"
+
 		self.label = tk.Label(self, text="CHOOSE SIDE")
 		self.label.grid(column=1, row=1,columnspan=2,pady=50)
 

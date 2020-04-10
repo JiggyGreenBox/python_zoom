@@ -85,6 +85,9 @@ class MLDFA():
 				self.draw_tools.create_myline(self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["M1"], p_bot, self.tag)
 
 
+	def update_canvas(self, draw_tools):
+		self.draw_tools = draw_tools
+
 	def unset(self):
 		print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)
