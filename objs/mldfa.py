@@ -23,19 +23,31 @@ class MLDFA():
 			isFemBot = False
 			isAldfa = False
 
+			fem_joint_p1 = self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P1"]
+			fem_joint_p2 = self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P2"]
+
+			fem_top_p1 = self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P1"]
+			fem_top_p2 = self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P2"]
+
+			fem_bot_p1 = self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P1"]
+			fem_bot_p2 = self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P2"]
+
+
+			bot_m1 = self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["M1"]
+			top_m1 = self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["M1"]
 
 
 			# ------------------------
 			# FROM ALDFA
 			# ------------------------
-			if self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P1"], "white", self.tag)
+			if fem_joint_p1 != None:
+				self.draw_tools.create_mypoint(fem_joint_p1, "white", self.tag)
 
-			if self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P2"], "white", self.tag)
+			if fem_joint_p2 != None:
+				self.draw_tools.create_mypoint(fem_joint_p2, "white", self.tag)
 
-			if self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P1"] != None and self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P2"] != None:
-				self.draw_tools.create_myline(self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P1"], self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P2"], self.tag)
+			if fem_joint_p1 != None and fem_joint_p2 != None:
+				self.draw_tools.create_myline(fem_joint_p1, fem_joint_p2, self.tag)
 				isAldfa = True
 
 
@@ -45,32 +57,26 @@ class MLDFA():
 			# ------------------------
 			# FEM AXIS
 			# TOP
-			if self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P1"], "white", self.tag)
+			if fem_top_p1 != None:
+				self.draw_tools.create_mypoint(fem_top_p1, "white", self.tag)
 
-			if self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P2"], "white", self.tag)
+			if fem_top_p2 != None:
+				self.draw_tools.create_mypoint(fem_top_p2, "white", self.tag)
 
-			if self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P1"] != None and self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P2"] != None:
-				p1 = self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P1"]
-				p2 = self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P2"]
-				m1 = self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["M1"]
-				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
+			if fem_top_p1 != None and fem_top_p2 != None:								
+				self.draw_tools.create_midpoint_line(fem_top_p1, fem_top_p2, top_m1, self.tag)
 				isFemTop = True
 
 
 			# BOT
-			if self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P1"], "white", self.tag)
+			if fem_bot_p1 != None:
+				self.draw_tools.create_mypoint(fem_bot_p1, "white", self.tag)
 
-			if self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P2"], "white", self.tag)
+			if fem_bot_p2 != None:
+				self.draw_tools.create_mypoint(fem_bot_p2, "white", self.tag)
 
-			if self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P1"] != None and self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P2"] != None:
-				p1 = self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P1"]
-				p2 = self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P2"]
-				m1 = self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["M1"]
-				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
+			if fem_bot_p1 != None and fem_bot_p2 != None:								
+				self.draw_tools.create_midpoint_line(fem_bot_p1, fem_bot_p2, bot_m1, self.tag)
 				isFemBot = True
 
 
@@ -80,9 +86,23 @@ class MLDFA():
 				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
 
 				p_bot = self.draw_tools.line_intersection(
-						(self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["M1"], self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["M1"]),
+						(top_m1, bot_m1),
 						(xbot, ybot))
-				self.draw_tools.create_myline(self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["M1"], p_bot, self.tag)
+				self.draw_tools.create_myline(top_m1, p_bot, self.tag)
+
+				# find angle ray intersection point
+				p_int = self.draw_tools.line_intersection(
+						(top_m1, p_bot),
+						(fem_joint_p1, fem_joint_p2))
+
+
+				if side == "LEFT":
+					angle = self.draw_tools.create_myAngle(top_m1, p_int, fem_joint_p2, self.tag)
+					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60, y_offset=-60)
+
+				if side == "RIGHT":
+					angle = self.draw_tools.create_myAngle(fem_joint_p1, p_int, top_m1, self.tag)
+					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, y_offset=-60)				
 
 
 	def update_canvas(self, draw_tools):

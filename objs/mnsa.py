@@ -42,7 +42,7 @@ class MNSA():
 				pass
 			else:
 				print(self.dict)
-				self.saveDict()
+				# self.saveDict()
 
 		self.draw()
 
@@ -151,25 +151,72 @@ class MNSA():
 				
 				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
 
+				fem_bot_m1 	= self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["M1"]
+				fem_top_m1 	= self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["M1"]
+
+				neck_m1 	= self.dict["MNSA"][side]["NECK_AXIS"]["M1"]
+				hip 		= self.dict["MAIN"][side]["HIP"]["P1"]
+
 				# FEM-AXIS ray
 				p_top = self.draw_tools.line_intersection(
-					(self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["M1"], self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["M1"]),
+					(fem_bot_m1, fem_top_m1),
 					(xtop, ytop))
+				self.draw_tools.create_myline(fem_bot_m1, p_top, self.tag)
 
-				self.draw_tools.create_myline(self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["M1"], p_top, self.tag)
 
 				# NECK-SHAFT ray
 				if side == "LEFT":
 					p_left = self.draw_tools.line_intersection(
-						(self.dict["MNSA"][side]["NECK_AXIS"]["M1"], self.dict["MAIN"][side]["HIP"]["P1"]),
+						(neck_m1, hip),
 						(xtop, xbot))
-					self.draw_tools.create_myline(self.dict["MAIN"][side]["HIP"]["P1"], p_left, self.tag)
+					self.draw_tools.create_myline(hip, p_left, self.tag)
+
+					# find angle ray intersection point
+					p_int = self.draw_tools.line_intersection(
+							(hip, p_left),
+							(fem_bot_m1, p_top))
+
+					angle = self.draw_tools.create_myAngle(hip, p_int, fem_bot_m1, self.tag)
+					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60)
+
+
+
 
 				if side == "RIGHT":
 					p_right = self.draw_tools.line_intersection(
-						(self.dict["MNSA"][side]["NECK_AXIS"]["M1"], self.dict["MAIN"][side]["HIP"]["P1"]),
+						(neck_m1, hip),
 						(ytop, ybot))
-					self.draw_tools.create_myline(self.dict["MAIN"][side]["HIP"]["P1"], p_right, self.tag)
+					self.draw_tools.create_myline(hip, p_right, self.tag)
+
+					# find angle ray intersection point
+					p_int = self.draw_tools.line_intersection(
+							(hip, p_right),
+							(fem_bot_m1, p_top))
+
+					angle = self.draw_tools.create_myAngle(fem_bot_m1, p_int, hip, self.tag)
+					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60)
+
+
+
+				# # FEM-AXIS ray
+				# p_top = self.draw_tools.line_intersection(
+				# 	(self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["M1"], self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["M1"]),
+				# 	(xtop, ytop))
+
+				# self.draw_tools.create_myline(self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["M1"], p_top, self.tag)
+
+				# # NECK-SHAFT ray
+				# if side == "LEFT":
+				# 	p_left = self.draw_tools.line_intersection(
+				# 		(self.dict["MNSA"][side]["NECK_AXIS"]["M1"], self.dict["MAIN"][side]["HIP"]["P1"]),
+				# 		(xtop, xbot))
+				# 	self.draw_tools.create_myline(self.dict["MAIN"][side]["HIP"]["P1"], p_left, self.tag)
+
+				# if side == "RIGHT":
+				# 	p_right = self.draw_tools.line_intersection(
+				# 		(self.dict["MNSA"][side]["NECK_AXIS"]["M1"], self.dict["MAIN"][side]["HIP"]["P1"]),
+				# 		(ytop, ybot))
+				# 	self.draw_tools.create_myline(self.dict["MAIN"][side]["HIP"]["P1"], p_right, self.tag)
 
 
 

@@ -78,17 +78,23 @@ class ALDFA():
 			isKnee = False
 			isAldfa = False
 
+			hip = self.dict["MAIN"][side]["HIP"]["P1"]
+			knee = self.dict["MAIN"][side]["KNEE"]["P1"]
+
+			fem_p1 = self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P1"]
+			fem_p2 = self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P2"]
+
 			# ------------------------
 			# FROM ALDFA
 			# ------------------------
-			if self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P1"], "white", self.tag)
+			if fem_p1 != None:
+				self.draw_tools.create_mypoint(fem_p1, "white", self.tag)
 
-			if self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P2"], "white", self.tag)
+			if fem_p2 != None:
+				self.draw_tools.create_mypoint(fem_p2, "white", self.tag)
 
-			if self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P1"] != None and self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P2"] != None:
-				self.draw_tools.create_myline(self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P1"], self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P2"], self.tag)
+			if fem_p1 != None and fem_p2 != None:
+				self.draw_tools.create_myline(fem_p1, fem_p2, self.tag)
 				isAldfa = True
 
 
@@ -96,20 +102,20 @@ class ALDFA():
 			# FROM MAIN
 			# ------------------------
 			# HIP
-			if self.dict["MAIN"][side]["HIP"]["P1"] != None:
+			if hip != None:
 				isHip = True
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["HIP"]["P1"], "white", self.tag)
+				self.draw_tools.create_mypoint(hip, "white", self.tag)
 
 			# KNEE
-			if self.dict["MAIN"][side]["KNEE"]["P1"] != None:
+			if knee != None:
 				isKnee = True
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["KNEE"]["P1"], "white", self.tag)
+				self.draw_tools.create_mypoint(knee, "white", self.tag)
 
 
 			if not isAldfa:
 				if isHip and isKnee:
 					# hip-knee line
-					self.draw_tools.create_myline(self.dict["MAIN"][side]["HIP"]["P1"], self.dict["MAIN"][side]["KNEE"]["P1"], self.tag)
+					self.draw_tools.create_myline(hip, knee, self.tag)
 			else:
 				if isHip and isKnee:
 					
@@ -117,11 +123,68 @@ class ALDFA():
 
 					# hip-knee ray
 					p_bot = self.draw_tools.line_intersection(
-						(self.dict["MAIN"][side]["HIP"]["P1"], self.dict["MAIN"][side]["KNEE"]["P1"]),
+						(hip, knee),
 						(xbot, ybot))
 
-					self.draw_tools.create_myline(self.dict["MAIN"][side]["HIP"]["P1"], p_bot, self.tag)
+					self.draw_tools.create_myline(hip, p_bot, self.tag)
 
+					# find angle ray intersection point
+					p_int = self.draw_tools.line_intersection(
+							(hip, p_bot),
+							(fem_p1, fem_p2))
+
+
+					if side == "LEFT":
+						angle = self.draw_tools.create_myAngle(hip, p_int, fem_p2, self.tag)
+						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60, y_offset=-60)
+
+					if side == "RIGHT":
+						angle = self.draw_tools.create_myAngle(fem_p1, p_int, hip, self.tag)
+						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, y_offset=-60)
+
+			# # ------------------------
+			# # FROM ALDFA
+			# # ------------------------
+			# if self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P1"] != None:
+			# 	self.draw_tools.create_mypoint(self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P1"], "white", self.tag)
+
+			# if self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P2"] != None:
+			# 	self.draw_tools.create_mypoint(self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P2"], "white", self.tag)
+
+			# if self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P1"] != None and self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P2"] != None:
+			# 	self.draw_tools.create_myline(self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P1"], self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P2"], self.tag)
+			# 	isAldfa = True
+
+
+			# # ------------------------
+			# # FROM MAIN
+			# # ------------------------
+			# # HIP
+			# if self.dict["MAIN"][side]["HIP"]["P1"] != None:
+			# 	isHip = True
+			# 	self.draw_tools.create_mypoint(self.dict["MAIN"][side]["HIP"]["P1"], "white", self.tag)
+
+			# # KNEE
+			# if self.dict["MAIN"][side]["KNEE"]["P1"] != None:
+			# 	isKnee = True
+			# 	self.draw_tools.create_mypoint(self.dict["MAIN"][side]["KNEE"]["P1"], "white", self.tag)
+
+
+			# if not isAldfa:
+			# 	if isHip and isKnee:
+			# 		# hip-knee line
+			# 		self.draw_tools.create_myline(self.dict["MAIN"][side]["HIP"]["P1"], self.dict["MAIN"][side]["KNEE"]["P1"], self.tag)
+			# else:
+			# 	if isHip and isKnee:
+					
+			# 		xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
+
+			# 		# hip-knee ray
+			# 		p_bot = self.draw_tools.line_intersection(
+			# 			(self.dict["MAIN"][side]["HIP"]["P1"], self.dict["MAIN"][side]["KNEE"]["P1"]),
+			# 			(xbot, ybot))
+
+			# 		self.draw_tools.create_myline(self.dict["MAIN"][side]["HIP"]["P1"], p_bot, self.tag)
 
 
 	# menu button clicks are routed here

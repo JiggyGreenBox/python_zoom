@@ -168,26 +168,30 @@ class MainWindow(ttk.Frame):
 		view.tkraise()
 
 
-	def menu_btn_click(self, obj_name, action):
-		'''Route menu click to object page'''		
-		self.objects[obj_name].menu_btn_click(action)
+	# def menu_btn_click(self, obj_name, action):
+	# 	'''Route menu click to object page'''		
+	# 	self.objects[obj_name].menu_btn_click(action)
 
 
-	def updateMenuLabel(self, label_text, menu_obj):
-		'''Set label text for user instructions'''
-		self.frames[menu_obj].setLabelText(label_text)
+	# def updateMenuLabel(self, label_text, menu_obj):
+	# 	'''Set label text for user instructions'''
+	# 	self.frames[menu_obj].setLabelText(label_text)
+
+
+	def test_excel(self):
+		print("successfully bubbled to the top")
 
 
 
 
 
 
-	def unsetObjs(self, obj_name):
-		'''Reset variable for inactive objects'''
-		for obj in self.objects:
-			# except obj_name call unset
-			if obj == obj_name: continue
-			self.objects[obj].unset()
+	# def unsetObjs(self, obj_name):
+	# 	'''Reset variable for inactive objects'''
+	# 	for obj in self.objects:
+	# 		# except obj_name call unset
+	# 		if obj == obj_name: continue
+	# 		self.objects[obj].unset()
 
 
 

@@ -11,6 +11,7 @@ class HKA():
 		
 	def click(self, event):
 		print("click from "+self.name)
+		self.draw_tools.clear_by_tag(self.tag)
 		self.draw() 
 
 
@@ -54,6 +55,17 @@ class HKA():
 
 					# hip-knee line
 					self.draw_tools.create_myline(self.dict["MAIN"][side]["HIP"]["P1"], self.dict["MAIN"][side]["KNEE"]["P1"], self.tag)
+
+					# draw angle
+					angle = ""
+					if side == "LEFT":				
+						angle = self.draw_tools.create_myAngle(p_top, self.dict["MAIN"][side]["KNEE"]["P1"], self.dict["MAIN"][side]["HIP"]["P1"], self.tag)
+					else:
+						angle = self.draw_tools.create_myAngle(self.dict["MAIN"][side]["HIP"]["P1"], self.dict["MAIN"][side]["KNEE"]["P1"], p_top, self.tag)
+					# , radius = 50, width = 3):
+					# self.canvas.create_text(x-r,y+r,fill="white", text='{0:.2f}'.format(t1), tags="tag")
+					
+					self.draw_tools.create_mytext(self.dict["MAIN"][side]["KNEE"]["P1"], '{0:.2f}'.format(angle), self.tag, x_offset=60)
 
 
 	def update_canvas(self, draw_tools):

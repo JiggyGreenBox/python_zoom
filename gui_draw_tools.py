@@ -2,6 +2,9 @@ import tkinter as tk
 
 from gui_canvas import CanvasImage
 
+# angle import
+import math
+
 class DrawTools(CanvasImage):
 	""" Class of Polygons. Inherit CanvasImage class """
 	def __init__(self, placeholder, path):
@@ -96,7 +99,22 @@ class DrawTools(CanvasImage):
 			outline=color,
 			fill=color,
 			tags=("token", mytag),
-		)		
+		)
+
+
+	def create_mytext(self, point, mytext, mytag, x_offset=0, y_offset=0, color="white", font_size=8):
+		"""Create a token at the given coordinate in the given color"""
+		# font_size = 8
+		# text='{0:.2f}'.format(t1)		
+		p1 = self.getScaledCoords(point)
+		x = p1[0]
+		y = p1[1]
+		x_off = x_offset * self.imscale
+		y_off = y_offset * self.imscale
+		# font_size = int(font_size/self.imscale)
+
+		self.canvas.create_text(x+x_off, y+y_off, fill=color, text=mytext, font=("TkDefaultFont", font_size), tags=mytag)
+
 
 
 	def create_midpoint(self, point, color, mytag):
@@ -122,7 +140,7 @@ class DrawTools(CanvasImage):
 		p1 = self.getScaledCoords(point1)
 		p2 = self.getScaledCoords(point2)
 
-		self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="red",width=2, tags=("del","lines", mytag))
+		self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="red", width=2, tags=("del","lines", mytag))
 
 
 	def create_midpoint_line(self, point1, point2, mid1, mytag):
@@ -132,11 +150,43 @@ class DrawTools(CanvasImage):
 		m1 = self.getScaledCoords(mid1)
 
 		self.create_midpoint(m1,"red", mytag)
-		self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="red",width=2, tags=("del","lines", mytag))
+		self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="red", width=2, tags=("del","lines", mytag))
 
 
 	def midpoint(self, p1, p2):
 		return ((p1[0]+p2[0])/2, (p1[1]+p2[1])/2)
+
+
+
+	def create_myAngle(self, point1, point2, point3, mytag, radius = 50, width = 3, outline="red"):
+
+		angle = self.getAnglePoints(point1, point2, point3)
+		print('angle: {}'.format(angle))
+
+		arc_angle = self.getAnglePointsNeg(point3, point2, (self.imwidth, point2[1]))
+		print('arc_angle: {}'.format(arc_angle))
+		
+		# bot_left = self.getScaledCoords(((point2[0] - radius),(point2[1] - radius)))
+		# top_right = self.getScaledCoords(((point2[0] + radius),(point2[1] + radius)))
+		# self.canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=angle1, style='arc', width=width, tags="tag")
+		p1 = self.getScaledCoords(point2)	
+		x = p1[0]	
+		y = p1[1]
+		r = radius * self.imscale
+
+		# self.canvas.create_arc(x-r, y-r, x+r, y+r, start=arc_angle, extent=angle, style='arc', width=width, tags=mytag)
+		self.canvas.create_arc(x-r, y-r, x+r, y+r, start=arc_angle, extent=angle, outline=outline, width=width, tags=mytag)
+		return angle
+
+
+	def getAnglePoints(self, a, b, c):
+		ang = math.degrees(math.atan2(c[1]-b[1], c[0]-b[0]) - math.atan2(a[1]-b[1], a[0]-b[0]))
+		return ang + 360 if ang < 0 else ang
+
+	def getAnglePointsNeg(self, a, b, c):
+		ang = math.degrees(math.atan2(c[1]-b[1], c[0]-b[0]) - math.atan2(a[1]-b[1], a[0]-b[0]))
+		return ang
+
 
 
 	def line_intersection(self, line1, line2):

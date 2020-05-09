@@ -102,9 +102,8 @@ class CanvasImage:
 		global point_list
 
 		point_list.clear()
-		point_counter = 0
-
-		self.canvas.delete("del")
+		point_counter = 0			
+		self.canvas.delete("tag")
 
 		# x = self.canvas.canvasx(event.x)  # get coordinates of the event on the canvas
 		# y = self.canvas.canvasy(event.y)
@@ -119,13 +118,72 @@ class CanvasImage:
 		# 	print("real:"+str(x1)+","+str(y1))
 
 
-	
+	def create_mypoint(self, point, color, mytag):
+		"""Create a token at the given coordinate in the given color"""
+		p1 = self.getScaledCoords(point)
+		x = p1[0]
+		y = p1[1]
+		thickness = 7 * self.imscale
+		self.canvas.create_oval(
+			x - thickness,
+			y - thickness,
+			x + thickness,
+			y + thickness,
+			outline=color,
+			fill=color,
+			tags=("token", mytag),
+		)
+
+
+	def getRealCoords(self, event):		
+		"""scale and pan invariant coords"""
+		x = self.canvas.canvasx(event.x)  # get coordinates of the event on the canvas
+		y = self.canvas.canvasy(event.y)
+
+		bbox = self.canvas.coords(self.container)  # get image area
+		x1 = round((x - bbox[0]) / self.imscale)  # get real (x,y) on the image without zoom
+		y1 = round((y - bbox[1]) / self.imscale)
+
+		return (x1, y1)
  
 	def getAngle(self, a, b, c):
 		ang = math.degrees(math.atan2(c[1]-b[1], c[0]-b[0]) - math.atan2(a[1]-b[1], a[0]-b[0]))
 		return ang + 360 if ang < 0 else ang
 
-		
+
+	def getAnglePoints(self, a, b, c):
+		ang = math.degrees(math.atan2(c[1]-b[1], c[0]-b[0]) - math.atan2(a[1]-b[1], a[0]-b[0]))
+		return ang + 360 if ang < 0 else ang
+
+	def getAnglePointsNeg(self, a, b, c):
+		ang = math.degrees(math.atan2(c[1]-b[1], c[0]-b[0]) - math.atan2(a[1]-b[1], a[0]-b[0]))
+		return ang
+
+
+	def getScaledCoords(self, point):		
+		"""scale and pan invariant coords"""
+		bbox = self.canvas.coords(self.container)  # get image area
+		x = point[0] * self.imscale + bbox[0]
+		y = point[1] * self.imscale + bbox[1]
+		return (x, y)
+
+	def retLeftPoint(self, p1, p2):
+		if p1[0] < p2[0]:
+			return p1
+		return p2
+
+
+	def create_myline(self, point1, point2, mytag):
+
+		p1 = self.getScaledCoords(point1)
+		p2 = self.getScaledCoords(point2)
+
+		self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="red",width=2, tags=("del","lines", mytag))
+
+
+	def circular_arc(self, canvas, x, y, r, t0, t1, width):
+		return canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=t1-t0,
+			style='arc', width=width)
 
 	def jiggy_click(self, event):
 		x = self.canvas.canvasx(event.x)  # get coordinates of the event on the canvas
@@ -137,33 +195,39 @@ class CanvasImage:
 
 		thickness = 10 * self.imscale
 
+		# xy = 20, 20, 300, 300
+
+
+		# self.canvas.create_oval(	300 - thickness, 300 - thickness,
+		# 									180 + thickness, 180 + thickness,
+		# 									width=0, fill="red",
+		# 									tags=("del"))
+
+		# self.canvas.create_arc(xy, start=0, extent=270, fill="rounded")
+		# self.canvas.create_arc(xy, start=270, extent=60, fill="blue")
+		# self.canvas.create_arc(xy, start=330, extent=30, fill="green")
+
+		# self.circular_arc(self.canvas, 20, 20, 10, 90, 180, 5)
+		
+
 		if(self.outside(x, y)):
 			# print("outside")
 			pass
 		else:
-
+			P = self.getRealCoords(event)
+			# print(P)
 			
 
-			if( point_counter < 3):				
-				# draw a circle
+			if( point_counter < 3):
 
-				bbox = self.canvas.coords(self.container)  # get image area
-				x_real = round((x - bbox[0]) / self.imscale)  # get real (x,y) on the image without zoom
-				y_real = round((y - bbox[1]) / self.imscale)
-
-				point_list.append([x_real,y_real])
-				self.canvas.create_oval(	x - thickness, y - thickness,
-											x + thickness, y + thickness,
-											width=0, fill="red",
-											tags=("del"))
+				point_list.append(P)
+				self.create_mypoint(P, "white", "tag")
 
 				# draw a dotted line between points
 				if point_counter > 0:					
 
-					x_prev = (point_list[point_counter-1][0] * self.imscale) + bbox[0]
-					y_prev = (point_list[point_counter-1][1] * self.imscale) + bbox[1]
-					# print(str(x_prev)+" "+str(y_prev)+" "+str(x)+" "+str(y))
-					self.canvas.create_line(x_prev, y_prev, x, y, fill="red",width=2, tags=("del"))
+					P_prev = point_list[point_counter-1]										
+					self.create_myline(P_prev, P, "tag")
 					# self.canvas.create_oval(round(x_prev), round(y_prev), x, y)
 
 			
@@ -173,22 +237,93 @@ class CanvasImage:
 				# 		(0, 0), 
 				# 		(0, 5))
 				# print(angle)
-				angle = self.getAngle(
-						(point_list[0][0], point_list[0][1]), 
-						(point_list[1][0], point_list[1][1]), 
-						(point_list[2][0], point_list[2][1]))
-				print(angle)
-				# if angle > 180:
-				# 	angle = angle-180
-				# 	print(angle)
-				print(point_list)
+				angle1 = self.getAnglePoints(point_list[0],point_list[1],point_list[2])
+				print('angle1: {}'.format(angle1))
+
+				angle2 = self.getAnglePoints(point_list[2],point_list[1],point_list[0])
+				print('angle2: {}'.format(angle2))
 
 
-			# bbox = self.canvas.coords(self.container)  # get image area
-			# x1 = round((x - bbox[0]) / self.imscale)  # get real (x,y) on the image without zoom
-			# y1 = round((y - bbox[1]) / self.imscale)
-			# print("real:"+str(x1)+","+str(y1))
+				print(point_list[0])
+				print(point_list[1])
+				print(self.retLeftPoint(point_list[0],point_list[1]))
 
+
+
+				p1 = self.getScaledCoords(point_list[1])	
+				x = p1[0]	
+				y = p1[1]
+				r = 20
+				width = 3
+				t1 = angle1
+
+				self.create_mypoint((self.imwidth,point_list[1][1]), "white", "tag")
+				arc_angle1 = self.getAnglePointsNeg(point_list[2],point_list[1],(self.imwidth,point_list[1][1]))
+				print('arc: {}'.format(arc_angle1))
+
+
+
+				t0 = arc_angle1
+				self.canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=angle1, style='arc', width=width, tags="tag")
+				# self.canvas.create_rectangle(x-r, y-r, x+r, y+r, outline='red', tags="tag")
+				self.canvas.create_text(x-r,y+r,fill="white", text='{0:.2f}'.format(t1), tags="tag")
+
+				font_size = 8
+
+				self.canvas.create_text(x-30,y+30,fill="white", text='{0:.2f}'.format(t1), font=("TkDefaultFont", font_size), tags="tag")
+				
+				
+
+
+
+
+				'''
+				if angle1 < angle2:
+
+					p1 = self.getScaledCoords(point_list[1])	
+					x = p1[0]	
+					y = p1[1]
+					r = 20
+					t0 = 0
+					t1 = angle1
+					width = 3
+
+
+					self.create_mypoint((self.imwidth,point_list[1][1]), "white", "tag")
+					arc_angle1 = self.getAnglePointsNeg(point_list[2],point_list[1],(self.imwidth,point_list[1][1]))
+					print('arc: {}'.format(arc_angle1))
+
+
+
+					t0 = arc_angle1
+					self.canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=angle1, style='arc', width=width, tags="tag")
+					# self.canvas.create_rectangle(x-r, y-r, x+r, y+r, outline='red', tags="tag")
+					self.canvas.create_text(x-r,y+r,fill="white", text='{0:.2f}'.format(t1), tags="tag")					
+
+
+				else:
+					p1 = self.getScaledCoords(point_list[1])	
+					x = p1[0]	
+					y = p1[1]
+					r = 20
+					t0 = 0
+					t1 = angle2
+					width = 3
+
+					self.create_mypoint((self.imwidth,point_list[1][1]), "white", "tag")
+					arc_angle1 = self.getAnglePointsNeg(point_list[0],point_list[1],(self.imwidth,point_list[1][1]))
+					print('arc: {}'.format(arc_angle1))
+
+					t0 = arc_angle1
+					# self.canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=angle2, style='arc', width=width, tags="tag")
+					# self.canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=angle2, fill='black', width=width, tags="tag")
+					self.canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=angle2, outline='red', width=width, tags="tag")
+					# self.canvas.create_rectangle(x-r, y-r, x+r, y+r, outline='red', tags="tag")					
+					self.canvas.create_text(x-r,y+r,fill="white", text='{0:.2f}'.format(t1), tags="tag")
+				'''
+
+				if arc_angle1 > 270:
+					print("too big")
 			# increment point counter
 			point_counter = point_counter+1
 
@@ -402,6 +537,7 @@ class MainWindow(ttk.Frame):
 
 # filename = './data/img_plg5.png'  # place path to your image here
 # filename = 'harold.jpg'  # place path to your image here
+# filename = 'legit2.jpg'  # place path to your image here
 filename = '500.jpg'  # place path to your image here
 #filename = 'd:/Data/yandex_z18_1-1.tif'  # huge TIFF file 1.4 GB
 #filename = 'd:/Data/The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg'

@@ -1,9 +1,9 @@
 import tkinter as tk
 
-
 from tkinter import ttk
 from tkinter import *
 
+# menus
 from menus.afta_menu import AFTA_Menu
 from menus.aldfa_menu import ALDFA_Menu
 from menus.hka_menu import HKA_Menu
@@ -16,16 +16,7 @@ from menus.kjlo_menu import KJLO_Menu
 from menus.kaol_menu import KAOL_Menu
 from menus.main_menu import MAIN_Menu
 
-# choose file
-from tkinter import filedialog
-
-# from gui_canvas import CanvasImage
-from gui_draw_tools import DrawTools
-
-# warning box for choose-side
-from tkinter import messagebox
-
-
+# objs
 from objs.afta import AFTA
 from objs.hka import HKA
 from objs.mnsa import MNSA
@@ -37,6 +28,17 @@ from objs.vca import VCA
 from objs.kjlo import KJLO
 from objs.kaol import KAOL
 from objs.main_anatomy import MAIN
+
+# choose file
+from tkinter import filedialog
+
+# from gui_canvas import CanvasImage
+from gui_draw_tools import DrawTools
+
+# warning box for choose-side
+from tkinter import messagebox
+
+
 
 
 class PRE_SCANNO_View(tk.Frame):
@@ -52,8 +54,8 @@ class PRE_SCANNO_View(tk.Frame):
 		self.master_dict = {}
 
 		# topbar
-		self.topbar = Frame(self, height=100,bg="red")
-		self.topbar.pack(anchor=E, fill=X, expand=False, side=TOP)  # <----
+		self.topbar = Frame(self, height=100)
+		self.topbar.pack(anchor=E, fill=X, expand=False, side=TOP)
 
 		# make buttons in the topbar
 		for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","ALDFA","MLDFA","TAMD","MPTA","KJLO", "KAOL"]):
@@ -95,8 +97,7 @@ class PRE_SCANNO_View(tk.Frame):
 			# put all of the pages in the same location;
 			# the one on the top of the stacking order
 			# will be the one that is visible.
-			menu.grid(row=0, column=0, sticky="nsew")
-			# menu.grid(row=0, column=0, sticky="s")
+			menu.grid(row=0, column=0, sticky="nsew")			
 
 
 		self.objects = {}
@@ -143,15 +144,15 @@ class PRE_SCANNO_View(tk.Frame):
 	def open_image_loc(self):		
 		image = filedialog.askopenfilename(initialdir=self.controller.working_dir)
 
+		if image != "":
+			self.med_image = image
+			self.canvas = DrawTools(self.content_frame, image)  # create widget
+			self.canvas.grid(row=0, column=0)  # show widget
 
+			for obj in self.objects:			
+				self.objects[obj].update_canvas(self.canvas)
 
-		self.canvas = DrawTools(self.content_frame, image)  # create widget
-		self.canvas.grid(row=0, column=0)  # show widget
-
-		for obj in self.objects:			
-			self.objects[obj].update_canvas(self.canvas)
-
-		print(image)
+		# print(image)
 
 
 	def menu_btn_click(self, obj_name, action):
@@ -166,6 +167,10 @@ class PRE_SCANNO_View(tk.Frame):
 			if obj == obj_name: continue
 			self.objects[obj].unset()
 
+
+	def updateMenuLabel(self, label_text, menu_obj):
+		'''Set label text for user instructions'''
+		self.menus[menu_obj].setLabelText(label_text)
 
 
 	def show_menu(self, obj_name):

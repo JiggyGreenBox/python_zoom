@@ -52,9 +52,14 @@ class MAIN:
 
 	def click(self, event):
 		print("click from "+self.name)
-		# print(self.dict)
+		print(self.dict)
 
-		self.draw()
+		# self.controller.updateMenuLabel("jiggy", "MAIN_Menu")
+		# self.updateLabel(self.getNextLabel())
+		# self.controller.updateMenuLabel(self.getNextLabel(), "MAIN_Menu")
+
+
+		# self.draw()
 
 		if self.side == None:
 			print("please choose side")
@@ -65,11 +70,15 @@ class MAIN:
 			if ret:
 				# self.draw_tools.create_token(event, "white", "main")
 				pass
+				# self.controller.updateMenuLabel(self.getNextLabel(), "MAIN_Menu")
 			else:
+				# self.controller.updateMenuLabel(self.side + " Done", "MAIN_Menu")
 				print(self.dict)
 				self.saveDict()
 
-			self.draw()
+		self.controller.updateMenuLabel(self.getNextLabel(), "MAIN_Menu")
+		self.draw_tools.clear_by_tag("main")
+		self.draw()
 
 			# self.controller.updateMenuLabel("jiggy", "MAIN_Menu")
 
@@ -86,8 +95,9 @@ class MAIN:
 
 	# save dictionary to file
 	def saveDict(self):
-		with open('patient.json', 'w') as fp:
-			json.dump(self.dict, fp, indent=4)		
+		pass
+		# with open('patient.json', 'w') as fp:
+		# 	json.dump(self.dict, fp, indent=4)		
 
 	# menu button clicks are routed here
 	def menu_btn_click(self, action):
@@ -97,6 +107,8 @@ class MAIN:
 
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"
+
+		self.controller.updateMenuLabel(self.getNextLabel(), "MAIN_Menu")
 
 
 	# return true to allow clicks
@@ -175,6 +187,61 @@ class MAIN:
 
 							return True, cur_tag
 		return False, cur_tag
+
+	
+
+
+	def getNextLabel(self):
+
+		if self.side != None:
+			
+			for item in self.dict["MAIN"][self.side]:
+				# get item type 
+				item_type = self.dict["MAIN"][self.side][item]["type"]
+
+				# point only has P1
+				if item_type == "point":
+					# check if P1 is None				
+					if self.dict["MAIN"][self.side][item]["P1"] == None:						
+						return (self.side + " " + item)
+
+				# point has P1 and P2, M1 is calculated
+				if item_type == "midpoint":
+
+					# check if P1 is None				
+					if self.dict["MAIN"][self.side][item]["P1"] == None:
+						return (self.side + " " + item + " P1")
+
+
+					# check if P2 is None				
+					if self.dict["MAIN"][self.side][item]["P2"] == None:
+						return (self.side + " " + item + " P2")
+
+				# axis has two midpoints
+				if item_type == "axis":
+					print("axis" + item)
+					# axis has a top and a bottom
+
+					# check if P1 is None
+					if self.dict["MAIN"][self.side][item]["TOP"]["P1"] == None:
+						return (self.side + " " + item + " P1")
+
+					# check if P2 is None				
+					if self.dict["MAIN"][self.side][item]["TOP"]["P2"] == None:
+						return (self.side + " " + item + " P2")
+
+
+					# check if P1 is None
+					if self.dict["MAIN"][self.side][item]["BOT"]["P1"] == None:
+						return (self.side + " " + item + " P1")
+
+					# check if P2 is None				
+					if self.dict["MAIN"][self.side][item]["BOT"]["P2"] == None:
+						return (self.side + " " + item + " P2")
+
+			return (self.side + " Done")
+
+		return None
 
 
  
@@ -344,10 +411,13 @@ class MAIN:
 			for item in self.dict["MAIN"][side]:
 
 				item_type = self.dict["MAIN"][side][item]["type"]
+				side_pre = side[0]+"_"
 
 				if item_type == "point":
 					if self.dict["MAIN"][side][item]["P1"] != None:
 						self.draw_tools.create_mypoint(self.dict["MAIN"][side][item]["P1"], "white", "main")
+						self.draw_tools.create_mytext(self.dict["MAIN"][side][item]["P1"], x_offset=80, mytext=(side_pre+item), mytag="main")
+						# self, point, color="white", font_size=8, mytext, mytag):
 
 
 				if item_type == "midpoint":
@@ -355,7 +425,7 @@ class MAIN:
 						self.draw_tools.create_mypoint(self.dict["MAIN"][side][item]["P1"], "white", "main")
 
 					if self.dict["MAIN"][side][item]["P2"] != None:
-						self.draw_tools.create_mypoint(self.dict["MAIN"][side][item]["P2"], "white", "main")
+						self.draw_tools.create_mypoint(self.dict["MAIN"][side][item]["P2"], "white", "main")						
 
 
 					if self.dict["MAIN"][side][item]["P1"] != None and self.dict["MAIN"][side][item]["P2"] != None:
@@ -363,6 +433,7 @@ class MAIN:
 						p2 = self.dict["MAIN"][side][item]["P2"]
 						m1 = self.dict["MAIN"][side][item]["M1"]
 						self.draw_tools.create_midpoint_line(p1, p2, m1, "main")
+						self.draw_tools.create_mytext(self.dict["MAIN"][side][item]["P2"], x_offset=80, mytext=(side_pre+item), mytag="main")
 
 
 
@@ -379,6 +450,9 @@ class MAIN:
 						m1 = self.dict["MAIN"][side][item]["TOP"]["M1"]
 						self.draw_tools.create_midpoint_line(p1, p2, m1, "main")
 
+						axis_text = side_pre + item.replace("AXIS_", "") + "_TOP"						
+						self.draw_tools.create_mytext(p2, x_offset=80, mytext=axis_text, mytag="main")
+
 
 					if self.dict["MAIN"][side][item]["BOT"]["P1"] != None:
 						self.draw_tools.create_mypoint(self.dict["MAIN"][side][item]["BOT"]["P1"], "white", "main")
@@ -391,6 +465,9 @@ class MAIN:
 						p2 = self.dict["MAIN"][side][item]["BOT"]["P2"]
 						m1 = self.dict["MAIN"][side][item]["BOT"]["M1"]
 						self.draw_tools.create_midpoint_line(p1, p2, m1, "main")
+
+						axis_text = side_pre + item.replace("AXIS_", "") + "_BOT"
+						self.draw_tools.create_mytext(p2, x_offset=80, mytext=axis_text, mytag="main")
 
 			# for points in self.dict[lines]:
 

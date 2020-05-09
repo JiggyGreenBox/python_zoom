@@ -76,18 +76,30 @@ class TAMD():
 			isTibBot = False
 			isTamd = False
 
+			tib_joint_p1 = self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P1"]
+			tib_joint_p2 = self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P2"]
+
+			tib_top_p1 = self.dict["MAIN"][side]["AXIS_TIB"]["TOP"]["P1"]
+			tib_top_p2 = self.dict["MAIN"][side]["AXIS_TIB"]["TOP"]["P2"]
+
+			tib_bot_p1 = self.dict["MAIN"][side]["AXIS_TIB"]["BOT"]["P1"]
+			tib_bot_p2 = self.dict["MAIN"][side]["AXIS_TIB"]["BOT"]["P2"]
+
+			bot_m1 = self.dict["MAIN"][side]["AXIS_TIB"]["BOT"]["M1"]
+			top_m1 = self.dict["MAIN"][side]["AXIS_TIB"]["TOP"]["M1"]
+
 
 			# ------------------------
 			# FROM TAMD
 			# ------------------------
-			if self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P1"], "white", self.tag)
+			if tib_joint_p1 != None:
+				self.draw_tools.create_mypoint(tib_joint_p1, "white", self.tag)
 
-			if self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P2"], "white", self.tag)
+			if tib_joint_p2 != None:
+				self.draw_tools.create_mypoint(tib_joint_p2, "white", self.tag)
 
-			if self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P1"] != None and self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P2"] != None:
-				self.draw_tools.create_myline(self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P1"], self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P2"], self.tag)
+			if tib_joint_p1 != None and tib_joint_p2 != None:
+				self.draw_tools.create_myline(tib_joint_p1, tib_joint_p2, self.tag)
 				isTamd = True
 
 			# ------------------------
@@ -95,32 +107,26 @@ class TAMD():
 			# ------------------------
 			# TIB AXIS
 			# TOP
-			if self.dict["MAIN"][side]["AXIS_TIB"]["TOP"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["AXIS_TIB"]["TOP"]["P1"], "white", self.tag)
+			if tib_top_p1 != None:
+				self.draw_tools.create_mypoint(tib_top_p1, "white", self.tag)
 
-			if self.dict["MAIN"][side]["AXIS_TIB"]["TOP"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["AXIS_TIB"]["TOP"]["P2"], "white", self.tag)
+			if tib_top_p2 != None:
+				self.draw_tools.create_mypoint(tib_top_p2, "white", self.tag)
 
-			if self.dict["MAIN"][side]["AXIS_TIB"]["TOP"]["P1"] != None and self.dict["MAIN"][side]["AXIS_TIB"]["TOP"]["P2"] != None:
-				p1 = self.dict["MAIN"][side]["AXIS_TIB"]["TOP"]["P1"]
-				p2 = self.dict["MAIN"][side]["AXIS_TIB"]["TOP"]["P2"]
-				m1 = self.dict["MAIN"][side]["AXIS_TIB"]["TOP"]["M1"]
-				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
+			if tib_top_p1 != None and tib_top_p2 != None:				
+				self.draw_tools.create_midpoint_line(tib_top_p1, tib_top_p2, top_m1, self.tag)
 				isTibTop = True
 
 
 			# BOT
-			if self.dict["MAIN"][side]["AXIS_TIB"]["BOT"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["AXIS_TIB"]["BOT"]["P1"], "white", self.tag)
+			if tib_bot_p1 != None:
+				self.draw_tools.create_mypoint(tib_bot_p1, "white", self.tag)
 
-			if self.dict["MAIN"][side]["AXIS_TIB"]["BOT"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["AXIS_TIB"]["BOT"]["P2"], "white", self.tag)
+			if tib_bot_p2 != None:
+				self.draw_tools.create_mypoint(tib_bot_p2, "white", self.tag)
 
-			if self.dict["MAIN"][side]["AXIS_TIB"]["BOT"]["P1"] != None and self.dict["MAIN"][side]["AXIS_TIB"]["BOT"]["P2"] != None:
-				p1 = self.dict["MAIN"][side]["AXIS_TIB"]["BOT"]["P1"]
-				p2 = self.dict["MAIN"][side]["AXIS_TIB"]["BOT"]["P2"]
-				m1 = self.dict["MAIN"][side]["AXIS_TIB"]["BOT"]["M1"]
-				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
+			if tib_bot_p1 != None and tib_bot_p2 != None:				
+				self.draw_tools.create_midpoint_line(tib_bot_p1, tib_bot_p2, bot_m1, self.tag)
 				isTibBot = True
 
 
@@ -129,10 +135,24 @@ class TAMD():
 				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
 				# TIB-AXIS ray
 				p_tib = self.draw_tools.line_intersection(
-					(self.dict["MAIN"][side]["AXIS_TIB"]["BOT"]["M1"], self.dict["MAIN"][side]["AXIS_TIB"]["TOP"]["M1"]),
+					(bot_m1, top_m1),
 					(xtop, ytop))
 
-				self.draw_tools.create_myline(self.dict["MAIN"][side]["AXIS_TIB"]["BOT"]["M1"], p_tib, self.tag)
+				self.draw_tools.create_myline(bot_m1, p_tib, self.tag)
+
+				# find angle ray intersection point
+				p_int = self.draw_tools.line_intersection(
+						(p_tib, bot_m1),
+						(tib_joint_p1, tib_joint_p2))
+
+
+				if side == "LEFT":
+					angle = self.draw_tools.create_myAngle(tib_joint_p2, p_int, bot_m1, self.tag)
+					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60, y_offset=60)
+
+				if side == "RIGHT":
+					angle = self.draw_tools.create_myAngle(bot_m1, p_int, tib_joint_p1, self.tag)
+					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, y_offset=60)		
 
 
 

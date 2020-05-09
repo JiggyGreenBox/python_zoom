@@ -27,26 +27,29 @@ class KAOL():
 
 	def draw(self):
 
-		isLeftAnkle = False
-		isRightAnkle = False
-
 		# loop left and right
 		for side in ["LEFT","RIGHT"]:
 
-			isTamd = False
+			isTamd = False			
+
+			tib_joint_p1 = self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P1"]
+			tib_joint_p2 = self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P2"]
+			ankle_p1 = self.dict["MAIN"][side]["ANKLE"]["P1"]
+			ankle_p2 = self.dict["MAIN"][side]["ANKLE"]["P2"]
+			ankle_m1 = self.dict["MAIN"][side]["ANKLE"]["M1"]
 
 
 			# ------------------------
 			# FROM TAMD
 			# ------------------------
-			if self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P1"], "white", self.tag)
+			if tib_joint_p1 != None:
+				self.draw_tools.create_mypoint(tib_joint_p1, "white", self.tag)
 
-			if self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P2"], "white", self.tag)
+			if tib_joint_p2 != None:
+				self.draw_tools.create_mypoint(tib_joint_p2, "white", self.tag)
 
-			if self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P1"] != None and self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P2"] != None:
-				self.draw_tools.create_myline(self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P1"], self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P2"], self.tag)
+			if tib_joint_p1 != None and tib_joint_p2 != None:
+				self.draw_tools.create_myline(tib_joint_p1, tib_joint_p2, self.tag)
 				isTamd = True
 
 
@@ -54,68 +57,62 @@ class KAOL():
 			# FROM MAIN
 			# ------------------------			
 			# ANKLE
-			if self.dict["MAIN"][side]["ANKLE"]["P1"] != None and self.dict["MAIN"][side]["ANKLE"]["P2"] != None:
+			if ankle_p1 != None and ankle_p2 != None:
+				
+				self.draw_tools.create_mypoint(ankle_p1, "white", self.tag)
+				self.draw_tools.create_mypoint(ankle_p2, "white", self.tag)
+				self.draw_tools.create_midpoint_line(ankle_p1, ankle_p2, ankle_m1, self.tag)
 
 
-				p1 = self.dict["MAIN"][side]["ANKLE"]["P1"]
-				p2 = self.dict["MAIN"][side]["ANKLE"]["P2"]
-				m1 = self.dict["MAIN"][side]["ANKLE"]["M1"]
-				self.draw_tools.create_mypoint(p1, "white", self.tag)
-				self.draw_tools.create_mypoint(p2, "white", self.tag)
-				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
 
-				if side == "RIGHT":
-					isRightAnkle = True
+				# =============CLEAN UP==================================
+				slope = self.slope(ankle_p1, ankle_p2)
 
-				if side == "LEFT":
-					isLeftAnkle = True
+				C = [0,0]
+				# D = p1
 
-		if isLeftAnkle and isRightAnkle:
-			p_left = self.dict["MAIN"]["LEFT"]["ANKLE"]["M1"]
-			p_right = self.dict["MAIN"]["RIGHT"]["ANKLE"]["M1"]
+				dy = math.sqrt(100**2/(slope**2+1))
+				dx = -slope*dy
+				# print("DX"+str(dx))
+				# print("DY"+str(dy))
+				C[0] = ankle_m1[0] + dx
+				C[1] = ankle_m1[1] + dy
+				# D[0] = m1[0] - dx
+				# D[1] = m1[1] - dy
 
-			self.draw_tools.create_myline(p_left, p_right, self.tag)
+				print(C)
+				# print(D)
 
-			slope = self.slope(p_left, p_right)
+				self.draw_tools.create_mypoint(C, "white", self.tag)
+				# self.draw_tools.create_mypoint(D, "white", self.tag)
+
+				# self.draw_tools.create_myline(C, D, self.tag)
+
+				if isTamd:
+
+					xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
+
+					# hip-knee ray
+					p_top = self.draw_tools.line_intersection((ankle_m1, C),(xtop, ytop))
+					self.draw_tools.create_myline(ankle_m1, p_top, self.tag)
 
 
-			L = [0,0]
-			R = [0,0]
-			# D = p1
+					# find angle ray intersection point
+					p_int = self.draw_tools.line_intersection((ankle_m1, p_top),(tib_joint_p1, tib_joint_p2))
 
-			dy = math.sqrt(100**2/(slope**2+1))
-			dx = -slope*dy
-			# print("DX"+str(dx))
-			# print("DY"+str(dy))
-			L[0] = p_left[0] + dx
-			L[1] = p_left[1] + dy
+					if side == "LEFT":
+						angle = self.draw_tools.create_myAngle(tib_joint_p2, p_int, ankle_m1, self.tag)
+						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60, y_offset=-60)
 
-			R[0] = p_right[0] + dx
-			R[1] = p_right[1] + dy
-
-			self.draw_tools.create_mypoint(L, "white", self.tag)
-			self.draw_tools.create_mypoint(R, "white", self.tag)
-
-			xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
-
-			# hip-knee ray
-			p_top_L = self.draw_tools.line_intersection(
-				(p_left, L),
-				(xtop, ytop))
-
-			p_top_R = self.draw_tools.line_intersection(
-				(p_right, R),
-				(xtop, ytop))
-
-			self.draw_tools.create_myline(p_left, p_top_L, self.tag)
-			self.draw_tools.create_myline(p_right, p_top_R, self.tag)
+					if side == "RIGHT":
+						angle = self.draw_tools.create_myAngle(ankle_m1, p_int, tib_joint_p1, self.tag)
+						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, y_offset=-60)
 
 
 	def update_canvas(self, draw_tools):
 		self.draw_tools = draw_tools
 
+
 	def unset(self):
 		print("unset from "+self.name)
-		self.draw_tools.clear_by_tag(self.tag)		
-
-						
+		self.draw_tools.clear_by_tag(self.tag)	

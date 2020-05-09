@@ -20,6 +20,8 @@ class ACOR():
 		if self.side == None:
 			print("please choose side")
 			self.controller.warningBox("Please select a Side")
+			self.controller.testbubble()
+			print(self.dict)
 		else:
 			ret =  self.addDict(event)
 			if not ret:
@@ -233,6 +235,9 @@ class ACOR():
 
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"
+
+	def update_canvas(self, draw_tools):
+		self.draw_tools = draw_tools
 
 	def unset(self):
 		print("unset from "+self.name)

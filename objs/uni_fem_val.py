@@ -184,6 +184,9 @@ class UNI_FEM_VAL():
 		return False									
  
 
+	def update_canvas(self, draw_tools):
+		self.draw_tools = draw_tools
+
 	def unset(self):
 		print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)

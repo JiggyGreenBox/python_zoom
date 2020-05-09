@@ -15,7 +15,7 @@ from gui_draw_tools import DrawTools
 
 from menus.acor_menu import ACOR_Menu
 from menus.isr_menu import ISR_Menu
-from menus.tslope_menu import TSLOPE_Menu	
+from menus.tslope_menu import TSLOPE_Menu
 
 
 from objs.acor import ACOR
@@ -58,7 +58,7 @@ class MainWindow(ttk.Frame):
 		for F in (
 					ACOR_Menu,
 					ISR_Menu,
-					TSLOPE_Menu					
+					TSLOPE_Menu
 				):
 			page_name = F.__name__
 			frame = F(parent=navbar, controller=self)
