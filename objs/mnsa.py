@@ -38,12 +38,12 @@ class MNSA():
 		else:
 			print(self.dict)
 			ret =  self.addDict(event)
-			if ret:				
-				pass
-			else:
-				print(self.dict)
-				# self.saveDict()
+			if ret:										
+				self.controller.save_json()
+				# pass
 
+		self.controller.updateMenuLabel(self.getNextLabel(), "MNSA_Menu")
+		self.draw_tools.clear_by_tag(self.tag)
 		self.draw()
 
 
@@ -218,12 +218,7 @@ class MNSA():
 				# 		(ytop, ybot))
 				# 	self.draw_tools.create_myline(self.dict["MAIN"][side]["HIP"]["P1"], p_right, self.tag)
 
-
-
-	# save dictionary to file
-	def saveDict(self):
-		with open('patient.json', 'w') as fp:
-			json.dump(self.dict, fp, indent=4)	
+	
 
 	# menu button clicks are routed here
 	def menu_btn_click(self, action):
@@ -234,11 +229,65 @@ class MNSA():
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"
 
+		if action == "DEL-LEFT-NECK-AXIS":
+			self.dict["MNSA"]["LEFT"]["NECK_AXIS"]["P1"] = None
+			self.dict["MNSA"]["LEFT"]["NECK_AXIS"]["P2"] = None
+			self.dict["MNSA"]["LEFT"]["NECK_AXIS"]["M1"] = None
+
+			self.draw_tools.clear_by_tag(self.tag)
+			self.draw()
+			self.controller.save_json()
+
+		if action == "DEL-RIGHT-NECK-AXIS":
+			self.dict["MNSA"]["RIGHT"]["NECK_AXIS"]["P1"] = None
+			self.dict["MNSA"]["RIGHT"]["NECK_AXIS"]["P2"] = None
+			self.dict["MNSA"]["RIGHT"]["NECK_AXIS"]["M1"] = None
+
+
+
+			self.draw_tools.clear_by_tag(self.tag)
+			self.draw()
+			self.controller.save_json()
+
+		self.controller.updateMenuLabel(self.getNextLabel(), "MNSA_Menu")
 
 	def update_canvas(self, draw_tools):
 		self.draw_tools = draw_tools
+
+
+	def update_dict(self, master_dict):
+		self.dict = master_dict
+
+
+
+	def getNextLabel(self):
+
+		if self.side != None:
+			
+			for item in self.dict["MNSA"][self.side]:
+
+				# get item type 
+				item_type = self.dict["MNSA"][self.side][item]["type"]
+
+
+				# point has P1 and P2, M1 is calculated
+				if item_type == "midpoint":
+
+					# check if P1 is None				
+					if self.dict["MNSA"][self.side][item]["P1"] == None:
+						return (self.side + " " + item + " P1")
+
+
+					# check if P2 is None				
+					if self.dict["MNSA"][self.side][item]["P2"] == None:
+						return (self.side + " " + item + " P2")
+
+			return (self.side + " Done")
+
+		return None
+
  
 	def unset(self):
-		print("unset from "+self.name)
+		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag("mnsa")
 		self.side = None

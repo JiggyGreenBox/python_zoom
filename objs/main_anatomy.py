@@ -64,17 +64,13 @@ class MAIN:
 		if self.side == None:
 			print("please choose side")
 			self.controller.warningBox("Please select a Side")
+			# self.controller.testbubble()
 		else:
 			# print("proceed")
 			ret =  self.addDict(event)
-			if ret:
-				# self.draw_tools.create_token(event, "white", "main")
-				pass
-				# self.controller.updateMenuLabel(self.getNextLabel(), "MAIN_Menu")
-			else:
-				# self.controller.updateMenuLabel(self.side + " Done", "MAIN_Menu")
-				print(self.dict)
-				self.saveDict()
+			if ret:				
+				self.controller.save_json()
+				# pass
 
 		self.controller.updateMenuLabel(self.getNextLabel(), "MAIN_Menu")
 		self.draw_tools.clear_by_tag("main")
@@ -104,9 +100,84 @@ class MAIN:
 		print(action)
 		if action == "SET-LEFT":
 			self.side = "LEFT"
+			self.controller.updateMenuLabel(self.getNextLabel(), "MAIN_Menu")
+			return # avoid clear,draw,json_save
 
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"
+			self.controller.updateMenuLabel(self.getNextLabel(), "MAIN_Menu")
+			return # avoid clear,draw,json_save
+
+
+
+		if action == "DEL-LEFT-HIP":
+			self.dict["MAIN"]["LEFT"]["HIP"]["P1"] = None
+
+		if action == "DEL-RIGHT-HIP":
+			self.dict["MAIN"]["RIGHT"]["HIP"]["P1"] = None
+
+		if action == "DEL-LEFT-KNEE":
+			self.dict["MAIN"]["LEFT"]["KNEE"]["P1"] = None
+
+		if action == "DEL-RIGHT-KNEE":
+			self.dict["MAIN"]["RIGHT"]["KNEE"]["P1"] = None						
+
+		if action == "DEL-LEFT-ANKLE":
+			self.dict["MAIN"]["LEFT"]["ANKLE"]["P1"] = None
+			self.dict["MAIN"]["LEFT"]["ANKLE"]["P2"] = None
+			self.dict["MAIN"]["LEFT"]["ANKLE"]["M1"] = None			
+
+		if action == "DEL-RIGHT-ANKLE":
+			self.dict["MAIN"]["RIGHT"]["ANKLE"]["P1"] = None
+			self.dict["MAIN"]["RIGHT"]["ANKLE"]["P2"] = None
+			self.dict["MAIN"]["RIGHT"]["ANKLE"]["M1"] = None			
+
+		if action == "DEL-LEFT-FEM-TOP":
+			self.dict["MAIN"]["LEFT"]["AXIS_FEM"]["TOP"]["P1"] = None
+			self.dict["MAIN"]["LEFT"]["AXIS_FEM"]["TOP"]["P2"] = None
+			self.dict["MAIN"]["LEFT"]["AXIS_FEM"]["TOP"]["M1"] = None			
+
+		if action == "DEL-RIGHT-FEM-TOP":
+			self.dict["MAIN"]["RIGHT"]["AXIS_FEM"]["TOP"]["P1"] = None
+			self.dict["MAIN"]["RIGHT"]["AXIS_FEM"]["TOP"]["P2"] = None
+			self.dict["MAIN"]["RIGHT"]["AXIS_FEM"]["TOP"]["M1"] = None			
+
+
+		if action == "DEL-LEFT-FEM-BOT":
+			self.dict["MAIN"]["LEFT"]["AXIS_FEM"]["BOT"]["P1"] = None
+			self.dict["MAIN"]["LEFT"]["AXIS_FEM"]["BOT"]["P2"] = None
+			self.dict["MAIN"]["LEFT"]["AXIS_FEM"]["BOT"]["M1"] = None		
+
+		if action == "DEL-RIGHT-FEM-BOT":
+			self.dict["MAIN"]["RIGHT"]["AXIS_FEM"]["BOT"]["P1"] = None
+			self.dict["MAIN"]["RIGHT"]["AXIS_FEM"]["BOT"]["P2"] = None
+			self.dict["MAIN"]["RIGHT"]["AXIS_FEM"]["BOT"]["M1"] = None			
+
+
+		if action == "DEL-LEFT-TIB-TOP":
+			self.dict["MAIN"]["LEFT"]["AXIS_TIB"]["TOP"]["P1"] = None
+			self.dict["MAIN"]["LEFT"]["AXIS_TIB"]["TOP"]["P2"] = None
+			self.dict["MAIN"]["LEFT"]["AXIS_TIB"]["TOP"]["M1"] = None			
+
+		if action == "DEL-RIGHT-TIB-TOP":
+			self.dict["MAIN"]["RIGHT"]["AXIS_TIB"]["TOP"]["P1"] = None
+			self.dict["MAIN"]["RIGHT"]["AXIS_TIB"]["TOP"]["P2"] = None
+			self.dict["MAIN"]["RIGHT"]["AXIS_TIB"]["TOP"]["M1"] = None
+
+		if action == "DEL-LEFT-TIB-BOT":
+			self.dict["MAIN"]["LEFT"]["AXIS_TIB"]["BOT"]["P1"] = None
+			self.dict["MAIN"]["LEFT"]["AXIS_TIB"]["BOT"]["P2"] = None
+			self.dict["MAIN"]["LEFT"]["AXIS_TIB"]["BOT"]["M1"] = None			
+
+		if action == "DEL-RIGHT-TIB-BOT":
+			self.dict["MAIN"]["RIGHT"]["AXIS_TIB"]["BOT"]["P1"] = None
+			self.dict["MAIN"]["RIGHT"]["AXIS_TIB"]["BOT"]["P2"] = None
+			self.dict["MAIN"]["RIGHT"]["AXIS_TIB"]["BOT"]["M1"] = None			
+
+
+		self.draw_tools.clear_by_tag("main")
+		self.draw()
+		self.controller.save_json()
 
 		self.controller.updateMenuLabel(self.getNextLabel(), "MAIN_Menu")
 
@@ -316,69 +387,70 @@ class MAIN:
 
 		return False				
 
-			
+	
 
 
-	def updateDict(self, tag, point):
 
-		props = tag.split('_')
+	# def updateDict(self, tag, point):
+
+	# 	props = tag.split('_')
 		
-		# update point
-		self.dict[props[1]][props[2]] = point
+	# 	# update point
+	# 	self.dict[props[1]][props[2]] = point
 
-		otherPoint = "P2" if props[2] == "P1" else "P1"
+	# 	otherPoint = "P2" if props[2] == "P1" else "P1"
 
-		# M = ""
+	# 	# M = ""
 
-		# def moveMidPoint():
+	# 	# def moveMidPoint():
 			
 			
-		# if type is midpoint update midpoint
-		if self.dict[props[1]]["type"] == "midpoint":			
-			# check if other point is drawn
-			if self.dict[props[1]][otherPoint] != None:
-				M = self.draw_tools.midpoint(self.dict[props[1]][otherPoint], point)
-				self.dict[props[1]]["M1"] = M	
+	# 	# if type is midpoint update midpoint
+	# 	if self.dict[props[1]]["type"] == "midpoint":			
+	# 		# check if other point is drawn
+	# 		if self.dict[props[1]][otherPoint] != None:
+	# 			M = self.draw_tools.midpoint(self.dict[props[1]][otherPoint], point)
+	# 			self.dict[props[1]]["M1"] = M	
 
 
 
-		# when L1 or L2
-			# if exists both L1 and L2
-				# if L1 update R1 P1
-					# line intersection L1M1 L2M1
-				# if L2 R1 P2
-					# line intersection L1M1 L2M1
-		if props[1] == "L1" or "L2":
-			if self.dict["L1"]["P1"] != None and self.dict["L2"]["P1"] != None:
-				if props[1] == "L1":
-					# print(M)
-					xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
+	# 	# when L1 or L2
+	# 		# if exists both L1 and L2
+	# 			# if L1 update R1 P1
+	# 				# line intersection L1M1 L2M1
+	# 			# if L2 R1 P2
+	# 				# line intersection L1M1 L2M1
+	# 	if props[1] == "L1" or "L2":
+	# 		if self.dict["L1"]["P1"] != None and self.dict["L2"]["P1"] != None:
+	# 			if props[1] == "L1":
+	# 				# print(M)
+	# 				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
 														
-					# R1M1 = self.dict["L1"]["M1"]
-					R1M2 = self.dict["L2"]["M1"]
-					ray1P1 = self.draw_tools.line_intersection((M, R1M2), (xtop, ytop))
-					self.dict["R1"]["P1"] = ray1P1
-				if props[1] == "L2":
-					self.dict["R1"]["P2"] = M
+	# 				# R1M1 = self.dict["L1"]["M1"]
+	# 				R1M2 = self.dict["L2"]["M1"]
+	# 				ray1P1 = self.draw_tools.line_intersection((M, R1M2), (xtop, ytop))
+	# 				self.dict["R1"]["P1"] = ray1P1
+	# 			if props[1] == "L2":
+	# 				self.dict["R1"]["P2"] = M
 					
-		# when L3 or L4
-			# if exists both L3 and L4
-				# if L3 R2 P1
-					# line intersection L3M1 L4M1
-				# if L4 R2 P2
-					# line intersection L3M1 L4M1
-		if props[1] == "L3" or "L4":
-			if self.dict["L3"]["P1"] != None and self.dict["L4"]["P1"] != None:
+	# 	# when L3 or L4
+	# 		# if exists both L3 and L4
+	# 			# if L3 R2 P1
+	# 				# line intersection L3M1 L4M1
+	# 			# if L4 R2 P2
+	# 				# line intersection L3M1 L4M1
+	# 	if props[1] == "L3" or "L4":
+	# 		if self.dict["L3"]["P1"] != None and self.dict["L4"]["P1"] != None:
 
-				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
+	# 			xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
 
-				if props[1] == "L3":
-					self.dict["R2"]["P1"] = self.draw_tools.line_intersection((M, self.dict["L4"]["P1"]), (xtop, xbot))
+	# 			if props[1] == "L3":
+	# 				self.dict["R2"]["P1"] = self.draw_tools.line_intersection((M, self.dict["L4"]["P1"]), (xtop, xbot))
 
-				if props[1] == "L4":
+	# 			if props[1] == "L4":
 					
-					self.dict["R2"]["P2"] = point
-					self.dict["R2"]["P1"] = self.draw_tools.line_intersection((point, self.dict["L3"]["M1"]), (xtop, xbot))
+	# 				self.dict["R2"]["P2"] = point
+	# 				self.dict["R2"]["P1"] = self.draw_tools.line_intersection((point, self.dict["L3"]["M1"]), (xtop, xbot))
 
 
 	def drawLines(self):
@@ -492,7 +564,11 @@ class MAIN:
 		self.draw_tools = draw_tools
 
 
+	def update_dict(self, master_dict):
+		self.dict = master_dict
+
+
 	def unset(self):
-		print("unset from "+self.name)
+		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag("main")
 		self.side = None

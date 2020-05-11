@@ -119,34 +119,43 @@ class KJLO():
 			R_tib_joint_p1 = self.dict["TAMD"]["RIGHT"]["TIB_JOINT_LINE"]["P1"]
 			R_tib_joint_p2 = self.dict["TAMD"]["RIGHT"]["TIB_JOINT_LINE"]["P2"]
 
+
+
+
 			# find points on edges
-			L_tib_joint_L_limit = self.draw_tools.line_intersection((L_tib_joint_p1, L_tib_joint_p2),(xtop, xbot))
-			L_tib_joint_R_limit = self.draw_tools.line_intersection((L_tib_joint_p1, L_tib_joint_p2),(ytop, ybot))
+			if L_tib_joint_p1 != None and L_tib_joint_p2 != None:
+				L_tib_joint_L_limit = self.draw_tools.line_intersection((L_tib_joint_p1, L_tib_joint_p2),(xtop, xbot))
+				L_tib_joint_R_limit = self.draw_tools.line_intersection((L_tib_joint_p1, L_tib_joint_p2),(ytop, ybot))
 
-			R_tib_joint_L_limit = self.draw_tools.line_intersection((R_tib_joint_p1, R_tib_joint_p2),(xtop, xbot))
-			R_tib_joint_R_limit = self.draw_tools.line_intersection((R_tib_joint_p1, R_tib_joint_p2),(ytop, ybot))
+				# intersection points
+				p_int_L = self.draw_tools.line_intersection((p_top_L, p_left),(L_tib_joint_L_limit, L_tib_joint_R_limit))
 
-			# intersection points			
-			p_int_L = self.draw_tools.line_intersection((p_top_L, p_left),(L_tib_joint_L_limit, L_tib_joint_R_limit))
-			p_int_R = self.draw_tools.line_intersection((p_top_R, p_right),(R_tib_joint_L_limit, R_tib_joint_R_limit))
+				# draw angles
+				L_angle = self.draw_tools.create_myAngle(p_left, p_int_L, L_tib_joint_L_limit, self.tag)
+				self.draw_tools.create_mytext(p_int_L, '{0:.2f}'.format(L_angle), self.tag, x_offset=-60, y_offset=-60)
 
-			# draw angles
-			L_angle = self.draw_tools.create_myAngle(p_left, p_int_L, L_tib_joint_L_limit, self.tag)
-			self.draw_tools.create_mytext(p_int_L, '{0:.2f}'.format(L_angle), self.tag, x_offset=-60, y_offset=-60)
+			if R_tib_joint_p1 != None and R_tib_joint_p2 != None:
+				R_tib_joint_L_limit = self.draw_tools.line_intersection((R_tib_joint_p1, R_tib_joint_p2),(xtop, xbot))
+				R_tib_joint_R_limit = self.draw_tools.line_intersection((R_tib_joint_p1, R_tib_joint_p2),(ytop, ybot))
 
-			R_angle = self.draw_tools.create_myAngle(R_tib_joint_R_limit, p_int_R, p_right, self.tag)
-			self.draw_tools.create_mytext(p_int_R, '{0:.2f}'.format(R_angle), self.tag, x_offset=60, y_offset=-60)
-
-
-
-
+				# intersection points
+				p_int_R = self.draw_tools.line_intersection((p_top_R, p_right),(R_tib_joint_L_limit, R_tib_joint_R_limit))
+				
+				# draw angles
+				R_angle = self.draw_tools.create_myAngle(R_tib_joint_R_limit, p_int_R, p_right, self.tag)
+				self.draw_tools.create_mytext(p_int_R, '{0:.2f}'.format(R_angle), self.tag, x_offset=60, y_offset=-60)
 
 
 	def update_canvas(self, draw_tools):
 		self.draw_tools = draw_tools
 
+
+	def update_dict(self, master_dict):
+		self.dict = master_dict
+
+
 	def unset(self):
-		print("unset from "+self.name)
+		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)		
 	
 

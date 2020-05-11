@@ -21,12 +21,14 @@ class ALDFA():
 			print("please choose side")
 			self.controller.warningBox("Please select a Side")
 		else:
-			print(self.dict)
+			# print(self.dict)
 			ret =  self.addDict(event)
 			if ret:
-				pass
-			else:
-				print(self.dict)			
+				self.controller.save_json()
+				# pass
+
+		self.controller.updateMenuLabel(self.getNextLabel(), "ALDFA_Menu")
+		self.draw_tools.clear_by_tag(self.tag)
 		self.draw()
 
 
@@ -197,9 +199,57 @@ class ALDFA():
 			self.side = "RIGHT"
 
 
+
+		if action == "DEL-LEFT-FEM-LINE":
+			self.dict["ALDFA"]["LEFT"]["FEM_JOINT_LINE"]["P1"] = None
+			self.dict["ALDFA"]["LEFT"]["FEM_JOINT_LINE"]["P2"] = None
+			self.draw_tools.clear_by_tag(self.tag)
+			self.draw()
+			self.controller.save_json()
+
+		if action == "DEL-RIGHT-FEM-LINE":
+			self.dict["ALDFA"]["RIGHT"]["FEM_JOINT_LINE"]["P1"] = None
+			self.dict["ALDFA"]["RIGHT"]["FEM_JOINT_LINE"]["P2"] = None
+			self.draw_tools.clear_by_tag(self.tag)
+			self.draw()
+			self.controller.save_json()
+
+		self.controller.updateMenuLabel(self.getNextLabel(), "ALDFA_Menu")
+
+
+
+	def getNextLabel(self):
+
+		if self.side != None:
+
+			for item in self.dict["ALDFA"][self.side]:
+				
+				# get item type 
+				item_type = self.dict["ALDFA"][self.side][item]["type"]
+
+				# line has P1 and P2
+				if item_type == "line":
+
+					# check if P1 is None				
+					if self.dict["ALDFA"][self.side][item]["P1"] == None:						
+						return (self.side + " " + item + " P1")
+
+
+					# check if P2 is None				
+					if self.dict["ALDFA"][self.side][item]["P2"] == None:						
+						return (self.side + " " + item + " P2")
+
+				return (self.side + " Done")
+
+		return None
+
+
 	def update_canvas(self, draw_tools):
 		self.draw_tools = draw_tools
+
+	def update_dict(self, master_dict):
+		self.dict = master_dict
 		
 	def unset(self):
-		print("unset from "+self.name)
+		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)

@@ -31,3 +31,6 @@ class MNSA_Menu(tk.Frame):
 
 		button = ttk.Button(self, text="NECK AXIS", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-NECK-AXIS"))
 		button.grid(column=2, row=4)
+
+	def setLabelText(self, label_text):
+		self.label.config(text=label_text)		

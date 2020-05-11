@@ -20,7 +20,7 @@ from gui_draw_tools import DrawTools
 from tkinter import messagebox
 
 class PRE_SKY_View(tk.Frame):
-	def __init__(self, parent, controller):
+	def __init__(self, parent, controller, master_dict):
 		tk.Frame.__init__(self, parent)
 		self.controller = controller
 
@@ -28,7 +28,8 @@ class PRE_SKY_View(tk.Frame):
 		# loaded from pat.json
 		self.med_image = ""
 		self.canvas = ""
-		self.master_dict = {}
+		# self.master_dict = {}		
+		self.master_dict = master_dict
 
 		# topbar
 		self.topbar = Frame(self, height=100)
@@ -73,7 +74,7 @@ class PRE_SKY_View(tk.Frame):
 					P_TILT
 				):
 			obj_name = Obj.__name__
-			print(obj_name)
+			# print(obj_name)
 			self.objects[obj_name] = Obj(self.canvas, self.master_dict, controller=self)
 
 	def show_frame(self, page_name):
@@ -90,16 +91,43 @@ class PRE_SKY_View(tk.Frame):
 			return True
 		return False
 
+
+	def update_dict(self, master_dict):
+		
+		# update dictionaries
+		self.master_dict = master_dict
+		for obj in self.objects:
+			self.objects[obj].update_dict(master_dict)
+
+		# found json data, load image from json
+		if self.master_dict["IMAGES"]["PRE-SKY"] != None:
+
+			self.med_image = self.master_dict["IMAGES"]["PRE-SKY"]
+			self.canvas = DrawTools(self.content_frame, image)  # create widget
+			self.canvas.grid(row=0, column=0)  # show widget
+
+			# update canvas object for children
+			for obj in self.objects:			
+				self.objects[obj].update_canvas(self.canvas)
+
+
+
 	def open_image_loc(self):		
 		image = filedialog.askopenfilename(initialdir=self.controller.working_dir)
 
 		if image != "":
+			# current session
 			self.med_image = image
 			self.canvas = DrawTools(self.content_frame, image)  # create widget
 			self.canvas.grid(row=0, column=0)  # show widget
 
+			# update canvas object for children
 			for obj in self.objects:			
 				self.objects[obj].update_canvas(self.canvas)
+
+			# save to json for future sessions
+			self.master_dict["IMAGES"]["PRE-SKY"] = image
+
 
 	def menu_btn_click(self, obj_name, action):
 		'''Route menu click to object page'''		

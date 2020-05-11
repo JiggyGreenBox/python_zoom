@@ -72,6 +72,11 @@ class VCA():
 		self.draw_tools = draw_tools
 
 
+	def update_dict(self, master_dict):
+		self.dict = master_dict		
+
+
+
 	def unset(self):
-		print("unset from "+self.name)
+		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)

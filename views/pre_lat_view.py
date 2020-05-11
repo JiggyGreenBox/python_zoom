@@ -22,7 +22,7 @@ from gui_draw_tools import DrawTools
 from tkinter import messagebox
 
 class PRE_LAT_View(tk.Frame):
-	def __init__(self, parent, controller):
+	def __init__(self, parent, controller, master_dict):
 		tk.Frame.__init__(self, parent)
 		self.controller = controller
 		
@@ -30,7 +30,8 @@ class PRE_LAT_View(tk.Frame):
 		# loaded from pat.json
 		self.med_image = ""
 		self.canvas = ""
-		self.master_dict = {}
+		# self.master_dict = {}
+		self.master_dict = master_dict
 
 		# topbar
 		self.topbar = Frame(self, height=100)
@@ -78,7 +79,7 @@ class PRE_LAT_View(tk.Frame):
 					TSLOPE
 				):
 			obj_name = Obj.__name__
-			print(obj_name)
+			# print(obj_name)
 			self.objects[obj_name] = Obj(self.canvas, self.master_dict, controller=self)
 
 	def show_frame(self, page_name):
@@ -91,9 +92,13 @@ class PRE_LAT_View(tk.Frame):
 		messagebox.showwarning("Warning", message)
 
 
-	def testbubble(self):
+	def save_json(self):
 		'''bubble to top'''
-		self.controller.test_excel()
+		self.controller.save_json()
+
+
+	def update_dict(self, master_dict):
+		self.master_dict = master_dict
 
 
 

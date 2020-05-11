@@ -21,14 +21,19 @@ class TAMD():
 			print("please choose side")
 			self.controller.warningBox("Please select a Side")
 		else:
-			pass
-			# print(self.dict)
+			# print(self.dict)			
 			ret =  self.addDict(event)
 			if ret:
-				pass
-			else:
-				print(self.dict)			
+				self.controller.save_json()
+				# pass
+
+
+		self.controller.updateMenuLabel(self.getNextLabel(), "TAMD_Menu")
+		self.draw_tools.clear_by_tag(self.tag)
 		self.draw()
+		
+
+
 
 	def checkMasterDict(self):
 		if "TAMD" not in self.dict.keys():
@@ -156,6 +161,29 @@ class TAMD():
 
 
 
+	def getNextLabel(self):
+		if self.side != None:
+			for item in self.dict["TAMD"][self.side]:
+				
+				# get item type 
+				item_type = self.dict["TAMD"][self.side][item]["type"]
+
+				# line has P1 and P2
+				if item_type == "line":
+
+					# check if P1 is None				
+					if self.dict["TAMD"][self.side][item]["P1"] == None:					
+						return (self.side + " " + item + " P1")
+
+
+					# check if P2 is None				
+					if self.dict["TAMD"][self.side][item]["P2"] == None:				
+						return (self.side + " " + item + " P2")
+
+				return (self.side + " Done")
+		return None
+
+
 	# menu button clicks are routed here
 	def menu_btn_click(self, action):
 		print(action)
@@ -165,10 +193,31 @@ class TAMD():
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"
 
+		if action == "DEL-LEFT-TIB-LINE":
+			self.dict["TAMD"]["LEFT"]["TIB_JOINT_LINE"]["P1"] = None
+			self.dict["TAMD"]["LEFT"]["TIB_JOINT_LINE"]["P2"] = None
+			self.draw_tools.clear_by_tag(self.tag)
+			self.draw()
+			self.controller.save_json()
+
+		if action == "DEL-RIGHT-TIB-LINE":
+			self.dict["TAMD"]["RIGHT"]["TIB_JOINT_LINE"]["P1"] = None
+			self.dict["TAMD"]["RIGHT"]["TIB_JOINT_LINE"]["P2"] = None
+			self.draw_tools.clear_by_tag(self.tag)
+			self.draw()
+			self.controller.save_json()
+
+		self.controller.updateMenuLabel(self.getNextLabel(), "TAMD_Menu")
+
 
 	def update_canvas(self, draw_tools):
 		self.draw_tools = draw_tools
 
+
+	def update_dict(self, master_dict):
+		self.dict = master_dict
+
+
 	def unset(self):
-		print("unset from "+self.name)
+		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)

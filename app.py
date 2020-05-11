@@ -10,21 +10,6 @@ from tkinter import ttk
 from tkinter import *
 from PIL import Image, ImageTk
 
-# from gui_canvas import CanvasImage
-from gui_draw_tools import DrawTools
-
-# from menus.afta_menu import AFTA_Menu
-# from menus.aldfa_menu import ALDFA_Menu
-# from menus.hka_menu import HKA_Menu
-# from menus.mldfa_menu import MLDFA_Menu
-# from menus.mnsa_menu import MNSA_Menu
-# from menus.tamd_menu import TAMD_Menu
-# from menus.mpta_menu import MPTA_Menu
-# from menus.vca_menu import VCA_Menu
-# from menus.kjlo_menu import KJLO_Menu
-# from menus.kaol_menu import KAOL_Menu
-# from menus.main_menu import MAIN_Menu
-
 
 from views.pre_scanno_view import PRE_SCANNO_View
 from views.post_scanno_view import POST_SCANNO_View
@@ -39,18 +24,6 @@ from views.details_view import DETAILS_View
 from views.set_working_view import SET_WORKING_View
 
 
-from objs.afta import AFTA
-from objs.hka import HKA
-from objs.mnsa import MNSA
-from objs.aldfa import ALDFA
-from objs.mldfa import MLDFA
-from objs.tamd import TAMD
-from objs.mpta import MPTA
-from objs.vca import VCA
-from objs.kjlo import KJLO
-from objs.kaol import KAOL
-from objs.main_anatomy import MAIN
-
 # read json file
 from pathlib import Path
 import json
@@ -62,7 +35,7 @@ from tkinter import filedialog
 
 
 class DETAILS_View(tk.Frame):
-	def __init__(self, parent, controller):
+	def __init__(self, parent, controller, master_dict):
 		tk.Frame.__init__(self, parent)
 		self.controller = controller		
 
@@ -71,6 +44,9 @@ class DETAILS_View(tk.Frame):
 		# This class has no image related to it
 		# exception for DETAILS_View
 		return True
+
+	def update_dict(self, master_dict):
+		pass
 
 
 
@@ -88,6 +64,8 @@ class MainWindow(ttk.Frame):
 		self.master.grid_columnconfigure(0, weight=1) # as did this
 
 		self.working_dir = ""
+		self.master_dict = {}
+		self.add_image_path_masterdict()
 
 		
 		# topbar
@@ -116,7 +94,7 @@ class MainWindow(ttk.Frame):
 					SET_WORKING_View
 				):
 			page_name = V.__name__
-			view = V(parent=self.master, controller=self)
+			view = V(parent=self.master, controller=self, master_dict=self.master_dict)
 			# view = V(parent=place_holder, controller=self)
 			self.views[page_name] = view
 
@@ -133,12 +111,31 @@ class MainWindow(ttk.Frame):
 
 	
 	def set_working_dir(self):
-		self.working_dir = filedialog.askdirectory()		
+		self.working_dir = filedialog.askdirectory()
 		if self.working_dir == "":
 			self.show_view("SET_WORKING")
 		else:
 			self.topbar.grid(row=0, column=0, sticky="we")
 			self.show_view("DETAILS")
+
+			try:
+				my_file = Path("pat.json")
+				if my_file.is_file():
+					# file exists
+					print("pat.json exists")
+
+					with open(my_file) as f:
+						d = json.load(f)
+						self.master_dict = d
+						print(d)
+
+				# update all dictionaries
+				for view in self.views:
+					self.views[view].update_dict(self.master_dict)
+
+
+			except Exception as e:
+				raise e
 
 
 	def show_view(self, page_name):
@@ -159,8 +156,28 @@ class MainWindow(ttk.Frame):
 		view.tkraise()
 
 
-	def test_excel(self):
+	def save_json(self):
 		print("successfully bubbled to the top")
+		print(self.master_dict)
+
+		with open('pat.json', 'w', encoding='utf-8') as f:
+			json.dump(self.master_dict, f, ensure_ascii=False, indent=4)
+
+
+
+	def add_image_path_masterdict(self):
+		if "IMAGES" not in self.master_dict.keys():
+			self.master_dict["IMAGES"] = 	{
+										"DETAILS":None,
+										"PRE-SCANNO":None,
+										"PRE-AP":None,
+										"PRE-LAT":None,
+										"PRE-SKY":None,
+										"POST-SCANNO":None,
+										"POST-AP":None,
+										"POST-LAT":None,
+										"POST-SKY":None
+									}
 
 
 

@@ -5,7 +5,7 @@ from tkinter import ttk
 from tkinter import *
 
 class POST_SKY_View(tk.Frame):
-	def __init__(self, parent, controller):
+	def __init__(self, parent, controller, master_dict):
 		tk.Frame.__init__(self, parent)
 		self.controller = controller
 
@@ -24,3 +24,8 @@ class POST_SKY_View(tk.Frame):
 			self.med_image = image
 		else:
 			print("image is blank")		
+
+
+
+	def update_dict(self, master_dict):
+		pass

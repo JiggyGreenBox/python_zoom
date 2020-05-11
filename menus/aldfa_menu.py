@@ -31,4 +31,8 @@ class ALDFA_Menu(tk.Frame):
 		button.grid(column=1, row=4)
 
 		button = ttk.Button(self, text="FEM LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-FEM-LINE"))
-		button.grid(column=2, row=4)		
+		button.grid(column=2, row=4)	
+
+
+	def setLabelText(self, label_text):
+		self.label.config(text=label_text)	

@@ -20,8 +20,8 @@ class ACOR():
 		if self.side == None:
 			print("please choose side")
 			self.controller.warningBox("Please select a Side")
-			self.controller.testbubble()
-			print(self.dict)
+			self.controller.save_json()
+			# print(self.dict)
 		else:
 			ret =  self.addDict(event)
 			if not ret:
@@ -204,6 +204,8 @@ class ACOR():
 					self.dict["ACOR"][self.side][item]["BOT"]["M1"] = M
 					return True	
 
+	def update_dict(self, master_dict):
+		self.dict = master_dict
 
 
 
@@ -240,5 +242,5 @@ class ACOR():
 		self.draw_tools = draw_tools
 
 	def unset(self):
-		print("unset from "+self.name)
+		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)

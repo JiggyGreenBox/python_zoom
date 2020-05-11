@@ -22,7 +22,7 @@ from tkinter import messagebox
 
 
 class PRE_AP_View(tk.Frame):
-	def __init__(self, parent, controller):
+	def __init__(self, parent, controller, master_dict):
 		tk.Frame.__init__(self, parent)
 		self.controller = controller
  
@@ -30,7 +30,7 @@ class PRE_AP_View(tk.Frame):
 		# loaded from pat.json
 		self.med_image = ""
 		self.canvas = ""
-		self.master_dict = {}
+		self.master_dict = master_dict
 
 		# topbar
 		self.topbar = Frame(self, height=100)
@@ -75,7 +75,7 @@ class PRE_AP_View(tk.Frame):
 					UNI_FEM_VAL
 				):
 			obj_name = Obj.__name__
-			print(obj_name)
+			# print(obj_name)
 			self.objects[obj_name] = Obj(self.canvas, self.master_dict, controller=self)
 
 
@@ -113,6 +113,10 @@ class PRE_AP_View(tk.Frame):
 	def updateMenuLabel(self, label_text, menu_obj):
 		'''Set label text for user instructions'''
 		self.frames[menu_obj].setLabelText(label_text)
+
+
+	def update_dict(self, master_dict):
+		self.master_dict = master_dict
 
 
 	def unsetObjs(self, obj_name):
