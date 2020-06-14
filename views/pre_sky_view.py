@@ -84,7 +84,13 @@ class PRE_SKY_View(tk.Frame):
 
 	def warningBox(self, message):
 		'''Display a warning box with message'''
-		messagebox.showwarning("Warning", message)		
+		messagebox.showwarning("Warning", message)
+
+
+	def save_json(self):
+		'''bubble to top'''
+		self.controller.save_json()
+
 
 	def is_set_med_image(self):
 		if self.med_image != "":
@@ -103,7 +109,7 @@ class PRE_SKY_View(tk.Frame):
 		if self.master_dict["IMAGES"]["PRE-SKY"] != None:
 
 			self.med_image = self.master_dict["IMAGES"]["PRE-SKY"]
-			self.canvas = DrawTools(self.content_frame, image)  # create widget
+			self.canvas = DrawTools(self.content_frame, self.med_image)  # create widget
 			self.canvas.grid(row=0, column=0)  # show widget
 
 			# update canvas object for children
@@ -136,7 +142,7 @@ class PRE_SKY_View(tk.Frame):
 
 	def updateMenuLabel(self, label_text, menu_obj):
 		'''Set label text for user instructions'''
-		self.frames[menu_obj].setLabelText(label_text)
+		self.menus[menu_obj].setLabelText(label_text)
 
 
 	def unsetObjs(self, obj_name):

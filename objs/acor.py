@@ -1,4 +1,4 @@
-
+import math
 
 class ACOR():
 	"""docstring for ClassName"""
@@ -24,13 +24,13 @@ class ACOR():
 			# print(self.dict)
 		else:
 			ret =  self.addDict(event)
-			if not ret:
-				# print("dict full")
-				print(self.dict["ACOR"])
-			# print(self.side)
+			if ret:
+				self.controller.save_json()
+				# pass
 
+		self.controller.updateMenuLabel(self.getNextLabel(), "ACOR_Menu")
+		self.draw_tools.clear_by_tag(self.tag)
 		self.draw()
-		# print(self.dict)
 
 
 	def checkMasterDict(self):
@@ -67,49 +67,54 @@ class ACOR():
 			isP1 = False
 			isP2 = False
 
+			acor_p1 = self.dict["ACOR"][side]["P1"]["P1"]
+			acor_p2 = self.dict["ACOR"][side]["P2"]["P1"]
+
+			axis_fem_top_p1 = self.dict["ACOR"][side]["AXIS_FEM"]["TOP"]["P1"]
+			axis_fem_top_p2 = self.dict["ACOR"][side]["AXIS_FEM"]["TOP"]["P2"]
+			axis_fem_top_m1 = self.dict["ACOR"][side]["AXIS_FEM"]["TOP"]["M1"]
+
+			axis_fem_bot_p1 = self.dict["ACOR"][side]["AXIS_FEM"]["BOT"]["P1"]
+			axis_fem_bot_p2 = self.dict["ACOR"][side]["AXIS_FEM"]["BOT"]["P2"]
+			axis_fem_bot_m1 = self.dict["ACOR"][side]["AXIS_FEM"]["BOT"]["M1"]
+
 			for item in self.dict["ACOR"][side]:
 
 				item_type = self.dict["ACOR"][side][item]["type"]
 
 				if item_type == "point":
-					if self.dict["ACOR"][side]["P1"]["P1"] != None:
-						self.draw_tools.create_mypoint(self.dict["ACOR"][side]["P1"]["P1"], "white", self.tag)
+					if acor_p1 != None:
+						self.draw_tools.create_mypoint(acor_p1, "white", self.tag)
 						isP1 = True
 
-					if self.dict["ACOR"][side]["P2"]["P1"] != None:
-						self.draw_tools.create_mypoint(self.dict["ACOR"][side]["P2"]["P1"], "white", self.tag)
+					if acor_p2 != None:
+						self.draw_tools.create_mypoint(acor_p2, "white", self.tag)
 						isP2 = True
 
 
 				if item_type == "axis":
 					# FEM AXIS
 					# TOP
-					if self.dict["ACOR"][side]["AXIS_FEM"]["TOP"]["P1"] != None:
-						self.draw_tools.create_mypoint(self.dict["ACOR"][side]["AXIS_FEM"]["TOP"]["P1"], "white", self.tag)
+					if axis_fem_top_p1 != None:
+						self.draw_tools.create_mypoint(axis_fem_top_p1, "white", self.tag)
 
-					if self.dict["ACOR"][side]["AXIS_FEM"]["TOP"]["P2"] != None:
-						self.draw_tools.create_mypoint(self.dict["ACOR"][side]["AXIS_FEM"]["TOP"]["P2"], "white", self.tag)
+					if axis_fem_top_p2 != None:
+						self.draw_tools.create_mypoint(axis_fem_top_p2, "white", self.tag)
 
-					if self.dict["ACOR"][side]["AXIS_FEM"]["TOP"]["P1"] != None and self.dict["ACOR"][side]["AXIS_FEM"]["TOP"]["P2"] != None:
-						p1 = self.dict["ACOR"][side]["AXIS_FEM"]["TOP"]["P1"]
-						p2 = self.dict["ACOR"][side]["AXIS_FEM"]["TOP"]["P2"]
-						m1 = self.dict["ACOR"][side]["AXIS_FEM"]["TOP"]["M1"]
-						self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
+					if axis_fem_top_p1 != None and axis_fem_top_p2 != None:						
+						# self.draw_tools.create_midpoint_line(axis_fem_top_p1, axis_fem_top_p2, axis_fem_top_m1, self.tag)
 						isFemTop = True
 
 
 					# BOT
-					if self.dict["ACOR"][side]["AXIS_FEM"]["BOT"]["P1"] != None:
-						self.draw_tools.create_mypoint(self.dict["ACOR"][side]["AXIS_FEM"]["BOT"]["P1"], "white", self.tag)
+					if axis_fem_bot_p1 != None:
+						self.draw_tools.create_mypoint(axis_fem_bot_p1, "white", self.tag)
 
-					if self.dict["ACOR"][side]["AXIS_FEM"]["BOT"]["P2"] != None:
-						self.draw_tools.create_mypoint(self.dict["ACOR"][side]["AXIS_FEM"]["BOT"]["P2"], "white", self.tag)
+					if axis_fem_bot_p2 != None:
+						self.draw_tools.create_mypoint(axis_fem_bot_p2, "white", self.tag)
 
-					if self.dict["ACOR"][side]["AXIS_FEM"]["BOT"]["P1"] != None and self.dict["ACOR"][side]["AXIS_FEM"]["BOT"]["P2"] != None:
-						p1 = self.dict["ACOR"][side]["AXIS_FEM"]["BOT"]["P1"]
-						p2 = self.dict["ACOR"][side]["AXIS_FEM"]["BOT"]["P2"]
-						m1 = self.dict["ACOR"][side]["AXIS_FEM"]["BOT"]["M1"]
-						self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
+					if axis_fem_bot_p1 != None and axis_fem_bot_p2 != None:						
+						# self.draw_tools.create_midpoint_line(axis_fem_bot_p1, axis_fem_bot_p2, axis_fem_bot_m1, self.tag)
 						isFemBot = True
 
 
@@ -119,15 +124,15 @@ class ACOR():
 					xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
 
 					# FEM-AXIS ray
-					p_fem = self.draw_tools.line_intersection(
-						(self.dict["ACOR"][side]["AXIS_FEM"]["BOT"]["M1"], self.dict["ACOR"][side]["AXIS_FEM"]["TOP"]["M1"]),
-						(xbot, ybot))
+					p_bot = self.draw_tools.line_intersection((axis_fem_top_m1, axis_fem_bot_m1),(xbot, ybot))
 
-					self.draw_tools.create_myline(self.dict["ACOR"][side]["AXIS_FEM"]["TOP"]["M1"], p_fem, self.tag)
+					U_fem, L_fem = self.draw_tools.retPointsUpDown(axis_fem_top_m1, axis_fem_bot_m1)
+
+					self.draw_tools.create_myline(U_fem, p_bot, self.tag)
 
 
 
-					slope, intercept = self.slope_intercept(self.dict["ACOR"][side]["AXIS_FEM"]["BOT"]["M1"],self.dict["ACOR"][side]["AXIS_FEM"]["TOP"]["M1"])
+					slope, intercept = self.slope_intercept(axis_fem_bot_m1, axis_fem_top_m1)
 					# print("slope")
 					print(slope)
 
@@ -135,21 +140,69 @@ class ACOR():
 					print(intercept)
 					print(ytop)
 
-					if isP1:						
-						P1_t = self.dict["ACOR"][side]["P1"]["P1"]
 
-						p_xtop_p1 = (-P1_t[1] / slope) + P1_t[0]
-										
+
+
+
+
+					if isP1:
+						# parallel line
+
+						# y2-y1 = m(x2-x1)
+						# y2 = 0 {top-line}
+						# -y1/m = x2-x1
+						# (-y1/m) + x1 = x2
+						p_xtop_p1 = (-acor_p1[1] / slope) + acor_p1[0]
+									
 						# self.draw_tools.create_mypoint([x_val, 0], "orange", self.tag)
-						self.draw_tools.create_myline(self.dict["ACOR"][side]["P1"]["P1"], [p_xtop_p1,0], self.tag)
+						self.draw_tools.create_myline(acor_p1, [p_xtop_p1,0], self.tag)					
 
-					if isP2:						
-						P2_t = self.dict["ACOR"][side]["P2"]["P1"]
+					if isP2:
+						# parallel line
 
-						p_xtop_p2 = (-P2_t[1] / slope) + P2_t[0]
-										
+						# y2-y1 = m(x2-x1)
+						# y2 = 0 {top-line}
+						# -y1/m = x2-x1
+						# (-y1/m) + x1 = x2
+						p_xtop_p2 = (-acor_p2[1] / slope) + acor_p2[0]
+									
 						# self.draw_tools.create_mypoint([x_val, 0], "orange", self.tag)
-						self.draw_tools.create_myline(self.dict["ACOR"][side]["P2"]["P1"], [p_xtop_p2,0], self.tag)
+						self.draw_tools.create_myline(acor_p2, [p_xtop_p2,0], self.tag)
+
+
+
+
+					# find L/R points for fem_axis_bot
+					L_fem_axis_bot, R_fem_axis_bot = self.draw_tools.retPointsLeftRight(axis_fem_bot_p1, axis_fem_bot_p2)
+
+					# perpendicular line
+					L_per = [0,0]
+					R_per = [0,0]
+					dy = math.sqrt(100**2/(slope**2+1))
+					dx = -slope*dy
+					L_per[0] = L_fem_axis_bot[0] + dx
+					L_per[1] = L_fem_axis_bot[1] + dy
+					R_per[0] = R_fem_axis_bot[0] + dx
+					R_per[1] = R_fem_axis_bot[1] + dy
+
+					# self.draw_tools.create_mypoint(L_per, "orange", self.tag)
+					# self.draw_tools.create_mypoint(R_per, "blue", self.tag)
+
+
+					# use line L_per-L_fem_axis_bot and R_per-R_fem_axis_bot 
+					# to find intersection
+					if isP1:
+						L_per_int = self.draw_tools.line_intersection((L_per, L_fem_axis_bot),(acor_p1, [p_xtop_p1,0]))
+						self.draw_tools.create_mypoint(L_per_int, "white", self.tag)
+						self.draw_tools.create_myline(L_fem_axis_bot, L_per_int, self.tag)
+
+					if isP2:
+						R_per_int = self.draw_tools.line_intersection((R_per, R_fem_axis_bot),(acor_p2, [p_xtop_p2,0]))
+						self.draw_tools.create_mypoint(R_per_int, "white", self.tag)
+						self.draw_tools.create_myline(R_fem_axis_bot, R_per_int, self.tag)
+
+
+						
 
 
 
@@ -209,6 +262,44 @@ class ACOR():
 
 
 
+	def getNextLabel(self):
+
+		if self.side != None:
+			for item in self.dict["ACOR"][self.side]:
+				# get item type 
+				item_type = self.dict["ACOR"][self.side][item]["type"]
+
+				# point only has P1
+				if item_type == "point":
+					# check if P1 is None				
+					if self.dict["ACOR"][self.side][item]["P1"] == None:						
+						return (self.side + " " + item)
+
+				# axis has two midpoints
+				if item_type == "axis":					
+					# axis has a top and a bottom
+
+					# check if P1 is None
+					if self.dict["ACOR"][self.side][item]["TOP"]["P1"] == None:						
+						return (self.side + " " + item + " P1")
+
+					# check if P2 is None				
+					if self.dict["ACOR"][self.side][item]["TOP"]["P2"] == None:						
+						return (self.side + " " + item + " P2")
+
+
+					# check if P1 is None
+					if self.dict["ACOR"][self.side][item]["BOT"]["P1"] == None:						
+						return (self.side + " " + item + " P1")
+
+					# check if P2 is None				
+					if self.dict["ACOR"][self.side][item]["BOT"]["P2"] == None:						
+						return (self.side + " " + item + " P2")
+
+			return (self.side + " Done")
+		return None
+
+
 	def slope(self, point1, point2):
 		x1 = point1[0]
 		y1 = point1[1]
@@ -234,9 +325,53 @@ class ACOR():
 		print(action)
 		if action == "SET-LEFT":
 			self.side = "LEFT"
+			self.controller.updateMenuLabel(self.getNextLabel(), "ACOR_Menu")
+			return # avoid clear,draw,json_save
 
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"
+			self.controller.updateMenuLabel(self.getNextLabel(), "ACOR_Menu")
+			return # avoid clear,draw,json_save
+
+
+		if action == "DEL-LEFT-FEM-TOP":
+			self.dict[self.name]["LEFT"]["AXIS_FEM"]["TOP"]["P1"] = None
+			self.dict[self.name]["LEFT"]["AXIS_FEM"]["TOP"]["P2"] = None
+			self.dict[self.name]["LEFT"]["AXIS_FEM"]["TOP"]["M1"] = None
+
+		if action == "DEL-RIGHT-FEM-TOP":
+			self.dict[self.name]["RIGHT"]["AXIS_FEM"]["TOP"]["P1"] = None
+			self.dict[self.name]["RIGHT"]["AXIS_FEM"]["TOP"]["P2"] = None
+			self.dict[self.name]["RIGHT"]["AXIS_FEM"]["TOP"]["M1"] = None
+
+		if action == "DEL-LEFT-FEM-BOT":
+			self.dict[self.name]["LEFT"]["AXIS_FEM"]["BOT"]["P1"] = None
+			self.dict[self.name]["LEFT"]["AXIS_FEM"]["BOT"]["P2"] = None
+			self.dict[self.name]["LEFT"]["AXIS_FEM"]["BOT"]["M1"] = None
+
+
+		if action == "DEL-RIGHT-FEM-BOT":
+			self.dict[self.name]["RIGHT"]["AXIS_FEM"]["BOT"]["P1"] = None
+			self.dict[self.name]["RIGHT"]["AXIS_FEM"]["BOT"]["P2"] = None
+			self.dict[self.name]["RIGHT"]["AXIS_FEM"]["BOT"]["M1"] = None
+
+		if action == "DEL-LEFT-P1":
+			self.dict[self.name]["LEFT"]["P1"]["P1"] = None
+
+		if action == "DEL-RIGHT-P1":
+			self.dict[self.name]["RIGHT"]["P1"]["P1"] = None
+
+		if action == "DEL-LEFT-P2":
+			self.dict[self.name]["LEFT"]["P2"]["P1"] = None
+
+		if action == "DEL-RIGHT-P2":
+			self.dict[self.name]["RIGHT"]["P2"]["P1"] = None
+
+		self.draw_tools.clear_by_tag(self.tag)
+		self.draw()
+		self.controller.save_json()
+
+		self.controller.updateMenuLabel(self.getNextLabel(), "ACOR_Menu")
 
 	def update_canvas(self, draw_tools):
 		self.draw_tools = draw_tools

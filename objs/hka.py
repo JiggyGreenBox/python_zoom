@@ -59,9 +59,11 @@ class HKA():
 					# draw angle
 					angle = ""
 					if side == "LEFT":				
-						angle = self.draw_tools.create_myAngle(p_top, self.dict["MAIN"][side]["KNEE"]["P1"], self.dict["MAIN"][side]["HIP"]["P1"], self.tag)
-					else:
+						
 						angle = self.draw_tools.create_myAngle(self.dict["MAIN"][side]["HIP"]["P1"], self.dict["MAIN"][side]["KNEE"]["P1"], p_top, self.tag)
+					else:
+						angle = self.draw_tools.create_myAngle(p_top, self.dict["MAIN"][side]["KNEE"]["P1"], self.dict["MAIN"][side]["HIP"]["P1"], self.tag)
+						
 					# , radius = 50, width = 3):
 					# self.canvas.create_text(x-r,y+r,fill="white", text='{0:.2f}'.format(t1), tags="tag")
 					

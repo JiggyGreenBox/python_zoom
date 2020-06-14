@@ -165,15 +165,15 @@ class MNSA():
 
 
 				# NECK-SHAFT ray
-				if side == "LEFT":
-					p_left = self.draw_tools.line_intersection(
+				if side == "RIGHT":
+					p_right = self.draw_tools.line_intersection(
 						(neck_m1, hip),
 						(xtop, xbot))
-					self.draw_tools.create_myline(hip, p_left, self.tag)
+					self.draw_tools.create_myline(hip, p_right, self.tag)
 
 					# find angle ray intersection point
 					p_int = self.draw_tools.line_intersection(
-							(hip, p_left),
+							(hip, p_right),
 							(fem_bot_m1, p_top))
 
 					angle = self.draw_tools.create_myAngle(hip, p_int, fem_bot_m1, self.tag)
@@ -182,15 +182,15 @@ class MNSA():
 
 
 
-				if side == "RIGHT":
-					p_right = self.draw_tools.line_intersection(
+				if side == "LEFT":
+					p_left = self.draw_tools.line_intersection(
 						(neck_m1, hip),
 						(ytop, ybot))
-					self.draw_tools.create_myline(hip, p_right, self.tag)
+					self.draw_tools.create_myline(hip, p_left, self.tag)
 
 					# find angle ray intersection point
 					p_int = self.draw_tools.line_intersection(
-							(hip, p_right),
+							(hip, p_left),
 							(fem_bot_m1, p_top))
 
 					angle = self.draw_tools.create_myAngle(fem_bot_m1, p_int, hip, self.tag)
@@ -289,5 +289,5 @@ class MNSA():
  
 	def unset(self):
 		# print("unset from "+self.name)
-		self.draw_tools.clear_by_tag("mnsa")
+		self.draw_tools.clear_by_tag(self.tag)
 		self.side = None

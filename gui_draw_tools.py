@@ -96,10 +96,13 @@ class DrawTools(CanvasImage):
 			y - thickness,
 			x + thickness,
 			y + thickness,
-			outline=color,
-			fill=color,
+			outline="black",
+			fill="orange",
 			tags=("token", mytag),
 		)
+		# point
+		# outline="#0a4680",			
+		# fill="#1382eb",
 
 
 	def create_mytext(self, point, mytext, mytag, x_offset=0, y_offset=0, color="white", font_size=8):
@@ -130,7 +133,7 @@ class DrawTools(CanvasImage):
 			y - thickness,
 			x + thickness,
 			y + thickness,
-			outline=color,
+			outline="black",
 			fill=color,
 			tags=("mid","lines", mytag),
 		)
@@ -140,7 +143,8 @@ class DrawTools(CanvasImage):
 		p1 = self.getScaledCoords(point1)
 		p2 = self.getScaledCoords(point2)
 
-		self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="red", width=2, tags=("del","lines", mytag))
+		# self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="red", width=2, tags=("del","lines", mytag))
+		self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="orange", width=2, tags=("del","lines", mytag))
 
 
 	def create_midpoint_line(self, point1, point2, mid1, mytag):
@@ -149,8 +153,11 @@ class DrawTools(CanvasImage):
 		p2 = self.getScaledCoords(point2)
 		m1 = self.getScaledCoords(mid1)
 
-		self.create_midpoint(m1,"red", mytag)
-		self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="red", width=2, tags=("del","lines", mytag))
+		# self.create_midpoint(m1,"red", mytag)
+		# self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="red", width=2, tags=("del","lines", mytag))
+		# 696969
+		self.create_midpoint(m1,"#404040", mytag)
+		self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="orange", width=2, tags=("del","lines", mytag))
 
 
 	def midpoint(self, p1, p2):
@@ -158,7 +165,7 @@ class DrawTools(CanvasImage):
 
 
 
-	def create_myAngle(self, point1, point2, point3, mytag, radius = 50, width = 3, outline="red"):
+	def create_myAngle(self, point1, point2, point3, mytag, radius = 50, width = 3, outline="orange"):
 
 		angle = self.getAnglePoints(point1, point2, point3)
 		print('angle: {}'.format(angle))
@@ -189,6 +196,22 @@ class DrawTools(CanvasImage):
 
 
 
+	def retPointsLeftRight(self, p1, p2):
+		if p1[0] < p2[0]:
+			return p1, p2
+		else:
+			return p2, p1
+
+
+	def retPointsUpDown(self, p1, p2):
+		if p1[1] < p2[1]:
+			return p1, p2
+		else:
+			return p2, p1
+
+
+
+
 	def line_intersection(self, line1, line2):
 		xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
 		ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1])
@@ -203,7 +226,8 @@ class DrawTools(CanvasImage):
 		d = (det(*line1), det(*line2))
 		x = det(d, xdiff) / div
 		y = det(d, ydiff) / div
-		return int(x), int(y)
+		# return int(x), int(y)
+		return x, y
 
 
 	def getImageCorners(self):

@@ -9,7 +9,7 @@ class MLDFA_Menu(tk.Frame):
 	def __init__(self, parent, controller):
 		tk.Frame.__init__(self, parent)
 		self.controller = controller
-		# self.obj_name = "MLDFA"
+		self.obj_name = "MLDFA"
 		
-		label = tk.Label(self, text="MLDFA_Menu")
-		label.pack(side="top", fill="x", pady=10)		
+		label = tk.Label(self, text=self.obj_name,font=("TkDefaultFont",20))
+		label.pack(side="top", fill="x", pady=20)

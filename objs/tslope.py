@@ -21,13 +21,14 @@ class TSLOPE():
 			print("please choose side")
 			self.controller.warningBox("Please select a Side")
 		else:
-			ret =  self.addDict(event)
-			if not ret:
-				# print("dict full")
-				print(self.dict)
-			# print(self.side)
+			ret =  self.addDict(event)			
+			if ret:
+				self.controller.save_json()
+				# pass
 
-		self.draw()
+		self.controller.updateMenuLabel(self.getNextLabel(), "TSLOPE_Menu")
+		self.draw_tools.clear_by_tag(self.tag)
+		self.draw()		
 		# print(self.dict)
 
 
@@ -36,10 +37,49 @@ class TSLOPE():
 		print(action)
 		if action == "SET-LEFT":
 			self.side = "LEFT"
+			self.controller.updateMenuLabel(self.getNextLabel(), "TSLOPE_Menu")
+			return # avoid clear,draw,json_save
 
 		if action == "SET-RIGHT":
-			self.side = "RIGHT"	
+			self.side = "RIGHT"
+			self.controller.updateMenuLabel(self.getNextLabel(), "TSLOPE_Menu")
+			return # avoid clear,draw,json_save
 
+
+		if action == "DEL-LEFT-TIB-LINE":
+			self.dict["TSLOPE"]["LEFT"]["TIB_JOINT_LINE"]["P1"] = None
+			self.dict["TSLOPE"]["LEFT"]["TIB_JOINT_LINE"]["P2"] = None
+
+		if action == "DEL-RIGHT-TIB-LINE":
+			self.dict["TSLOPE"]["RIGHT"]["TIB_JOINT_LINE"]["P1"] = None
+			self.dict["TSLOPE"]["RIGHT"]["TIB_JOINT_LINE"]["P2"] = None
+
+
+
+		if action == "DEL-LEFT-TIB-TOP":			
+			self.dict["TSLOPE"]["LEFT"]["AXIS_TIB"]["TOP"]["P1"] = None
+			self.dict["TSLOPE"]["LEFT"]["AXIS_TIB"]["TOP"]["P2"] = None
+			self.dict["TSLOPE"]["LEFT"]["AXIS_TIB"]["TOP"]["M1"] = None
+
+		if action == "DEL-RIGHT-TIB-TOP":
+			self.dict["TSLOPE"]["RIGHT"]["AXIS_TIB"]["TOP"]["P1"] = None
+			self.dict["TSLOPE"]["RIGHT"]["AXIS_TIB"]["TOP"]["P2"] = None
+			self.dict["TSLOPE"]["RIGHT"]["AXIS_TIB"]["TOP"]["M1"] = None
+
+		if action == "DEL-LEFT-TIB-BOT":
+			self.dict["TSLOPE"]["LEFT"]["AXIS_TIB"]["BOT"]["P1"] = None
+			self.dict["TSLOPE"]["LEFT"]["AXIS_TIB"]["BOT"]["P2"] = None
+			self.dict["TSLOPE"]["LEFT"]["AXIS_TIB"]["BOT"]["M1"] = None
+
+		if action == "DEL-RIGHT-TIB-BOT":
+			self.dict["TSLOPE"]["RIGHT"]["AXIS_TIB"]["BOT"]["P1"] = None
+			self.dict["TSLOPE"]["RIGHT"]["AXIS_TIB"]["BOT"]["P2"] = None
+			self.dict["TSLOPE"]["RIGHT"]["AXIS_TIB"]["BOT"]["M1"] = None
+
+		self.controller.updateMenuLabel(self.getNextLabel(), "TSLOPE_Menu")
+		self.draw_tools.clear_by_tag(self.tag)
+		self.controller.save_json()
+		self.draw()
 
 	
 	def draw(self):
@@ -48,57 +88,83 @@ class TSLOPE():
 		for side in ["LEFT","RIGHT"]:
 
 			isTibTop 	= False
-			isTibBot 	= False			
+			isTibBot 	= False		
+			isTibP1P2 	= False
+
+			joint_line_p1 = self.dict["TSLOPE"][side]["TIB_JOINT_LINE"]["P1"]
+			joint_line_p2 = self.dict["TSLOPE"][side]["TIB_JOINT_LINE"]["P2"]
+
+			top_axis_tib_p1 = self.dict[self.name][side]["AXIS_TIB"]["TOP"]["P1"]
+			top_axis_tib_p2 = self.dict[self.name][side]["AXIS_TIB"]["TOP"]["P2"]
+			top_axis_tib_m1 = self.dict[self.name][side]["AXIS_TIB"]["TOP"]["M1"]
+
+			bot_axis_tib_p1 = self.dict[self.name][side]["AXIS_TIB"]["BOT"]["P1"]
+			bot_axis_tib_p2 = self.dict[self.name][side]["AXIS_TIB"]["BOT"]["P2"]			
+			bot_axis_tib_m1 = self.dict[self.name][side]["AXIS_TIB"]["BOT"]["M1"]
 
 
-			if self.dict["TSLOPE"][side]["TIB_JOINT_LINE"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["TSLOPE"][side]["TIB_JOINT_LINE"]["P1"], "white", self.tag)
+			if joint_line_p1 != None:
+				self.draw_tools.create_mypoint(joint_line_p1, "white", self.tag)
 
-			if self.dict["TSLOPE"][side]["TIB_JOINT_LINE"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["TSLOPE"][side]["TIB_JOINT_LINE"]["P2"], "white", self.tag)
+			if joint_line_p2 != None:
+				self.draw_tools.create_mypoint(joint_line_p2, "white", self.tag)
 
-			if self.dict["TSLOPE"][side]["TIB_JOINT_LINE"]["P1"] != None and self.dict["TSLOPE"][side]["TIB_JOINT_LINE"]["P2"] != None:
-				self.draw_tools.create_myline(self.dict["TSLOPE"][side]["TIB_JOINT_LINE"]["P1"], self.dict["TSLOPE"][side]["TIB_JOINT_LINE"]["P2"], self.tag)
+			if joint_line_p1 != None and joint_line_p2 != None:
+				self.draw_tools.create_myline(joint_line_p1, joint_line_p2, self.tag)
+				isTibP1P2 = True
 
 
 			# TIB AXIS
 			# TOP
-			if self.dict["TSLOPE"][side]["AXIS_TIB"]["TOP"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["TSLOPE"][side]["AXIS_TIB"]["TOP"]["P1"], "white", self.tag)
+			if top_axis_tib_p1 != None:
+				self.draw_tools.create_mypoint(top_axis_tib_p1, "white", self.tag)
 
-			if self.dict["TSLOPE"][side]["AXIS_TIB"]["TOP"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["TSLOPE"][side]["AXIS_TIB"]["TOP"]["P2"], "white", self.tag)
+			if top_axis_tib_p2 != None:
+				self.draw_tools.create_mypoint(top_axis_tib_p2, "white", self.tag)
 
-			if self.dict["TSLOPE"][side]["AXIS_TIB"]["TOP"]["P1"] != None and self.dict["TSLOPE"][side]["AXIS_TIB"]["TOP"]["P2"] != None:
-				p1 = self.dict["TSLOPE"][side]["AXIS_TIB"]["TOP"]["P1"]
-				p2 = self.dict["TSLOPE"][side]["AXIS_TIB"]["TOP"]["P2"]
-				m1 = self.dict["TSLOPE"][side]["AXIS_TIB"]["TOP"]["M1"]
-				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
+			if top_axis_tib_p1 != None and top_axis_tib_p2 != None:				
+				self.draw_tools.create_midpoint_line(top_axis_tib_p1, top_axis_tib_p2, top_axis_tib_m1, self.tag)
 				isTibTop = True
 
 
 			# BOT
-			if self.dict["TSLOPE"][side]["AXIS_TIB"]["BOT"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["TSLOPE"][side]["AXIS_TIB"]["BOT"]["P1"], "white", self.tag)
+			if bot_axis_tib_p1 != None:
+				self.draw_tools.create_mypoint(bot_axis_tib_p1, "white", self.tag)
 
-			if self.dict["TSLOPE"][side]["AXIS_TIB"]["BOT"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["TSLOPE"][side]["AXIS_TIB"]["BOT"]["P2"], "white", self.tag)
+			if bot_axis_tib_p2 != None:
+				self.draw_tools.create_mypoint(bot_axis_tib_p2, "white", self.tag)
 
-			if self.dict["TSLOPE"][side]["AXIS_TIB"]["BOT"]["P1"] != None and self.dict["TSLOPE"][side]["AXIS_TIB"]["BOT"]["P2"] != None:
-				p1 = self.dict["TSLOPE"][side]["AXIS_TIB"]["BOT"]["P1"]
-				p2 = self.dict["TSLOPE"][side]["AXIS_TIB"]["BOT"]["P2"]
-				m1 = self.dict["TSLOPE"][side]["AXIS_TIB"]["BOT"]["M1"]
-				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
+			if bot_axis_tib_p1 != None and bot_axis_tib_p2 != None:				
+				self.draw_tools.create_midpoint_line(bot_axis_tib_p1, bot_axis_tib_p2, bot_axis_tib_m1, self.tag)
 				isTibBot = True
 
 			xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
 
-			if isTibTop and isTibBot:
+			if isTibTop and isTibBot and isTibP1P2:
+
+				L_p1, R_p1 = self.draw_tools.retPointsLeftRight(joint_line_p1, joint_line_p2)
+				U_m1, D_m1 = self.draw_tools.retPointsUpDown(top_axis_tib_m1, bot_axis_tib_m1)
+
 				# TIB-AXIS ray
-				p_tib = self.draw_tools.line_intersection(
-					(self.dict["TSLOPE"][side]["AXIS_TIB"]["BOT"]["M1"], self.dict["TSLOPE"][side]["AXIS_TIB"]["TOP"]["M1"]),
+				p_top = self.draw_tools.line_intersection(
+					(U_m1, D_m1),
 					(xtop, ytop))
-				self.draw_tools.create_myline(self.dict["TSLOPE"][side]["AXIS_TIB"]["BOT"]["M1"], p_tib, self.tag)
+				self.draw_tools.create_myline(D_m1, p_top, self.tag)
+
+
+				# intersection point
+				p_int = self.draw_tools.line_intersection(
+					(U_m1, D_m1),
+					(joint_line_p1, joint_line_p2))				
+
+				# find and draw angles
+				if side == "LEFT":
+					angle = self.draw_tools.create_myAngle(D_m1, p_int, L_p1, self.tag,radius=30)
+					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, y_offset=60)
+
+				if side == "RIGHT":
+					angle = self.draw_tools.create_myAngle(R_p1, p_int, D_m1, self.tag,radius=30)
+					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60, y_offset=60)
 
 
 
@@ -188,6 +254,54 @@ class TSLOPE():
 					return True					
 
 		return False	
+
+
+	def getNextLabel(self):
+
+		if self.side != None:
+			for item in self.dict["TSLOPE"][self.side]:
+				# get item type 
+				item_type = self.dict["TSLOPE"][self.side][item]["type"]
+
+				
+				# line has P1 and P2
+				if item_type == "line":
+
+					# check if P1 is None				
+					if self.dict["TSLOPE"][self.side][item]["P1"] == None:						
+						return (self.side + " " + item + " P1")
+
+
+					# check if P2 is None				
+					if self.dict["TSLOPE"][self.side][item]["P2"] == None:						
+						return (self.side + " " + item + " P1")
+
+
+				# axis has two midpoints
+				if item_type == "axis":				
+					# axis has a top and a bottom
+					# TOP
+
+					# check if P1 is None
+					if self.dict["TSLOPE"][self.side][item]["TOP"]["P1"] == None:						
+						return (self.side + " " + item + " P1")
+
+					# check if P2 is None				
+					if self.dict["TSLOPE"][self.side][item]["TOP"]["P2"] == None:						
+						return (self.side + " " + item + " P2")
+
+					# BOT
+					# check if P1 is None
+					if self.dict["TSLOPE"][self.side][item]["BOT"]["P1"] == None:						
+						return (self.side + " " + item + " P1")
+
+					# check if P2 is None				
+					if self.dict["TSLOPE"][self.side][item]["BOT"]["P2"] == None:
+						return (self.side + " " + item + " P2")
+
+			return (self.side + " Done")
+
+		return None
 
 
 	def update_canvas(self, draw_tools):

@@ -120,44 +120,44 @@ class MAIN:
 			self.dict["MAIN"]["LEFT"]["KNEE"]["P1"] = None
 
 		if action == "DEL-RIGHT-KNEE":
-			self.dict["MAIN"]["RIGHT"]["KNEE"]["P1"] = None						
+			self.dict["MAIN"]["RIGHT"]["KNEE"]["P1"] = None
 
 		if action == "DEL-LEFT-ANKLE":
 			self.dict["MAIN"]["LEFT"]["ANKLE"]["P1"] = None
 			self.dict["MAIN"]["LEFT"]["ANKLE"]["P2"] = None
-			self.dict["MAIN"]["LEFT"]["ANKLE"]["M1"] = None			
+			self.dict["MAIN"]["LEFT"]["ANKLE"]["M1"] = None
 
 		if action == "DEL-RIGHT-ANKLE":
 			self.dict["MAIN"]["RIGHT"]["ANKLE"]["P1"] = None
 			self.dict["MAIN"]["RIGHT"]["ANKLE"]["P2"] = None
-			self.dict["MAIN"]["RIGHT"]["ANKLE"]["M1"] = None			
+			self.dict["MAIN"]["RIGHT"]["ANKLE"]["M1"] = None
 
 		if action == "DEL-LEFT-FEM-TOP":
 			self.dict["MAIN"]["LEFT"]["AXIS_FEM"]["TOP"]["P1"] = None
 			self.dict["MAIN"]["LEFT"]["AXIS_FEM"]["TOP"]["P2"] = None
-			self.dict["MAIN"]["LEFT"]["AXIS_FEM"]["TOP"]["M1"] = None			
+			self.dict["MAIN"]["LEFT"]["AXIS_FEM"]["TOP"]["M1"] = None
 
 		if action == "DEL-RIGHT-FEM-TOP":
 			self.dict["MAIN"]["RIGHT"]["AXIS_FEM"]["TOP"]["P1"] = None
 			self.dict["MAIN"]["RIGHT"]["AXIS_FEM"]["TOP"]["P2"] = None
-			self.dict["MAIN"]["RIGHT"]["AXIS_FEM"]["TOP"]["M1"] = None			
+			self.dict["MAIN"]["RIGHT"]["AXIS_FEM"]["TOP"]["M1"] = None
 
 
 		if action == "DEL-LEFT-FEM-BOT":
 			self.dict["MAIN"]["LEFT"]["AXIS_FEM"]["BOT"]["P1"] = None
 			self.dict["MAIN"]["LEFT"]["AXIS_FEM"]["BOT"]["P2"] = None
-			self.dict["MAIN"]["LEFT"]["AXIS_FEM"]["BOT"]["M1"] = None		
+			self.dict["MAIN"]["LEFT"]["AXIS_FEM"]["BOT"]["M1"] = None
 
 		if action == "DEL-RIGHT-FEM-BOT":
 			self.dict["MAIN"]["RIGHT"]["AXIS_FEM"]["BOT"]["P1"] = None
 			self.dict["MAIN"]["RIGHT"]["AXIS_FEM"]["BOT"]["P2"] = None
-			self.dict["MAIN"]["RIGHT"]["AXIS_FEM"]["BOT"]["M1"] = None			
+			self.dict["MAIN"]["RIGHT"]["AXIS_FEM"]["BOT"]["M1"] = None
 
 
 		if action == "DEL-LEFT-TIB-TOP":
 			self.dict["MAIN"]["LEFT"]["AXIS_TIB"]["TOP"]["P1"] = None
 			self.dict["MAIN"]["LEFT"]["AXIS_TIB"]["TOP"]["P2"] = None
-			self.dict["MAIN"]["LEFT"]["AXIS_TIB"]["TOP"]["M1"] = None			
+			self.dict["MAIN"]["LEFT"]["AXIS_TIB"]["TOP"]["M1"] = None
 
 		if action == "DEL-RIGHT-TIB-TOP":
 			self.dict["MAIN"]["RIGHT"]["AXIS_TIB"]["TOP"]["P1"] = None
@@ -167,12 +167,12 @@ class MAIN:
 		if action == "DEL-LEFT-TIB-BOT":
 			self.dict["MAIN"]["LEFT"]["AXIS_TIB"]["BOT"]["P1"] = None
 			self.dict["MAIN"]["LEFT"]["AXIS_TIB"]["BOT"]["P2"] = None
-			self.dict["MAIN"]["LEFT"]["AXIS_TIB"]["BOT"]["M1"] = None			
+			self.dict["MAIN"]["LEFT"]["AXIS_TIB"]["BOT"]["M1"] = None
 
 		if action == "DEL-RIGHT-TIB-BOT":
 			self.dict["MAIN"]["RIGHT"]["AXIS_TIB"]["BOT"]["P1"] = None
 			self.dict["MAIN"]["RIGHT"]["AXIS_TIB"]["BOT"]["P2"] = None
-			self.dict["MAIN"]["RIGHT"]["AXIS_TIB"]["BOT"]["M1"] = None			
+			self.dict["MAIN"]["RIGHT"]["AXIS_TIB"]["BOT"]["M1"] = None
 
 
 		self.draw_tools.clear_by_tag("main")

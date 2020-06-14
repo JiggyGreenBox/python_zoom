@@ -22,13 +22,13 @@ class SA():
 			self.controller.warningBox("Please select a Side")
 		else:
 			ret =  self.addDict(event)
-			if not ret:
-				# print("dict full")
-				print(self.dict)
-			# print(self.side)
+			if ret:				
+				self.controller.save_json()
+				# pass
 
+		self.controller.updateMenuLabel(self.getNextLabel(), "SA_Menu")
+		self.draw_tools.clear_by_tag(self.tag)
 		self.draw()
-		# print(self.dict)
 
 
 	# menu button clicks are routed here
@@ -36,11 +36,37 @@ class SA():
 		print(action)
 		if action == "SET-LEFT":
 			self.side = "LEFT"
+			self.controller.updateMenuLabel(self.getNextLabel(), "SA_Menu")
+			return
 
 		if action == "SET-RIGHT":
-			self.side = "RIGHT"	
+			self.side = "RIGHT"
+			self.controller.updateMenuLabel(self.getNextLabel(), "SA_Menu")
+			return
 
 
+		if action == "DEL-LEFT-P1":
+			self.dict["SA"]["LEFT"]["P1"]["P1"] = None
+
+		if action == "DEL-RIGHT-P1":
+			self.dict["SA"]["RIGHT"]["P1"]["P1"] = None
+
+		if action == "DEL-LEFT-P2":
+			self.dict["SA"]["LEFT"]["P2"]["P1"] = None
+
+		if action == "DEL-RIGHT-P2":
+			self.dict["SA"]["RIGHT"]["P2"]["P1"] = None
+
+		if action == "DEL-LEFT-P3":
+			self.dict["SA"]["LEFT"]["P3"]["P1"] = None
+
+		if action == "DEL-RIGHT-P3":
+			self.dict["SA"]["RIGHT"]["P3"]["P1"] = None
+			
+		self.draw_tools.clear_by_tag(self.tag)
+		self.draw()
+		self.controller.save_json()
+		self.controller.updateMenuLabel(self.getNextLabel(), "SA_Menu")
 	
 	def draw(self):
 
@@ -66,6 +92,10 @@ class SA():
 				self.draw_tools.create_myline(p2, p3, self.tag)
 
 
+				angle = self.draw_tools.create_myAngle(p1, p2, p3, self.tag)
+				self.draw_tools.create_mytext(p2, '{0:.2f}'.format(angle), self.tag, y_offset=-60)
+
+
 
 
 	def checkMasterDict(self):
@@ -82,6 +112,31 @@ class SA():
 												"P3":		{"type":"point","P1":None}
 											}
 									}
+
+
+	def getNextLabel(self):
+
+		if self.side != None:
+			for item in self.dict["SA"][self.side]:
+				# get item type 
+				item_type = self.dict["SA"][self.side][item]["type"]
+
+				# point only has P1
+				if item_type == "point":
+					# check if P1 is None				
+					if self.dict["SA"][self.side]["P1"]["P1"] == None:
+						return (self.side + " " + "P1")
+
+					if self.dict["SA"][self.side]["P2"]["P1"] == None:					
+						return (self.side + " " + "P2")
+
+					if self.dict["SA"][self.side]["P3"]["P1"] == None:						
+						return (self.side + " " + "P3")
+
+			return (self.side + " Done")
+
+		return None	
+
 
 
 

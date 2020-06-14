@@ -25,12 +25,13 @@ class ISR():
 			print(self.dict)
 		else:
 			ret =  self.addDict(event)
-			if not ret:
-				print("dict full")
-			# print(self.side)
+			if ret:
+				self.controller.save_json()
+				# pass
 
+		self.controller.updateMenuLabel(self.getNextLabel(), "ISR_Menu")
+		self.draw_tools.clear_by_tag(self.tag)
 		self.draw()
-		print(self.dict)
 
 
 	# menu button clicks are routed here
@@ -38,9 +39,39 @@ class ISR():
 		print(action)
 		if action == "SET-LEFT":
 			self.side = "LEFT"
+			self.controller.updateMenuLabel(self.getNextLabel(), "ISR_Menu")
+			return # avoid clear,draw,json_save
 
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"			
+			self.controller.updateMenuLabel(self.getNextLabel(), "ISR_Menu")
+			return # avoid clear,draw,json_save
+
+
+		if action == "DEL-LEFT-P1":
+			self.dict[self.name]["LEFT"]["P1"]["P1"] = None
+
+		if action == "DEL-RIGHT-P1":
+			self.dict[self.name]["RIGHT"]["P1"]["P1"] = None
+
+		if action == "DEL-LEFT-P2":
+			self.dict[self.name]["LEFT"]["P2"]["P1"] = None
+
+		if action == "DEL-RIGHT-P2":
+			self.dict[self.name]["RIGHT"]["P2"]["P1"] = None
+
+
+		if action == "DEL-LEFT-P3":
+			self.dict[self.name]["LEFT"]["P3"]["P1"] = None
+
+		if action == "DEL-RIGHT-P3":
+			self.dict[self.name]["RIGHT"]["P3"]["P1"] = None
+
+		self.draw_tools.clear_by_tag(self.tag)
+		self.draw()
+		self.controller.save_json()
+
+		self.controller.updateMenuLabel(self.getNextLabel(), "ISR_Menu")			
 
 
 
@@ -52,23 +83,27 @@ class ISR():
 			isP2 	= False
 			isP3 	= False
 
+			p1 = self.dict["ISR"][side]["P1"]["P1"]
+			p2 = self.dict["ISR"][side]["P2"]["P1"]
+			p3 = self.dict["ISR"][side]["P3"]["P1"]
+
 			
-			if self.dict["ISR"][side]["P1"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["ISR"][side]["P1"]["P1"], "white", self.tag)
+			if p1 != None:
+				self.draw_tools.create_mypoint(p1, "white", self.tag)
 				isP1 = True
 
-			if self.dict["ISR"][side]["P2"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["ISR"][side]["P2"]["P1"], "white", self.tag)
+			if p2 != None:
+				self.draw_tools.create_mypoint(p2, "white", self.tag)
 				isP2 = True
 
-			if self.dict["ISR"][side]["P3"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["ISR"][side]["P3"]["P1"], "white", self.tag)
+			if p3 != None:
+				self.draw_tools.create_mypoint(p3, "white", self.tag)
 				isP3 = True
 
 
 			if isP1 and isP2 and isP3:
-				self.draw_tools.create_myline(self.dict["ISR"][side]["P1"]["P1"], self.dict["ISR"][side]["P2"]["P1"], self.tag)
-				self.draw_tools.create_myline(self.dict["ISR"][side]["P2"]["P1"], self.dict["ISR"][side]["P3"]["P1"], self.tag)
+				self.draw_tools.create_myline(p1, p2, self.tag)
+				self.draw_tools.create_myline(p2, p3, self.tag)
 
 
 
@@ -96,7 +131,20 @@ class ISR():
 				P = self.draw_tools.getRealCoords(event)
 				self.dict["ISR"][self.side][item]["P1"] = P
 				return True
-		return False									
+		return False
+
+
+	def getNextLabel(self):
+
+		if self.side != None:
+			for item in self.dict["ISR"][self.side]:
+
+				if self.dict["ISR"][self.side][item]["P1"] == None:					
+					return (self.side + " " + item)
+
+			return (self.side + " Done")
+
+		return None							
 
 
 	def update_canvas(self, draw_tools):

@@ -129,8 +129,8 @@ class CanvasImage:
 			y - thickness,
 			x + thickness,
 			y + thickness,
-			outline="#0a4680",			
-			fill="#1382eb",
+			outline=color,
+			fill=color,
 			tags=("token", mytag),
 		)
 
@@ -151,13 +151,23 @@ class CanvasImage:
 		return ang + 360 if ang < 0 else ang
 
 
-	def getAnglePoints(self, a, b, c):
-		ang = math.degrees(math.atan2(c[1]-b[1], c[0]-b[0]) - math.atan2(a[1]-b[1], a[0]-b[0]))
-		return ang + 360 if ang < 0 else ang
 
-	def getAnglePointsNeg(self, a, b, c):
-		ang = math.degrees(math.atan2(c[1]-b[1], c[0]-b[0]) - math.atan2(a[1]-b[1], a[0]-b[0]))
-		return ang
+
+	def line_intersection(self, line1, line2):
+		xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
+		ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1])
+
+		def det(a, b):
+			return a[0] * b[1] - a[1] * b[0]
+
+		div = det(xdiff, ydiff)
+		if div == 0:
+			raise Exception('lines do not intersect')
+
+		d = (det(*line1), det(*line2))
+		x = det(d, xdiff) / div
+		y = det(d, ydiff) / div
+		return int(x), int(y)
 
 
 	def getScaledCoords(self, point):		
@@ -178,9 +188,7 @@ class CanvasImage:
 		p1 = self.getScaledCoords(point1)
 		p2 = self.getScaledCoords(point2)
 
-		self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="#559ee6",width=2, tags=("del","lines", mytag))
-		# self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="#559ee6",width=2, outline="white",tags=("del","lines", mytag))
-		#696969
+		self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="red",width=2, tags=("del","lines", mytag))
 
 
 	def circular_arc(self, canvas, x, y, r, t0, t1, width):
@@ -217,115 +225,32 @@ class CanvasImage:
 			pass
 		else:
 			P = self.getRealCoords(event)
-			# print(P)
+			print(point_counter)
 			
 
-			if( point_counter < 3):
+			if( point_counter < 4):
 
 				point_list.append(P)
 				self.create_mypoint(P, "white", "tag")
 
-				# draw a dotted line between points
-				if point_counter > 0:					
-
-					P_prev = point_list[point_counter-1]										
-					self.create_myline(P_prev, P, "tag")
-					# self.canvas.create_oval(round(x_prev), round(y_prev), x, y)
+				
 
 			
-			if( point_counter == 2):
-				# angle = self.getAngle(
-				# 		(5, 0), 
-				# 		(0, 0), 
-				# 		(0, 5))
-				# print(angle)
-				angle1 = self.getAnglePoints(point_list[0],point_list[1],point_list[2])
-				print('angle1: {}'.format(angle1))
+			if( point_counter == 3):
 
-				angle2 = self.getAnglePoints(point_list[2],point_list[1],point_list[0])
-				print('angle2: {}'.format(angle2))
+				p1 = point_list[0]
+				p2 = point_list[1]
+				p3 = point_list[2]
+				p4 = point_list[3]
 
+				self.create_myline(p1, p2, "tag")
+				self.create_myline(p3, p4, "tag")
 
-				print(point_list[0])
-				print(point_list[1])
-				print(self.retLeftPoint(point_list[0],point_list[1]))
+				p_int = self.line_intersection((p1, p2), (p3, p4))
 
+				angle = self.create_myAngle(p1, p_int, p3, "tag")
+				print(angle)
 
-
-				p1 = self.getScaledCoords(point_list[1])	
-				x = p1[0]	
-				y = p1[1]
-				r = 20
-				width = 3
-				t1 = angle1
-
-				self.create_mypoint((self.imwidth,point_list[1][1]), "white", "tag")
-				arc_angle1 = self.getAnglePointsNeg(point_list[2],point_list[1],(self.imwidth,point_list[1][1]))
-				print('arc: {}'.format(arc_angle1))
-
-
-
-				t0 = arc_angle1
-				self.canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=angle1, style='arc', width=width, tags="tag")
-				# self.canvas.create_rectangle(x-r, y-r, x+r, y+r, outline='red', tags="tag")
-				self.canvas.create_text(x-r,y+r,fill="white", text='{0:.2f}'.format(t1), tags="tag")
-
-				font_size = 8
-
-				self.canvas.create_text(x-30,y+30,fill="white", text='{0:.2f}'.format(t1), font=("TkDefaultFont", font_size), tags="tag")
-				
-				
-
-
-
-
-				'''
-				if angle1 < angle2:
-
-					p1 = self.getScaledCoords(point_list[1])	
-					x = p1[0]	
-					y = p1[1]
-					r = 20
-					t0 = 0
-					t1 = angle1
-					width = 3
-
-
-					self.create_mypoint((self.imwidth,point_list[1][1]), "white", "tag")
-					arc_angle1 = self.getAnglePointsNeg(point_list[2],point_list[1],(self.imwidth,point_list[1][1]))
-					print('arc: {}'.format(arc_angle1))
-
-
-
-					t0 = arc_angle1
-					self.canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=angle1, style='arc', width=width, tags="tag")
-					# self.canvas.create_rectangle(x-r, y-r, x+r, y+r, outline='red', tags="tag")
-					self.canvas.create_text(x-r,y+r,fill="white", text='{0:.2f}'.format(t1), tags="tag")					
-
-
-				else:
-					p1 = self.getScaledCoords(point_list[1])	
-					x = p1[0]	
-					y = p1[1]
-					r = 20
-					t0 = 0
-					t1 = angle2
-					width = 3
-
-					self.create_mypoint((self.imwidth,point_list[1][1]), "white", "tag")
-					arc_angle1 = self.getAnglePointsNeg(point_list[0],point_list[1],(self.imwidth,point_list[1][1]))
-					print('arc: {}'.format(arc_angle1))
-
-					t0 = arc_angle1
-					# self.canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=angle2, style='arc', width=width, tags="tag")
-					# self.canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=angle2, fill='black', width=width, tags="tag")
-					self.canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=angle2, outline='red', width=width, tags="tag")
-					# self.canvas.create_rectangle(x-r, y-r, x+r, y+r, outline='red', tags="tag")					
-					self.canvas.create_text(x-r,y+r,fill="white", text='{0:.2f}'.format(t1), tags="tag")
-				'''
-
-				if arc_angle1 > 270:
-					print("too big")
 			# increment point counter
 			point_counter = point_counter+1
 
@@ -367,6 +292,35 @@ class CanvasImage:
 	def redraw_figures(self):
 		""" Dummy function to redraw figures in the children classes """
 		pass
+
+	def create_myAngle(self, point1, point2, point3, mytag, radius = 50, width = 3, outline="red"):
+
+		angle = self.getAnglePoints(point1, point2, point3)
+		print('angle: {}'.format(angle))
+
+		arc_angle = self.getAnglePointsNeg(point3, point2, (self.imwidth, point2[1]))
+		print('arc_angle: {}'.format(arc_angle))
+		
+		# bot_left = self.getScaledCoords(((point2[0] - radius),(point2[1] - radius)))
+		# top_right = self.getScaledCoords(((point2[0] + radius),(point2[1] + radius)))
+		# self.canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=angle1, style='arc', width=width, tags="tag")
+		p1 = self.getScaledCoords(point2)	
+		x = p1[0]	
+		y = p1[1]
+		r = radius * self.imscale
+
+		# self.canvas.create_arc(x-r, y-r, x+r, y+r, start=arc_angle, extent=angle, style='arc', width=width, tags=mytag)
+		self.canvas.create_arc(x-r, y-r, x+r, y+r, start=arc_angle, extent=angle, outline=outline, width=width, tags=mytag)
+		return angle
+
+	def getAnglePoints(self, a, b, c):
+		ang = math.degrees(math.atan2(c[1]-b[1], c[0]-b[0]) - math.atan2(a[1]-b[1], a[0]-b[0]))
+		return ang + 360 if ang < 0 else ang
+
+	def getAnglePointsNeg(self, a, b, c):
+		ang = math.degrees(math.atan2(c[1]-b[1], c[0]-b[0]) - math.atan2(a[1]-b[1], a[0]-b[0]))
+		return ang
+
 
 	def grid(self, **kw):
 		""" Put CanvasImage widget on the parent widget """
@@ -536,18 +490,6 @@ class MainWindow(ttk.Frame):
 		self.master.columnconfigure(0, weight=1)
 		canvas = CanvasImage(self.master, path)  # create widget
 		canvas.grid(row=0, column=0)  # show widget
-
-
-
-	def findfont(self, names):
-		'''Return name of first font family derived from names'''
-		for name in names:
-			if name.lower() in (x.lower() for x in tkfont.names(root=self)):
-				font = tkfont.Font(name=name, exists=True, root=self)
-				return font.actual()['family']
-			elif name.lower() in (x.lower()
-								  for x in tkfont.families(root=self)):
-				return name
 
 # filename = './data/img_plg5.png'  # place path to your image here
 # filename = 'harold.jpg'  # place path to your image here

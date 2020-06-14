@@ -74,12 +74,14 @@ class MPTA():
 							(tib_joint_p1, tib_joint_p2))
 
 
-					if side == "LEFT":
-						angle = self.draw_tools.create_myAngle(tib_joint_p2, p_int, ankle_m1, self.tag)
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60, y_offset=60)
+					L_tib, R_tib = self.draw_tools.retPointsLeftRight(tib_joint_p1, tib_joint_p2)
 
 					if side == "RIGHT":
-						angle = self.draw_tools.create_myAngle(ankle_m1, p_int, tib_joint_p1, self.tag)
+						angle = self.draw_tools.create_myAngle(R_tib, p_int, ankle_m1, self.tag)
+						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60, y_offset=60)
+
+					if side == "LEFT":
+						angle = self.draw_tools.create_myAngle(ankle_m1, p_int, L_tib, self.tag)
 						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, y_offset=60)
 
 	def update_canvas(self, draw_tools):

@@ -136,12 +136,19 @@ class ALDFA():
 							(fem_p1, fem_p2))
 
 
+						
+					L_fem, R_fem = self.draw_tools.retPointsLeftRight(fem_p1, fem_p2)
+						
+
+
 					if side == "LEFT":
-						angle = self.draw_tools.create_myAngle(hip, p_int, fem_p2, self.tag)
+
+
+						angle = self.draw_tools.create_myAngle(hip, p_int, R_fem, self.tag)
 						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60, y_offset=-60)
 
 					if side == "RIGHT":
-						angle = self.draw_tools.create_myAngle(fem_p1, p_int, hip, self.tag)
+						angle = self.draw_tools.create_myAngle(L_fem, p_int, hip, self.tag)
 						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, y_offset=-60)
 
 			# # ------------------------

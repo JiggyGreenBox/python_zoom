@@ -87,7 +87,12 @@ class PRE_AP_View(tk.Frame):
 
 	def warningBox(self, message):
 		'''Display a warning box with message'''
-		messagebox.showwarning("Warning", message)		
+		messagebox.showwarning("Warning", message)
+
+
+	def save_json(self):
+		'''bubble to top'''
+		self.controller.save_json()
 
 	def is_set_med_image(self):
 		if self.med_image != "":
@@ -98,12 +103,17 @@ class PRE_AP_View(tk.Frame):
 		image = filedialog.askopenfilename(initialdir=self.controller.working_dir)
 
 		if image != "":
+			# current session
 			self.med_image = image
 			self.canvas = DrawTools(self.content_frame, image)  # create widget
 			self.canvas.grid(row=0, column=0)  # show widget
 
+			# update canvas object for children
 			for obj in self.objects:			
 				self.objects[obj].update_canvas(self.canvas)
+
+			# save to json for future sessions
+			self.master_dict["IMAGES"]["PRE-AP"] = image
 
 	def menu_btn_click(self, obj_name, action):
 		'''Route menu click to object page'''		
@@ -112,11 +122,26 @@ class PRE_AP_View(tk.Frame):
 
 	def updateMenuLabel(self, label_text, menu_obj):
 		'''Set label text for user instructions'''
-		self.frames[menu_obj].setLabelText(label_text)
+		self.menus[menu_obj].setLabelText(label_text)
 
 
 	def update_dict(self, master_dict):
+
+		# update dictionaries
 		self.master_dict = master_dict
+		for obj in self.objects:
+			self.objects[obj].update_dict(master_dict)		
+
+		# found json data, load image from json
+		if self.master_dict["IMAGES"]["PRE-AP"] != None:
+
+			self.med_image = self.master_dict["IMAGES"]["PRE-AP"]
+			self.canvas = DrawTools(self.content_frame, self.med_image)  # create widget
+			self.canvas.grid(row=0, column=0)  # show widget
+
+			# update canvas object for children
+			for obj in self.objects:			
+				self.objects[obj].update_canvas(self.canvas)
 
 
 	def unsetObjs(self, obj_name):

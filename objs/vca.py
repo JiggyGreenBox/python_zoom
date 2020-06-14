@@ -10,8 +10,102 @@ class VCA():
 		self.controller = controller
 		self.side = None
 
+		# check if master dictionary has values
+		# if not populate the dictionary
+		self.checkMasterDict()
+
+		# DEL-LEFT-DIST-FEM
+
+	def checkMasterDict(self):
+		if "VCA" not in self.dict.keys():
+			self.dict["VCA"] = 	{
+									"LEFT":	{
+												"DIST_FEM":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+											},
+									"RIGHT":	{
+												"DIST_FEM":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+											}
+									}		
+
 	def click(self, event):
 		print("click from "+self.name)
+
+		if self.side == None:
+			print("please choose side")
+			self.controller.warningBox("Please select a Side")
+		else:
+			# print(self.dict)
+			ret =  self.addDict(event)
+			if ret:										
+				self.controller.save_json()
+				# pass
+
+		self.controller.updateMenuLabel(self.getNextLabel(), "VCA_Menu")
+		self.draw_tools.clear_by_tag(self.tag)
+		self.draw()
+
+
+	def addDict(self, event):
+		for item in self.dict["VCA"][self.side]:
+			
+			# get item type 
+			item_type = self.dict["VCA"][self.side][item]["type"]
+			print(item)
+
+			# point has P1 and P2, M1 is calculated
+			if item_type == "midpoint":
+
+				# check if P1 is None				
+				if self.dict["VCA"][self.side][item]["P1"] == None:
+					P = self.draw_tools.getRealCoords(event)
+					self.dict["VCA"][self.side][item]["P1"] = P
+					return True
+
+
+				# check if P2 is None				
+				if self.dict["VCA"][self.side][item]["P2"] == None:
+					P = self.draw_tools.getRealCoords(event)
+					self.dict["VCA"][self.side][item]["P2"] = P
+
+					M = self.draw_tools.midpoint(self.dict["VCA"][self.side][item]["P1"], P)
+					self.dict["VCA"][self.side][item]["M1"] = M
+					return True
+		return False
+
+
+
+	# menu button clicks are routed here
+	def menu_btn_click(self, action):
+		print(action)
+		if action == "SET-LEFT":
+			self.side = "LEFT"
+
+		if action == "SET-RIGHT":
+			self.side = "RIGHT"
+
+		if action == "DEL-LEFT-DIST-FEM":
+			self.dict["VCA"]["LEFT"]["DIST_FEM"]["P1"] = None
+			self.dict["VCA"]["LEFT"]["DIST_FEM"]["P2"] = None
+			self.dict["VCA"]["LEFT"]["DIST_FEM"]["M1"] = None
+
+			self.draw_tools.clear_by_tag(self.tag)
+			self.draw()
+			self.controller.save_json()
+
+		if action == "DEL-RIGHT-DIST-FEM":
+			self.dict["VCA"]["RIGHT"]["DIST_FEM"]["P1"] = None
+			self.dict["VCA"]["RIGHT"]["DIST_FEM"]["P2"] = None
+			self.dict["VCA"]["RIGHT"]["DIST_FEM"]["M1"] = None
+
+
+
+			self.draw_tools.clear_by_tag(self.tag)
+			self.draw()
+			self.controller.save_json()
+
+		self.controller.updateMenuLabel(self.getNextLabel(), "VCA_Menu")
+
+
 
 	def draw(self):
 
@@ -20,52 +114,56 @@ class VCA():
 
 
 			# ------------------------
-			# FROM MAIN
+			# FROM VCA
 			# ------------------------
 
+			dist_fem_p1 = self.dict["VCA"][side]["DIST_FEM"]["P1"]
+			dist_fem_p2 = self.dict["VCA"][side]["DIST_FEM"]["P2"]
+			dist_fem_m1 = self.dict["VCA"][side]["DIST_FEM"]["M1"]
+
+			isDist = False
+
+			if dist_fem_p1 != None:
+				self.draw_tools.create_mypoint(dist_fem_p1, "white", self.tag)
+
+			if dist_fem_p2 != None:
+				self.draw_tools.create_mypoint(dist_fem_p2, "white", self.tag)
+
+			if dist_fem_p1 != None and dist_fem_p2 != None:				
+				self.draw_tools.create_midpoint_line(dist_fem_p1, dist_fem_p2, dist_fem_m1, self.tag)
+				isDist = True
+
+
+			# ------------------------
+			# FROM MAIN
+			# ------------------------
 			isHip = False
 			isKnee = False
-			isFemBot = False
+
+			hip = self.dict["MAIN"][side]["HIP"]["P1"]
+			knee = self.dict["MAIN"][side]["KNEE"]["P1"]
 
 
 			# HIP
-			if self.dict["MAIN"][side]["HIP"]["P1"] != None:
+			if hip != None:
 				isHip = True
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["HIP"]["P1"], "white", self.tag)
+				self.draw_tools.create_mypoint(hip, "white", self.tag)
 
 			# KNEE
-			if self.dict["MAIN"][side]["KNEE"]["P1"] != None:
+			if knee != None:
 				isKnee = True
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["KNEE"]["P1"], "white", self.tag)
+				self.draw_tools.create_mypoint(knee, "white", self.tag)
 
 			# HIP-KNEE-LINE
-			if self.dict["MAIN"][side]["HIP"]["P1"] != None and self.dict["MAIN"][side]["KNEE"]["P1"] != None:
-				self.draw_tools.create_myline(self.dict["MAIN"][side]["HIP"]["P1"], self.dict["MAIN"][side]["KNEE"]["P1"], self.tag)
-				isAldfa = True
+			if hip != None and knee != None:
+				self.draw_tools.create_myline(hip, knee, self.tag)
+
+
+			if isHip and isKnee and isDist:
+				self.draw_tools.create_myline(dist_fem_m1, knee, self.tag)
 
 
 
-			# FEM AXIS			
-			# BOT
-			if self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P1"], "white", self.tag)
-
-			if self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P2"], "white", self.tag)
-
-			if self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P1"] != None and self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P2"] != None:
-				p1 = self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P1"]
-				p2 = self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P2"]
-				m1 = self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["M1"]
-				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
-				isFemBot = True
-
-			if isHip and isKnee and isFemBot:
-
-				# knee fem-bot ray
-				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
-				p_top = self.draw_tools.line_intersection((self.dict["MAIN"][side]["KNEE"]["P1"], self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["M1"]), (xtop, ytop))
-				self.draw_tools.create_myline(self.dict["MAIN"][side]["KNEE"]["P1"], p_top, self.tag)
 
 
 	def update_canvas(self, draw_tools):
@@ -75,6 +173,32 @@ class VCA():
 	def update_dict(self, master_dict):
 		self.dict = master_dict		
 
+
+	def getNextLabel(self):
+
+		if self.side != None:
+			
+			for item in self.dict["VCA"][self.side]:
+
+				# get item type 
+				item_type = self.dict["VCA"][self.side][item]["type"]
+
+
+				# point has P1 and P2, M1 is calculated
+				if item_type == "midpoint":
+
+					# check if P1 is None				
+					if self.dict["VCA"][self.side][item]["P1"] == None:
+						return (self.side + " " + item + " P1")
+
+
+					# check if P2 is None				
+					if self.dict["VCA"][self.side][item]["P2"] == None:
+						return (self.side + " " + item + " P2")
+
+			return (self.side + " Done")
+
+		return None
 
 
 	def unset(self):

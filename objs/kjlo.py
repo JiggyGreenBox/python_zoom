@@ -74,14 +74,15 @@ class KJLO():
 
 
 		if isLeftAnkle and isRightAnkle:
-			p_left = self.dict["MAIN"]["LEFT"]["ANKLE"]["M1"]
-			p_right = self.dict["MAIN"]["RIGHT"]["ANKLE"]["M1"]
+			L_ankle = self.dict["MAIN"]["LEFT"]["ANKLE"]["M1"]
+			R_ankle = self.dict["MAIN"]["RIGHT"]["ANKLE"]["M1"]
 
-			self.draw_tools.create_myline(p_left, p_right, self.tag)
+			# join ankles
+			self.draw_tools.create_myline(L_ankle, R_ankle, self.tag)
 
-			slope = self.slope(p_left, p_right)
+			slope = self.slope(L_ankle, R_ankle)
 
-
+			# points perpendicular to LR-ankle-line
 			L = [0,0]
 			R = [0,0]
 			# D = p1
@@ -90,11 +91,11 @@ class KJLO():
 			dx = -slope*dy
 			# print("DX"+str(dx))
 			# print("DY"+str(dy))
-			L[0] = p_left[0] + dx
-			L[1] = p_left[1] + dy
+			L[0] = L_ankle[0] + dx
+			L[1] = L_ankle[1] + dy
 
-			R[0] = p_right[0] + dx
-			R[1] = p_right[1] + dy
+			R[0] = R_ankle[0] + dx
+			R[1] = R_ankle[1] + dy
 
 			self.draw_tools.create_mypoint(L, "white", self.tag)
 			self.draw_tools.create_mypoint(R, "white", self.tag)
@@ -103,15 +104,15 @@ class KJLO():
 
 			# hip-knee ray
 			p_top_L = self.draw_tools.line_intersection(
-				(p_left, L),
+				(L_ankle, L),
 				(xtop, ytop))
 
 			p_top_R = self.draw_tools.line_intersection(
-				(p_right, R),
+				(R_ankle, R),
 				(xtop, ytop))
 
-			self.draw_tools.create_myline(p_left, p_top_L, self.tag)
-			self.draw_tools.create_myline(p_right, p_top_R, self.tag)
+			self.draw_tools.create_myline(L_ankle, p_top_L, self.tag)
+			self.draw_tools.create_myline(R_ankle, p_top_R, self.tag)
 
 			# not in left right loop
 			L_tib_joint_p1 = self.dict["TAMD"]["LEFT"]["TIB_JOINT_LINE"]["P1"]
@@ -128,10 +129,13 @@ class KJLO():
 				L_tib_joint_R_limit = self.draw_tools.line_intersection((L_tib_joint_p1, L_tib_joint_p2),(ytop, ybot))
 
 				# intersection points
-				p_int_L = self.draw_tools.line_intersection((p_top_L, p_left),(L_tib_joint_L_limit, L_tib_joint_R_limit))
+				p_int_L = self.draw_tools.line_intersection((p_top_L, L_ankle),(L_tib_joint_L_limit, L_tib_joint_R_limit))
+
+				# find LR points
+				LL_tib, LR_tib = self.draw_tools.retPointsLeftRight(L_tib_joint_p1, L_tib_joint_p2)
 
 				# draw angles
-				L_angle = self.draw_tools.create_myAngle(p_left, p_int_L, L_tib_joint_L_limit, self.tag)
+				L_angle = self.draw_tools.create_myAngle(LR_tib, p_int_L, L_ankle, self.tag)
 				self.draw_tools.create_mytext(p_int_L, '{0:.2f}'.format(L_angle), self.tag, x_offset=-60, y_offset=-60)
 
 			if R_tib_joint_p1 != None and R_tib_joint_p2 != None:
@@ -139,10 +143,13 @@ class KJLO():
 				R_tib_joint_R_limit = self.draw_tools.line_intersection((R_tib_joint_p1, R_tib_joint_p2),(ytop, ybot))
 
 				# intersection points
-				p_int_R = self.draw_tools.line_intersection((p_top_R, p_right),(R_tib_joint_L_limit, R_tib_joint_R_limit))
+				p_int_R = self.draw_tools.line_intersection((p_top_R, R_ankle),(R_tib_joint_L_limit, R_tib_joint_R_limit))
+
+				# find LR points
+				RL_tib, RR_tib = self.draw_tools.retPointsLeftRight(R_tib_joint_p1, R_tib_joint_p2)
 				
 				# draw angles
-				R_angle = self.draw_tools.create_myAngle(R_tib_joint_R_limit, p_int_R, p_right, self.tag)
+				R_angle = self.draw_tools.create_myAngle(R_ankle, p_int_R, RL_tib, self.tag)
 				self.draw_tools.create_mytext(p_int_R, '{0:.2f}'.format(R_angle), self.tag, x_offset=60, y_offset=-60)
 
 
