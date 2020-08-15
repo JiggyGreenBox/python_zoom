@@ -445,9 +445,9 @@
         }
     },
     "DETAILS": {
-        "F_NAME": null,
-        "L_NAME": null,
-        "AGE": null,
-        "SEX": null
+        "F_NAME": "asd",
+        "L_NAME": "jiggy",
+        "AGE": "232",
+        "SEX": "F"
     }
 }

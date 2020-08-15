@@ -1,4 +1,5 @@
 import tkinter as tk
+
 from tkinter import ttk
 from tkinter import *
 
@@ -19,9 +20,13 @@ from gui_draw_tools import DrawTools
 # warning box for choose-side
 from tkinter import messagebox
 
+# get relpath
+import os
+
 
 
 class PRE_AP_View(tk.Frame):
+	
 	def __init__(self, parent, controller, master_dict):
 		tk.Frame.__init__(self, parent)
 		self.controller = controller
@@ -76,7 +81,8 @@ class PRE_AP_View(tk.Frame):
 				):
 			obj_name = Obj.__name__
 			# print(obj_name)
-			self.objects[obj_name] = Obj(self.canvas, self.master_dict, controller=self)
+			self.objects[obj_name] = Obj(self.canvas, self.master_dict, controller=self, op_type = "PRE-OP")			
+
 
 
 
@@ -99,10 +105,15 @@ class PRE_AP_View(tk.Frame):
 			return True
 		return False
 
-	def open_image_loc(self):		
-		image = filedialog.askopenfilename(initialdir=self.controller.working_dir)
+	def open_image_loc(self):
 
-		if image != "":
+		image = filedialog.askopenfilename(initialdir=self.controller.working_dir)			
+
+		if isinstance(image, str) and image != "":
+
+			dir_name = os.path.dirname(image)
+			rel_path = os.path.relpath(image, dir_name)
+
 			# current session
 			self.med_image = image
 			self.canvas = DrawTools(self.content_frame, image)  # create widget
@@ -113,7 +124,11 @@ class PRE_AP_View(tk.Frame):
 				self.objects[obj].update_canvas(self.canvas)
 
 			# save to json for future sessions
-			self.master_dict["IMAGES"]["PRE-AP"] = image
+			# self.master_dict["IMAGES"]["PRE-AP"] = image
+			self.master_dict["IMAGES"]["PRE-AP"] = rel_path
+
+			# save to pat.json
+			self.controller.save_json()
 
 	def menu_btn_click(self, obj_name, action):
 		'''Route menu click to object page'''		
@@ -135,7 +150,7 @@ class PRE_AP_View(tk.Frame):
 		# found json data, load image from json
 		if self.master_dict["IMAGES"]["PRE-AP"] != None:
 
-			self.med_image = self.master_dict["IMAGES"]["PRE-AP"]
+			self.med_image = self.controller.working_dir + "/" + self.master_dict["IMAGES"]["PRE-AP"]
 			self.canvas = DrawTools(self.content_frame, self.med_image)  # create widget
 			self.canvas.grid(row=0, column=0)  # show widget
 
@@ -157,4 +172,14 @@ class PRE_AP_View(tk.Frame):
 		self.canvas.setObject(self.objects[obj_name])
 		self.objects[obj_name].draw()
 		self.unsetObjs(obj_name)
-		self.show_frame(menu)										
+		self.show_frame(menu)					
+
+
+	def resetImg(self, image):
+		self.canvas.destroy()		
+		self.canvas = DrawTools(self.content_frame, image)  # create widget
+		self.canvas.grid(row=0, column=0)  # show widget
+
+		# update canvas object for children
+		for obj in self.objects:			
+			self.objects[obj].update_canvas(self.canvas)

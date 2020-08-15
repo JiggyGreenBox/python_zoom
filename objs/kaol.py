@@ -2,11 +2,13 @@ import math
 
 class KAOL():
 	"""docstring for ClassName"""
-	def __init__(self, draw_tools, master_dict, controller):
+	def __init__(self, draw_tools, master_dict, controller, op_type):
 		self.name = "KAOL"
 		self.tag = "kaol"
 		self.draw_tools = draw_tools
-		self.dict = master_dict		
+		self.dict = master_dict
+		self.controller = controller
+		self.op_type = op_type
 
 		
 	def click(self, event):
@@ -32,11 +34,11 @@ class KAOL():
 
 			isTamd = False			
 
-			tib_joint_p1 = self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P1"]
-			tib_joint_p2 = self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P2"]
-			ankle_p1 = self.dict["MAIN"][side]["ANKLE"]["P1"]
-			ankle_p2 = self.dict["MAIN"][side]["ANKLE"]["P2"]
-			ankle_m1 = self.dict["MAIN"][side]["ANKLE"]["M1"]
+			tib_joint_p1 = self.dict["TAMD"][self.op_type][side]["TIB_JOINT_LINE"]["P1"]
+			tib_joint_p2 = self.dict["TAMD"][self.op_type][side]["TIB_JOINT_LINE"]["P2"]
+			ankle_p1 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P1"]
+			ankle_p2 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]
+			ankle_m1 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["M1"]
 
 
 			# ------------------------
@@ -109,6 +111,16 @@ class KAOL():
 					if side == "RIGHT":
 						angle = self.draw_tools.create_myAngle(R_tib, p_int, ankle_m1, self.tag)
 						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, y_offset=-60)
+
+
+					# check if value exists
+					if self.dict["EXCEL"][self.op_type][side]["KAOL"] == None:
+
+						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+						self.dict["EXCEL"][self.op_type][side]["KAOL"]	 	= '{0:.2f}'.format(angle)
+
+						# save after insert
+						self.controller.save_json()
 
 
 	def update_canvas(self, draw_tools):

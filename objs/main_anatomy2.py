@@ -2,7 +2,7 @@
 
 class MainAnatomy:
 	# instance attribute
-	def __init__(self, draw_tools, master_dict):
+	def __init__(self, draw_tools, master_dict, controller, op_type):
 		self.name = "object1"
 		self.draw_tools = draw_tools
 		self.dict = master_dict

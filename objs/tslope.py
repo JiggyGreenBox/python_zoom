@@ -2,13 +2,14 @@
 
 class TSLOPE():
 	"""docstring for ClassName"""
-	def __init__(self, draw_tools, master_dict, controller):
+	def __init__(self, draw_tools, master_dict, controller, op_type):
 		self.name = "TSLOPE"
 		self.tag = "tslope"
 		self.draw_tools = draw_tools
 		self.dict = master_dict
 		self.controller = controller
 		self.side = None
+		self.op_type = op_type
 
 		# check if master dictionary has values
 		# if not populate the dictionary
@@ -47,34 +48,34 @@ class TSLOPE():
 
 
 		if action == "DEL-LEFT-TIB-LINE":
-			self.dict["TSLOPE"]["LEFT"]["TIB_JOINT_LINE"]["P1"] = None
-			self.dict["TSLOPE"]["LEFT"]["TIB_JOINT_LINE"]["P2"] = None
+			self.dict["TSLOPE"][self.op_type]["LEFT"]["TIB_JOINT_LINE"]["P1"] = None
+			self.dict["TSLOPE"][self.op_type]["LEFT"]["TIB_JOINT_LINE"]["P2"] = None
 
 		if action == "DEL-RIGHT-TIB-LINE":
-			self.dict["TSLOPE"]["RIGHT"]["TIB_JOINT_LINE"]["P1"] = None
-			self.dict["TSLOPE"]["RIGHT"]["TIB_JOINT_LINE"]["P2"] = None
+			self.dict["TSLOPE"][self.op_type]["RIGHT"]["TIB_JOINT_LINE"]["P1"] = None
+			self.dict["TSLOPE"][self.op_type]["RIGHT"]["TIB_JOINT_LINE"]["P2"] = None
 
 
 
 		if action == "DEL-LEFT-TIB-TOP":			
-			self.dict["TSLOPE"]["LEFT"]["AXIS_TIB"]["TOP"]["P1"] = None
-			self.dict["TSLOPE"]["LEFT"]["AXIS_TIB"]["TOP"]["P2"] = None
-			self.dict["TSLOPE"]["LEFT"]["AXIS_TIB"]["TOP"]["M1"] = None
+			self.dict["TSLOPE"][self.op_type]["LEFT"]["AXIS_TIB"]["TOP"]["P1"] = None
+			self.dict["TSLOPE"][self.op_type]["LEFT"]["AXIS_TIB"]["TOP"]["P2"] = None
+			self.dict["TSLOPE"][self.op_type]["LEFT"]["AXIS_TIB"]["TOP"]["M1"] = None
 
 		if action == "DEL-RIGHT-TIB-TOP":
-			self.dict["TSLOPE"]["RIGHT"]["AXIS_TIB"]["TOP"]["P1"] = None
-			self.dict["TSLOPE"]["RIGHT"]["AXIS_TIB"]["TOP"]["P2"] = None
-			self.dict["TSLOPE"]["RIGHT"]["AXIS_TIB"]["TOP"]["M1"] = None
+			self.dict["TSLOPE"][self.op_type]["RIGHT"]["AXIS_TIB"]["TOP"]["P1"] = None
+			self.dict["TSLOPE"][self.op_type]["RIGHT"]["AXIS_TIB"]["TOP"]["P2"] = None
+			self.dict["TSLOPE"][self.op_type]["RIGHT"]["AXIS_TIB"]["TOP"]["M1"] = None
 
 		if action == "DEL-LEFT-TIB-BOT":
-			self.dict["TSLOPE"]["LEFT"]["AXIS_TIB"]["BOT"]["P1"] = None
-			self.dict["TSLOPE"]["LEFT"]["AXIS_TIB"]["BOT"]["P2"] = None
-			self.dict["TSLOPE"]["LEFT"]["AXIS_TIB"]["BOT"]["M1"] = None
+			self.dict["TSLOPE"][self.op_type]["LEFT"]["AXIS_TIB"]["BOT"]["P1"] = None
+			self.dict["TSLOPE"][self.op_type]["LEFT"]["AXIS_TIB"]["BOT"]["P2"] = None
+			self.dict["TSLOPE"][self.op_type]["LEFT"]["AXIS_TIB"]["BOT"]["M1"] = None
 
 		if action == "DEL-RIGHT-TIB-BOT":
-			self.dict["TSLOPE"]["RIGHT"]["AXIS_TIB"]["BOT"]["P1"] = None
-			self.dict["TSLOPE"]["RIGHT"]["AXIS_TIB"]["BOT"]["P2"] = None
-			self.dict["TSLOPE"]["RIGHT"]["AXIS_TIB"]["BOT"]["M1"] = None
+			self.dict["TSLOPE"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["P1"] = None
+			self.dict["TSLOPE"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["P2"] = None
+			self.dict["TSLOPE"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["M1"] = None
 
 		self.controller.updateMenuLabel(self.getNextLabel(), "TSLOPE_Menu")
 		self.draw_tools.clear_by_tag(self.tag)
@@ -91,16 +92,15 @@ class TSLOPE():
 			isTibBot 	= False		
 			isTibP1P2 	= False
 
-			joint_line_p1 = self.dict["TSLOPE"][side]["TIB_JOINT_LINE"]["P1"]
-			joint_line_p2 = self.dict["TSLOPE"][side]["TIB_JOINT_LINE"]["P2"]
+			joint_line_p1 = self.dict["TSLOPE"][self.op_type][side]["TIB_JOINT_LINE"]["P1"]
+			joint_line_p2 = self.dict["TSLOPE"][self.op_type][side]["TIB_JOINT_LINE"]["P2"]
 
-			top_axis_tib_p1 = self.dict[self.name][side]["AXIS_TIB"]["TOP"]["P1"]
-			top_axis_tib_p2 = self.dict[self.name][side]["AXIS_TIB"]["TOP"]["P2"]
-			top_axis_tib_m1 = self.dict[self.name][side]["AXIS_TIB"]["TOP"]["M1"]
-
-			bot_axis_tib_p1 = self.dict[self.name][side]["AXIS_TIB"]["BOT"]["P1"]
-			bot_axis_tib_p2 = self.dict[self.name][side]["AXIS_TIB"]["BOT"]["P2"]			
-			bot_axis_tib_m1 = self.dict[self.name][side]["AXIS_TIB"]["BOT"]["M1"]
+			top_axis_tib_p1 = self.dict[self.name][self.op_type][side]["AXIS_TIB"]["TOP"]["P1"]
+			top_axis_tib_p2 = self.dict[self.name][self.op_type][side]["AXIS_TIB"]["TOP"]["P2"]
+			top_axis_tib_m1 = self.dict[self.name][self.op_type][side]["AXIS_TIB"]["TOP"]["M1"]
+			bot_axis_tib_p1 = self.dict[self.name][self.op_type][side]["AXIS_TIB"]["BOT"]["P1"]
+			bot_axis_tib_p2 = self.dict[self.name][self.op_type][side]["AXIS_TIB"]["BOT"]["P2"]			
+			bot_axis_tib_m1 = self.dict[self.name][self.op_type][side]["AXIS_TIB"]["BOT"]["M1"]
 
 
 			if joint_line_p1 != None:
@@ -167,53 +167,84 @@ class TSLOPE():
 					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60, y_offset=60)
 
 
+				# check if value exists
+				if self.dict["EXCEL"][self.op_type][side]["TSLOPE"] == None:
+
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["TSLOPE"]	 	= '{0:.2f}'.format(angle)
+
+					# save after insert
+					self.controller.save_json()
+
+
 
 
 
 	def checkMasterDict(self):
 		if "TSLOPE" not in self.dict.keys():
 			self.dict["TSLOPE"] = 	{
-									"LEFT":	{
-												"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None},
-												"AXIS_TIB":	{
-																"type":	"axis",
-																"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
-																"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
-															}
-											},
-									"RIGHT":	{
-												"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None},
-												"AXIS_TIB":	{
-																"type":	"axis",
-																"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
-																"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
-															}
-											}
+										"PRE-OP":{
+												"LEFT":	{
+															"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None},
+															"AXIS_TIB":	{
+																			"type":	"axis",
+																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
+																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																		}
+														},
+												"RIGHT":	{
+															"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None},
+															"AXIS_TIB":	{
+																			"type":	"axis",
+																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
+																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																		}
+														}
+												},
+
+										"POST-OP":{
+												"LEFT":	{
+															"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None},
+															"AXIS_TIB":	{
+																			"type":	"axis",
+																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
+																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																		}
+														},
+												"RIGHT":	{
+															"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None},
+															"AXIS_TIB":	{
+																			"type":	"axis",
+																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
+																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																		}
+														}
+												}
 									}
 
 
 
 	def addDict(self, event):
 
-		for item in self.dict["TSLOPE"][self.side]:
+		for item in self.dict["TSLOPE"][self.op_type][self.side]:
 			# get item type 
-			item_type = self.dict["TSLOPE"][self.side][item]["type"]
+			item_type = self.dict["TSLOPE"][self.op_type][self.side][item]["type"]
 
 			
 			# line has P1 and P2
 			if item_type == "line":
 
 				# check if P1 is None				
-				if self.dict["TSLOPE"][self.side][item]["P1"] == None:
+				if self.dict["TSLOPE"][self.op_type][self.side][item]["P1"] == None:
 					P = self.draw_tools.getRealCoords(event)
-					self.dict["TSLOPE"][self.side][item]["P1"] = P
+					self.dict["TSLOPE"][self.op_type][self.side][item]["P1"] = P
 					return True
 
 
 				# check if P2 is None				
-				if self.dict["TSLOPE"][self.side][item]["P2"] == None:
+				if self.dict["TSLOPE"][self.op_type][self.side][item]["P2"] == None:
 					P = self.draw_tools.getRealCoords(event)
-					self.dict["TSLOPE"][self.side][item]["P2"] = P
+					self.dict["TSLOPE"][self.op_type][self.side][item]["P2"] = P
 					return True
 
 
@@ -223,34 +254,34 @@ class TSLOPE():
 				# TOP
 
 				# check if P1 is None
-				if self.dict["TSLOPE"][self.side][item]["TOP"]["P1"] == None:
+				if self.dict["TSLOPE"][self.op_type][self.side][item]["TOP"]["P1"] == None:
 					P = self.draw_tools.getRealCoords(event)
-					self.dict["TSLOPE"][self.side][item]["TOP"]["P1"] = P
+					self.dict["TSLOPE"][self.op_type][self.side][item]["TOP"]["P1"] = P
 					return True
 
 				# check if P2 is None				
-				if self.dict["TSLOPE"][self.side][item]["TOP"]["P2"] == None:
+				if self.dict["TSLOPE"][self.op_type][self.side][item]["TOP"]["P2"] == None:
 					P = self.draw_tools.getRealCoords(event)
-					self.dict["TSLOPE"][self.side][item]["TOP"]["P2"] = P
+					self.dict["TSLOPE"][self.op_type][self.side][item]["TOP"]["P2"] = P
 
-					M = self.draw_tools.midpoint(self.dict["TSLOPE"][self.side][item]["TOP"]["P1"], P)
-					self.dict["TSLOPE"][self.side][item]["TOP"]["M1"] = M
+					M = self.draw_tools.midpoint(self.dict["TSLOPE"][self.op_type][self.side][item]["TOP"]["P1"], P)
+					self.dict["TSLOPE"][self.op_type][self.side][item]["TOP"]["M1"] = M
 					return True
 
 				# BOT
 				# check if P1 is None
-				if self.dict["TSLOPE"][self.side][item]["BOT"]["P1"] == None:
+				if self.dict["TSLOPE"][self.op_type][self.side][item]["BOT"]["P1"] == None:
 					P = self.draw_tools.getRealCoords(event)
-					self.dict["TSLOPE"][self.side][item]["BOT"]["P1"] = P
+					self.dict["TSLOPE"][self.op_type][self.side][item]["BOT"]["P1"] = P
 					return True
 
 				# check if P2 is None				
-				if self.dict["TSLOPE"][self.side][item]["BOT"]["P2"] == None:
+				if self.dict["TSLOPE"][self.op_type][self.side][item]["BOT"]["P2"] == None:
 					P = self.draw_tools.getRealCoords(event)
-					self.dict["TSLOPE"][self.side][item]["BOT"]["P2"] = P
+					self.dict["TSLOPE"][self.op_type][self.side][item]["BOT"]["P2"] = P
 
-					M = self.draw_tools.midpoint(self.dict["TSLOPE"][self.side][item]["BOT"]["P1"], P)
-					self.dict["TSLOPE"][self.side][item]["BOT"]["M1"] = M
+					M = self.draw_tools.midpoint(self.dict["TSLOPE"][self.op_type][self.side][item]["BOT"]["P1"], P)
+					self.dict["TSLOPE"][self.op_type][self.side][item]["BOT"]["M1"] = M
 					return True					
 
 		return False	
@@ -259,21 +290,21 @@ class TSLOPE():
 	def getNextLabel(self):
 
 		if self.side != None:
-			for item in self.dict["TSLOPE"][self.side]:
+			for item in self.dict["TSLOPE"][self.op_type][self.side]:
 				# get item type 
-				item_type = self.dict["TSLOPE"][self.side][item]["type"]
+				item_type = self.dict["TSLOPE"][self.op_type][self.side][item]["type"]
 
 				
 				# line has P1 and P2
 				if item_type == "line":
 
 					# check if P1 is None				
-					if self.dict["TSLOPE"][self.side][item]["P1"] == None:						
+					if self.dict["TSLOPE"][self.op_type][self.side][item]["P1"] == None:						
 						return (self.side + " " + item + " P1")
 
 
 					# check if P2 is None				
-					if self.dict["TSLOPE"][self.side][item]["P2"] == None:						
+					if self.dict["TSLOPE"][self.op_type][self.side][item]["P2"] == None:						
 						return (self.side + " " + item + " P1")
 
 
@@ -283,20 +314,20 @@ class TSLOPE():
 					# TOP
 
 					# check if P1 is None
-					if self.dict["TSLOPE"][self.side][item]["TOP"]["P1"] == None:						
+					if self.dict["TSLOPE"][self.op_type][self.side][item]["TOP"]["P1"] == None:						
 						return (self.side + " " + item + " P1")
 
 					# check if P2 is None				
-					if self.dict["TSLOPE"][self.side][item]["TOP"]["P2"] == None:						
+					if self.dict["TSLOPE"][self.op_type][self.side][item]["TOP"]["P2"] == None:						
 						return (self.side + " " + item + " P2")
 
 					# BOT
 					# check if P1 is None
-					if self.dict["TSLOPE"][self.side][item]["BOT"]["P1"] == None:						
+					if self.dict["TSLOPE"][self.op_type][self.side][item]["BOT"]["P1"] == None:						
 						return (self.side + " " + item + " P1")
 
 					# check if P2 is None				
-					if self.dict["TSLOPE"][self.side][item]["BOT"]["P2"] == None:
+					if self.dict["TSLOPE"][self.op_type][self.side][item]["BOT"]["P2"] == None:
 						return (self.side + " " + item + " P2")
 
 			return (self.side + " Done")
@@ -315,3 +346,5 @@ class TSLOPE():
 	def unset(self):
 		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)
+
+		

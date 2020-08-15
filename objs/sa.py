@@ -2,13 +2,14 @@
 
 class SA():
 	"""docstring for ClassName"""
-	def __init__(self, draw_tools, master_dict, controller):
+	def __init__(self, draw_tools, master_dict, controller, op_type):
 		self.name = "SA"
 		self.tag = "sa"
 		self.draw_tools = draw_tools
 		self.dict = master_dict
 		self.controller = controller
 		self.side = None
+		self.op_type = op_type
 
 		# check if master dictionary has values
 		# if not populate the dictionary
@@ -46,22 +47,22 @@ class SA():
 
 
 		if action == "DEL-LEFT-P1":
-			self.dict["SA"]["LEFT"]["P1"]["P1"] = None
+			self.dict["SA"][self.op_type]["LEFT"]["P1"]["P1"] = None
 
 		if action == "DEL-RIGHT-P1":
-			self.dict["SA"]["RIGHT"]["P1"]["P1"] = None
+			self.dict["SA"][self.op_type]["RIGHT"]["P1"]["P1"] = None
 
 		if action == "DEL-LEFT-P2":
-			self.dict["SA"]["LEFT"]["P2"]["P1"] = None
+			self.dict["SA"][self.op_type]["LEFT"]["P2"]["P1"] = None
 
 		if action == "DEL-RIGHT-P2":
-			self.dict["SA"]["RIGHT"]["P2"]["P1"] = None
+			self.dict["SA"][self.op_type]["RIGHT"]["P2"]["P1"] = None
 
 		if action == "DEL-LEFT-P3":
-			self.dict["SA"]["LEFT"]["P3"]["P1"] = None
+			self.dict["SA"][self.op_type]["LEFT"]["P3"]["P1"] = None
 
 		if action == "DEL-RIGHT-P3":
-			self.dict["SA"]["RIGHT"]["P3"]["P1"] = None
+			self.dict["SA"][self.op_type]["RIGHT"]["P3"]["P1"] = None
 			
 		self.draw_tools.clear_by_tag(self.tag)
 		self.draw()
@@ -73,9 +74,9 @@ class SA():
 		# loop left and right
 		for side in ["LEFT","RIGHT"]:
 
-			p1 = self.dict["SA"][side]["P1"]["P1"]
-			p2 = self.dict["SA"][side]["P2"]["P1"]
-			p3 = self.dict["SA"][side]["P3"]["P1"]
+			p1 = self.dict["SA"][self.op_type][side]["P1"]["P1"]
+			p2 = self.dict["SA"][self.op_type][side]["P2"]["P1"]
+			p3 = self.dict["SA"][self.op_type][side]["P3"]["P1"]
 
 			if p1 != None:
 				self.draw_tools.create_mypoint(p1, "white", self.tag)
@@ -94,6 +95,15 @@ class SA():
 
 				angle = self.draw_tools.create_myAngle(p1, p2, p3, self.tag)
 				self.draw_tools.create_mytext(p2, '{0:.2f}'.format(angle), self.tag, y_offset=-60)
+				
+				# check if value exists
+				if self.dict["EXCEL"][self.op_type][side]["SA"] == None:
+
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["SA"]	 	= '{0:.2f}'.format(angle)
+
+					# save after insert
+					self.controller.save_json()
 
 
 
@@ -101,36 +111,50 @@ class SA():
 	def checkMasterDict(self):
 		if "SA" not in self.dict.keys():
 			self.dict["SA"] = 	{
-									"LEFT":	{
-												"P1":		{"type":"point","P1":None},
-												"P2":		{"type":"point","P1":None},
-												"P3":		{"type":"point","P1":None}
+								"PRE-OP":	{
+											"LEFT":	{
+														"P1":		{"type":"point","P1":None},
+														"P2":		{"type":"point","P1":None},
+														"P3":		{"type":"point","P1":None}
+													},
+											"RIGHT":{
+														"P1":		{"type":"point","P1":None},
+														"P2":		{"type":"point","P1":None},
+														"P3":		{"type":"point","P1":None}
+													}
 											},
-									"RIGHT":	{
-												"P1":		{"type":"point","P1":None},
-												"P2":		{"type":"point","P1":None},
-												"P3":		{"type":"point","P1":None}
-											}
-									}
+								"POST-OP":	{
+											"LEFT":	{
+														"P1":		{"type":"point","P1":None},
+														"P2":		{"type":"point","P1":None},
+														"P3":		{"type":"point","P1":None}
+													},
+											"RIGHT":{
+														"P1":		{"type":"point","P1":None},
+														"P2":		{"type":"point","P1":None},
+														"P3":		{"type":"point","P1":None}
+													}
+											}		
+								}
 
 
 	def getNextLabel(self):
 
 		if self.side != None:
-			for item in self.dict["SA"][self.side]:
+			for item in self.dict["SA"][self.op_type][self.side]:
 				# get item type 
-				item_type = self.dict["SA"][self.side][item]["type"]
+				item_type = self.dict["SA"][self.op_type][self.side][item]["type"]
 
 				# point only has P1
 				if item_type == "point":
 					# check if P1 is None				
-					if self.dict["SA"][self.side]["P1"]["P1"] == None:
+					if self.dict["SA"][self.op_type][self.side]["P1"]["P1"] == None:
 						return (self.side + " " + "P1")
 
-					if self.dict["SA"][self.side]["P2"]["P1"] == None:					
+					if self.dict["SA"][self.op_type][self.side]["P2"]["P1"] == None:
 						return (self.side + " " + "P2")
 
-					if self.dict["SA"][self.side]["P3"]["P1"] == None:						
+					if self.dict["SA"][self.op_type][self.side]["P3"]["P1"] == None:
 						return (self.side + " " + "P3")
 
 			return (self.side + " Done")
@@ -142,26 +166,26 @@ class SA():
 
 	def addDict(self, event):
 
-		for item in self.dict["SA"][self.side]:
+		for item in self.dict["SA"][self.op_type][self.side]:
 			# get item type 
-			item_type = self.dict["SA"][self.side][item]["type"]
+			item_type = self.dict["SA"][self.op_type][self.side][item]["type"]
 
 			# point only has P1
 			if item_type == "point":
 				# check if P1 is None				
-				if self.dict["SA"][self.side]["P1"]["P1"] == None:
+				if self.dict["SA"][self.op_type][self.side]["P1"]["P1"] == None:
 					P = self.draw_tools.getRealCoords(event)
-					self.dict["SA"][self.side]["P1"]["P1"] = P
+					self.dict["SA"][self.op_type][self.side]["P1"]["P1"] = P
 					return True
 
-				if self.dict["SA"][self.side]["P2"]["P1"] == None:
+				if self.dict["SA"][self.op_type][self.side]["P2"]["P1"] == None:
 					P = self.draw_tools.getRealCoords(event)
-					self.dict["SA"][self.side]["P2"]["P1"] = P
+					self.dict["SA"][self.op_type][self.side]["P2"]["P1"] = P
 					return True
 
-				if self.dict["SA"][self.side]["P3"]["P1"] == None:
+				if self.dict["SA"][self.op_type][self.side]["P3"]["P1"] == None:
 					P = self.draw_tools.getRealCoords(event)
-					self.dict["SA"][self.side]["P3"]["P1"] = P
+					self.dict["SA"][self.op_type][self.side]["P3"]["P1"] = P
 					return True
 
 		return False	

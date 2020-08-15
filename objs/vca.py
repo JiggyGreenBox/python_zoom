@@ -2,13 +2,14 @@
 
 class VCA():
 	"""docstring for ClassName"""
-	def __init__(self, draw_tools, master_dict, controller):
+	def __init__(self, draw_tools, master_dict, controller, op_type):
 		self.name = "VCA"
 		self.tag = "vca"
 		self.draw_tools = draw_tools
 		self.dict = master_dict
 		self.controller = controller
 		self.side = None
+		self.op_type = op_type
 
 		# check if master dictionary has values
 		# if not populate the dictionary
@@ -19,16 +20,28 @@ class VCA():
 	def checkMasterDict(self):
 		if "VCA" not in self.dict.keys():
 			self.dict["VCA"] = 	{
-									"LEFT":	{
-												"DIST_FEM":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+									"PRE-OP":{
+												"LEFT":	{
+															"DIST_FEM":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+														},
+												"RIGHT":	{
+															"DIST_FEM":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+														}
+
 											},
-									"RIGHT":	{
-												"DIST_FEM":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+									"POST-OP":{
+												"LEFT":	{
+															"DIST_FEM":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+														},
+												"RIGHT":	{
+															"DIST_FEM":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+														}
+
 											}
-									}		
+								}		
 
 	def click(self, event):
-		print("click from "+self.name)
+		print("click from " + self.name)
 
 		if self.side == None:
 			print("please choose side")
@@ -46,29 +59,29 @@ class VCA():
 
 
 	def addDict(self, event):
-		for item in self.dict["VCA"][self.side]:
+		for item in self.dict["VCA"][self.op_type][self.side]:
 			
 			# get item type 
-			item_type = self.dict["VCA"][self.side][item]["type"]
+			item_type = self.dict["VCA"][self.op_type][self.side][item]["type"]
 			print(item)
 
 			# point has P1 and P2, M1 is calculated
 			if item_type == "midpoint":
 
 				# check if P1 is None				
-				if self.dict["VCA"][self.side][item]["P1"] == None:
+				if self.dict["VCA"][self.op_type][self.side][item]["P1"] == None:
 					P = self.draw_tools.getRealCoords(event)
-					self.dict["VCA"][self.side][item]["P1"] = P
+					self.dict["VCA"][self.op_type][self.side][item]["P1"] = P
 					return True
 
 
 				# check if P2 is None				
-				if self.dict["VCA"][self.side][item]["P2"] == None:
+				if self.dict["VCA"][self.op_type][self.side][item]["P2"] == None:
 					P = self.draw_tools.getRealCoords(event)
-					self.dict["VCA"][self.side][item]["P2"] = P
+					self.dict["VCA"][self.op_type][self.side][item]["P2"] = P
 
-					M = self.draw_tools.midpoint(self.dict["VCA"][self.side][item]["P1"], P)
-					self.dict["VCA"][self.side][item]["M1"] = M
+					M = self.draw_tools.midpoint(self.dict["VCA"][self.op_type][self.side][item]["P1"], P)
+					self.dict["VCA"][self.op_type][self.side][item]["M1"] = M
 					return True
 		return False
 
@@ -84,18 +97,18 @@ class VCA():
 			self.side = "RIGHT"
 
 		if action == "DEL-LEFT-DIST-FEM":
-			self.dict["VCA"]["LEFT"]["DIST_FEM"]["P1"] = None
-			self.dict["VCA"]["LEFT"]["DIST_FEM"]["P2"] = None
-			self.dict["VCA"]["LEFT"]["DIST_FEM"]["M1"] = None
+			self.dict["VCA"][self.op_type]["LEFT"]["DIST_FEM"]["P1"] = None
+			self.dict["VCA"][self.op_type]["LEFT"]["DIST_FEM"]["P2"] = None
+			self.dict["VCA"][self.op_type]["LEFT"]["DIST_FEM"]["M1"] = None
 
 			self.draw_tools.clear_by_tag(self.tag)
 			self.draw()
 			self.controller.save_json()
 
 		if action == "DEL-RIGHT-DIST-FEM":
-			self.dict["VCA"]["RIGHT"]["DIST_FEM"]["P1"] = None
-			self.dict["VCA"]["RIGHT"]["DIST_FEM"]["P2"] = None
-			self.dict["VCA"]["RIGHT"]["DIST_FEM"]["M1"] = None
+			self.dict["VCA"][self.op_type]["RIGHT"]["DIST_FEM"]["P1"] = None
+			self.dict["VCA"][self.op_type]["RIGHT"]["DIST_FEM"]["P2"] = None
+			self.dict["VCA"][self.op_type]["RIGHT"]["DIST_FEM"]["M1"] = None
 
 
 
@@ -117,9 +130,9 @@ class VCA():
 			# FROM VCA
 			# ------------------------
 
-			dist_fem_p1 = self.dict["VCA"][side]["DIST_FEM"]["P1"]
-			dist_fem_p2 = self.dict["VCA"][side]["DIST_FEM"]["P2"]
-			dist_fem_m1 = self.dict["VCA"][side]["DIST_FEM"]["M1"]
+			dist_fem_p1 = self.dict["VCA"][self.op_type][side]["DIST_FEM"]["P1"]
+			dist_fem_p2 = self.dict["VCA"][self.op_type][side]["DIST_FEM"]["P2"]
+			dist_fem_m1 = self.dict["VCA"][self.op_type][side]["DIST_FEM"]["M1"]
 
 			isDist = False
 
@@ -140,8 +153,8 @@ class VCA():
 			isHip = False
 			isKnee = False
 
-			hip = self.dict["MAIN"][side]["HIP"]["P1"]
-			knee = self.dict["MAIN"][side]["KNEE"]["P1"]
+			hip = self.dict["MAIN"][self.op_type][side]["HIP"]["P1"]
+			knee = self.dict["MAIN"][self.op_type][side]["KNEE"]["P1"]
 
 
 			# HIP
@@ -164,6 +177,18 @@ class VCA():
 
 
 
+			# check if value exists
+			if self.dict["EXCEL"][self.op_type][side]["VCA"] == None:
+
+				self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+				# self.dict["EXCEL"][self.op_type][side]["VCA"]	 	= '{0:.2f}'.format(angle)
+				self.dict["EXCEL"][self.op_type][side]["VCA"]	 	= 5
+
+				# save after insert
+				self.controller.save_json()
+
+
+
 
 
 	def update_canvas(self, draw_tools):
@@ -178,22 +203,22 @@ class VCA():
 
 		if self.side != None:
 			
-			for item in self.dict["VCA"][self.side]:
+			for item in self.dict["VCA"][self.op_type][self.side]:
 
 				# get item type 
-				item_type = self.dict["VCA"][self.side][item]["type"]
+				item_type = self.dict["VCA"][self.op_type][self.side][item]["type"]
 
 
 				# point has P1 and P2, M1 is calculated
 				if item_type == "midpoint":
 
 					# check if P1 is None				
-					if self.dict["VCA"][self.side][item]["P1"] == None:
+					if self.dict["VCA"][self.op_type][self.side][item]["P1"] == None:
 						return (self.side + " " + item + " P1")
 
 
 					# check if P2 is None				
-					if self.dict["VCA"][self.side][item]["P2"] == None:
+					if self.dict["VCA"][self.op_type][self.side][item]["P2"] == None:
 						return (self.side + " " + item + " P2")
 
 			return (self.side + " Done")

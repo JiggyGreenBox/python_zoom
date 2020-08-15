@@ -2,13 +2,14 @@ import json
 
 class MNSA():
 	"""docstring for ClassName"""
-	def __init__(self, draw_tools, master_dict, controller):
+	def __init__(self, draw_tools, master_dict, controller, op_type):
 		self.name = "MNSA"
 		self.tag = "mnsa"
 		self.draw_tools = draw_tools
 		self.dict = master_dict
 		self.controller = controller
 		self.side = None
+		self.op_type = op_type
 
 		# check if master dictionary has values
 		# if not populate the dictionary
@@ -19,12 +20,22 @@ class MNSA():
 	def checkMasterDict(self):
 		if "MNSA" not in self.dict.keys():
 			self.dict["MNSA"] = 	{
-									"LEFT":	{
-												"NECK_AXIS":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
-											},
-									"RIGHT":	{
-												"NECK_AXIS":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
-											}
+										"PRE-OP":{
+												"LEFT":	{
+															"NECK_AXIS":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+														},
+												"RIGHT":	{
+															"NECK_AXIS":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+														}
+										},
+										"POST-OP":{
+												"LEFT":	{
+															"NECK_AXIS":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+														},
+												"RIGHT":	{
+															"NECK_AXIS":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+														}
+										}
 									}
 
 	def click(self, event):
@@ -51,28 +62,28 @@ class MNSA():
 
 
 	def addDict(self, event):
-		for item in self.dict["MNSA"][self.side]:
+		for item in self.dict["MNSA"][self.op_type][self.side]:
 			
 			# get item type 
-			item_type = self.dict["MNSA"][self.side][item]["type"]
+			item_type = self.dict["MNSA"][self.op_type][self.side][item]["type"]
 
 			# point has P1 and P2, M1 is calculated
 			if item_type == "midpoint":
 
 				# check if P1 is None				
-				if self.dict["MNSA"][self.side][item]["P1"] == None:
+				if self.dict["MNSA"][self.op_type][self.side][item]["P1"] == None:
 					P = self.draw_tools.getRealCoords(event)
-					self.dict["MNSA"][self.side][item]["P1"] = P
+					self.dict["MNSA"][self.op_type][self.side][item]["P1"] = P
 					return True
 
 
 				# check if P2 is None				
-				if self.dict["MNSA"][self.side][item]["P2"] == None:
+				if self.dict["MNSA"][self.op_type][self.side][item]["P2"] == None:
 					P = self.draw_tools.getRealCoords(event)
-					self.dict["MNSA"][self.side][item]["P2"] = P
+					self.dict["MNSA"][self.op_type][self.side][item]["P2"] = P
 
-					M = self.draw_tools.midpoint(self.dict["MNSA"][self.side][item]["P1"], P)
-					self.dict["MNSA"][self.side][item]["M1"] = M
+					M = self.draw_tools.midpoint(self.dict["MNSA"][self.op_type][self.side][item]["P1"], P)
+					self.dict["MNSA"][self.op_type][self.side][item]["M1"] = M
 					return True
 		return False
 
@@ -94,16 +105,16 @@ class MNSA():
 			# ------------------------
 			# FROM MNSA
 			# ------------------------
-			if self.dict["MNSA"][side]["NECK_AXIS"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MNSA"][side]["NECK_AXIS"]["P1"], "white", self.tag)
+			if self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"] != None:
+				self.draw_tools.create_mypoint(self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"], "white", self.tag)
 
-			if self.dict["MNSA"][side]["NECK_AXIS"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MNSA"][side]["NECK_AXIS"]["P2"], "white", self.tag)
+			if self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P2"] != None:
+				self.draw_tools.create_mypoint(self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P2"], "white", self.tag)
 
-			if self.dict["MNSA"][side]["NECK_AXIS"]["P1"] != None and self.dict["MNSA"][side]["NECK_AXIS"]["P2"] != None:
-				p1 = self.dict["MNSA"][side]["NECK_AXIS"]["P1"]
-				p2 = self.dict["MNSA"][side]["NECK_AXIS"]["P2"]
-				m1 = self.dict["MNSA"][side]["NECK_AXIS"]["M1"]
+			if self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"] != None and self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P2"] != None:
+				p1 = self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"]
+				p2 = self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P2"]
+				m1 = self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["M1"]
 				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
 				isNeck = True
 
@@ -113,37 +124,37 @@ class MNSA():
 			# FROM MAIN
 			# ------------------------
 			# HIP
-			if self.dict["MAIN"][side]["HIP"]["P1"] != None:				
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["HIP"]["P1"], "white", self.tag)
+			if self.dict["MAIN"][self.op_type][side]["HIP"]["P1"] != None:				
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["HIP"]["P1"], "white", self.tag)
 
 
 			# FEM AXIS
 			# TOP
-			if self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P1"], "white", self.tag)
+			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"] != None:
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"], "white", self.tag)
 
-			if self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P2"], "white", self.tag)
+			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"] != None:
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"], "white", self.tag)
 
-			if self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P1"] != None and self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P2"] != None:
-				p1 = self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P1"]
-				p2 = self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P2"]
-				m1 = self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["M1"]
+			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"] != None and self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"] != None:
+				p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
+				p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
+				m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
 				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
 				isFemTop = True
 
 
 			# BOT
-			if self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P1"], "white", self.tag)
+			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"] != None:
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"], "white", self.tag)
 
-			if self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P2"], "white", self.tag)
+			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"] != None:
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"], "white", self.tag)
 
-			if self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P1"] != None and self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P2"] != None:
-				p1 = self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P1"]
-				p2 = self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P2"]
-				m1 = self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["M1"]
+			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"] != None and self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"] != None:
+				p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
+				p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
+				m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
 				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
 				isFemBot = True
 
@@ -151,11 +162,11 @@ class MNSA():
 				
 				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
 
-				fem_bot_m1 	= self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["M1"]
-				fem_top_m1 	= self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["M1"]
+				fem_bot_m1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
+				fem_top_m1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
 
-				neck_m1 	= self.dict["MNSA"][side]["NECK_AXIS"]["M1"]
-				hip 		= self.dict["MAIN"][side]["HIP"]["P1"]
+				neck_m1 	= self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["M1"]
+				hip 		= self.dict["MAIN"][self.op_type][side]["HIP"]["P1"]
 
 				# FEM-AXIS ray
 				p_top = self.draw_tools.line_intersection(
@@ -198,25 +209,14 @@ class MNSA():
 
 
 
-				# # FEM-AXIS ray
-				# p_top = self.draw_tools.line_intersection(
-				# 	(self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["M1"], self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["M1"]),
-				# 	(xtop, ytop))
+				# check if value exists
+				if self.dict["EXCEL"][self.op_type][side]["MNSA"] == None:
 
-				# self.draw_tools.create_myline(self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["M1"], p_top, self.tag)
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["MNSA"]	 	= '{0:.2f}'.format(angle)
 
-				# # NECK-SHAFT ray
-				# if side == "LEFT":
-				# 	p_left = self.draw_tools.line_intersection(
-				# 		(self.dict["MNSA"][side]["NECK_AXIS"]["M1"], self.dict["MAIN"][side]["HIP"]["P1"]),
-				# 		(xtop, xbot))
-				# 	self.draw_tools.create_myline(self.dict["MAIN"][side]["HIP"]["P1"], p_left, self.tag)
-
-				# if side == "RIGHT":
-				# 	p_right = self.draw_tools.line_intersection(
-				# 		(self.dict["MNSA"][side]["NECK_AXIS"]["M1"], self.dict["MAIN"][side]["HIP"]["P1"]),
-				# 		(ytop, ybot))
-				# 	self.draw_tools.create_myline(self.dict["MAIN"][side]["HIP"]["P1"], p_right, self.tag)
+					# save after insert
+					self.controller.save_json()
 
 	
 
@@ -230,18 +230,18 @@ class MNSA():
 			self.side = "RIGHT"
 
 		if action == "DEL-LEFT-NECK-AXIS":
-			self.dict["MNSA"]["LEFT"]["NECK_AXIS"]["P1"] = None
-			self.dict["MNSA"]["LEFT"]["NECK_AXIS"]["P2"] = None
-			self.dict["MNSA"]["LEFT"]["NECK_AXIS"]["M1"] = None
+			self.dict["MNSA"][self.op_type]["LEFT"]["NECK_AXIS"]["P1"] = None
+			self.dict["MNSA"][self.op_type]["LEFT"]["NECK_AXIS"]["P2"] = None
+			self.dict["MNSA"][self.op_type]["LEFT"]["NECK_AXIS"]["M1"] = None
 
 			self.draw_tools.clear_by_tag(self.tag)
 			self.draw()
 			self.controller.save_json()
 
 		if action == "DEL-RIGHT-NECK-AXIS":
-			self.dict["MNSA"]["RIGHT"]["NECK_AXIS"]["P1"] = None
-			self.dict["MNSA"]["RIGHT"]["NECK_AXIS"]["P2"] = None
-			self.dict["MNSA"]["RIGHT"]["NECK_AXIS"]["M1"] = None
+			self.dict["MNSA"][self.op_type]["RIGHT"]["NECK_AXIS"]["P1"] = None
+			self.dict["MNSA"][self.op_type]["RIGHT"]["NECK_AXIS"]["P2"] = None
+			self.dict["MNSA"][self.op_type]["RIGHT"]["NECK_AXIS"]["M1"] = None
 
 
 
@@ -264,22 +264,22 @@ class MNSA():
 
 		if self.side != None:
 			
-			for item in self.dict["MNSA"][self.side]:
+			for item in self.dict["MNSA"][self.op_type][self.side]:
 
 				# get item type 
-				item_type = self.dict["MNSA"][self.side][item]["type"]
+				item_type = self.dict["MNSA"][self.op_type][self.side][item]["type"]
 
 
 				# point has P1 and P2, M1 is calculated
 				if item_type == "midpoint":
 
 					# check if P1 is None				
-					if self.dict["MNSA"][self.side][item]["P1"] == None:
+					if self.dict["MNSA"][self.op_type][self.side][item]["P1"] == None:
 						return (self.side + " " + item + " P1")
 
 
 					# check if P2 is None				
-					if self.dict["MNSA"][self.side][item]["P2"] == None:
+					if self.dict["MNSA"][self.op_type][self.side][item]["P2"] == None:
 						return (self.side + " " + item + " P2")
 
 			return (self.side + " Done")

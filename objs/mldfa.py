@@ -2,13 +2,14 @@
 
 class MLDFA():
 	"""docstring for ClassName"""
-	def __init__(self, draw_tools, master_dict, controller):
+	def __init__(self, draw_tools, master_dict, controller, op_type):
 		self.name = "MLDFA"
 		self.tag = "mldfa"
 		self.draw_tools = draw_tools
 		self.dict = master_dict
 		self.controller = controller
 		self.side = None
+		self.op_type = op_type
 		
 	def click(self, event):
 		print("click from "+self.name)
@@ -23,18 +24,18 @@ class MLDFA():
 			isFemBot = False
 			isAldfa = False
 
-			fem_joint_p1 = self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P1"]
-			fem_joint_p2 = self.dict["ALDFA"][side]["FEM_JOINT_LINE"]["P2"]
+			fem_joint_p1 = self.dict["ALDFA"][self.op_type][side]["FEM_JOINT_LINE"]["P1"]
+			fem_joint_p2 = self.dict["ALDFA"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
 
-			fem_top_p1 = self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P1"]
-			fem_top_p2 = self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["P2"]
+			fem_top_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
+			fem_top_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
 
-			fem_bot_p1 = self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P1"]
-			fem_bot_p2 = self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["P2"]
+			fem_bot_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
+			fem_bot_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
 
 
-			bot_m1 = self.dict["MAIN"][side]["AXIS_FEM"]["BOT"]["M1"]
-			top_m1 = self.dict["MAIN"][side]["AXIS_FEM"]["TOP"]["M1"]
+			bot_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
+			top_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
 
 
 			# ------------------------
@@ -106,6 +107,15 @@ class MLDFA():
 					angle = self.draw_tools.create_myAngle(L_fem, p_int, top_m1, self.tag)
 					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, y_offset=-60)				
 
+				# check if value exists
+				if self.dict["EXCEL"][self.op_type][side]["mLDFA"] == None:
+
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["mLDFA"]	 	= '{0:.2f}'.format(angle)
+
+					# save after insert
+					self.controller.save_json()
+					
 
 	def update_canvas(self, draw_tools):
 		self.draw_tools = draw_tools

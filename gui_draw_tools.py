@@ -5,11 +5,22 @@ from gui_canvas import CanvasImage
 # angle import
 import math
 
+# # debug
+# from itertools import count
+
 class DrawTools(CanvasImage):
 	""" Class of Polygons. Inherit CanvasImage class """
+
+	# _ids = count(0)
+
+
 	def __init__(self, placeholder, path):
 		""" Initialize the Base Class """
 		CanvasImage.__init__(self, placeholder, path)  # call __init__ of the CanvasImage class
+
+		# self.id = next(self._ids)
+		# self.path = path
+		# print("instance no {}".format(self.id))
 
 		# this data is used to keep track of an
 		# item being dragged
@@ -309,4 +320,15 @@ class DrawTools(CanvasImage):
 		self.canvas.move(self._drag_data["item"], delta_x, delta_y)
 		# record the new position
 		self._drag_data["x"] = x_find
-		self._drag_data["y"] = y_find		
+		self._drag_data["y"] = y_find	
+
+
+
+	def update_img(self, image):
+		print("reached")
+		self.jigjig(image)
+
+
+	# def __del__(self): 
+	# 	print("deleted instance no {}".format(self.id))
+	# 	print("deleted path {}".format(self.path))

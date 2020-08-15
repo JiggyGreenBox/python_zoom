@@ -62,7 +62,7 @@ from tkinter import filedialog
 
 
 class DETAILS_View(tk.Frame):
-	def __init__(self, parent, controller):
+	def __init__(self, parent, controller, master_dict):
 		tk.Frame.__init__(self, parent)
 		self.controller = controller		
 
@@ -88,6 +88,7 @@ class MainWindow(ttk.Frame):
 		self.master.grid_columnconfigure(0, weight=1) # as did this
 
 		self.working_dir = ""
+		self.master_dict = {}
 
 		
 		# topbar
@@ -116,7 +117,7 @@ class MainWindow(ttk.Frame):
 					SET_WORKING_View
 				):
 			page_name = V.__name__
-			view = V(parent=self.master, controller=self)
+			view = V(parent=self.master, controller=self, master_dict=self.master_dict)			
 			# view = V(parent=place_holder, controller=self)
 			self.views[page_name] = view
 
