@@ -24,65 +24,71 @@ class AFTA():
 			isTibTop 	= False
 			isTibBot 	= False
 
+			# AXIS_FEM
+			fem_top_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
+			fem_top_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
+			fem_top_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
+
+			fem_bot_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
+			fem_bot_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
+			fem_bot_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
+
+			# AXIS_TIB
+			tib_top_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["P1"]
+			tib_top_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["P2"]
+			tib_top_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["M1"]
+
+			tib_bot_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["P1"]
+			tib_bot_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["P2"]
+			tib_bot_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["M1"]
+
 			# FEM AXIS
 			# TOP
-			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"], "white", self.tag)
+			if fem_top_p1 != None:
+				self.draw_tools.create_mypoint(fem_top_p1, "white", self.tag)
 
-			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"], "white", self.tag)
+			if fem_top_p2 != None:
+				self.draw_tools.create_mypoint(fem_top_p2, "white", self.tag)
 
-			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"] != None and self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"] != None:
-				p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
-				p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
-				m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
-				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
+			if fem_top_p1 != None and fem_top_p2 != None:
+				self.draw_tools.create_midpoint_line(fem_top_p1, fem_top_p2, fem_top_m1, self.tag)
 				isFemTop = True
 
 
 			# BOT
-			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"], "white", self.tag)
+			if fem_bot_p1 != None:
+				self.draw_tools.create_mypoint(fem_bot_p1, "white", self.tag)
 
-			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"], "white", self.tag)
+			if fem_bot_p2 != None:
+				self.draw_tools.create_mypoint(fem_bot_p2, "white", self.tag)
 
-			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"] != None and self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"] != None:
-				p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
-				p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
-				m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
-				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
+			if fem_bot_p1 != None and fem_bot_p2 != None:				
+				self.draw_tools.create_midpoint_line(fem_bot_p1, fem_bot_p2, fem_bot_m1, self.tag)
 				isFemBot = True
 
 
 			# TIB AXIS
 			# TOP
-			if self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["P1"], "white", self.tag)
+			if tib_top_p1 != None:
+				self.draw_tools.create_mypoint(tib_top_p1, "white", self.tag)
 
-			if self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["P2"], "white", self.tag)
+			if tib_top_p2 != None:
+				self.draw_tools.create_mypoint(tib_top_p2, "white", self.tag)
 
-			if self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["P1"] != None and self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["P2"] != None:
-				p1 = self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["P1"]
-				p2 = self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["P2"]
-				m1 = self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["M1"]
-				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
+			if tib_top_p1 != None and tib_top_p2 != None:				
+				self.draw_tools.create_midpoint_line(tib_top_p1, tib_top_p2, tib_top_m1, self.tag)
 				isTibTop = True
 
 
 			# BOT
-			if self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["P1"], "white", self.tag)
+			if tib_bot_p1 != None:
+				self.draw_tools.create_mypoint(tib_bot_p1, "white", self.tag)
 
-			if self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["P2"], "white", self.tag)
+			if tib_bot_p2 != None:
+				self.draw_tools.create_mypoint(tib_bot_p2, "white", self.tag)
 
-			if self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["P1"] != None and self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["P2"] != None:
-				p1 = self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["P1"]
-				p2 = self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["P2"]
-				m1 = self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["M1"]
-				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
+			if tib_bot_p1 != None and tib_bot_p2 != None:				
+				self.draw_tools.create_midpoint_line(tib_bot_p1, tib_bot_p1, tib_bot_m1, self.tag)
 				isTibBot = True
 
 
@@ -94,37 +100,59 @@ class AFTA():
 				
 				# FEM-AXIS ray
 				p_fem = self.draw_tools.line_intersection(
-					(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"], self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]),
+					(fem_bot_m1, fem_top_m1),
 					(xbot, ybot))
 
-				self.draw_tools.create_myline(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"], p_fem, self.tag)
+				# self.draw_tools.create_myline(fem_top_m1, p_fem, self.tag)
 
 			if isTibTop and isTibBot:
 
 				# TIB-AXIS ray
 				p_tib = self.draw_tools.line_intersection(
-					(self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["M1"], self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["M1"]),
+					(tib_bot_m1, tib_top_m1),
 					(xtop, ytop))
 
-				self.draw_tools.create_myline(self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["M1"], p_tib, self.tag)
+				self.draw_tools.create_myline(tib_bot_m1, p_tib, self.tag)
 
 
 			if isFemBot and isFemTop and isTibTop and isTibBot:
-				p_int = self.draw_tools.line_intersection((self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["M1"], self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["M1"]),
-					(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"], self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]))
 
+				p_int = self.draw_tools.line_intersection((tib_bot_m1, tib_top_m1),
+					(fem_bot_m1, fem_top_m1))
 
-				a1 = self.draw_tools.getAnglePoints(self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["M1"], p_int, self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"])
-				a2 = self.draw_tools.getAnglePoints(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"], p_int, self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["M1"])
+				# int debug
+				self.draw_tools.create_mypoint(p_int, "white", self.tag)
+				self.draw_tools.create_myline(fem_top_m1, p_int, self.tag)
+
+				a1 = self.draw_tools.getAnglePoints(p_tib, p_int, fem_top_m1)
+				a2 = self.draw_tools.getAnglePoints(fem_top_m1, p_int, p_tib)
 				print('{0:.2f} a1 RIGHT'.format(a1))
 				print('{0:.2f} a2 RIGHT'.format(a2))
 
 				if a1 < a2:					
-					angle = self.draw_tools.create_myAngle(self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["M1"], p_int, self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"], self.tag)
+					angle = self.draw_tools.create_myAngle(p_tib, p_int, fem_top_m1, self.tag)
 				else:
-					angle = self.draw_tools.create_myAngle(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"], p_int, self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["M1"], self.tag)
+					angle = self.draw_tools.create_myAngle(fem_top_m1, p_int, p_tib, self.tag)
 
 				self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60)
+
+				# p_int = self.draw_tools.line_intersection((tib_bot_m1, tib_top_m1),
+				# 	(fem_bot_m1, fem_top_m1))
+
+				# # int debug
+				# self.draw_tools.create_mypoint(p_int, "white", self.tag)
+
+				# a1 = self.draw_tools.getAnglePoints(tib_top_m1, p_int, fem_bot_m1)
+				# a2 = self.draw_tools.getAnglePoints(fem_bot_m1, p_int, tib_top_m1)
+				# print('{0:.2f} a1 RIGHT'.format(a1))
+				# print('{0:.2f} a2 RIGHT'.format(a2))
+
+				# if a1 < a2:					
+				# 	angle = self.draw_tools.create_myAngle(tib_top_m1, p_int, fem_bot_m1, self.tag)
+				# else:
+				# 	angle = self.draw_tools.create_myAngle(fem_bot_m1, p_int, tib_top_m1, self.tag)
+
+				# self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60)
 
 
 				# check if value exists

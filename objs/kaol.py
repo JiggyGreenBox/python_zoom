@@ -105,11 +105,23 @@ class KAOL():
 					L_tib, R_tib = self.draw_tools.retPointsLeftRight(tib_joint_p1, tib_joint_p2)
 
 					if side == "LEFT":
-						angle = self.draw_tools.create_myAngle(ankle_m1, p_int, L_tib, self.tag)
+
+						# sometimes due to ankle line, the intersection is outside the bounds of the joint line
+						# so find the intersection with the edge of the image
+						# to prevent wrong angle
+						R_p_safe = self.draw_tools.line_intersection((L_tib, R_tib),(xtop, xbot))
+
+						angle = self.draw_tools.create_myAngle(ankle_m1, p_int, R_p_safe, self.tag)
 						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60, y_offset=-60)
 
 					if side == "RIGHT":
-						angle = self.draw_tools.create_myAngle(R_tib, p_int, ankle_m1, self.tag)
+
+						# sometimes due to ankle line, the intersection is outside the bounds of the joint line
+						# so find the intersection with the edge of the image
+						# to prevent wrong angle
+						R_p_safe = self.draw_tools.line_intersection((L_tib, R_tib),(ytop, ybot))
+
+						angle = self.draw_tools.create_myAngle(R_p_safe, p_int, ankle_m1, self.tag)
 						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, y_offset=-60)
 
 

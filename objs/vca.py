@@ -101,6 +101,8 @@ class VCA():
 			self.dict["VCA"][self.op_type]["LEFT"]["DIST_FEM"]["P2"] = None
 			self.dict["VCA"][self.op_type]["LEFT"]["DIST_FEM"]["M1"] = None
 
+			self.dict["EXCEL"][self.op_type]["LEFT"]["VCA"] = None
+
 			self.draw_tools.clear_by_tag(self.tag)
 			self.draw()
 			self.controller.save_json()
@@ -109,6 +111,8 @@ class VCA():
 			self.dict["VCA"][self.op_type]["RIGHT"]["DIST_FEM"]["P1"] = None
 			self.dict["VCA"][self.op_type]["RIGHT"]["DIST_FEM"]["P2"] = None
 			self.dict["VCA"][self.op_type]["RIGHT"]["DIST_FEM"]["M1"] = None
+
+			self.dict["EXCEL"][self.op_type]["RIGHT"]["VCA"] = None
 
 
 
@@ -176,16 +180,28 @@ class VCA():
 				self.draw_tools.create_myline(dist_fem_m1, knee, self.tag)
 
 
+				a1 = self.draw_tools.getAnglePoints(hip, knee, dist_fem_m1)
+				a2 = self.draw_tools.getAnglePoints(dist_fem_m1, knee, hip)
+				print('{0:.2f} a1 RIGHT'.format(a1))
+				print('{0:.2f} a2 RIGHT'.format(a2))
 
-			# check if value exists
-			if self.dict["EXCEL"][self.op_type][side]["VCA"] == None:
+				if a1 > a2:					
+					angle = self.draw_tools.create_myAngle(dist_fem_m1, knee, hip, self.tag)
+				else:					
+					angle = self.draw_tools.create_myAngle(hip, knee, dist_fem_m1, self.tag)
 
-				self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-				# self.dict["EXCEL"][self.op_type][side]["VCA"]	 	= '{0:.2f}'.format(angle)
-				self.dict["EXCEL"][self.op_type][side]["VCA"]	 	= 5
+				self.draw_tools.create_mytext(dist_fem_m1, '{0:.2f}'.format(angle), self.tag, x_offset=0, y_offset=-60)
 
-				# save after insert
-				self.controller.save_json()
+
+				# check if value exists
+				if self.dict["EXCEL"][self.op_type][side]["VCA"] == None:
+
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					# self.dict["EXCEL"][self.op_type][side]["VCA"]	 	= '{0:.2f}'.format(angle)
+					self.dict["EXCEL"][self.op_type][side]["VCA"]	 	= '{0:.2f}'.format(angle)
+
+					# save after insert
+					self.controller.save_json()
 
 
 

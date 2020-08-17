@@ -49,7 +49,7 @@ class MainWindow(ttk.Frame):
 		self.master.grid_rowconfigure(1, weight=1) # this needed to be added
 		self.master.grid_columnconfigure(0, weight=1) # as did this
 
-		self.working_dir = ""
+		self.working_dir = ""		
 		self.master_dict = {}
 		self.add_image_path_masterdict()
 
@@ -165,6 +165,7 @@ class MainWindow(ttk.Frame):
 	def save_json(self):
 		# print("successfully bubbled to the top")
 		# print(self.master_dict)
+		print('saving json')
 
 		with open(self.working_dir + '/pat.json', 'w', encoding='utf-8') as f:
 			json.dump(self.master_dict, f, ensure_ascii=False, indent=4)
