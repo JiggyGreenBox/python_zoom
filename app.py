@@ -498,7 +498,7 @@ class MainWindow(ttk.Frame):
 					gender.append(disp_sex)
 					leg_side.append(side[0])
 					k_l_grade.append(x)
-					mtype.append(x)
+					mtype.append(op_type)
 					prosthesis.append(x)
 					hka.append(self.master_dict["EXCEL"][op_type][side]["HKA"])
 					mad.append(self.master_dict["EXCEL"][op_type][side]["MAD"])
@@ -559,7 +559,7 @@ class MainWindow(ttk.Frame):
 # self.master_dict["EXCEL"][op_type][side]["TFLE/EXT"]
 
 
-		# print(l_list)
+		print(mtype)
 
 
 		df = pd.DataFrame(mdict)

@@ -53,12 +53,19 @@ class CanvasImage:
 		# Bind events to the Canvas
 		self.canvas.bind('<Configure>', lambda event: self.__show_image())  # canvas is resized
 		self.canvas.bind('<ButtonPress-1>', self.jiggy_click)  # remember canvas position
+		# self.canvas.bind('<Motion>', self.hover)  # remember canvas position
 		self.canvas.bind('<ButtonPress-2>', self.__move_from)  # remember canvas position
 		self.canvas.bind('<ButtonPress-3>', self.jiggy)  # remember canvas position
 		self.canvas.bind('<B2-Motion>',     self.__move_to)  # move canvas to the new position
 		self.canvas.bind('<MouseWheel>', self.__wheel)  # zoom for Windows and MacOS, but not Linux
 		self.canvas.bind('<Button-5>',   self.__wheel)  # zoom for Linux, wheel scroll down
 		self.canvas.bind('<Button-4>',   self.__wheel)  # zoom for Linux, wheel scroll up
+
+
+		self.canvas.tag_bind("tag", "<ButtonPress-1>", self.drag_start)
+		self.canvas.tag_bind("tag", "<ButtonRelease-1>", self.drag_stop)
+		self.canvas.tag_bind("tag", "<B1-Motion>", self.drag)
+
 		# Handle keystrokes in idle mode, because program slows down on a weak computers,
 		# when too many key stroke events in the same time
 		self.canvas.bind('<Key>', lambda event: self.canvas.after_idle(self.__keystroke, event))
@@ -97,6 +104,10 @@ class CanvasImage:
 		self.__show_image()  # show image on the canvas
 		self.canvas.focus_set()  # set focus on the canvas
 
+
+		self._drag_data = {"x": 0, "y": 0, "item": None}
+		self.cur_obj = None
+
 	def jiggy(self, event):
 		global point_counter
 		global point_list
@@ -116,6 +127,13 @@ class CanvasImage:
 		# 	x1 = round((x - bbox[0]) / self.imscale)  # get real (x,y) on the image without zoom
 		# 	y1 = round((y - bbox[1]) / self.imscale)
 		# 	print("real:"+str(x1)+","+str(y1))
+
+	def hover(self, event):
+		x = self.canvas.canvasx(event.x)  # get coordinates of the event on the canvas
+		y = self.canvas.canvasy(event.y)
+
+		self.canvas.delete("hover_line")
+		self.create_myline((0,0), (x,y), "hover_line")
 
 
 	def create_mypoint(self, point, color, mytag):
@@ -524,6 +542,63 @@ class CanvasImage:
 		del self.__pyramid  # delete pyramid variable
 		self.canvas.destroy()
 		self.__imframe.destroy()
+
+
+
+
+
+	def drag_start(self, event):
+		"""Begining drag of an object"""
+		# record the item and its location
+		x_find = round(self.canvas.canvasx(event.x))
+		y_find = round(self.canvas.canvasy(event.y))
+
+		self.canvas.delete("lines")
+
+		self._drag_data["item"] = self.canvas.find_closest(x_find, y_find)[0]
+		self._drag_data["x"] = x_find
+		self._drag_data["y"] = y_find
+
+	def drag_stop(self, event):
+		"""End drag of an object"""
+		# reset the drag information
+		
+		tags = self.canvas.itemcget(self._drag_data["item"], "tags")		
+		m = tags.split(' ')
+		m.remove('token')
+		m.remove('current')
+		print(m)
+
+		# get real coords
+		bbox = self.canvas.coords(self.container)  # get image area
+		x1 = round((self._drag_data["x"] - bbox[0]) / self.imscale)  # get real (x,y) on the image without zoom
+		y1 = round((self._drag_data["y"] - bbox[1]) / self.imscale)		 
+
+		# x1 = (self._drag_data["x"] - bbox[0]) / self.imscale  # get real (x,y) on the image without zoom
+		# y1 = (self._drag_data["y"] - bbox[1]) / self.imscale		 
+		
+
+		# self.cur_obj.updateDict(m[0],(x1, y1))
+
+		# self.cur_obj.drawLines()
+
+		self._drag_data["item"] = None
+		self._drag_data["x"] = 0
+		self._drag_data["y"] = 0
+
+
+	def drag(self, event):
+		"""Handle dragging of an object"""
+		x_find = round(self.canvas.canvasx(event.x))
+		y_find = round(self.canvas.canvasy(event.y))
+
+		delta_x = x_find - self._drag_data["x"]
+		delta_y = y_find - self._drag_data["y"]
+		# move the object the appropriate amount
+		self.canvas.move(self._drag_data["item"], delta_x, delta_y)
+		# record the new position
+		self._drag_data["x"] = x_find
+		self._drag_data["y"] = y_find	
 
 class MainWindow(ttk.Frame):
 	""" Main window class """
