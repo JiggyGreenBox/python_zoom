@@ -215,17 +215,49 @@ class ACOR():
 					# self.draw_tools.create_mypoint(R_per, "blue", self.tag)
 
 
+					# assign L,R acor
+
+
 					# use line L_per-L_fem_axis_bot and R_per-R_fem_axis_bot 
 					# to find intersection
 					if isP1:
-						L_per_int = self.draw_tools.line_intersection((L_per, L_fem_axis_bot),(acor_p1, [p_xtop_p1,0]))
-						self.draw_tools.create_mypoint(L_per_int, "white", self.tag)
-						self.draw_tools.create_myline(L_fem_axis_bot, L_per_int, self.tag)
+
+						# check if its left or right
+						L_acor, _ = self.draw_tools.retPointsLeftRight(axis_fem_bot_m1, acor_p1)
+						_ , R_acor = self.draw_tools.retPointsLeftRight(axis_fem_bot_m1, acor_p1)
+						if(acor_p1 == L_acor):
+							print("point is on the left")
+							L_per_int = self.draw_tools.line_intersection((L_per, L_fem_axis_bot),(acor_p1, [p_xtop_p1,0]))
+							self.draw_tools.create_mypoint(L_per_int, "white", self.tag)
+							self.draw_tools.create_myline(L_fem_axis_bot, L_per_int, self.tag)
+
+						if(acor_p1 == R_acor):
+							print("point is on the right")
+							R_per_int = self.draw_tools.line_intersection((R_per, R_fem_axis_bot),(acor_p1, [p_xtop_p1,0]))
+							self.draw_tools.create_mypoint(R_per_int, "white", self.tag)
+							self.draw_tools.create_myline(R_fem_axis_bot, R_per_int, self.tag)
 
 					if isP2:
-						R_per_int = self.draw_tools.line_intersection((R_per, R_fem_axis_bot),(acor_p2, [p_xtop_p2,0]))
-						self.draw_tools.create_mypoint(R_per_int, "white", self.tag)
-						self.draw_tools.create_myline(R_fem_axis_bot, R_per_int, self.tag)
+
+						# check if its left or right
+						L_acor, _ = self.draw_tools.retPointsLeftRight(axis_fem_bot_m1, acor_p2)
+						_ , R_acor = self.draw_tools.retPointsLeftRight(axis_fem_bot_m1, acor_p2)
+
+						if(acor_p2 == L_acor):
+							print("point is on the left")
+							L_per_int = self.draw_tools.line_intersection((L_per, L_fem_axis_bot),(acor_p2, [p_xtop_p2,0]))
+							self.draw_tools.create_mypoint(L_per_int, "white", self.tag)
+							self.draw_tools.create_myline(L_fem_axis_bot, L_per_int, self.tag)
+
+						if(acor_p2 == R_acor):
+							print("point is on the right")
+							R_per_int = self.draw_tools.line_intersection((R_per, R_fem_axis_bot),(acor_p2, [p_xtop_p2,0]))
+							self.draw_tools.create_mypoint(R_per_int, "white", self.tag)
+							self.draw_tools.create_myline(R_fem_axis_bot, R_per_int, self.tag)
+
+						# R_per_int = self.draw_tools.line_intersection((R_per, R_fem_axis_bot),(acor_p2, [p_xtop_p2,0]))
+						# self.draw_tools.create_mypoint(R_per_int, "white", self.tag)
+						# self.draw_tools.create_myline(R_fem_axis_bot, R_per_int, self.tag)
 
 
 						
