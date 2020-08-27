@@ -11,3 +11,7 @@ git checkout pre_post_dict
 // install requirements
 pip install Pillow
 pip install pandas
+pip install openpyxl
+
+// python executable
+where python
