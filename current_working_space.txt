@@ -1,0 +1,16 @@
+MAD
+EADFA
+EADFPS
+EADFDS
+JDA
+EADTA
+EADTPS
+EADTDS
+FFLEX
+PCOR
+PPBA
+MISCELL
+
+
+./darknet detector demo cfg/coco.data yolov3-tiny-prn.cfg yolov3-tiny-prn.weights rtsp://192.168.0.129:554/Streaming/Channels/1/?transportmode=unicast
+./darknet detector demo cfg/coco.data yolov3-tiny-prn.cfg yolov3-tiny-prn.weights rtsp://192.168.0.129:554/Streaming/Channels/2/?transportmode=unicast

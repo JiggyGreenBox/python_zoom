@@ -11,6 +11,13 @@ class MAIN_Menu(tk.Frame):
 		self.controller = controller		
 		self.obj_name = "MAIN"
 
+		# daw axis vars
+		# self.mech_var = StringVar(self)
+		# self.anat_var = StringVar(self)
+
+		self.mech_var = IntVar()
+		self.anat_var = IntVar()
+
 
 
 		header_label = tk.Label(self, text=self.obj_name,font=("TkDefaultFont",20))
@@ -79,8 +86,39 @@ class MAIN_Menu(tk.Frame):
 		button = ttk.Button(self, text="TIB BOT", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-TIB-BOT"))
 		button.grid(column=2, row=11)
 
+
+		# CheckVar1 = IntVar()
+		# CheckVar2 = IntVar()
+		'''
+		mech_axis_cb = Checkbutton(self, text="MECH AXIS", variable=self.mech_var,onvalue="checked", offvalue="unchecked",command=self.meme)
+		mech_axis_cb.grid(column=1, row=12)
+
+		anat_axis_cb = Checkbutton(self, text="ANAT AXIS", variable=self.anat_var,onvalue="checked", offvalue="unchecked",command=self.meme)
+		anat_axis_cb.grid(column=1, row=13)
+		'''
+
+
+		mech_axis_cb = Checkbutton(self, text="MECH AXIS", variable=self.mech_var,command=self.meme)
+		mech_axis_cb.grid(column=1, row=12)
+
+		anat_axis_cb = Checkbutton(self, text="ANAT AXIS", variable=self.anat_var,command=self.meme)
+		anat_axis_cb.grid(column=1, row=13)
+
+
+		mech_axis_cb = Checkbutton(self, text="MECH AXIS", variable=self.mech_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_MECH_AXIS", self.mech_var))
+		mech_axis_cb.grid(column=1, row=12)
+
+		anat_axis_cb = Checkbutton(self, text="ANAT AXIS", variable=self.anat_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_ANAT_AXIS", self.anat_var))
+		anat_axis_cb.grid(column=1, row=13)
+
+		
 		
 
 
 	def setLabelText(self, label_text):
 		self.label.config(text=label_text)
+
+	def meme(self):
+		print('mech {}'.format(self.mech_var.get()))
+		print('anat {}'.format(self.anat_var.get()))
+		print("\n")

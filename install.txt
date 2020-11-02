@@ -1,0 +1,17 @@
+// git download
+https://git-scm.com/download/win
+
+// python download
+
+
+// git clone repo
+git clone https://github.com/JiggyGreenBox/python_zoom.git
+git checkout pre_post_dict
+
+// install requirements
+pip install Pillow
+pip install pandas
+pip install openpyxl
+
+// python executable
+where python

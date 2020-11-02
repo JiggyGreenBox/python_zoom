@@ -2,16 +2,18 @@ import math
 
 class KAOL():
 	"""docstring for ClassName"""
-	def __init__(self, draw_tools, master_dict, controller):
+	def __init__(self, draw_tools, master_dict, controller, op_type):
 		self.name = "KAOL"
 		self.tag = "kaol"
 		self.draw_tools = draw_tools
-		self.dict = master_dict		
+		self.dict = master_dict
+		self.controller = controller
+		self.op_type = op_type
 
 		
 	def click(self, event):
 		print("click from "+self.name)
-		# self.draw() 
+		self.draw() 
 
 		# print(self.slope((0,0),(10,10)))
 
@@ -27,26 +29,28 @@ class KAOL():
 
 	def draw(self):
 
+		self.draw_tools.clear_by_tag(self.tag)
+
 		# loop left and right
 		for side in ["LEFT","RIGHT"]:
 
 			isTamd = False			
 
-			tib_joint_p1 = self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P1"]
-			tib_joint_p2 = self.dict["TAMD"][side]["TIB_JOINT_LINE"]["P2"]
-			ankle_p1 = self.dict["MAIN"][side]["ANKLE"]["P1"]
-			ankle_p2 = self.dict["MAIN"][side]["ANKLE"]["P2"]
-			ankle_m1 = self.dict["MAIN"][side]["ANKLE"]["M1"]
+			tib_joint_p1 = self.dict["TAMD"][self.op_type][side]["TIB_JOINT_LINE"]["P1"]
+			tib_joint_p2 = self.dict["TAMD"][self.op_type][side]["TIB_JOINT_LINE"]["P2"]
+			ankle_p1 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P1"]
+			ankle_p2 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]
+			ankle_m1 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["M1"]
 
 
 			# ------------------------
 			# FROM TAMD
 			# ------------------------
 			if tib_joint_p1 != None:
-				self.draw_tools.create_mypoint(tib_joint_p1, "white", self.tag)
+				self.draw_tools.create_mypoint(tib_joint_p1, "white", [self.tag, side, "NO-DRAG"])
 
 			if tib_joint_p2 != None:
-				self.draw_tools.create_mypoint(tib_joint_p2, "white", self.tag)
+				self.draw_tools.create_mypoint(tib_joint_p2, "white", [self.tag, side, "NO-DRAG"])
 
 			if tib_joint_p1 != None and tib_joint_p2 != None:
 				self.draw_tools.create_myline(tib_joint_p1, tib_joint_p2, self.tag)
@@ -59,8 +63,8 @@ class KAOL():
 			# ANKLE
 			if ankle_p1 != None and ankle_p2 != None:
 				
-				self.draw_tools.create_mypoint(ankle_p1, "white", self.tag)
-				self.draw_tools.create_mypoint(ankle_p2, "white", self.tag)
+				self.draw_tools.create_mypoint(ankle_p1, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(ankle_p2, "white", [self.tag, side, "NO-DRAG"])
 				self.draw_tools.create_midpoint_line(ankle_p1, ankle_p2, ankle_m1, self.tag)
 
 
@@ -83,7 +87,7 @@ class KAOL():
 				print(C)
 				# print(D)
 
-				self.draw_tools.create_mypoint(C, "white", self.tag)
+				self.draw_tools.create_mypoint(C, "white", [self.tag, side, "NO-DRAG"])
 				# self.draw_tools.create_mypoint(D, "white", self.tag)
 
 				# self.draw_tools.create_myline(C, D, self.tag)
@@ -103,12 +107,48 @@ class KAOL():
 					L_tib, R_tib = self.draw_tools.retPointsLeftRight(tib_joint_p1, tib_joint_p2)
 
 					if side == "LEFT":
-						angle = self.draw_tools.create_myAngle(ankle_m1, p_int, L_tib, self.tag)
+
+						# sometimes due to ankle line, the intersection is outside the bounds of the joint line
+						# so find the intersection with the edge of the image
+						# to prevent wrong angle
+						R_p_safe = self.draw_tools.line_intersection((L_tib, R_tib),(xtop, xbot))
+
+						angle = self.draw_tools.create_myAngle(ankle_m1, p_int, R_p_safe, self.tag)
 						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60, y_offset=-60)
 
 					if side == "RIGHT":
-						angle = self.draw_tools.create_myAngle(R_tib, p_int, ankle_m1, self.tag)
+
+						# sometimes due to ankle line, the intersection is outside the bounds of the joint line
+						# so find the intersection with the edge of the image
+						# to prevent wrong angle
+						R_p_safe = self.draw_tools.line_intersection((L_tib, R_tib),(ytop, ybot))
+
+						angle = self.draw_tools.create_myAngle(R_p_safe, p_int, ankle_m1, self.tag)
 						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, y_offset=-60)
+
+
+					# check if value exists
+					if self.dict["EXCEL"][self.op_type][side]["KAOL"] == None:
+
+						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+						self.dict["EXCEL"][self.op_type][side]["KAOL"]	 	= '{0:.2f}'.format(angle)
+
+						# save after insert
+						self.controller.save_json()
+
+
+	def drag_start(self, tags):
+		pass		
+	def drag(self, P_mouse):
+		pass
+	def drag_stop(self, P_mouse):
+		self.draw()
+	def hover(self, P_mouse, P_stored, hover_label):
+		pass
+	def regainHover(self, side):
+		pass
+	def escapeObjFunc(self):
+		pass
 
 
 	def update_canvas(self, draw_tools):
@@ -121,4 +161,4 @@ class KAOL():
 
 	def unset(self):
 		# print("unset from "+self.name)
-		self.draw_tools.clear_by_tag(self.tag)	
+		self.draw_tools.clear_by_tag(self.tag)

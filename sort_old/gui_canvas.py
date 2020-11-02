@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
-# Advanced zoom for images of various types from small to huge up to several GB
 import math
 import warnings
 import tkinter as tk
 
+
 from tkinter import ttk
+from tkinter import *
 from PIL import Image, ImageTk
 
-# angle import
-import math
-point_counter = 0
-point_list = []
+# debug
+# from itertools import count
 
 class AutoScrollbar(ttk.Scrollbar):
 	""" A scrollbar that hides itself if it's not needed. Works only for grid geometry manager """
@@ -29,7 +28,15 @@ class AutoScrollbar(ttk.Scrollbar):
 
 class CanvasImage:
 	""" Display and zoom image """
+
+	# _ids = count(0)
+
 	def __init__(self, placeholder, path):
+
+		# self.id = next(self._ids)
+		# self.path = path
+		# print("instance no {}".format(self.id))
+
 		""" Initialize the ImageFrame """
 		self.imscale = 1.0  # scale for the canvas image zoom, public for outer classes
 		self.__delta = 1.3  # zoom magnitude
@@ -52,9 +59,8 @@ class CanvasImage:
 		vbar.configure(command=self.__scroll_y)
 		# Bind events to the Canvas
 		self.canvas.bind('<Configure>', lambda event: self.__show_image())  # canvas is resized
-		self.canvas.bind('<ButtonPress-1>', self.jiggy_click)  # remember canvas position
 		self.canvas.bind('<ButtonPress-2>', self.__move_from)  # remember canvas position
-		self.canvas.bind('<ButtonPress-3>', self.jiggy)  # remember canvas position
+		# self.canvas.bind('<ButtonPress-3>', self.jiggy)  # remember canvas position
 		self.canvas.bind('<B2-Motion>',     self.__move_to)  # move canvas to the new position
 		self.canvas.bind('<MouseWheel>', self.__wheel)  # zoom for Windows and MacOS, but not Linux
 		self.canvas.bind('<Button-5>',   self.__wheel)  # zoom for Linux, wheel scroll down
@@ -98,236 +104,21 @@ class CanvasImage:
 		self.canvas.focus_set()  # set focus on the canvas
 
 	def jiggy(self, event):
-		global point_counter
-		global point_list
-
-		point_list.clear()
-		point_counter = 0			
-		self.canvas.delete("tag")
-
-		# x = self.canvas.canvasx(event.x)  # get coordinates of the event on the canvas
-		# y = self.canvas.canvasy(event.y)
-		# print("click:"+str(x)+","+str(y))
-
-		# if(self.outside(x, y)):
-		# 	print("outside")
-		# else:
-		# 	bbox = self.canvas.coords(self.container)  # get image area
-		# 	x1 = round((x - bbox[0]) / self.imscale)  # get real (x,y) on the image without zoom
-		# 	y1 = round((y - bbox[1]) / self.imscale)
-		# 	print("real:"+str(x1)+","+str(y1))
-
-
-	def create_mypoint(self, point, color, mytag):
-		"""Create a token at the given coordinate in the given color"""
-		p1 = self.getScaledCoords(point)
-		x = p1[0]
-		y = p1[1]
-		thickness = 7 * self.imscale
-		self.canvas.create_oval(
-			x - thickness,
-			y - thickness,
-			x + thickness,
-			y + thickness,
-			outline="#0a4680",			
-			fill="#1382eb",
-			tags=("token", mytag),
-		)
-
-
-	def getRealCoords(self, event):		
-		"""scale and pan invariant coords"""
 		x = self.canvas.canvasx(event.x)  # get coordinates of the event on the canvas
 		y = self.canvas.canvasy(event.y)
-
-		bbox = self.canvas.coords(self.container)  # get image area
-		x1 = round((x - bbox[0]) / self.imscale)  # get real (x,y) on the image without zoom
-		y1 = round((y - bbox[1]) / self.imscale)
-
-		return (x1, y1)
- 
-	def getAngle(self, a, b, c):
-		ang = math.degrees(math.atan2(c[1]-b[1], c[0]-b[0]) - math.atan2(a[1]-b[1], a[0]-b[0]))
-		return ang + 360 if ang < 0 else ang
-
-
-	def getAnglePoints(self, a, b, c):
-		ang = math.degrees(math.atan2(c[1]-b[1], c[0]-b[0]) - math.atan2(a[1]-b[1], a[0]-b[0]))
-		return ang + 360 if ang < 0 else ang
-
-	def getAnglePointsNeg(self, a, b, c):
-		ang = math.degrees(math.atan2(c[1]-b[1], c[0]-b[0]) - math.atan2(a[1]-b[1], a[0]-b[0]))
-		return ang
-
-
-	def getScaledCoords(self, point):		
-		"""scale and pan invariant coords"""
-		bbox = self.canvas.coords(self.container)  # get image area
-		x = point[0] * self.imscale + bbox[0]
-		y = point[1] * self.imscale + bbox[1]
-		return (x, y)
-
-	def retLeftPoint(self, p1, p2):
-		if p1[0] < p2[0]:
-			return p1
-		return p2
-
-
-	def create_myline(self, point1, point2, mytag):
-
-		p1 = self.getScaledCoords(point1)
-		p2 = self.getScaledCoords(point2)
-
-		self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="#559ee6",width=2, tags=("del","lines", mytag))
-		# self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="#559ee6",width=2, outline="white",tags=("del","lines", mytag))
-		#696969
-
-
-	def circular_arc(self, canvas, x, y, r, t0, t1, width):
-		return canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=t1-t0,
-			style='arc', width=width)
-
-	def jiggy_click(self, event):
-		x = self.canvas.canvasx(event.x)  # get coordinates of the event on the canvas
-		y = self.canvas.canvasy(event.y)
-		# print("click:"+str(x)+","+str(y))
-
-		global point_counter
-		global point_list
-
-		thickness = 10 * self.imscale
-
-		# xy = 20, 20, 300, 300
-
-
-		# self.canvas.create_oval(	300 - thickness, 300 - thickness,
-		# 									180 + thickness, 180 + thickness,
-		# 									width=0, fill="red",
-		# 									tags=("del"))
-
-		# self.canvas.create_arc(xy, start=0, extent=270, fill="rounded")
-		# self.canvas.create_arc(xy, start=270, extent=60, fill="blue")
-		# self.canvas.create_arc(xy, start=330, extent=30, fill="green")
-
-		# self.circular_arc(self.canvas, 20, 20, 10, 90, 180, 5)
-		
+		print("click:"+str(x)+","+str(y))
 
 		if(self.outside(x, y)):
-			# print("outside")
-			pass
+			print("outside")
 		else:
-			P = self.getRealCoords(event)
-			# print(P)
-			
+			bbox = self.canvas.coords(self.container)  # get image area
+			x1 = round((x - bbox[0]) / self.imscale)  # get real (x,y) on the image without zoom
+			y1 = round((y - bbox[1]) / self.imscale)
+			print("real:"+str(x1)+","+str(y1))
 
-			if( point_counter < 3):
+		# global cur_obj
+		self.cur_obj.click()
 
-				point_list.append(P)
-				self.create_mypoint(P, "white", "tag")
-
-				# draw a dotted line between points
-				if point_counter > 0:					
-
-					P_prev = point_list[point_counter-1]										
-					self.create_myline(P_prev, P, "tag")
-					# self.canvas.create_oval(round(x_prev), round(y_prev), x, y)
-
-			
-			if( point_counter == 2):
-				# angle = self.getAngle(
-				# 		(5, 0), 
-				# 		(0, 0), 
-				# 		(0, 5))
-				# print(angle)
-				angle1 = self.getAnglePoints(point_list[0],point_list[1],point_list[2])
-				print('angle1: {}'.format(angle1))
-
-				angle2 = self.getAnglePoints(point_list[2],point_list[1],point_list[0])
-				print('angle2: {}'.format(angle2))
-
-
-				print(point_list[0])
-				print(point_list[1])
-				print(self.retLeftPoint(point_list[0],point_list[1]))
-
-
-
-				p1 = self.getScaledCoords(point_list[1])	
-				x = p1[0]	
-				y = p1[1]
-				r = 20
-				width = 3
-				t1 = angle1
-
-				self.create_mypoint((self.imwidth,point_list[1][1]), "white", "tag")
-				arc_angle1 = self.getAnglePointsNeg(point_list[2],point_list[1],(self.imwidth,point_list[1][1]))
-				print('arc: {}'.format(arc_angle1))
-
-
-
-				t0 = arc_angle1
-				self.canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=angle1, style='arc', width=width, tags="tag")
-				# self.canvas.create_rectangle(x-r, y-r, x+r, y+r, outline='red', tags="tag")
-				self.canvas.create_text(x-r,y+r,fill="white", text='{0:.2f}'.format(t1), tags="tag")
-
-				font_size = 8
-
-				self.canvas.create_text(x-30,y+30,fill="white", text='{0:.2f}'.format(t1), font=("TkDefaultFont", font_size), tags="tag")
-				
-				
-
-
-
-
-				'''
-				if angle1 < angle2:
-
-					p1 = self.getScaledCoords(point_list[1])	
-					x = p1[0]	
-					y = p1[1]
-					r = 20
-					t0 = 0
-					t1 = angle1
-					width = 3
-
-
-					self.create_mypoint((self.imwidth,point_list[1][1]), "white", "tag")
-					arc_angle1 = self.getAnglePointsNeg(point_list[2],point_list[1],(self.imwidth,point_list[1][1]))
-					print('arc: {}'.format(arc_angle1))
-
-
-
-					t0 = arc_angle1
-					self.canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=angle1, style='arc', width=width, tags="tag")
-					# self.canvas.create_rectangle(x-r, y-r, x+r, y+r, outline='red', tags="tag")
-					self.canvas.create_text(x-r,y+r,fill="white", text='{0:.2f}'.format(t1), tags="tag")					
-
-
-				else:
-					p1 = self.getScaledCoords(point_list[1])	
-					x = p1[0]	
-					y = p1[1]
-					r = 20
-					t0 = 0
-					t1 = angle2
-					width = 3
-
-					self.create_mypoint((self.imwidth,point_list[1][1]), "white", "tag")
-					arc_angle1 = self.getAnglePointsNeg(point_list[0],point_list[1],(self.imwidth,point_list[1][1]))
-					print('arc: {}'.format(arc_angle1))
-
-					t0 = arc_angle1
-					# self.canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=angle2, style='arc', width=width, tags="tag")
-					# self.canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=angle2, fill='black', width=width, tags="tag")
-					self.canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=angle2, outline='red', width=width, tags="tag")
-					# self.canvas.create_rectangle(x-r, y-r, x+r, y+r, outline='red', tags="tag")					
-					self.canvas.create_text(x-r,y+r,fill="white", text='{0:.2f}'.format(t1), tags="tag")
-				'''
-
-				if arc_angle1 > 270:
-					print("too big")
-			# increment point counter
-			point_counter = point_counter+1
 
 	def smaller(self):
 		""" Resize image proportionally and return smaller image """
@@ -382,6 +173,11 @@ class CanvasImage:
 	def place(self, **kw):
 		""" Exception: cannot use place with this widget """
 		raise Exception('Cannot use place with the widget ' + self.__class__.__name__)
+
+
+	# def setObject(self, myobject):
+	# 	# print("set" + str(myobject))
+	# 	self.cur_obj = myobject
 
 	# noinspection PyUnusedLocal
 	def __scroll_x(self, *args, **kwargs):
@@ -517,6 +313,10 @@ class CanvasImage:
 			return self.__pyramid[0].crop(bbox)
 
 	def destroy(self):
+
+		# print("deleted instance no {}".format(self.id))
+		# print("deleted path {}".format(self.path))
+		
 		""" ImageFrame destructor """
 		self.__image.close()
 		map(lambda i: i.close, self.__pyramid)  # close all pyramid images
@@ -524,40 +324,3 @@ class CanvasImage:
 		del self.__pyramid  # delete pyramid variable
 		self.canvas.destroy()
 		self.__imframe.destroy()
-
-class MainWindow(ttk.Frame):
-	""" Main window class """
-	def __init__(self, mainframe, path):
-		""" Initialize the main Frame """
-		ttk.Frame.__init__(self, master=mainframe)
-		self.master.title('Advanced Zoom v3.0')
-		self.master.geometry('800x600')  # size of the main window
-		self.master.rowconfigure(0, weight=1)  # make the CanvasImage widget expandable
-		self.master.columnconfigure(0, weight=1)
-		canvas = CanvasImage(self.master, path)  # create widget
-		canvas.grid(row=0, column=0)  # show widget
-
-
-
-	def findfont(self, names):
-		'''Return name of first font family derived from names'''
-		for name in names:
-			if name.lower() in (x.lower() for x in tkfont.names(root=self)):
-				font = tkfont.Font(name=name, exists=True, root=self)
-				return font.actual()['family']
-			elif name.lower() in (x.lower()
-								  for x in tkfont.families(root=self)):
-				return name
-
-# filename = './data/img_plg5.png'  # place path to your image here
-# filename = 'harold.jpg'  # place path to your image here
-# filename = 'legit2.jpg'  # place path to your image here
-filename = '500.jpg'  # place path to your image here
-#filename = 'd:/Data/yandex_z18_1-1.tif'  # huge TIFF file 1.4 GB
-#filename = 'd:/Data/The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg'
-#filename = 'd:/Data/The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.tif'
-#filename = 'd:/Data/heic1502a.tif'
-#filename = 'd:/Data/land_shallow_topo_east.tif'
-#filename = 'd:/Data/X1D5_B0002594.3FR'
-app = MainWindow(tk.Tk(), path=filename)
-app.mainloop()

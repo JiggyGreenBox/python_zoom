@@ -8,6 +8,9 @@ from tkinter import ttk
 from tkinter import *
 from PIL import Image, ImageTk
 
+# debug
+# from itertools import count
+
 class AutoScrollbar(ttk.Scrollbar):
 	""" A scrollbar that hides itself if it's not needed. Works only for grid geometry manager """
 	def set(self, lo, hi):
@@ -25,7 +28,15 @@ class AutoScrollbar(ttk.Scrollbar):
 
 class CanvasImage:
 	""" Display and zoom image """
+
+	# _ids = count(0)
+
 	def __init__(self, placeholder, path):
+
+		# self.id = next(self._ids)
+		# self.path = path
+		# print("instance no {}".format(self.id))
+
 		""" Initialize the ImageFrame """
 		self.imscale = 1.0  # scale for the canvas image zoom, public for outer classes
 		self.__delta = 1.3  # zoom magnitude
@@ -302,6 +313,10 @@ class CanvasImage:
 			return self.__pyramid[0].crop(bbox)
 
 	def destroy(self):
+
+		# print("deleted instance no {}".format(self.id))
+		# print("deleted path {}".format(self.path))
+		
 		""" ImageFrame destructor """
 		self.__image.close()
 		map(lambda i: i.close, self.__pyramid)  # close all pyramid images
