@@ -5,6 +5,7 @@ class MAIN:
 	def __init__(self, draw_tools, master_dict, controller, op_type):
 		self.name = "MAIN"
 		self.tag = "main"
+		self.menu_label = "MAIN_Menu"
 		self.draw_tools = draw_tools
 		self.dict = master_dict
 		self.controller = controller
@@ -16,8 +17,14 @@ class MAIN:
 		self.checkMasterDict()
 
 		# unique to main
+		self.draw_labels = True
+		self.draw_hover = True
 		self.draw_mech_axis = False
 		self.draw_anat_axis = False
+
+		self.drag_label = None
+
+		self.hover_text = None
 
 
 
@@ -27,7 +34,8 @@ class MAIN:
 										"PRE-OP": 	{
 													"LEFT":	{
 															"HIP":		{"type":"point","P1":None},
-															"KNEE":		{"type":"point","P1":None},
+															"FEM_KNEE":	{"type":"point","P1":None},
+															"TIB_KNEE":	{"type":"point","P1":None},
 															"ANKLE":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 															"AXIS_FEM":	{
 																			"type":	"axis",
@@ -42,7 +50,8 @@ class MAIN:
 															},
 													"RIGHT":{
 															"HIP":		{"type":"point","P1":None},
-															"KNEE":		{"type":"point","P1":None},
+															"FEM_KNEE":	{"type":"point","P1":None},
+															"TIB_KNEE":	{"type":"point","P1":None},
 															"ANKLE":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 															"AXIS_FEM":	{
 																			"type":	"axis",
@@ -59,7 +68,8 @@ class MAIN:
 										"POST-OP": 	{
 													"LEFT":	{
 															"HIP":		{"type":"point","P1":None},
-															"KNEE":		{"type":"point","P1":None},
+															"FEM_KNEE":	{"type":"point","P1":None},
+															"TIB_KNEE":	{"type":"point","P1":None},
 															"ANKLE":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 															"AXIS_FEM":	{
 																			"type":	"axis",
@@ -74,7 +84,8 @@ class MAIN:
 															},
 													"RIGHT":{
 															"HIP":		{"type":"point","P1":None},
-															"KNEE":		{"type":"point","P1":None},
+															"FEM_KNEE":	{"type":"point","P1":None},
+															"TIB_KNEE":	{"type":"point","P1":None},
 															"ANKLE":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 															"AXIS_FEM":	{
 																			"type":	"axis",
@@ -110,12 +121,13 @@ class MAIN:
 		else:
 			# print("proceed")
 			ret =  self.addDict(event)
+			# find if P0 hovers are required
+			self.mainHoverUsingNextLabel()
 			if ret:				
 				self.controller.save_json()
 				# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), "MAIN_Menu")
-		self.draw_tools.clear_by_tag(self.tag)
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
 		self.draw()
 
 			# self.controller.updateMenuLabel("jiggy", "MAIN_Menu")
@@ -142,14 +154,14 @@ class MAIN:
 		print(action)
 		if action == "SET-LEFT":
 			self.side = "LEFT"
-			self.controller.updateMenuLabel(self.getNextLabel(), "MAIN_Menu")
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			self.draw()
 			self.regainHover(self.side)
 			return # avoid clear,draw,json_save
 
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"
-			self.controller.updateMenuLabel(self.getNextLabel(), "MAIN_Menu")
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			self.draw()
 			self.regainHover(self.side)
 			return # avoid clear,draw,json_save
@@ -164,12 +176,21 @@ class MAIN:
 			self.dict["MAIN"][self.op_type]["RIGHT"]["HIP"]["P1"] = None
 			self.side = "RIGHT"
 
-		if action == "DEL-LEFT-KNEE":
-			self.dict["MAIN"][self.op_type]["LEFT"]["KNEE"]["P1"] = None
+		if action == "DEL-LEFT-FEM-KNEE":
+			self.dict["MAIN"][self.op_type]["LEFT"]["FEM_KNEE"]["P1"] = None
 			self.side = "LEFT"
 
-		if action == "DEL-RIGHT-KNEE":
-			self.dict["MAIN"][self.op_type]["RIGHT"]["KNEE"]["P1"] = None
+		if action == "DEL-RIGHT-FEM-KNEE":
+			self.dict["MAIN"][self.op_type]["RIGHT"]["FEM_KNEE"]["P1"] = None
+			self.side = "RIGHT"
+
+
+		if action == "DEL-LEFT-TIB-KNEE":
+			self.dict["MAIN"][self.op_type]["LEFT"]["TIB_KNEE"]["P1"] = None
+			self.side = "LEFT"
+
+		if action == "DEL-RIGHT-TIB-KNEE":
+			self.dict["MAIN"][self.op_type]["RIGHT"]["TIB_KNEE"]["P1"] = None
 			self.side = "RIGHT"
 
 		if action == "DEL-LEFT-ANKLE":
@@ -239,7 +260,7 @@ class MAIN:
 		self.draw()
 		self.regainHover(self.side)
 		self.controller.save_json()
-		self.controller.updateMenuLabel(self.getNextLabel(), "MAIN_Menu")
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 
 
 
@@ -276,20 +297,20 @@ class MAIN:
 
 					# check if P1 is None
 					if self.dict["MAIN"][self.op_type][self.side][item]["TOP"]["P1"] == None:
-						return (self.side + " " + item + " P1")
+						return (self.side + " " + item + " TOP P1")
 
 					# check if P2 is None				
 					if self.dict["MAIN"][self.op_type][self.side][item]["TOP"]["P2"] == None:
-						return (self.side + " " + item + " P2")
+						return (self.side + " " + item + " TOP P2")
 
 
 					# check if P1 is None
 					if self.dict["MAIN"][self.op_type][self.side][item]["BOT"]["P1"] == None:
-						return (self.side + " " + item + " P1")
+						return (self.side + " " + item + " BOT P1")
 
 					# check if P2 is None				
 					if self.dict["MAIN"][self.op_type][self.side][item]["BOT"]["P2"] == None:
-						return (self.side + " " + item + " P2")
+						return (self.side + " " + item + " BOT P2")
 
 			return (self.side + " Done")
 
@@ -309,7 +330,7 @@ class MAIN:
 			# point only has P1
 			if item_type == "point":
 				# check if P1 is None				
-				if self.dict["MAIN"][self.op_type][self.side][item]["P1"] == None:					
+				if self.dict["MAIN"][self.op_type][self.side][item]["P1"] == None:
 					self.dict["MAIN"][self.op_type][self.side][item]["P1"] = P
 					return True
 
@@ -422,17 +443,25 @@ class MAIN:
 				if item_type == "point":
 					if self.dict["MAIN"][self.op_type][side][item]["P1"] != None:
 
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P1"], "white", [self.tag, side, item,"P1"])
-						self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"], x_offset=80, mytext=(side_pre+item), mytag=self.tag)
+						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P1"], "orange", [self.tag, side, item,"P1"])
+						# self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"], x_offset=80, mytext=(side_pre+item), mytag=self.tag)
+
+						if self.draw_labels:
+							if item == "TIB_KNEE" and side == "RIGHT":
+								self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"],x_offset=-80, mytext=(side_pre+item), mytag=self.tag, color="blue")
+							elif item == "FEM_KNEE" and side == "LEFT":
+								self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"],x_offset=-80, mytext=(side_pre+item), mytag=self.tag, color="blue")
+							else:
+								self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"],x_offset=80, mytext=(side_pre+item), mytag=self.tag, color="blue")
 						# self, point, color="white", font_size=8, mytext, mytag):
 
 				# ANKLE
 				if item_type == "midpoint":
 					if self.dict["MAIN"][self.op_type][side][item]["P1"] != None:
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P1"], "white", [self.tag, side, "ANKLE", "P1"])
+						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P1"], "orange", [self.tag, side, "ANKLE", "P1"])
 
 					if self.dict["MAIN"][self.op_type][side][item]["P2"] != None:
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P2"], "white", [self.tag, side, "ANKLE", "P2"])
+						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P2"], "orange", [self.tag, side, "ANKLE", "P2"])
 
 
 					if self.dict["MAIN"][self.op_type][side][item]["P1"] != None and self.dict["MAIN"][self.op_type][side][item]["P2"] != None:
@@ -440,17 +469,18 @@ class MAIN:
 						p2 = self.dict["MAIN"][self.op_type][side][item]["P2"]
 						m1 = self.dict["MAIN"][self.op_type][side][item]["M1"]
 						self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag, side, "ANKLE_LINE"])
-						self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P2"], x_offset=80, mytext=(side_pre+item), mytag=[self.tag, side, "ANKLE_LINE"])
+						if self.draw_labels:
+							self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P2"], x_offset=80, mytext=(side_pre+item), mytag=[self.tag, side, "ANKLE_LINE"], color="blue")
 
 
 				# AXIS_TIB & AXIS_FEM
 				if item_type == "axis":
 					
 					if self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"] != None:						
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"], "white", [self.tag, side, item, "TOP", "P1"])
+						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"], "orange", [self.tag, side, item, "TOP", "P1"])
 
 					if self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"] != None:
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"], "white", [self.tag, side, item, "TOP", "P2"])
+						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"], "orange", [self.tag, side, item, "TOP", "P2"])
 
 					if self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"] != None and self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"] != None:
 						p1 = self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"]
@@ -458,15 +488,16 @@ class MAIN:
 						m1 = self.dict["MAIN"][self.op_type][side][item]["TOP"]["M1"]
 						self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag,side,"AXIS_LINE"])
 
-						axis_text = side_pre + item.replace("AXIS_", "") + "_TOP"						
-						self.draw_tools.create_mytext(p2, x_offset=80, mytext=axis_text, mytag=self.tag)
+						axis_text = side_pre + item.replace("AXIS_", "") + "_TOP"
+						if self.draw_labels:
+							self.draw_tools.create_mytext(p2, x_offset=80, mytext=axis_text, mytag=self.tag, color="blue")
 
 
 					if self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"] != None:						
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"], "white", [self.tag, side, item, "BOT", "P1"])
+						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"], "orange", [self.tag, side, item, "BOT", "P1"])
 
 					if self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"] != None:						
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"], "white", [self.tag, side, item, "BOT", "P2"])
+						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"], "orange", [self.tag, side, item, "BOT", "P2"])
 
 					if self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"] != None and self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"] != None:
 						p1 = self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"]
@@ -475,7 +506,8 @@ class MAIN:
 						self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag,side,"AXIS_LINE"])
 
 						axis_text = side_pre + item.replace("AXIS_", "") + "_BOT"
-						self.draw_tools.create_mytext(p2, x_offset=80, mytext=axis_text, mytag=self.tag)
+						if self.draw_labels:
+							self.draw_tools.create_mytext(p2, x_offset=80, mytext=axis_text, mytag=self.tag, color="blue")
 					
 
 
@@ -484,6 +516,27 @@ class MAIN:
 
 
 	def hover(self, P_mouse, P_stored, hover_label):
+
+
+		if self.draw_hover:
+
+			side_pre = self.side[0]+"_"
+
+			if(	hover_label == "P0_HIP" or
+				hover_label == "P0_FEM_KNEE" or
+				hover_label == "P0_TIB_KNEE" or
+				hover_label == "P0_ANKLE" or
+				hover_label == "P0_AXIS_FEM_TOP" or
+				hover_label == "P0_AXIS_FEM_BOT" or
+				hover_label == "P0_AXIS_TIB_TOP" or
+				hover_label == "P0_AXIS_TIB_BOT"
+				):
+				self.draw_tools.clear_by_tag("hover_line")
+				self.draw_tools.create_mypoint(P_mouse, "red", [self.tag, "hover_line"], hover_point=True)
+				if self.draw_labels:
+					self.draw_tools.create_mytext(P_mouse,x_offset=80, mytext=(side_pre+self.hover_text), mytag=[self.tag, "hover_line"])
+
+
 
 		if(	hover_label == "P1_ANKLE" or
 			hover_label == "P1_TOP_AXIS_FEM" or
@@ -494,6 +547,130 @@ class MAIN:
 			self.draw_tools.clear_by_tag("hover_line")
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
 			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line")
+
+
+	def mainHoverUsingNextLabel(self):
+		label = self.getNextLabel()
+
+		if label == "RIGHT HIP":
+			self.side = "RIGHT"
+			self.hover_text = "HIP"
+			self.draw_tools.setHoverPointLabel("P0_HIP")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT HIP":
+			self.side = "LEFT"
+			self.hover_text = "HIP"
+			self.draw_tools.setHoverPointLabel("P0_HIP")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+		elif label == "RIGHT FEM_KNEE":			
+			self.side = "RIGHT"
+			self.hover_text = "FEM_KNEE"
+			self.draw_tools.setHoverPointLabel("P0_FEM_KNEE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT FEM_KNEE":
+			self.side = "LEFT"
+			self.hover_text = "FEM_KNEE"
+			self.draw_tools.setHoverPointLabel("P0_FEM_KNEE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+		elif label == "RIGHT TIB_KNEE":			
+			self.side = "RIGHT"
+			self.hover_text = "TIB_KNEE"
+			self.draw_tools.setHoverPointLabel("P0_TIB_KNEE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT TIB_KNEE":
+			self.side = "LEFT"
+			self.hover_text = "TIB_KNEE"
+			self.draw_tools.setHoverPointLabel("P0_TIB_KNEE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+		elif label == "RIGHT ANKLE P1":
+			self.side = "RIGHT"
+			self.hover_text = "ANKLE_P1"
+			self.draw_tools.setHoverPointLabel("P0_ANKLE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT ANKLE P1":
+			self.side = "LEFT"
+			self.hover_text = "ANKLE_P1"
+			self.draw_tools.setHoverPointLabel("P0_ANKLE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+		
+		elif label == "RIGHT AXIS_FEM TOP P1":
+			self.side = "RIGHT"
+			self.hover_text = "AXIS_FEM_TOP_P1"
+			self.draw_tools.setHoverPointLabel("P0_AXIS_FEM_TOP")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT AXIS_FEM TOP P1":
+			self.side = "LEFT"
+			self.hover_text = "AXIS_FEM_TOP_P1"
+			self.draw_tools.setHoverPointLabel("P0_AXIS_FEM_TOP")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+		elif label == "RIGHT AXIS_FEM BOT P1":
+			self.side = "RIGHT"
+			self.hover_text = "AXIS_FEM_BOT_P1"
+			self.draw_tools.setHoverPointLabel("P0_AXIS_FEM_BOT")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT AXIS_FEM BOT P1":
+			self.side = "LEFT"
+			self.hover_text = "AXIS_FEM_BOT_P1"
+			self.draw_tools.setHoverPointLabel("P0_AXIS_FEM_BOT")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+		
+		elif label == "RIGHT AXIS_TIB TOP P1":
+			self.side = "RIGHT"
+			self.hover_text = "AXIS_TIB_TOP_P1"
+			self.draw_tools.setHoverPointLabel("P0_AXIS_TIB_TOP")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT AXIS_TIB TOP P1":
+			self.side = "LEFT"
+			self.hover_text = "AXIS_TIB_TOP_P1"
+			self.draw_tools.setHoverPointLabel("P0_AXIS_TIB_TOP")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		
+		elif label == "RIGHT AXIS_TIB BOT P1":
+			self.side = "RIGHT"
+			self.hover_text = "AXIS_TIB_BOT_P1"
+			self.draw_tools.setHoverPointLabel("P0_AXIS_TIB_BOT")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT AXIS_TIB BOT P1":
+			self.side = "LEFT"
+			self.hover_text = "AXIS_TIB_BOT_P1"
+			self.draw_tools.setHoverPointLabel("P0_AXIS_TIB_BOT")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+		elif label == "LEFT Done" or label == "RIGHT Done":
+			self.draw_tools.setHoverPointLabel("")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(False)
+
+		# else:
+		# 	self.draw_tools.setHoverPointLabel(None)
+		# 	self.draw_tools.setHoverPoint(None)
+		# 	self.draw_tools.setHoverBool(False)
+
+
+
+
 
 	def regainHover(self, side):
 		p1_ankle = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P1"]
@@ -508,6 +685,9 @@ class MAIN:
 		p2_axis_tib_top = self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["P2"]
 		p1_axis_tib_bot = self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["P1"]
 		p2_axis_tib_bot = self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["P2"]
+
+		# find if P0 hovers are required
+		self.mainHoverUsingNextLabel()
 
 		if p1_ankle == None and p2_ankle != None:
 			self.draw_tools.setHoverPointLabel("P1_ANKLE")
@@ -656,9 +836,14 @@ class MAIN:
 			self.drag_label = "HIP"
 			self.drag_side 	= side
 
-		elif "KNEE" in tags:
+		elif "FEM_KNEE" in tags:
 			self.drag_point = None
-			self.drag_label = "KNEE"
+			self.drag_label = "FEM_KNEE"
+			self.drag_side 	= side
+
+		elif "TIB_KNEE" in tags:
+			self.drag_point = None
+			self.drag_label = "TIB_KNEE"
 			self.drag_side 	= side
 
 
@@ -693,14 +878,6 @@ class MAIN:
 				self.drag_label = "P2_AXIS_TIB_"+topbot
 				self.drag_side 	= side
 
-
-
-		
-
-		
-
-
-
 	def drag(self, P_mouse):
 
 
@@ -733,8 +910,11 @@ class MAIN:
 		if self.drag_label == "HIP":
 			self.dict["MAIN"][self.op_type][self.drag_side]["HIP"]["P1"] = P_mouse
 			
-		elif self.drag_label == "KNEE":
-			self.dict["MAIN"][self.op_type][self.drag_side]["KNEE"]["P1"] = P_mouse						
+		elif self.drag_label == "FEM_KNEE":
+			self.dict["MAIN"][self.op_type][self.drag_side]["FEM_KNEE"]["P1"] = P_mouse
+
+		elif self.drag_label == "TIB_KNEE":
+			self.dict["MAIN"][self.op_type][self.drag_side]["TIB_KNEE"]["P1"] = P_mouse
 
 
 		elif self.drag_label == "P1_ANKLE":
@@ -802,5 +982,19 @@ class MAIN:
 				self.draw_anat_axis = False
 			elif val.get() == 1:
 				self.draw_anat_axis = True
+			self.draw()
+
+		if action == "TOGGLE_LABEL":
+			if val.get() == 0:
+				self.draw_labels = False
+			elif val.get() == 1:
+				self.draw_labels = True
+			self.draw()
+
+		if action == "TOGGLE_HOVER":
+			if val.get() == 0:
+				self.draw_hover = False
+			elif val.get() == 1:
+				self.draw_hover = True
 			self.draw()
 

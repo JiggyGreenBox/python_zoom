@@ -44,7 +44,8 @@ class MainWindow(ttk.Frame):
 		""" Initialize the main Frame """
 		ttk.Frame.__init__(self, master=mainframe)
 		self.master.title('Advanced Zoom v3.0')
-		self.master.geometry('800x600')  # size of the main window
+		# self.master.geometry('800x600')  # size of the main window
+		self.master.geometry('900x700')  # size of the main window
 		
 		self.master.grid_rowconfigure(1, weight=1) # this needed to be added
 		self.master.grid_columnconfigure(0, weight=1) # as did this

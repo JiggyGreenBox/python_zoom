@@ -149,10 +149,10 @@ class VCA():
 			isDist = False
 
 			if dist_fem_p1 != None:
-				self.draw_tools.create_mypoint(dist_fem_p1, "white", [self.tag, side, "P1_DIST_FEM"])
+				self.draw_tools.create_mypoint(dist_fem_p1, "orange", [self.tag, side, "P1_DIST_FEM"])
 
 			if dist_fem_p2 != None:
-				self.draw_tools.create_mypoint(dist_fem_p2, "white", [self.tag, side, "P2_DIST_FEM"])
+				self.draw_tools.create_mypoint(dist_fem_p2, "orange", [self.tag, side, "P2_DIST_FEM"])
 
 			if dist_fem_p1 != None and dist_fem_p2 != None:				
 				self.draw_tools.create_midpoint_line(dist_fem_p1, dist_fem_p2, dist_fem_m1, [self.tag,side,"DIST_FEM_LINE"])
@@ -166,18 +166,18 @@ class VCA():
 			isKnee = False
 
 			hip = self.dict["MAIN"][self.op_type][side]["HIP"]["P1"]
-			knee = self.dict["MAIN"][self.op_type][side]["KNEE"]["P1"]
+			knee = self.dict["MAIN"][self.op_type][side]["FEM_KNEE"]["P1"]
 
 
 			# HIP
 			if hip != None:
 				isHip = True
-				self.draw_tools.create_mypoint(hip, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(hip, "orange", [self.tag, side, "NO-DRAG"])
 
 			# KNEE
 			if knee != None:
 				isKnee = True
-				self.draw_tools.create_mypoint(knee, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(knee, "orange", [self.tag, side, "NO-DRAG"])
 
 			# HIP-KNEE-LINE
 			if hip != None and knee != None:
@@ -198,7 +198,7 @@ class VCA():
 				else:					
 					angle = self.draw_tools.create_myAngle(hip, knee, dist_fem_m1, self.tag)
 
-				self.draw_tools.create_mytext(dist_fem_m1, '{0:.2f}'.format(angle), [self.tag,side,"VCA_ANGLE"], x_offset=0, y_offset=-60)
+				self.draw_tools.create_mytext(dist_fem_m1, '{0:.2f}'.format(angle), [self.tag,side,"VCA_ANGLE"], x_offset=0, y_offset=-60, color="blue")
 
 
 				# check if value exists

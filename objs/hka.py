@@ -24,10 +24,12 @@ class HKA():
 		for side in ["LEFT","RIGHT"]:
 
 			isHip = False
-			isKnee = False
+			isFemKnee = False
+			isTibKnee = False
 
 			hip 		= self.dict["MAIN"][self.op_type][side]["HIP"]["P1"]
-			knee 		= self.dict["MAIN"][self.op_type][side]["KNEE"]["P1"]			
+			fem_knee 	= self.dict["MAIN"][self.op_type][side]["FEM_KNEE"]["P1"]
+			tib_knee 	= self.dict["MAIN"][self.op_type][side]["TIB_KNEE"]["P1"]
 			
 			ankle_p1 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["P1"]
 			ankle_p2 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]
@@ -37,30 +39,38 @@ class HKA():
 			# HIP
 			if hip != None:
 				isHip = True
-				self.draw_tools.create_mypoint(hip, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(hip, "orange", [self.tag, side, "NO-DRAG"])
 
 			# KNEE
-			if knee != None:
-				isKnee = True
-				self.draw_tools.create_mypoint(knee, "white", [self.tag, side, "NO-DRAG"])
+			if fem_knee != None:
+				isFemKnee = True
+				self.draw_tools.create_mypoint(fem_knee, "orange", [self.tag, side, "NO-DRAG"])
+
+			if tib_knee != None:
+				isTibKnee = True
+				self.draw_tools.create_mypoint(tib_knee, "orange", [self.tag, side, "NO-DRAG"])
 
 
 			# ANKLE
 			if ankle_p1 != None and ankle_p2 != None:
 				
-				self.draw_tools.create_mypoint(ankle_p1, "white", [self.tag, side, "NO-DRAG"])
-				self.draw_tools.create_mypoint(ankle_p2, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(ankle_p1, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(ankle_p2, "orange", [self.tag, side, "NO-DRAG"])
 				self.draw_tools.create_midpoint_line(ankle_p1, ankle_p2, ankle_m1, self.tag)
 
-				if isHip and isKnee:
+				if isHip and isTibKnee and isFemKnee:
 
-					# ankle-knee ray
+					# ankle-tib-knee ray
 					xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
-					p_top = self.draw_tools.line_intersection((ankle_m1, knee), (xtop, ytop))
+					p_top = self.draw_tools.line_intersection((ankle_m1, tib_knee), (xtop, ytop))
 					self.draw_tools.create_myline(ankle_m1, p_top, self.tag)
 
+
+					# fem-tib-intersection
+					hka_point = self.draw_tools.line_intersection((ankle_m1, tib_knee), (hip, fem_knee))
+
 					# hip-knee line
-					self.draw_tools.create_myline(hip, knee, self.tag)
+					self.draw_tools.create_myline(hip, hka_point, self.tag)
 
 					# draw angle
 					angle = ""
@@ -73,14 +83,16 @@ class HKA():
 					'''
 
 					if side == "LEFT":						
-						angle = self.draw_tools.create_myAngle(ankle_m1, knee, hip, self.tag)
+						angle = self.draw_tools.create_myAngle(ankle_m1, hka_point, hip, self.tag)
 					else:
-						angle = self.draw_tools.create_myAngle(hip, knee, ankle_m1, self.tag)
+						angle = self.draw_tools.create_myAngle(hip, hka_point, ankle_m1, self.tag)
 						
 					# , radius = 50, width = 3):
 					# self.canvas.create_text(x-r,y+r,fill="white", text='{0:.2f}'.format(t1), tags="tag")
 					
-					self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side]["KNEE"]["P1"], '{0:.2f}'.format(angle), self.tag, x_offset=60)
+					# self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side]["KNEE"]["P1"], '{0:.2f}'.format(angle), self.tag, x_offset=60)
+					self.draw_tools.create_mytext(hka_point, '{0:.2f}'.format(angle), self.tag, x_offset=60, color="blue")
+					
 
 
 					# check if value exists

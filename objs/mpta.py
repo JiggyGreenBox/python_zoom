@@ -28,7 +28,7 @@ class MPTA():
 			tib_joint_p1 = self.dict["TAMD"][self.op_type][side]["TIB_JOINT_LINE"]["P1"]
 			tib_joint_p2 = self.dict["TAMD"][self.op_type][side]["TIB_JOINT_LINE"]["P2"]
 
-			knee = self.dict["MAIN"][self.op_type][side]["KNEE"]["P1"]
+			knee = self.dict["MAIN"][self.op_type][side]["TIB_KNEE"]["P1"]
 
 			ankle_p1 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P1"]
 			ankle_p2 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]

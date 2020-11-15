@@ -47,10 +47,10 @@ class AFTA():
 			# FEM AXIS
 			# TOP
 			if fem_top_p1 != None:
-				self.draw_tools.create_mypoint(fem_top_p1, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(fem_top_p1, "orange", [self.tag, side, "NO-DRAG"])
 
 			if fem_top_p2 != None:
-				self.draw_tools.create_mypoint(fem_top_p2, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(fem_top_p2, "orange", [self.tag, side, "NO-DRAG"])
 
 			if fem_top_p1 != None and fem_top_p2 != None:
 				self.draw_tools.create_midpoint_line(fem_top_p1, fem_top_p2, fem_top_m1, self.tag)
@@ -59,10 +59,10 @@ class AFTA():
 
 			# BOT
 			if fem_bot_p1 != None:
-				self.draw_tools.create_mypoint(fem_bot_p1, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(fem_bot_p1, "orange", [self.tag, side, "NO-DRAG"])
 
 			if fem_bot_p2 != None:
-				self.draw_tools.create_mypoint(fem_bot_p2, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(fem_bot_p2, "orange", [self.tag, side, "NO-DRAG"])
 
 			if fem_bot_p1 != None and fem_bot_p2 != None:				
 				self.draw_tools.create_midpoint_line(fem_bot_p1, fem_bot_p2, fem_bot_m1, self.tag)
@@ -72,10 +72,10 @@ class AFTA():
 			# TIB AXIS
 			# TOP
 			if tib_top_p1 != None:
-				self.draw_tools.create_mypoint(tib_top_p1, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(tib_top_p1, "orange", [self.tag, side, "NO-DRAG"])
 
 			if tib_top_p2 != None:
-				self.draw_tools.create_mypoint(tib_top_p2, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(tib_top_p2, "orange", [self.tag, side, "NO-DRAG"])
 
 			if tib_top_p1 != None and tib_top_p2 != None:				
 				self.draw_tools.create_midpoint_line(tib_top_p1, tib_top_p2, tib_top_m1, self.tag)
@@ -84,13 +84,13 @@ class AFTA():
 
 			# BOT
 			if tib_bot_p1 != None:
-				self.draw_tools.create_mypoint(tib_bot_p1, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(tib_bot_p1, "orange", [self.tag, side, "NO-DRAG"])
 
 			if tib_bot_p2 != None:
-				self.draw_tools.create_mypoint(tib_bot_p2, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(tib_bot_p2, "orange", [self.tag, side, "NO-DRAG"])
 
 			if tib_bot_p1 != None and tib_bot_p2 != None:				
-				self.draw_tools.create_midpoint_line(tib_bot_p1, tib_bot_p1, tib_bot_m1, self.tag)
+				self.draw_tools.create_midpoint_line(tib_bot_p1, tib_bot_p2, tib_bot_m1, self.tag)
 				isTibBot = True
 
 
@@ -123,7 +123,7 @@ class AFTA():
 					(fem_bot_m1, fem_top_m1))
 
 				# int debug
-				self.draw_tools.create_mypoint(p_int, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(p_int, "orange", [self.tag, side, "NO-DRAG"])
 				self.draw_tools.create_myline(fem_top_m1, p_int, self.tag)
 
 				a1 = self.draw_tools.getAnglePoints(p_tib, p_int, fem_top_m1)
@@ -136,13 +136,13 @@ class AFTA():
 				else:
 					angle = self.draw_tools.create_myAngle(fem_top_m1, p_int, p_tib, self.tag)
 
-				self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60)
+				self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, color="blue")
 
 				# p_int = self.draw_tools.line_intersection((tib_bot_m1, tib_top_m1),
 				# 	(fem_bot_m1, fem_top_m1))
 
 				# # int debug
-				# self.draw_tools.create_mypoint(p_int, "white", self.tag)
+				# self.draw_tools.create_mypoint(p_int, "orange", self.tag)
 
 				# a1 = self.draw_tools.getAnglePoints(tib_top_m1, p_int, fem_bot_m1)
 				# a2 = self.draw_tools.getAnglePoints(fem_bot_m1, p_int, tib_top_m1)

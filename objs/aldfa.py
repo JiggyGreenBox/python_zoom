@@ -100,7 +100,7 @@ class ALDFA():
 			isAldfa = False
 
 			hip = self.dict["MAIN"][self.op_type][side]["HIP"]["P1"]
-			knee = self.dict["MAIN"][self.op_type][side]["KNEE"]["P1"]
+			knee = self.dict["MAIN"][self.op_type][side]["FEM_KNEE"]["P1"]
 
 			fem_p1 = self.dict["ALDFA"][self.op_type][side]["FEM_JOINT_LINE"]["P1"]
 			fem_p2 = self.dict["ALDFA"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
@@ -109,10 +109,10 @@ class ALDFA():
 			# FROM ALDFA
 			# ------------------------
 			if fem_p1 != None:
-				self.draw_tools.create_mypoint(fem_p1, "white", [self.tag, side, "P1_ALDFA"])
+				self.draw_tools.create_mypoint(fem_p1, "orange", [self.tag, side, "P1_ALDFA"])
 
 			if fem_p2 != None:
-				self.draw_tools.create_mypoint(fem_p2, "white", [self.tag, side, "P2_ALDFA"])
+				self.draw_tools.create_mypoint(fem_p2, "orange", [self.tag, side, "P2_ALDFA"])
 
 			if fem_p1 != None and fem_p2 != None:
 				self.draw_tools.create_myline(fem_p1, fem_p2, [self.tag,side,"LINE_ALDFA"])
@@ -125,12 +125,12 @@ class ALDFA():
 			# HIP
 			if hip != None:
 				isHip = True
-				self.draw_tools.create_mypoint(hip, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(hip, "orange", [self.tag, side, "NO-DRAG"])
 
 			# KNEE
 			if knee != None:
 				isKnee = True
-				self.draw_tools.create_mypoint(knee, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(knee, "orange", [self.tag, side, "NO-DRAG"])
 
 
 			if not isAldfa:
@@ -162,11 +162,11 @@ class ALDFA():
 
 					if side == "LEFT":
 						angle = self.draw_tools.create_myAngle(hip, p_int, R_fem, [self.tag,side,"ANGLE_ALDFA"])
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"ANGLE_ALDFA"], x_offset=60, y_offset=-60)
+						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"ANGLE_ALDFA"], x_offset=60, y_offset=-60, color="blue")
 
 					if side == "RIGHT":
 						angle = self.draw_tools.create_myAngle(L_fem, p_int, hip, [self.tag,side,"ANGLE_ALDFA"])
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"ANGLE_ALDFA"], x_offset=-60, y_offset=-60)
+						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"ANGLE_ALDFA"], x_offset=-60, y_offset=-60, color="blue")
 
 
 					# check if value exists

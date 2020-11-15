@@ -108,9 +108,10 @@ class DrawTools(CanvasImage):
 		)
 
 
-	def create_mypoint(self, point, color, mytag):
+	def create_mypoint(self, point, color, mytag, hover_point=False):
 		"""Create a token at the given coordinate in the given color"""
-		mytag.append("token")
+		if not hover_point:
+			mytag.append("token")
 		p1 = self.getScaledCoords(point)
 		x = p1[0]
 		y = p1[1]
@@ -121,7 +122,7 @@ class DrawTools(CanvasImage):
 			x + thickness,
 			y + thickness,
 			outline="black",
-			fill="orange",
+			fill=color,
 			tags=mytag,
 		)
 		# point
@@ -406,15 +407,16 @@ class DrawTools(CanvasImage):
 
 	def hover(self, event):
 
-		P_mouse = self.getRealCoords(event)
-		
-		if self.getHoverBool() == True:
-
-			P_stored = self.getHoverPoint()
-			self.cur_obj.hover(P_mouse, P_stored, self.hover_label)
+		if self.cur_obj != None:
+			P_mouse = self.getRealCoords(event)
 			
-			# self.canvas.delete("hover_line")
-			# self.create_myline(P_stored, P_mouse, "hover_line")
+			if self.getHoverBool() == True:
+
+				P_stored = self.getHoverPoint()
+				self.cur_obj.hover(P_mouse, P_stored, self.hover_label)
+				
+				# self.canvas.delete("hover_line")
+				# self.create_myline(P_stored, P_mouse, "hover_line")
 
 
 	def setHoverPoint(self, P):

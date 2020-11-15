@@ -116,10 +116,10 @@ class MNSA():
 			# FROM MNSA
 			# ------------------------
 			if self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"], "white", [self.tag, side, "P1_NECK_AXIS"])
+				self.draw_tools.create_mypoint(self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"], "orange", [self.tag, side, "P1_NECK_AXIS"])
 
 			if self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P2"], "white", [self.tag, side, "P2_NECK_AXIS"])
+				self.draw_tools.create_mypoint(self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P2"], "orange", [self.tag, side, "P2_NECK_AXIS"])
 
 			if self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"] != None and self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P2"] != None:
 				p1 = self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"]
@@ -135,16 +135,16 @@ class MNSA():
 			# ------------------------
 			# HIP
 			if self.dict["MAIN"][self.op_type][side]["HIP"]["P1"] != None:				
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["HIP"]["P1"], "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["HIP"]["P1"], "orange", [self.tag, side, "NO-DRAG"])
 
 
 			# FEM AXIS
 			# TOP
 			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"], "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"], "orange", [self.tag, side, "NO-DRAG"])
 
 			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"], "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"], "orange", [self.tag, side, "NO-DRAG"])
 
 			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"] != None and self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"] != None:
 				p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
@@ -156,10 +156,10 @@ class MNSA():
 
 			# BOT
 			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"], "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"], "orange", [self.tag, side, "NO-DRAG"])
 
 			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"], "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"], "orange", [self.tag, side, "NO-DRAG"])
 
 			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"] != None and self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"] != None:
 				p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
@@ -260,7 +260,7 @@ class MNSA():
 								(fem_bot_m1, p_top))
 
 						angle = self.draw_tools.create_myAngle(hip, p_int, fem_bot_m1, [self.tag,side,"MNSA_ANGLE"])
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"MNSA_ANGLE"], x_offset=60)
+						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"MNSA_ANGLE"], x_offset=60, color="blue")
 
 
 
@@ -277,7 +277,7 @@ class MNSA():
 								(fem_bot_m1, p_top))
 
 						angle = self.draw_tools.create_myAngle(fem_bot_m1, p_int, hip, [self.tag,side,"MNSA_ANGLE"])
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"MNSA_ANGLE"], x_offset=60)
+						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"MNSA_ANGLE"], x_offset=60, color="blue")
 
 
 
