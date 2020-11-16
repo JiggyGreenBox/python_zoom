@@ -35,7 +35,7 @@ class TAMDold():
 		
 
 
-	def hover(self, P_mouse, P_stored, hover_label):		
+	def hover(self, P_mouse, P_stored, hover_label):
 		if hover_label == "P1_TAMD":
 			self.draw_tools.clear_by_tag("hover_line")
 			self.draw_tools.create_myline(P_mouse, P_stored, "hover_line")
