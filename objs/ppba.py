@@ -88,26 +88,32 @@ class PPBA():
 			line2 = False
 
 			# from P-TILT
-			p1 = self.dict["P_TILT"][self.op_type][side]["P1P2_LINE"]["P1"]
-			p2 = self.dict["P_TILT"][self.op_type][side]["P1P2_LINE"]["P2"]
+			# p1 = self.dict["P_TILT"][self.op_type][side]["P1P2_LINE"]["P1"]
+			# p2 = self.dict["P_TILT"][self.op_type][side]["P1P2_LINE"]["P2"]
+
+			p1 = self.dict["P_TILT"][self.op_type][side]["PAT_CROSS_SECTION"]["P1"]
+			p2 = self.dict["P_TILT"][self.op_type][side]["PAT_CROSS_SECTION"]["P2"]
+
 			
 			knee_cap_line_p1 = self.dict["PPBA"][self.op_type][side]["KNEE_CAP_LINE"]["P1"]
 			knee_cap_line_p2 = self.dict["PPBA"][self.op_type][side]["KNEE_CAP_LINE"]["P2"]
 
 			
 			if p1 != None:
-				self.draw_tools.create_mypoint(p1, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(p1, "orange", [self.tag, side, "NO-DRAG"])
 			if p2 != None:
-				self.draw_tools.create_mypoint(p2, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(p2, "orange", [self.tag, side, "NO-DRAG"])
 			if p1 != None and p2 != None:
 				self.draw_tools.create_myline(p1, p2, [self.tag, side, "NO-DRAG"])
 				line1 = True
 
 
 			if knee_cap_line_p1 != None:
-				self.draw_tools.create_mypoint(knee_cap_line_p1, "white", [self.tag, side, "KNEE_P1"])
+				self.draw_tools.create_mypoint(knee_cap_line_p1, "orange", [self.tag, side, "KNEE_P1"])
+				self.draw_tools.create_mytext(knee_cap_line_p1, "P1", [self.tag,"P_LABEL"], y_offset=30)
 			if knee_cap_line_p2 != None:
-				self.draw_tools.create_mypoint(knee_cap_line_p2, "white", [self.tag, side, "KNEE_P2"])
+				self.draw_tools.create_mypoint(knee_cap_line_p2, "orange", [self.tag, side, "KNEE_P2"])
+				self.draw_tools.create_mytext(knee_cap_line_p2, "P2", [self.tag,"P_LABEL"], y_offset=30)
 			if knee_cap_line_p1 != None and knee_cap_line_p2 != None:
 				self.draw_tools.create_myline(knee_cap_line_p1, knee_cap_line_p2, [self.tag, side, "KNEE_LINE"])
 				line2 = True
@@ -116,7 +122,7 @@ class PPBA():
 				p_int = self.draw_tools.line_intersection((knee_cap_line_p1, knee_cap_line_p2),(p1, p2))
 
 				angle = self.draw_tools.getSmallestAngle(p1, p_int, knee_cap_line_p1)
-				self.draw_tools.create_mytext(knee_cap_line_p2, '{0:.2f}'.format(angle), [self.tag,"PPBA_ANGLE"], y_offset=40, color="blue")
+				self.draw_tools.create_mytext(p2, '{0:.2f}'.format(angle), [self.tag,"PPBA_ANGLE"], y_offset=-40, color="blue")
 			
 
 			# if isP2 and isP3:							
@@ -292,6 +298,7 @@ class PPBA():
 
 
 		if self.drag_label == "KNEE_P1" or self.drag_label == "KNEE_P2":
+			self.draw_tools.clear_by_tag("P_LABEL")
 			self.draw_tools.clear_by_tag("drag_line")
 			if self.drag_point != None:
 				self.draw_tools.create_myline(self.drag_point, P_mouse, "drag_line")

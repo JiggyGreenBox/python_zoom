@@ -45,15 +45,15 @@ class P_TILT_Menu(tk.Frame):
 		button.grid(column=2, row=6)
 
 
-		button = ttk.Button(self, text="P3", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-P3"))
+		button = ttk.Button(self, text="PAT P1", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-PAT-P1"))
 		button.grid(column=1, row=7)
-		button = ttk.Button(self, text="P3", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-P3"))
+		button = ttk.Button(self, text="PAT P1", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-PAT-P1"))
 		button.grid(column=2, row=7)
 
 		
-		button = ttk.Button(self, text="P4", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-P4"))
+		button = ttk.Button(self, text="PAT P2", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-PAT-P2"))
 		button.grid(column=1, row=8)
-		button = ttk.Button(self, text="P4", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-P4"))
+		button = ttk.Button(self, text="PAT P2", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-PAT-P2"))
 		button.grid(column=2, row=8)
 
 

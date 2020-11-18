@@ -38,8 +38,12 @@ class KAOL():
 
 			# tib_joint_p1 = self.dict["TAMD"][self.op_type][side]["TIB_JOINT_LINE"]["P1"]
 			# tib_joint_p2 = self.dict["TAMD"][self.op_type][side]["TIB_JOINT_LINE"]["P2"]
-			tib_joint_p1 = self.dict["MPTA"][self.op_type][side]["TIB_JOINT_LINE"]["P1"]
-			tib_joint_p2 = self.dict["MPTA"][self.op_type][side]["TIB_JOINT_LINE"]["P2"]
+			# tib_joint_p1 = self.dict["MPTA"][self.op_type][side]["TIB_JOINT_LINE"]["P1"]
+			# tib_joint_p2 = self.dict["MPTA"][self.op_type][side]["TIB_JOINT_LINE"]["P2"]
+
+			tib_joint_p1 = self.dict["KJLO"][self.op_type][side]["JOINT_LINE"]["P1"]
+			tib_joint_p2 = self.dict["KJLO"][self.op_type][side]["JOINT_LINE"]["P2"]
+
 			ankle_p1 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P1"]
 			ankle_p2 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]
 			ankle_m1 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["M1"]
@@ -116,7 +120,7 @@ class KAOL():
 						R_p_safe = self.draw_tools.line_intersection((L_tib, R_tib),(xtop, xbot))
 
 						angle = self.draw_tools.create_myAngle(ankle_m1, p_int, R_p_safe, self.tag)
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60, y_offset=-60)
+						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60, y_offset=-60, color="blue")
 
 					if side == "RIGHT":
 
@@ -126,7 +130,7 @@ class KAOL():
 						R_p_safe = self.draw_tools.line_intersection((L_tib, R_tib),(ytop, ybot))
 
 						angle = self.draw_tools.create_myAngle(R_p_safe, p_int, ankle_m1, self.tag)
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, y_offset=-60)
+						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, y_offset=-60, color="blue")
 
 
 					# check if value exists

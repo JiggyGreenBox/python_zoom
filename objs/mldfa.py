@@ -243,10 +243,10 @@ class MLDFA():
 
 		self.controller.save_json()
 		self.draw()
-# P1_ALDFA
-# P2_ALDFA
-# LINE_ALDFA
-# ANGLE_ALDFA
+	# P1_ALDFA
+	# P2_ALDFA
+	# LINE_ALDFA
+	# ANGLE_ALDFA
 
 	# menu button clicks are routed here
 	def menu_btn_click(self, action):

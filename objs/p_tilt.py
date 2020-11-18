@@ -67,20 +67,20 @@ class P_TILT():
 			self.side = "RIGHT"
 
 
-		if action == "DEL-LEFT-P3":			
-			self.dict["P_TILT"][self.op_type]["LEFT"]["P3P4_LINE"]["P1"] = None
+		if action == "DEL-LEFT-PAT-P1":			
+			self.dict["P_TILT"][self.op_type]["LEFT"]["PAT_CROSS_SECTION"]["P1"] = None
 			self.side = "LEFT"
 
-		if action == "DEL-RIGHT-P3":			
-			self.dict["P_TILT"][self.op_type]["RIGHT"]["P3P4_LINE"]["P1"] = None
+		if action == "DEL-RIGHT-PAT-P1":			
+			self.dict["P_TILT"][self.op_type]["RIGHT"]["PAT_CROSS_SECTION"]["P1"] = None
 			self.side = "RIGHT"
 
-		if action == "DEL-LEFT-P4":
-			self.dict["P_TILT"][self.op_type]["LEFT"]["P3P4_LINE"]["P2"] = None
+		if action == "DEL-LEFT-PAT-P2":
+			self.dict["P_TILT"][self.op_type]["LEFT"]["PAT_CROSS_SECTION"]["P2"] = None
 			self.side = "LEFT"
 
-		if action == "DEL-RIGHT-P4":
-			self.dict["P_TILT"][self.op_type]["RIGHT"]["P3P4_LINE"]["P2"] = None
+		if action == "DEL-RIGHT-PAT-P2":
+			self.dict["P_TILT"][self.op_type]["RIGHT"]["PAT_CROSS_SECTION"]["P2"] = None
 			self.side = "RIGHT"
 
 		
@@ -99,45 +99,66 @@ class P_TILT():
 
 			p1 = self.dict["P_TILT"][self.op_type][side]["P1P2_LINE"]["P1"]
 			p2 = self.dict["P_TILT"][self.op_type][side]["P1P2_LINE"]["P2"]
-			p3 = self.dict["P_TILT"][self.op_type][side]["P3P4_LINE"]["P1"]
-			p4 = self.dict["P_TILT"][self.op_type][side]["P3P4_LINE"]["P2"]
+			pat_p1 = self.dict["P_TILT"][self.op_type][side]["PAT_CROSS_SECTION"]["P1"]
+			pat_p2 = self.dict["P_TILT"][self.op_type][side]["PAT_CROSS_SECTION"]["P2"]
 
 
 
 			if p1 != None:
-				self.draw_tools.create_mypoint(p1, "white", [self.tag,side,"P1P2_LINE","P1"])
+				self.draw_tools.create_mypoint(p1, "orange", [self.tag,side,"P1P2_LINE","P1"])
+
 
 			if p2 != None:
-				self.draw_tools.create_mypoint(p2, "white", [self.tag,side,"P1P2_LINE","P2"])
+				self.draw_tools.create_mypoint(p2, "orange", [self.tag,side,"P1P2_LINE","P2"])
 
 			if p1 != None and p2 != None:
 				self.draw_tools.create_myline(p1, p2, [self.tag,side,"P1P2_LINE","P1P2_LINE_LINE"])
 
 
 
-			if p3 != None:
-				self.draw_tools.create_mypoint(p3, "white", [self.tag,side,"P3P4_LINE","P1"])
+			if pat_p1 != None:
+				self.draw_tools.create_mypoint(pat_p1, "orange", [self.tag,side,"PAT_CROSS_SECTION","P1"])
+				self.draw_tools.create_mytext(pat_p1, "PAT P1", [self.tag,"PAT_CROSS_SECTION"], y_offset=-30)
 
-			if p4 != None:
-				self.draw_tools.create_mypoint(p4, "white", [self.tag,side,"P3P4_LINE","P2"])
+			if pat_p2 != None:
+				self.draw_tools.create_mypoint(pat_p2, "orange", [self.tag,side,"PAT_CROSS_SECTION","P2"])
+				self.draw_tools.create_mytext(pat_p2, "PAT P2", [self.tag,"PAT_CROSS_SECTION"], y_offset=-30)
 
-			if p3 != None and p4 != None:
-				self.draw_tools.create_myline(p3, p4, [self.tag,side,"P3P4_LINE","P3P4_LINE_LINE"])
+			if pat_p1 != None and pat_p2 != None:
+				self.draw_tools.create_myline(pat_p1, pat_p2, [self.tag,side,"PAT_CROSS_SECTION","PAT_CROSS_SECTION_LINE"])
 			
 
-			if p1 != None and p2 != None and p3 != None and p4 != None:
+			if p1 != None and p2 != None and pat_p1 != None and pat_p2 != None:
 				
-				U_p, D_p = self.draw_tools.retPointsUpDown(p3, p4)
+				U_p, D_p = self.draw_tools.retPointsUpDown(pat_p1, pat_p2)
 				L_p, R_p = self.draw_tools.retPointsLeftRight(p1, p2)
 				p_int = self.draw_tools.line_intersection((U_p, D_p), (L_p, R_p))
 
 
-				if side == "LEFT":
-					angle = self.draw_tools.create_myAngle(U_p, p_int, R_p, [self.tag,"PTILT_ANGLE"])
-				else:
-					angle = self.draw_tools.create_myAngle(L_p, p_int, U_p, [self.tag,"PTILT_ANGLE"])
+				# angle = self.draw_tools.getSmallestAngle(p1, p_int, knee_cap_line_p1)
+				
 
-				self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
+
+				if side == "LEFT":
+					# angle = self.draw_tools.create_myAngle(U_p, p_int, R_p, [self.tag,"PTILT_ANGLE"])
+					angle = self.draw_tools.getSmallestAngle(U_p, p_int, R_p)
+
+					if angle > 8:
+						angle = self.draw_tools.create_myAngle(U_p, p_int, R_p, [self.tag,"PTILT_ANGLE"])
+						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
+					else:
+						self.draw_tools.create_mytext(L_p, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
+				else:
+					angle = self.draw_tools.getSmallestAngle(L_p, p_int, U_p)
+					
+					if angle > 8:
+						angle = self.draw_tools.create_myAngle(L_p, p_int, U_p, [self.tag,"PTILT_ANGLE"])	
+						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
+					else:
+						self.draw_tools.create_mytext(R_p, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
+
+				# self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
+
 
 
 			# if p1!=None and p2!=None:
@@ -147,8 +168,8 @@ class P_TILT():
 			# 		sa_p1 = self.dict["SA"][self.op_type][side]["P1"]["P1"]				
 			# 		sa_p3 = self.dict["SA"][self.op_type][side]["P3"]["P1"]
 
-			# 		self.draw_tools.create_mypoint(sa_p1, "white", [self.tag])
-			# 		self.draw_tools.create_mypoint(sa_p3, "white", [self.tag])
+			# 		self.draw_tools.create_mypoint(sa_p1, "orange", [self.tag])
+			# 		self.draw_tools.create_mypoint(sa_p3, "orange", [self.tag])
 			# 		self.draw_tools.create_myline(sa_p1, sa_p3, [self.tag])
 					
 
@@ -157,7 +178,7 @@ class P_TILT():
 			# 		L_p, R_p = self.draw_tools.retPointsLeftRight(p1, p2)
 			# 		p_int = self.draw_tools.line_intersection((sa_p1, sa_p3), (p1, p2))
 
-			# 		# self.draw_tools.create_mypoint(p_int, "white", self.tag)
+			# 		# self.draw_tools.create_mypoint(p_int, "orange", self.tag)
 
 			# 		if side == "LEFT":
 			# 			angle = self.draw_tools.create_myAngle(L_sa, p_int, L_p, [self.tag])
@@ -212,22 +233,22 @@ class P_TILT():
 										"PRE-OP":{
 												"LEFT":	{
 															"P1P2_LINE":	{"type":"line","P1":None,"P2":None},
-															"P3P4_LINE":	{"type":"line","P1":None,"P2":None}
+															"PAT_CROSS_SECTION":	{"type":"line","P1":None,"P2":None}
 																										
 														},
 												"RIGHT":	{
 															"P1P2_LINE":	{"type":"line","P1":None,"P2":None},
-															"P3P4_LINE":	{"type":"line","P1":None,"P2":None}
+															"PAT_CROSS_SECTION":	{"type":"line","P1":None,"P2":None}
 														}
 										},
 										"POST-OP":{
 												"LEFT":	{
 															"P1P2_LINE":	{"type":"line","P1":None,"P2":None},
-															"P3P4_LINE":	{"type":"line","P1":None,"P2":None}
+															"PAT_CROSS_SECTION":	{"type":"line","P1":None,"P2":None}
 														},
 												"RIGHT":	{
 															"P1P2_LINE":	{"type":"line","P1":None,"P2":None},
-															"P3P4_LINE":	{"type":"line","P1":None,"P2":None}
+															"PAT_CROSS_SECTION":	{"type":"line","P1":None,"P2":None}
 														}
 										}
 									}
@@ -244,8 +265,8 @@ class P_TILT():
 
 			p1 = self.dict["P_TILT"][self.op_type][self.side]["P1P2_LINE"]["P1"]
 			p2 = self.dict["P_TILT"][self.op_type][self.side]["P1P2_LINE"]["P2"]
-			p3 = self.dict["P_TILT"][self.op_type][self.side]["P3P4_LINE"]["P1"]
-			p4 = self.dict["P_TILT"][self.op_type][self.side]["P3P4_LINE"]["P2"]
+			pat_p1 = self.dict["P_TILT"][self.op_type][self.side]["PAT_CROSS_SECTION"]["P1"]
+			pat_p2 = self.dict["P_TILT"][self.op_type][self.side]["PAT_CROSS_SECTION"]["P2"]
 
 			# point only has P1
 			if item_type == "line":
@@ -273,24 +294,24 @@ class P_TILT():
 						self.draw_tools.setHoverPointLabel(None)
 					return True
 
-				if p3 == None:
-					self.dict["P_TILT"][self.op_type][self.side]["P3P4_LINE"]["P1"] = P
-					if p4 == None:
-						self.draw_tools.setHoverPointLabel("P3")
+				if pat_p1 == None:
+					self.dict["P_TILT"][self.op_type][self.side]["PAT_CROSS_SECTION"]["P1"] = P
+					if pat_p2 == None:
+						self.draw_tools.setHoverPointLabel("PAT_P1")
 						self.draw_tools.setHoverPoint(P)
 						self.draw_tools.setHoverBool(True)
-					elif p4 != None:
+					elif pat_p2 != None:
 						self.draw_tools.setHoverBool(False)
 						self.draw_tools.setHoverPointLabel(None)
 					return True
 
-				if p4 == None:
-					self.dict["P_TILT"][self.op_type][self.side]["P3P4_LINE"]["P2"] = P
-					if p3 == None:
-						self.draw_tools.setHoverPointLabel("P3")
+				if pat_p2 == None:
+					self.dict["P_TILT"][self.op_type][self.side]["PAT_CROSS_SECTION"]["P2"] = P
+					if pat_p1 == None:
+						self.draw_tools.setHoverPointLabel("PAT_P1")
 						self.draw_tools.setHoverPoint(P)
 						self.draw_tools.setHoverBool(True)
-					elif p3 != None:
+					elif pat_p1 != None:
 						self.draw_tools.setHoverBool(False)
 						self.draw_tools.setHoverPointLabel(None)
 					return True
@@ -308,8 +329,8 @@ class P_TILT():
 
 				p1 = self.dict["P_TILT"][self.op_type][self.side]["P1P2_LINE"]["P1"]
 				p2 = self.dict["P_TILT"][self.op_type][self.side]["P1P2_LINE"]["P2"]
-				p3 = self.dict["P_TILT"][self.op_type][self.side]["P3P4_LINE"]["P1"]
-				p4 = self.dict["P_TILT"][self.op_type][self.side]["P3P4_LINE"]["P2"]
+				pat_p1 = self.dict["P_TILT"][self.op_type][self.side]["PAT_CROSS_SECTION"]["P1"]
+				pat_p2 = self.dict["P_TILT"][self.op_type][self.side]["PAT_CROSS_SECTION"]["P2"]
 
 				# point only has P1
 				if item_type == "line":
@@ -320,11 +341,11 @@ class P_TILT():
 					if p2 == None:
 						return (self.side + " P2")
 
-					if p3 == None:
-						return (self.side + " P3")
+					if pat_p1 == None:
+						return (self.side + " PAT P1")
 
-					if p4 == None:
-						return (self.side + " P4")
+					if pat_p2 == None:
+						return (self.side + " PAT P2")
 
 			return (self.side + " Done")
 
@@ -339,7 +360,7 @@ class P_TILT():
 			self.draw_tools.create_myline(P_stored, P_mouse, "hover_line")
 
 
-		if hover_label == "P3":
+		if hover_label == "PAT_P1":
 			self.draw_tools.clear_by_tag("hover_line")
 			self.draw_tools.create_myline(P_stored, P_mouse, "hover_line")
 
@@ -348,8 +369,8 @@ class P_TILT():
 
 		p1 = self.dict["P_TILT"][self.op_type][side]["P1P2_LINE"]["P1"]
 		p2 = self.dict["P_TILT"][self.op_type][side]["P1P2_LINE"]["P2"]
-		p3 = self.dict["P_TILT"][self.op_type][side]["P3P4_LINE"]["P1"]
-		p4 = self.dict["P_TILT"][self.op_type][side]["P3P4_LINE"]["P2"]
+		pat_p1 = self.dict["P_TILT"][self.op_type][side]["PAT_CROSS_SECTION"]["P1"]
+		pat_p2 = self.dict["P_TILT"][self.op_type][side]["PAT_CROSS_SECTION"]["P2"]
 
 		# no P1 no P2
 		# P1 but no P2
@@ -372,18 +393,18 @@ class P_TILT():
 		# no P3 no P4
 		# P3 but no P4
 		# P4 but no P3
-		if p3 == None and p4 == None:
+		if pat_p1 == None and pat_p2 == None:
 			self.draw_tools.setHoverBool(False)
 			self.draw_tools.setHoverPointLabel(None)
 
-		if p3 == None and p4 != None:
-			self.draw_tools.setHoverPointLabel("P3")
-			self.draw_tools.setHoverPoint(p4)
+		if pat_p1 == None and pat_p2 != None:
+			self.draw_tools.setHoverPointLabel("PAT_P1")
+			self.draw_tools.setHoverPoint(pat_p2)
 			self.draw_tools.setHoverBool(True)
 
-		if p4 == None and p3 != None:
-			self.draw_tools.setHoverPointLabel("P3")
-			self.draw_tools.setHoverPoint(p3)
+		if pat_p2 == None and pat_p1 != None:
+			self.draw_tools.setHoverPointLabel("PAT_P1")
+			self.draw_tools.setHoverPoint(pat_p1)
 			self.draw_tools.setHoverBool(True)
 
 
@@ -413,14 +434,14 @@ class P_TILT():
 
 		p1 = self.dict["P_TILT"][self.op_type][side]["P1P2_LINE"]["P1"]
 		p2 = self.dict["P_TILT"][self.op_type][side]["P1P2_LINE"]["P2"]
-		p3 = self.dict["P_TILT"][self.op_type][side]["P3P4_LINE"]["P1"]
-		p4 = self.dict["P_TILT"][self.op_type][side]["P3P4_LINE"]["P2"]
+		pat_p1 = self.dict["P_TILT"][self.op_type][side]["PAT_CROSS_SECTION"]["P1"]
+		pat_p2 = self.dict["P_TILT"][self.op_type][side]["PAT_CROSS_SECTION"]["P2"]
 
 
 		if "P1P2_LINE" in tags:
 			item = "P1P2_LINE"
-		elif "P3P4_LINE" in tags:
-			item = "P3P4_LINE"
+		elif "PAT_CROSS_SECTION" in tags:
+			item = "PAT_CROSS_SECTION"
 
 
 		if "P1" in tags:
@@ -430,9 +451,9 @@ class P_TILT():
 				self.drag_label = "P1"
 				self.drag_side 	= side
 
-			if item == "P3P4_LINE":
-				self.drag_point = p4
-				self.drag_label = "P3"
+			if item == "PAT_CROSS_SECTION":
+				self.drag_point = pat_p2
+				self.drag_label = "PAT_P1"
 				self.drag_side 	= side
 
 		elif "P2" in tags:
@@ -442,9 +463,9 @@ class P_TILT():
 				self.drag_label = "P2"
 				self.drag_side 	= side
 
-			if item == "P3P4_LINE":
-				self.drag_point = p3
-				self.drag_label = "P4"
+			if item == "PAT_CROSS_SECTION":
+				self.drag_point = pat_p1
+				self.drag_label = "PAT_P2"
 				self.drag_side 	= side
 		
 
@@ -459,12 +480,12 @@ class P_TILT():
 				self.draw_tools.clear_by_tag("drag_line")
 				self.draw_tools.create_myline(self.drag_point, P_mouse, "drag_line")
 		
-		if self.drag_label == "P3" or self.drag_label == "P4":
+		if self.drag_label == "PAT_P1" or self.drag_label == "PAT_P2":
 			if self.drag_point != None:
 
 				self.draw_tools.clear_by_tag("PTILT_ANGLE")
 
-				self.draw_tools.clear_by_tag("P3P4_LINE_LINE")
+				self.draw_tools.clear_by_tag("PAT_CROSS_SECTION_LINE")
 				self.draw_tools.clear_by_tag("drag_line")
 				self.draw_tools.create_myline(self.drag_point, P_mouse, "drag_line")
 				
@@ -484,13 +505,13 @@ class P_TILT():
 			self.draw()
 
 
-		if self.drag_label == "P3":
-			self.dict["P_TILT"][self.op_type][self.drag_side]["P3P4_LINE"]["P1"] = P_mouse
+		if self.drag_label == "PAT_P1":
+			self.dict["P_TILT"][self.op_type][self.drag_side]["PAT_CROSS_SECTION"]["P1"] = P_mouse
 			self.controller.save_json()
 			self.draw()
 
-		if self.drag_label == "P4":
-			self.dict["P_TILT"][self.op_type][self.drag_side]["P3P4_LINE"]["P2"] = P_mouse
+		if self.drag_label == "PAT_P2":
+			self.dict["P_TILT"][self.op_type][self.drag_side]["PAT_CROSS_SECTION"]["P2"] = P_mouse
 			self.controller.save_json()
 			self.draw()
 
