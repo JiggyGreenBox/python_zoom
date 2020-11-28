@@ -111,8 +111,8 @@ class ACOR():
 
 					if acor_p1 != None:
 						# print("P1 Found")
-						# self.draw_tools.create_mypoint(acor_p1, "white", self.tag)
-						self.draw_tools.create_mypoint(acor_p1, "white", [self.tag, side, "P1"])
+						# self.draw_tools.create_mypoint(acor_p1, "orange", self.tag)
+						self.draw_tools.create_mypoint(acor_p1, "orange", [self.tag, side, "P1"])
 
 						# join the point to the top parallel to femGuideRay
 						p_xtop = (-acor_p1[1] / slope) + acor_p1[0]
@@ -122,8 +122,8 @@ class ACOR():
 
 					if acor_p2 != None:
 						# print("P2 Found")
-						# self.draw_tools.create_mypoint(acor_p2, "white", self.tag)
-						self.draw_tools.create_mypoint(acor_p2, "white", [self.tag, side, "P2"])
+						# self.draw_tools.create_mypoint(acor_p2, "orange", self.tag)
+						self.draw_tools.create_mypoint(acor_p2, "orange", [self.tag, side, "P2"])
 						# join the point to the top parallel to femGuideRay
 						p_xtop = (-acor_p2[1] / slope) + acor_p2[0]
 						self.draw_tools.create_myline(acor_p2, [p_xtop,0], [self.tag, side, "P2_line"])
@@ -131,8 +131,8 @@ class ACOR():
 
 					if acor_p3 != None:
 						# print("P3 Found")
-						# self.draw_tools.create_mypoint(acor_p2, "white", self.tag)
-						self.draw_tools.create_mypoint(acor_p3, "white", [self.tag, side, "P3"])
+						# self.draw_tools.create_mypoint(acor_p2, "orange", self.tag)
+						self.draw_tools.create_mypoint(acor_p3, "orange", [self.tag, side, "P3"])
 
 						# join the point to the top parallel to femGuideRay
 						p_xtop = (-acor_p3[1] / slope) + acor_p3[0]
@@ -197,10 +197,10 @@ class ACOR():
 				if item_type == "guideline":
 
 					if guide_fem_p1 != None:
-						self.draw_tools.create_mypoint(guide_fem_p1, "white", [self.tag, side, "GUIDE_FEM", "P1"])
+						self.draw_tools.create_mypoint(guide_fem_p1, "orange", [self.tag, side, "GUIDE_FEM", "P1"])
 
 					if guide_fem_p2 != None:
-						self.draw_tools.create_mypoint(guide_fem_p2, "white", [self.tag, side, "GUIDE_FEM", "P2"])
+						self.draw_tools.create_mypoint(guide_fem_p2, "orange", [self.tag, side, "GUIDE_FEM", "P2"])
 
 					if guide_fem_p1 != None and guide_fem_p2 != None:						
 						# self.draw_tools.create_midpoint_line(axis_fem_top_p1, axis_fem_top_p2, axis_fem_top_m1, self.tag)
@@ -447,7 +447,7 @@ class ACOR():
 			dx, dy = self.getHorizontalDxDy(self.side)
 			H_point[0] = P_mouse[0] + dx
 			H_point[1] = P_mouse[1] + dy
-			# self.draw_tools.create_mypoint(H_point, "white", ["hover_line"])
+			# self.draw_tools.create_mypoint(H_point, "orange", ["hover_line"])
 
 			# find angle ray intersection point
 			p_int = self.draw_tools.line_intersection(
@@ -455,7 +455,7 @@ class ACOR():
 					(self.dict[self.name][self.op_type][self.side]["GUIDE_FEM"]["P1"], self.dict[self.name][self.op_type][self.side]["GUIDE_FEM"]["P2"]))
 			self.draw_tools.create_myline(P_mouse, p_int, "hover_line")
 
-			self.draw_tools.create_mypoint(p_int, "white", ["hover_line"])
+			self.draw_tools.create_mypoint(p_int, "orange", ["hover_line"])
 
 		elif hover_label == "P1" or hover_label == "P2":
 			slope = self.getFemRaySlope(self.side)
@@ -485,7 +485,7 @@ class ACOR():
 			if p_int != "":
 				self.draw_tools.clear_by_tag("hover_line")
 				self.draw_tools.create_myline(P_mouse, [p_xtop_p1,0], "hover_line")
-				self.draw_tools.create_mypoint(p_int, "white", ["hover_line"])
+				self.draw_tools.create_mypoint(p_int, "orange", ["hover_line"])
 
 		
 

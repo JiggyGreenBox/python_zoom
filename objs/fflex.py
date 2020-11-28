@@ -132,10 +132,10 @@ class FFLEX():
 			# TIB AXIS
 			# TOP
 			if axis_fem_top_p1 != None:
-				self.draw_tools.create_mypoint(axis_fem_top_p1, "white", [self.tag,side,"AXIS_FEM","TOP","P1"])
+				self.draw_tools.create_mypoint(axis_fem_top_p1, "orange", [self.tag,side,"AXIS_FEM","TOP","P1"])
 
 			if axis_fem_top_p2 != None:
-				self.draw_tools.create_mypoint(axis_fem_top_p2, "white", [self.tag,side,"AXIS_FEM","TOP","P2"])
+				self.draw_tools.create_mypoint(axis_fem_top_p2, "orange", [self.tag,side,"AXIS_FEM","TOP","P2"])
 
 			if axis_fem_top_p1 != None and axis_fem_top_p2 != None:				
 				self.draw_tools.create_midpoint_line(axis_fem_top_p1, axis_fem_top_p2, axis_fem_top_m1, [self.tag,side,"TOP_AXIS_LINE"])
@@ -145,10 +145,10 @@ class FFLEX():
 
 			# BOT
 			if axis_fem_bot_p1 != None:
-				self.draw_tools.create_mypoint(axis_fem_bot_p1, "white", [self.tag,side,"AXIS_FEM","BOT","P1"])
+				self.draw_tools.create_mypoint(axis_fem_bot_p1, "orange", [self.tag,side,"AXIS_FEM","BOT","P1"])
 
 			if axis_fem_bot_p2 != None:
-				self.draw_tools.create_mypoint(axis_fem_bot_p2, "white", [self.tag,side,"AXIS_FEM","BOT","P2"])
+				self.draw_tools.create_mypoint(axis_fem_bot_p2, "orange", [self.tag,side,"AXIS_FEM","BOT","P2"])
 
 			if axis_fem_bot_p1 != None and axis_fem_bot_p2 != None:				
 				self.draw_tools.create_midpoint_line(axis_fem_bot_p1, axis_fem_bot_p2, axis_fem_bot_m1, [self.tag,"BOT_AXIS_LINE"])
@@ -157,10 +157,10 @@ class FFLEX():
 
 
 			if fem_joint_p1 != None:
-				self.draw_tools.create_mypoint(fem_joint_p1, "white", [self.tag,side,"FEM_JOINT_LINE","P1"])
+				self.draw_tools.create_mypoint(fem_joint_p1, "orange", [self.tag,side,"FEM_JOINT_LINE","P1"])
 
 			if fem_joint_p2 != None:
-				self.draw_tools.create_mypoint(fem_joint_p2, "white", [self.tag,side,"FEM_JOINT_LINE","P2"])
+				self.draw_tools.create_mypoint(fem_joint_p2, "orange", [self.tag,side,"FEM_JOINT_LINE","P2"])
 
 			if fem_joint_p1 != None and fem_joint_p2 != None:
 				self.draw_tools.create_myline(fem_joint_p1, fem_joint_p2, [self.tag,"FEM_LINE"])

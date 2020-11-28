@@ -197,6 +197,15 @@ class DrawTools(CanvasImage):
 
 
 
+	def slope(self, point1, point2):
+		x1 = point1[0]
+		y1 = point1[1]
+		x2 = point2[0]
+		y2 = point2[1]
+		return (y2-y1)/(x2-x1)
+
+
+
 	def create_myAngle(self, point1, point2, point3, mytag, radius=50, width=3, outline="orange"):
 
 		angle = self.getAnglePoints(point1, point2, point3)
@@ -250,6 +259,14 @@ class DrawTools(CanvasImage):
 			return p1, p2
 		else:
 			return p2, p1
+
+
+	def retIsPointUp(self, p1, p2):
+		if p1[1] < p2[1]:
+			return True
+		else:
+			return False
+
 
 
 

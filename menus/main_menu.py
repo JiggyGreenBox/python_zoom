@@ -112,16 +112,16 @@ class MAIN_Menu(tk.Frame):
 		# anat_axis_cb.grid(column=1, row=14)
 
 		mech_axis_cb = Checkbutton(self, text="LABELS", variable=self.label_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_LABEL", self.label_var))
-		mech_axis_cb.grid(column=1, row=13)
+		mech_axis_cb.grid(sticky="W",column=1, row=13)
 
 		mech_axis_cb = Checkbutton(self, text="HOVER", variable=self.hover_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_HOVER", self.hover_var))
-		mech_axis_cb.grid(column=1, row=14)
+		mech_axis_cb.grid(sticky="W",column=1, row=14)
 
 		mech_axis_cb = Checkbutton(self, text="MECH AXIS", variable=self.mech_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_MECH_AXIS", self.mech_var))
-		mech_axis_cb.grid(column=1, row=15)
+		mech_axis_cb.grid(sticky="W",column=1, row=15)
 
 		anat_axis_cb = Checkbutton(self, text="ANAT AXIS", variable=self.anat_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_ANAT_AXIS", self.anat_var))
-		anat_axis_cb.grid(column=1, row=16)
+		anat_axis_cb.grid(sticky="W",column=1, row=16)
 
 		
 		

@@ -109,7 +109,7 @@ class MainWindow(ttk.Frame):
 
 
 		# remove for production
-		self.debugSetDir()
+		# self.debugSetDir()
 
 		if self.working_dir == "":
 			self.topbar.grid_forget()

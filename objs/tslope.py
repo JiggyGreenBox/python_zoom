@@ -1,4 +1,4 @@
-
+import math
 
 class TSLOPE():
 	"""docstring for ClassName"""
@@ -15,6 +15,7 @@ class TSLOPE():
 		# if not populate the dictionary
 		self.checkMasterDict()
 
+		self.tvarval = False
 
 		self.drag_point = None
 		self.drag_label = None
@@ -111,10 +112,10 @@ class TSLOPE():
 
 
 			if joint_line_p1 != None:
-				self.draw_tools.create_mypoint(joint_line_p1, "white", [self.tag,side,"TIB_JOINT_LINE","P1"])
+				self.draw_tools.create_mypoint(joint_line_p1, "orange", [self.tag,side,"TIB_JOINT_LINE","P1"])
 
 			if joint_line_p2 != None:
-				self.draw_tools.create_mypoint(joint_line_p2, "white", [self.tag,side,"TIB_JOINT_LINE","P2"])
+				self.draw_tools.create_mypoint(joint_line_p2, "orange", [self.tag,side,"TIB_JOINT_LINE","P2"])
 
 			if joint_line_p1 != None and joint_line_p2 != None:
 				self.draw_tools.create_myline(joint_line_p1, joint_line_p2, [self.tag,side,"FEM_LINE"])
@@ -124,10 +125,10 @@ class TSLOPE():
 			# TIB AXIS
 			# TOP
 			if top_axis_tib_p1 != None:
-				self.draw_tools.create_mypoint(top_axis_tib_p1, "white", [self.tag,side,"AXIS_TIB","TOP","P1"])
+				self.draw_tools.create_mypoint(top_axis_tib_p1, "orange", [self.tag,side,"AXIS_TIB","TOP","P1"])
 
 			if top_axis_tib_p2 != None:
-				self.draw_tools.create_mypoint(top_axis_tib_p2, "white", [self.tag,side,"AXIS_TIB","TOP","P2"])
+				self.draw_tools.create_mypoint(top_axis_tib_p2, "orange", [self.tag,side,"AXIS_TIB","TOP","P2"])
 
 			if top_axis_tib_p1 != None and top_axis_tib_p2 != None:				
 				self.draw_tools.create_midpoint_line(top_axis_tib_p1, top_axis_tib_p2, top_axis_tib_m1, [self.tag,side,"TOP_AXIS_LINE"])
@@ -136,10 +137,10 @@ class TSLOPE():
 
 			# BOT
 			if bot_axis_tib_p1 != None:
-				self.draw_tools.create_mypoint(bot_axis_tib_p1, "white", [self.tag,side,"AXIS_TIB","BOT","P1"])
+				self.draw_tools.create_mypoint(bot_axis_tib_p1, "orange", [self.tag,side,"AXIS_TIB","BOT","P1"])
 
 			if bot_axis_tib_p2 != None:
-				self.draw_tools.create_mypoint(bot_axis_tib_p2, "white", [self.tag,side,"AXIS_TIB","BOT","P2"])
+				self.draw_tools.create_mypoint(bot_axis_tib_p2, "orange", [self.tag,side,"AXIS_TIB","BOT","P2"])
 
 			if bot_axis_tib_p1 != None and bot_axis_tib_p2 != None:				
 				self.draw_tools.create_midpoint_line(bot_axis_tib_p1, bot_axis_tib_p2, bot_axis_tib_m1, [self.tag,side,"BOT_AXIS_LINE"])
@@ -223,6 +224,36 @@ class TSLOPE():
 
 						# save after insert
 						self.controller.save_json()
+
+					# check T-VAR-VAL
+					if self.tvarval:
+						# fem to axis intersection
+						# p_int
+						# self.draw_tools.create_mypoint(p_int, "orange", [self.tag, side, "NO-DRAG"])
+
+						# find perpendicular point
+						slope = self.draw_tools.slope(U_m1, D_m1)				
+						dy = math.sqrt(100**2/(slope**2+1))
+						dx = -slope*dy
+
+						C = [0,0]
+						C[0] = p_int[0] + dx
+						C[1] = p_int[1] + dy
+
+						if side == "RIGHT":
+							R_perpend_border = self.draw_tools.line_intersection((C, p_int), (ytop, ybot))
+							tvarval_angle = self.draw_tools.getSmallestAngle(R_perpend_border, p_int, R_p1)
+							print('RIGHT: {0:.2f}'.format(tvarval_angle))
+							self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(tvarval_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
+
+						if side == "LEFT":
+							L_perpend_border = self.draw_tools.line_intersection((C, p_int), (xtop, xbot))
+							tvarval_angle = self.draw_tools.getSmallestAngle(L_p1, p_int, L_perpend_border)
+							print('LEFT: {0:.2f}'.format(tvarval_angle))
+							self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(tvarval_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
+
+						# self.draw_tools.create_mypoint(C, "orange", [self.tag, side, "NO-DRAG"])
+
 
 
 
@@ -592,5 +623,17 @@ class TSLOPE():
 	def unset(self):
 		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)
+
+
+	def checkbox_click(self,action, val):
+
+		print('checkbox {} val{}'.format(action,val.get()))
+
+		if action == "TOGGLE_TVARVAL":
+			if val.get() == 0:
+				self.tvarval = False
+			elif val.get() == 1:
+				self.tvarval = True
+			self.draw()		
 
 		

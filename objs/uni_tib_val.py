@@ -100,10 +100,10 @@ class UNI_TIB_VAL():
 
 			# FEM JOINT LINE
 			if fem_joint_p1 != None:
-				self.draw_tools.create_mypoint(fem_joint_p1, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(fem_joint_p1, "orange", [self.tag, side, "NO-DRAG"])
 
 			if fem_joint_p2 != None:
-				self.draw_tools.create_mypoint(fem_joint_p2, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(fem_joint_p2, "orange", [self.tag, side, "NO-DRAG"])
 
 			if fem_joint_p1 != None and fem_joint_p2 != None:
 				self.draw_tools.create_myline(fem_joint_p1, fem_joint_p2, self.tag)
@@ -121,10 +121,10 @@ class UNI_TIB_VAL():
 			bot_axis_tib_m1 = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["BOT"]["M1"]
 
 			if top_axis_tib_p1 != None:
-				self.draw_tools.create_mypoint(top_axis_tib_p1, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(top_axis_tib_p1, "orange", [self.tag, side, "NO-DRAG"])
 
 			if top_axis_tib_p2 != None:
-				self.draw_tools.create_mypoint(top_axis_tib_p2, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(top_axis_tib_p2, "orange", [self.tag, side, "NO-DRAG"])
 
 			if top_axis_tib_p1 != None and top_axis_tib_p2 != None:				
 				
@@ -134,10 +134,10 @@ class UNI_TIB_VAL():
 
 			# BOT
 			if bot_axis_tib_p1 != None:
-				self.draw_tools.create_mypoint(bot_axis_tib_p1, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(bot_axis_tib_p1, "orange", [self.tag, side, "NO-DRAG"])
 
 			if bot_axis_tib_p2 != None:
-				self.draw_tools.create_mypoint(bot_axis_tib_p2, "white", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(bot_axis_tib_p2, "orange", [self.tag, side, "NO-DRAG"])
 
 			if bot_axis_tib_p1 != None and bot_axis_tib_p2 != None:				
 				# m1 = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["TOP"]["M1"]
@@ -159,7 +159,7 @@ class UNI_TIB_VAL():
 
 					# fem to axis intersection
 					p_int = self.draw_tools.line_intersection((fem_joint_p1, fem_joint_p2), (p_top, D_m1))
-					self.draw_tools.create_mypoint(p_int, "white", [self.tag, side, "NO-DRAG"])
+					self.draw_tools.create_mypoint(p_int, "orange", [self.tag, side, "NO-DRAG"])
 
 					# find parallel point
 					slope = self.slope(U_m1, D_m1)				
@@ -170,7 +170,7 @@ class UNI_TIB_VAL():
 					C[0] = p_int[0] + dx
 					C[1] = p_int[1] + dy
 
-					# self.draw_tools.create_mypoint(C, "white", [self.tag, side, "NO-DRAG"])
+					# self.draw_tools.create_mypoint(C, "orange", [self.tag, side, "NO-DRAG"])
 
 					# find L R point
 					L_fem, R_fem = self.draw_tools.retPointsLeftRight(fem_joint_p1, fem_joint_p2)

@@ -94,13 +94,13 @@ class SA():
 			p3 = self.dict["SA"][self.op_type][side]["P3"]["P1"]
 
 			if p1 != None:
-				self.draw_tools.create_mypoint(p1, "white", [self.tag, side, "P1"])
+				self.draw_tools.create_mypoint(p1, "orange", [self.tag, side, "P1"])
 
 			if p2 != None:
-				self.draw_tools.create_mypoint(p2, "white", [self.tag, side, "P2"])
+				self.draw_tools.create_mypoint(p2, "orange", [self.tag, side, "P2"])
 
 			if p3 != None:
-				self.draw_tools.create_mypoint(p3, "white", [self.tag, side, "P3"])
+				self.draw_tools.create_mypoint(p3, "orange", [self.tag, side, "P3"])
 
 
 			if p1 != None and p2 != None:
@@ -112,7 +112,7 @@ class SA():
 			if p1!=None and p2!=None and p3!=None:
 
 				angle = self.draw_tools.create_myAngle(p1, p2, p3, [self.tag, "P1P2P3_angle"])
-				self.draw_tools.create_mytext(p2, '{0:.2f}'.format(angle), [self.tag, "P1P2P3_angle"], y_offset=-60)
+				self.draw_tools.create_mytext(p2, '{0:.2f}'.format(angle), [self.tag, "P1P2P3_angle"], y_offset=-60, color="blue")
 				
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type][side]["SA"] == None:

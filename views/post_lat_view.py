@@ -8,12 +8,15 @@ from menus.acor_menu import ACOR_Menu
 from menus.isr_menu import ISR_Menu
 from menus.tslope_menu import TSLOPE_Menu
 from menus.fflex_menu import FFLEX_Menu
+from menus.fflex_ukr_menu import FFLEX_UKR_Menu
 
 # objs
 from objs.acor import ACOR
 from objs.isr import ISR
 from objs.tslope import TSLOPE
 from objs.fflex import FFLEX
+from objs.fflex_ukr import FFLEX_UKR
+
 
 # choose file
 from tkinter import filedialog
@@ -46,7 +49,7 @@ class POST_LAT_View(tk.Frame):
 		self.topbar.pack(anchor=E, fill=X, expand=False, side=TOP)
 
 		# make buttons in the topbar
-		for x,text in enumerate(["ACOR","ISR","TSLOPE","FFLEX"]):
+		for x,text in enumerate(["ACOR","ISR","TSLOPE","FFLEX","FFLEX_UKR"]):
 			# print(text)
 			button = ttk.Button(self.topbar, text=text, command=lambda text=text: self.show_menu(text))
 			button.grid(column=x, row=1)
@@ -69,7 +72,8 @@ class POST_LAT_View(tk.Frame):
 					ACOR_Menu,
 					ISR_Menu,
 					TSLOPE_Menu,
-					FFLEX_Menu
+					FFLEX_Menu,
+					FFLEX_UKR_Menu
 				):
 			page_name = M.__name__
 			menu = M(parent=self.navbar, controller=self)
@@ -86,7 +90,8 @@ class POST_LAT_View(tk.Frame):
 					ACOR,
 					ISR,
 					TSLOPE,
-					FFLEX
+					FFLEX,
+					FFLEX_UKR
 				):
 			obj_name = Obj.__name__
 			# print(obj_name)
@@ -200,4 +205,11 @@ class POST_LAT_View(tk.Frame):
 
 		# update canvas object for children
 		for obj in self.objects:			
-			self.objects[obj].update_canvas(self.canvas)		
+			self.objects[obj].update_canvas(self.canvas)
+
+
+	def checkbox_click(self, obj_name, action, val):
+		try:
+			self.objects[obj_name].checkbox_click(action,val)
+		except Exception as e:
+			raise e

@@ -88,7 +88,7 @@ class HKA():
 						angle = self.draw_tools.create_myAngle(hip, hka_point, ankle_m1, self.tag)
 						
 					# , radius = 50, width = 3):
-					# self.canvas.create_text(x-r,y+r,fill="white", text='{0:.2f}'.format(t1), tags="tag")
+					# self.canvas.create_text(x-r,y+r,fill="orange", text='{0:.2f}'.format(t1), tags="tag")
 					
 					# self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side]["KNEE"]["P1"], '{0:.2f}'.format(angle), self.tag, x_offset=60)
 					self.draw_tools.create_mytext(hka_point, '{0:.2f}'.format(angle), self.tag, x_offset=60, color="blue")

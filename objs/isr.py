@@ -102,15 +102,15 @@ class ISR():
 
 			
 			if p1 != None:
-				self.draw_tools.create_mypoint(p1, "white", [self.tag, side, "P1"])
+				self.draw_tools.create_mypoint(p1, "orange", [self.tag, side, "P1"])
 				isP1 = True
 
 			if p2 != None:
-				self.draw_tools.create_mypoint(p2, "white", [self.tag, side, "P2"])
+				self.draw_tools.create_mypoint(p2, "orange", [self.tag, side, "P2"])
 				isP2 = True
 
 			if p3 != None:
-				self.draw_tools.create_mypoint(p3, "white", [self.tag, side, "P3"])
+				self.draw_tools.create_mypoint(p3, "orange", [self.tag, side, "P3"])
 				isP3 = True
 
 
