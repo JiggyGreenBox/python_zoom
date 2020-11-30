@@ -5,6 +5,7 @@ class SA():
 	def __init__(self, draw_tools, master_dict, controller, op_type):
 		self.name = "SA"
 		self.tag = "sa"
+		self.menu_label = "SA_Menu"
 		self.draw_tools = draw_tools
 		self.dict = master_dict
 		self.controller = controller
@@ -31,7 +32,7 @@ class SA():
 				self.controller.save_json()
 				# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), "SA_Menu")
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 		self.draw_tools.clear_by_tag(self.tag)
 		self.draw()
 
@@ -41,13 +42,13 @@ class SA():
 		print(action)
 		if action == "SET-LEFT":
 			self.side = "LEFT"
-			self.controller.updateMenuLabel(self.getNextLabel(), "SA_Menu")
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			self.regainHover(self.side)
 			return
 
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"
-			self.controller.updateMenuLabel(self.getNextLabel(), "SA_Menu")
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			self.regainHover(self.side)
 			return
 
@@ -80,7 +81,7 @@ class SA():
 		self.controller.save_json()
 		self.draw()
 		self.regainHover(self.side)
-		self.controller.updateMenuLabel(self.getNextLabel(), "SA_Menu")
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 	
 	def draw(self):
 

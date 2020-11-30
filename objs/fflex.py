@@ -5,6 +5,7 @@ class FFLEX():
 	def __init__(self, draw_tools, master_dict, controller, op_type):
 		self.name = "FFLEX"
 		self.tag = "fflex"
+		self.menu_label = "FFLEX_Menu"
 		self.draw_tools = draw_tools
 		self.dict = master_dict
 		self.controller = controller
@@ -31,7 +32,7 @@ class FFLEX():
 				self.controller.save_json()
 				# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), "FFLEX_Menu")
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 		self.draw_tools.clear_by_tag(self.tag)
 		self.draw()
 		# print(self.dict)
@@ -42,14 +43,14 @@ class FFLEX():
 		print(action)
 		if action == "SET-LEFT":
 			self.side = "LEFT"
-			self.controller.updateMenuLabel(self.getNextLabel(), "FFLEX_Menu")
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			self.draw()
 			self.regainHover(self.side)
 			return # avoid clear,draw,json_save
 
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"
-			self.controller.updateMenuLabel(self.getNextLabel(), "FFLEX_Menu")
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			self.draw()
 			self.regainHover(self.side)
 			return # avoid clear,draw,json_save
@@ -96,7 +97,7 @@ class FFLEX():
 		self.regainHover(self.side)
 
 		self.controller.save_json()
-		self.controller.updateMenuLabel(self.getNextLabel(), "FFLEX_Menu")
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 
 	
 	def draw(self):

@@ -95,7 +95,15 @@ class PRE_SKY_View(tk.Frame):
 
 	def save_json(self):
 		'''bubble to top'''
-		self.controller.save_json()		
+		self.controller.save_json()
+
+
+	def escapeFunc(self):
+		if self.canvas != "":
+			try:
+				self.canvas.cur_obj.escapeObjFunc()
+			except Exception as e:
+				raise e	
 
 
 	def is_set_med_image(self):
@@ -185,3 +193,10 @@ class PRE_SKY_View(tk.Frame):
 		# update canvas object for children
 		for obj in self.objects:			
 			self.objects[obj].update_canvas(self.canvas)
+
+
+	def checkbox_click(self, obj_name, action, val):
+		try:
+			self.objects[obj_name].checkbox_click(action,val)
+		except Exception as e:
+			raise e				

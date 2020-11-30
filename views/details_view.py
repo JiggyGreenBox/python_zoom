@@ -129,4 +129,7 @@ class DETAILS_View(tk.Frame):
 				self.e_age.insert(0, age)
 
 			if sex != None:				
-				self.sex.set(sex)										
+				self.sex.set(sex)
+
+
+	

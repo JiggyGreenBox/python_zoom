@@ -236,7 +236,7 @@ class PRE_SCANNO_View(tk.Frame):
 		self.canvas.grid(row=0, column=0)  # show widget
 
 		# update canvas object for children
-		for obj in self.objects:			
+		for obj in self.objects:
 			self.objects[obj].update_canvas(self.canvas)
 
 

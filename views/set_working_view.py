@@ -35,3 +35,7 @@ class SET_WORKING_View(tk.Frame):
 
 	def update_dict(self, master_dict):
 		pass
+
+
+	def checkbox_click(self, obj_name, action, val):
+		pass

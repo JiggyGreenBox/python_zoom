@@ -5,6 +5,7 @@ class ISR():
 	def __init__(self, draw_tools, master_dict, controller, op_type):
 		self.name = "ISR"
 		self.tag = "isr"
+		self.menu_label = "ISR_Menu"
 		self.draw_tools = draw_tools
 		self.dict = master_dict
 		self.controller = controller
@@ -30,7 +31,7 @@ class ISR():
 				self.controller.save_json()
 				# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), "ISR_Menu")
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 		self.draw_tools.clear_by_tag(self.tag)
 		self.draw()
 
@@ -40,13 +41,13 @@ class ISR():
 		print(action)
 		if action == "SET-LEFT":
 			self.side = "LEFT"
-			self.controller.updateMenuLabel(self.getNextLabel(), "ISR_Menu")
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			self.regainHover(self.side)
 			return # avoid clear,draw,json_save
 
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"			
-			self.controller.updateMenuLabel(self.getNextLabel(), "ISR_Menu")
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			self.regainHover(self.side)
 			return # avoid clear,draw,json_save
 
@@ -82,7 +83,7 @@ class ISR():
 		self.regainHover(self.side)
 
 		self.controller.save_json()
-		self.controller.updateMenuLabel(self.getNextLabel(), "ISR_Menu")			
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)			
 
 
 

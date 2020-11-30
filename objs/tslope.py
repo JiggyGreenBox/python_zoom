@@ -5,6 +5,7 @@ class TSLOPE():
 	def __init__(self, draw_tools, master_dict, controller, op_type):
 		self.name = "TSLOPE"
 		self.tag = "tslope"
+		self.menu_label = "TSLOPE_Menu"
 		self.draw_tools = draw_tools
 		self.dict = master_dict
 		self.controller = controller
@@ -15,7 +16,7 @@ class TSLOPE():
 		# if not populate the dictionary
 		self.checkMasterDict()
 
-		self.tvarval = False
+		self.tflexext = False
 
 		self.drag_point = None
 		self.drag_label = None
@@ -33,7 +34,7 @@ class TSLOPE():
 				self.controller.save_json()
 				# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), "TSLOPE_Menu")
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 		self.draw_tools.clear_by_tag(self.tag)
 		self.draw()		
 		# print(self.dict)
@@ -44,12 +45,12 @@ class TSLOPE():
 		print(action)
 		if action == "SET-LEFT":
 			self.side = "LEFT"
-			self.controller.updateMenuLabel(self.getNextLabel(), "TSLOPE_Menu")
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			return # avoid clear,draw,json_save
 
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"
-			self.controller.updateMenuLabel(self.getNextLabel(), "TSLOPE_Menu")
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			return # avoid clear,draw,json_save
 
 
@@ -83,7 +84,7 @@ class TSLOPE():
 			self.dict["TSLOPE"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["P2"] = None
 			self.dict["TSLOPE"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["M1"] = None
 
-		self.controller.updateMenuLabel(self.getNextLabel(), "TSLOPE_Menu")
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 		self.draw_tools.clear_by_tag(self.tag)
 		self.controller.save_json()
 		self.draw()
@@ -226,7 +227,7 @@ class TSLOPE():
 						self.controller.save_json()
 
 					# check T-VAR-VAL
-					if self.tvarval:
+					if self.tflexext:
 						# fem to axis intersection
 						# p_int
 						# self.draw_tools.create_mypoint(p_int, "orange", [self.tag, side, "NO-DRAG"])
@@ -242,15 +243,15 @@ class TSLOPE():
 
 						if side == "RIGHT":
 							R_perpend_border = self.draw_tools.line_intersection((C, p_int), (ytop, ybot))
-							tvarval_angle = self.draw_tools.getSmallestAngle(R_perpend_border, p_int, R_p1)
-							print('RIGHT: {0:.2f}'.format(tvarval_angle))
-							self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(tvarval_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
+							tflexext_angle = self.draw_tools.getSmallestAngle(R_perpend_border, p_int, R_p1)
+							print('RIGHT: {0:.2f}'.format(tflexext_angle))
+							self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(tflexext_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
 
 						if side == "LEFT":
 							L_perpend_border = self.draw_tools.line_intersection((C, p_int), (xtop, xbot))
-							tvarval_angle = self.draw_tools.getSmallestAngle(L_p1, p_int, L_perpend_border)
-							print('LEFT: {0:.2f}'.format(tvarval_angle))
-							self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(tvarval_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
+							tflexext_angle = self.draw_tools.getSmallestAngle(L_p1, p_int, L_perpend_border)
+							print('LEFT: {0:.2f}'.format(tflexext_angle))
+							self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(tflexext_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
 
 						# self.draw_tools.create_mypoint(C, "orange", [self.tag, side, "NO-DRAG"])
 
@@ -629,11 +630,11 @@ class TSLOPE():
 
 		print('checkbox {} val{}'.format(action,val.get()))
 
-		if action == "TOGGLE_TVARVAL":
+		if action == "TOGGLE_TFLEXEXT":
 			if val.get() == 0:
-				self.tvarval = False
+				self.tflexext = False
 			elif val.get() == 1:
-				self.tvarval = True
+				self.tflexext = True
 			self.draw()		
 
 		

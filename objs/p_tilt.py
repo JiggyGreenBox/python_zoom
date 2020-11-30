@@ -5,6 +5,7 @@ class P_TILT():
 	def __init__(self, draw_tools, master_dict, controller, op_type):
 		self.name = "P_TILT"
 		self.tag = "p_tilt"
+		self.menu_label =  "P_TILT_Menu"
 		self.draw_tools = draw_tools
 		self.dict = master_dict
 		self.controller = controller
@@ -27,7 +28,7 @@ class P_TILT():
 				self.controller.save_json()
 				# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), "P_TILT_Menu")
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 		self.draw_tools.clear_by_tag(self.tag)
 		self.draw()
 
@@ -37,14 +38,14 @@ class P_TILT():
 		print(action)
 		if action == "SET-LEFT":
 			self.side = "LEFT"
-			self.controller.updateMenuLabel(self.getNextLabel(), "P_TILT_Menu")
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			self.draw()
 			self.regainHover(self.side)
 			return
 
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"
-			self.controller.updateMenuLabel(self.getNextLabel(), "P_TILT_Menu")
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			self.draw()
 			self.regainHover(self.side)
 			return
@@ -87,7 +88,7 @@ class P_TILT():
 		self.draw()
 		self.regainHover(self.side)
 		self.controller.save_json()
-		self.controller.updateMenuLabel(self.getNextLabel(), "P_TILT_Menu")
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 
 	
 	def draw(self):

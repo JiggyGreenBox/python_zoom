@@ -5,6 +5,7 @@ class VCA():
 	def __init__(self, draw_tools, master_dict, controller, op_type):
 		self.name = "VCA"
 		self.tag = "vca"
+		self.menu_label = "VCA_Menu"
 		self.draw_tools = draw_tools
 		self.dict = master_dict
 		self.controller = controller
@@ -53,7 +54,7 @@ class VCA():
 				self.controller.save_json()
 				# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), "VCA_Menu")
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 		self.draw_tools.clear_by_tag(self.tag)
 		self.draw()
 
@@ -126,7 +127,7 @@ class VCA():
 			self.draw()
 			self.controller.save_json()
 
-		self.controller.updateMenuLabel(self.getNextLabel(), "VCA_Menu")
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 
 
 
