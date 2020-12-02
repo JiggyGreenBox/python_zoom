@@ -14,7 +14,7 @@ class UNI_FEM_VAL():
 
 		# check if master dictionary has values
 		# if not populate the dictionary
-		self.checkMasterDict()
+		self.checkMasterDict() 
 
 
 	def click(self, event):
@@ -166,7 +166,7 @@ class UNI_FEM_VAL():
 
 					# fem line extension
 					p_line_bot = self.draw_tools.line_intersection((fem_line_p1, fem_line_p2), (xbot, ybot))
-					self.draw_tools.create_myline(D_fem_p1, p_line_bot, self.tag)
+					self.draw_tools.create_myline(D_fem_p1, p_line_bot, [self.tag,"FEM_LINE"])
 
 					# fem-axis and fem-line intersection
 					p_int = self.draw_tools.line_intersection((U_fem_m1, p_axis_bot), (D_fem_p1, p_line_bot))
@@ -183,16 +183,19 @@ class UNI_FEM_VAL():
 						angle = self.draw_tools.create_myAngle(U_fem_m1, p_int, U_fem_p1, self.tag)
 						
 						
-					self.draw_tools.create_mytext(U_fem_p1, '{0:.2f}'.format(angle), self.tag, x_offset=-60)
+					
 
 					# check if intersection point is above or below
 					# if above then
 					# else 
 					check_U, check_D = self.draw_tools.retPointsUpDown(p_int, U_fem_m1)
 					if(p_int == check_U):
-						print("point is above so +ve")
+						print('{} point is above so +ve'.format(side))
 					else:
-						print("point is below so -ve")
+						angle = angle * -1
+						print('{} point is below so -ve'.format(side))
+
+					self.draw_tools.create_mytext(U_fem_p1, '{0:.2f}'.format(angle), self.tag, y_offset=-60, color="blue")
 
 			
 			
@@ -368,7 +371,7 @@ class UNI_FEM_VAL():
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
 			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line")
 
-			# bot_axis_tib_m1 = self.dict[self.name][self.op_type][self.side]["AXIS_TIB"]["BOT"]["M1"]
+			# bot_axis_tib_m1 = self.dict[self.name][self.op_type][self.side]["AXIS_FEM"]["BOT"]["M1"]
 			axis_fem_bot_m1 = self.dict["UNI_FEM_VAL"][self.op_type][self.side]["AXIS_FEM"]["BOT"]["M1"]
 
 			if axis_fem_bot_m1 != None:
@@ -511,6 +514,42 @@ class UNI_FEM_VAL():
 				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line")		
 	def drag_stop(self, P_mouse):
 		self.draw_tools.clear_by_tag("drag_line")
+
+		# FEM JOINT LINE
+		if self.drag_label == "P1_JOINT":
+			self.dict["UNI_FEM_VAL"][self.op_type][self.drag_side]["FEM_JOINT_LINE"]["P1"] = P_mouse
+			self.controller.save_json()
+			self.draw()
+
+		if self.drag_label == "P2_JOINT":
+			self.dict["UNI_FEM_VAL"][self.op_type][self.drag_side]["FEM_JOINT_LINE"]["P2"] = P_mouse
+			self.controller.save_json()
+			self.draw()
+
+
+		if self.drag_label == "P1_AXIS_FEM_TOP":
+			self.dict["UNI_FEM_VAL"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["P1"] = P_mouse
+			self.dict["UNI_FEM_VAL"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.controller.save_json()
+			self.draw()
+
+		if self.drag_label == "P2_AXIS_FEM_TOP":
+			self.dict["UNI_FEM_VAL"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["P2"] = P_mouse
+			self.dict["UNI_FEM_VAL"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.controller.save_json()
+			self.draw()
+
+		if self.drag_label == "P1_AXIS_FEM_BOT":
+			self.dict["UNI_FEM_VAL"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["P1"] = P_mouse
+			self.dict["UNI_FEM_VAL"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.controller.save_json()
+			self.draw()
+
+		if self.drag_label == "P2_AXIS_FEM_BOT":
+			self.dict["UNI_FEM_VAL"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["P2"] = P_mouse
+			self.dict["UNI_FEM_VAL"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.controller.save_json()
+			self.draw()
 
 
 	def update_canvas(self, draw_tools):
