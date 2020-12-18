@@ -136,7 +136,7 @@ class PRE_SCANNO_View(tk.Frame):
 		'''bubble to top'''
 		self.controller.save_json()
 
-	def escapeFunc(self):
+	def escapeFunc(self):		
 		if self.canvas != "":
 			try:
 				self.canvas.cur_obj.escapeObjFunc()
@@ -186,6 +186,12 @@ class PRE_SCANNO_View(tk.Frame):
 
 			dir_name = os.path.dirname(image)
 			rel_path = os.path.relpath(image, dir_name)
+
+			# only allow images from the working dir
+			if self.controller.working_dir != dir_name:
+				print("mis-match")
+				self.warningBox("Image not from working directory")
+				return
 
 			# current session
 			self.med_image = image			

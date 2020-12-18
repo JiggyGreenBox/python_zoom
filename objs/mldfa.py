@@ -170,10 +170,10 @@ class MLDFA():
 
 
 					# check if value exists
-					if self.dict["EXCEL"][self.op_type][side]["aLDFA"] == None:
+					if self.dict["EXCEL"][self.op_type][side]["mLDFA"] == None:
 
 						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-						self.dict["EXCEL"][self.op_type][side]["aLDFA"]	 	= '{0:.2f}'.format(angle)
+						self.dict["EXCEL"][self.op_type][side]["mLDFA"]	 	= '{0:.2f}'.format(angle)
 
 						# save after insert
 						self.controller.save_json()

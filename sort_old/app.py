@@ -403,39 +403,20 @@ class MainWindow(ttk.Frame):
 		f_name 		= ""
 		disp_age 	= ""
 		disp_sex 	= ""
-		# "DETAILS": {
-		#         "F_NAME": "kim",
-		#         "L_NAME": "jong",
-		#         "AGE": "45",
-		#         "SEX": "M"
-	
+
 		# NAME
-		if self.master_dict["DETAILS"]["L_NAME"] != None:
+		if self.master_dict["DETAILS"]["L_NAME"] in self.master_dict:
 			l_name = self.master_dict["DETAILS"]["L_NAME"]
-		else:
-			print("lname not fpund")
-		if self.master_dict["DETAILS"]["F_NAME"] != None:
+		if self.master_dict["DETAILS"]["F_NAME"] in self.master_dict:
 			f_name = self.master_dict["DETAILS"]["F_NAME"]
-		else:
-			print("fname not fpund")
 		disp_name 	= (l_name + " " + f_name).upper()
-		print('disp_name = {}'.format(disp_name))
 
 		# AGE
-		if self.master_dict["DETAILS"]["AGE"] != None:
+		if self.master_dict["DETAILS"]["AGE"] in self.master_dict:
 			disp_age = self.master_dict["DETAILS"]["AGE"]
 		# SEX
-		if self.master_dict["DETAILS"]["SEX"] != None:
+		if self.master_dict["DETAILS"]["SEX"] in self.master_dict:
 			disp_sex = self.master_dict["DETAILS"]["SEX"]
-
-		'''
-		l_name = self.master_dict["DETAILS"]["L_NAME"]
-		f_name = self.master_dict["DETAILS"]["F_NAME"]
-		disp_name 	= (l_name + " " + f_name).upper()
-		print('disp_name = {}'.format(disp_name))
-		disp_age = self.master_dict["DETAILS"]["AGE"]		
-		disp_sex = self.master_dict["DETAILS"]["SEX"]
-		'''
 
 
 		name 		= []
@@ -443,7 +424,7 @@ class MainWindow(ttk.Frame):
 		gender 		= []
 		leg_side 	= []
 		k_l_grade 	= []
-		mdate 		= []
+		mtype 		= []
 		prosthesis 	= []
 		hka 		= []
 		mad 		= []
@@ -472,189 +453,148 @@ class MainWindow(ttk.Frame):
 		ptilt 		= []
 		ppba 		= []
 		miscell 	= []
-		post_hka	= []
-		post_mad 	= []
-		post_mnsa 	= []
-		post_vca 	= []
-		post_afta 	= []
-		post_mldfa 	= []
-		post_aldfa 	= []
-		post_eadfa 	= []
-		post_eadfps = []
-		post_eadfds = []
-		post_jda 	= []
-		post_tamd 	= []
-		post_mpta 	= []
-		post_kjlo 	= []
-		post_kaol 	= []
-		post_eadta 	= []
-		post_eadtps = []
-		post_eadtds = []
-		post_fflex  = []
-		post_pcor 	= []
-		post_acor 	= []
-		post_tslope = []
-		post_isr 	= []
-		post_sa 	= []
-		post_ptilt 	= []
-		post_ppba 	= []
-		post_miscel = []
 		fvarval 	= []
 		tvarval 	= []
 		ffleext 	= []
 		tfleext 	= []
 
 		mdict = {
-					"NAME"			:	name,
-					"AGE"			:	age,
-					"GENDER"		:	gender,
-					"SIDE"			:	leg_side,
-					"K-L GRADE"		:	k_l_grade,
-					"DATE"			:	mdate,
-					"PROSTHESIS"	:	prosthesis,
-					"HKA"			:	hka,
-					"MAD"			:	mad,
-					"MNSA"			:	mnsa,
-					"VCA"			:	vca,
-					"aFTA"			:	afta,
-					"mLDFA"			:	mldfa,
-					"aLDFA"			:	aldfa,
-					"EADFA"			:	eadfa,
-					"EADFPS"		:	eadfps,
-					"EADFDS"		:	eadfds,
-					"JDA"			:	jda,
-					"TAMD"			:	tamd,
-					"MPTA"			:	mpta,
-					"KJLO"			:	kjlo,
-					"KAOL"			:	kaol,
-					"EADTA"			:	eadta,
-					"EADTPS"		:	eadtps,
-					"EADTDS"		:	eadtds,
-					"FFLEX"			:	fflex,
-					"PCOR"			:	pcor,
-					"ACOR"			:	acor,
-					"TSLOPE"		:	tslope,
-					"ISR"			:	isr,
-					"SA"			:	sa,
-					"PTILT"			:	ptilt,
-					"PPBA"			:	ppba,
-					"MISCELL"		:	miscell,
-					"Post-HKA"		:	post_hka,
-					"Post-MAD"		:	post_mad,
-					"Post-MNSA"		:	post_mnsa,
-					"Post-VCA"		:	post_vca,
-					"Post-aFTA"		:	post_afta,
-					"Post-mLDFA"	:	post_mldfa,
-					"Post-aLDFA"	:	post_aldfa,
-					"Post-EADFA"	:	post_eadfa,
-					"Post-EADFPS"	:	post_eadfps,
-					"Post-EADFDS"	:	post_eadfds,
-					"Post-JDA"		:	post_jda,
-					"Post-TAMD"		:	post_tamd,
-					"Post-MPTA"		:	post_mpta,
-					"Post-KJLO"		:	post_kjlo,
-					"Post-KAOL"		:	post_kaol,
-					"Post-EADTA"	:	post_eadta,
-					"Post-EADTPS"	:	post_eadtps,
-					"Post-EADTDS"	:	post_eadtds,
-					"Post-FFLEX	"	:	post_fflex,
-					"Post-PCOR"		:	post_pcor,
-					"Post-ACOR"		:	post_acor,
-					"Post-TSLOPE"	:	post_tslope,
-					"Post-ISR"		:	post_isr,
-					"Post-SA"		:	post_sa,
-					"Post-PTILT"	:	post_ptilt,
-					"Post-PPBA"		:	post_ppba,
-					"Post-MISCELL"	:	post_miscel,
-					"Post-F FLE/EXT"	:	ffleext,
-					"Post-F VAR/VAL"	:	fvarval,
-					"Post-T FLE/EXT"	:	tfleext,
-					"Post-T VAR/VAL"	:	tvarval
+					"NAME"			:name,
+					"AGE"			:age,
+					"GENDER"		:gender,
+					"SIDE"			:leg_side,
+					"K-L GRADE"		:k_l_grade,
+					"TYPE"			:mtype,
+					"PROSTHESIS"	:prosthesis,
+					"HKA"			:hka,
+					"MAD"			:mad,
+					"MNSA"			:mnsa,
+					"VCA"			:vca,
+					"aFTA"			:afta,
+					"mLDFA"			:mldfa,
+					"aLDFA"			:aldfa,
+					"EADFA"			:eadfa,
+					"EADFPS"		:eadfps,
+					"EADFDS"		:eadfds,
+					"JDA"			:jda,
+					"TAMD"			:tamd,
+					"MPTA"			:mpta,
+					"KJLO"			:kjlo,
+					"KAOL"			:kaol,
+					"EADTA"			:eadta,
+					"EADTPS"		:eadtps,
+					"EADTDS"		:eadtds,
+					"FFLEX"			:fflex,
+					"PCOR"			:pcor,
+					"ACOR"			:acor,
+					"TSLOPE"		:tslope,
+					"ISR"			:isr,
+					"SA"			:sa,
+					"PTILT"			:ptilt,
+					"PPBA"			:ppba,
+					"MISCELL"		:miscell,
+					"FVAR/VAL"		:fvarval,
+					"TVAR/VAL"		:tvarval,
+					"FFLE/EXT"		:ffleext,
+					"TFLE/EXT"		:tfleext
 				}
 
 
 
 		# Iterate
-		# for op_type in ["PRE-OP", "POST-OP"]:
-		for side in ["RIGHT", "LEFT"]:
+		for op_type in ["PRE-OP", "POST-OP"]:
+			for side in ["RIGHT", "LEFT"]:
 
-			# master list				
-			# if self.master_dict["EXCEL"][op_type][side]["HASDATA"] == True:
+				# master list
+				# m_list = []
 
+				# data for leg exists
+				# print('{} {}'.format(op_type,side))
+				# print(self.master_dict["EXCEL"][op_type][side]["HASDATA"])
+				if self.master_dict["EXCEL"][op_type][side]["HASDATA"] == True:
 
-			x = ""					
+					# # local list
+					# l_list = []
 
-			name.append(disp_name)
-			age.append(disp_age)
-			gender.append(disp_sex)
-			leg_side.append(side[0])
-			k_l_grade.append(x)
-			mdate.append(x)
-			prosthesis.append(x)
-			hka.append(self.master_dict["EXCEL"]["PRE-OP"][side]["HKA"])
-			mad.append(self.master_dict["EXCEL"]["PRE-OP"][side]["MAD"])
-			mnsa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["MNSA"])
-			vca.append(self.master_dict["EXCEL"]["PRE-OP"][side]["VCA"])
-			afta.append(self.master_dict["EXCEL"]["PRE-OP"][side]["aFTA"])
-			mldfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["mLDFA"])
-			aldfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["aLDFA"])
-			eadfa.append(x)
-			eadfps.append(x)
-			eadfds.append(x)
-			jda.append(x)
-			tamd.append(self.master_dict["EXCEL"]["PRE-OP"][side]["TAMD"])
-			mpta.append(self.master_dict["EXCEL"]["PRE-OP"][side]["MPTA"])
-			kjlo.append(self.master_dict["EXCEL"]["PRE-OP"][side]["KJLO"])
-			kaol.append(self.master_dict["EXCEL"]["PRE-OP"][side]["KAOL"])
-			eadta.append(x)
-			eadtps.append(x)
-			eadtds.append(x)
-			fflex.append(self.master_dict["EXCEL"]["PRE-OP"][side]["FFLEX"])
-			pcor.append(self.master_dict["EXCEL"]["PRE-OP"][side]["PCOR"])
-			acor.append(self.master_dict["EXCEL"]["PRE-OP"][side]["ACOR"])
-			tslope.append(self.master_dict["EXCEL"]["PRE-OP"][side]["TSLOPE"])
-			isr.append(self.master_dict["EXCEL"]["PRE-OP"][side]["ISR"])
-			sa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["SA"])
-			ptilt.append(self.master_dict["EXCEL"]["PRE-OP"][side]["PTILT"])
-			ppba.append(self.master_dict["EXCEL"]["PRE-OP"][side]["PPBA"])
-			miscell.append(x)
+					# # iterate over fields
+					# for obj in self.master_dict["EXCEL"][op_type][side]:
 
-			
-			post_hka.append(self.master_dict["EXCEL"]["POST-OP"][side]["HKA"])
-			post_mad.append(x)
-			post_mnsa.append(self.master_dict["EXCEL"]["POST-OP"][side]["MNSA"])
-			post_vca.append(self.master_dict["EXCEL"]["POST-OP"][side]["VCA"])
-			post_afta.append(self.master_dict["EXCEL"]["POST-OP"][side]["aFTA"])
-			post_mldfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["mLDFA"])
-			post_aldfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["aLDFA"])
-			post_eadfa.append(x)
-			post_eadfps.append(x)
-			post_eadfds.append(x)
-			post_jda.append(x)
-			post_tamd.append(self.master_dict["EXCEL"]["POST-OP"][side]["TAMD"])
-			post_mpta.append(self.master_dict["EXCEL"]["POST-OP"][side]["MPTA"])
-			post_kjlo.append(self.master_dict["EXCEL"]["POST-OP"][side]["KJLO"])
-			post_kaol.append(self.master_dict["EXCEL"]["POST-OP"][side]["KAOL"])
-			post_eadta.append(x)
-			post_eadtps.append(x)
-			post_eadtds.append(x)
-			post_fflex.append(self.master_dict["EXCEL"]["POST-OP"][side]["FFLEX"])
-			post_pcor.append(self.master_dict["EXCEL"]["POST-OP"][side]["PCOR"])
-			post_acor.append(self.master_dict["EXCEL"]["POST-OP"][side]["ACOR"])
-			post_tslope.append(self.master_dict["EXCEL"]["POST-OP"][side]["TSLOPE"])
-			post_isr.append(self.master_dict["EXCEL"]["POST-OP"][side]["ISR"])
-			post_sa.append(self.master_dict["EXCEL"]["POST-OP"][side]["SA"])
-			post_ptilt.append(self.master_dict["EXCEL"]["POST-OP"][side]["PTILT"])
-			post_ppba.append(self.master_dict["EXCEL"]["POST-OP"][side]["PPBA"])
-			post_miscel.append(x)
+					# 	# ignore bool fields
+					# 	if obj == "HASDATA": continue
 
-			fvarval.append(x)
-			tvarval.append(x)
-			ffleext.append(x)
-			tfleext.append(x)
+					# 	if self.master_dict["EXCEL"][op_type][side][obj] == None:
+					# 		l_list.append("")
+					# 	else:
+					# 		l_list.append(self.master_dict["EXCEL"][op_type][side][obj])
+					x = ""					
+
+					name.append(disp_name)
+					age.append(disp_age)
+					gender.append(disp_sex)
+					leg_side.append(side[0])
+					k_l_grade.append(x)
+					mtype.append(op_type)
+					prosthesis.append(x)
+					hka.append(self.master_dict["EXCEL"][op_type][side]["HKA"])
+					mad.append(self.master_dict["EXCEL"][op_type][side]["MAD"])
+					mnsa.append(self.master_dict["EXCEL"][op_type][side]["MNSA"])
+					vca.append(self.master_dict["EXCEL"][op_type][side]["VCA"])
+					afta.append(self.master_dict["EXCEL"][op_type][side]["aFTA"])
+					mldfa.append(self.master_dict["EXCEL"][op_type][side]["mLDFA"])
+					aldfa.append(self.master_dict["EXCEL"][op_type][side]["aLDFA"])
+					eadfa.append(x)
+					eadfps.append(x)
+					eadfds.append(x)
+					jda.append(x)
+					tamd.append(self.master_dict["EXCEL"][op_type][side]["TAMD"])
+					mpta.append(self.master_dict["EXCEL"][op_type][side]["MPTA"])
+					kjlo.append(self.master_dict["EXCEL"][op_type][side]["KJLO"])
+					kaol.append(self.master_dict["EXCEL"][op_type][side]["KAOL"])
+					eadta.append(x)
+					eadtps.append(x)
+					eadtds.append(x)
+					fflex.append(x)
+					pcor.append(x)
+					acor.append(x)
+					tslope.append(self.master_dict["EXCEL"][op_type][side]["TSLOPE"])
+					isr.append(x)
+					sa.append(self.master_dict["EXCEL"][op_type][side]["SA"])
+					ptilt.append(self.master_dict["EXCEL"][op_type][side]["PTILT"])
+					ppba.append(x)
+					miscell.append(x)
+					fvarval.append(x)
+					tvarval.append(x)
+					ffleext.append(x)
+					tfleext.append(x)
 
 
-		# print(mtype)
+		# self.master_dict["EXCEL"][op_type][side]["MAD"]
+		# self.master_dict["EXCEL"][op_type][side]["VCA"]
+		# self.master_dict["EXCEL"][op_type][side]["aFTA"]
+
+		# self.master_dict["EXCEL"][op_type][side]["EADFA"]
+		# self.master_dict["EXCEL"][op_type][side]["EADFPS"]
+		# self.master_dict["EXCEL"][op_type][side]["EADFDS"]
+		# self.master_dict["EXCEL"][op_type][side]["JDA"]
+
+		# self.master_dict["EXCEL"][op_type][side]["EADTA"]
+		# self.master_dict["EXCEL"][op_type][side]["EADTPS"]
+		# self.master_dict["EXCEL"][op_type][side]["EADTDS"]
+		# self.master_dict["EXCEL"][op_type][side]["FFLEX"]
+		# self.master_dict["EXCEL"][op_type][side]["PCOR"]
+		# self.master_dict["EXCEL"][op_type][side]["ACOR"]
+
+		# self.master_dict["EXCEL"][op_type][side]["ISR"]
+
+		# self.master_dict["EXCEL"][op_type][side]["PPBA"]
+		# self.master_dict["EXCEL"][op_type][side]["MISCELL"]
+		# self.master_dict["EXCEL"][op_type][side]["FVAR/VAL"]
+		# self.master_dict["EXCEL"][op_type][side]["TVAR/VAL"]
+		# self.master_dict["EXCEL"][op_type][side]["FFLE/EXT"]
+		# self.master_dict["EXCEL"][op_type][side]["TFLE/EXT"]
+
+
+		print(mtype)
 
 
 		df = pd.DataFrame(mdict)

@@ -153,6 +153,12 @@ class POST_LAT_View(tk.Frame):
 
 			dir_name = os.path.dirname(image)
 			rel_path = os.path.relpath(image, dir_name)
+
+			# only allow images from the working dir
+			if self.controller.working_dir != dir_name:
+				print("mis-match")
+				self.warningBox("Image not from working directory")
+				return
 		
 			# current session
 			self.med_image = image			

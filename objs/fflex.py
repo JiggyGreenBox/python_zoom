@@ -191,7 +191,9 @@ class FFLEX():
 					# intersection point
 					p_int = self.draw_tools.line_intersection(
 						(U_m1, D_m1),
-						(fem_joint_p1, fem_joint_p2))				
+						(fem_joint_p1, fem_joint_p2))
+
+					angle = ""
 
 					# find and draw angles
 					if side == "LEFT":
@@ -203,14 +205,14 @@ class FFLEX():
 						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=30, y_offset=60, color="blue")
 
 
-					# # check if value exists
+					# check if value exists
+					if angle != "" and self.dict["EXCEL"][self.op_type][side]["FFLEX"] == None:
 					# if self.dict["EXCEL"][self.op_type][side]["TSLOPE"] == None:
-
-					# 	self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					# 	self.dict["EXCEL"][self.op_type][side]["TSLOPE"]	= '{0:.2f}'.format(angle)
-
-					# 	# save after insert
-					# 	self.controller.save_json()
+						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+						self.dict["EXCEL"][self.op_type][side]["FFLEX"]	= '{0:.2f}'.format(angle)
+						# save after insert
+						self.controller.save_json()
+						
 
 
 	def hover(self, P_mouse, P_stored, hover_label):

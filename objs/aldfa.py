@@ -111,10 +111,10 @@ class ALDFA():
 					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, y_offset=-60, color="blue")	
 
 				# check if value exists
-				if self.dict["EXCEL"][self.op_type][side]["mLDFA"] == None:
+				if self.dict["EXCEL"][self.op_type][side]["aLDFA"] == None:
 
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["mLDFA"]	 	= '{0:.2f}'.format(angle)
+					self.dict["EXCEL"][self.op_type][side]["aLDFA"]	 	= '{0:.2f}'.format(angle)
 
 					# save after insert
 					self.controller.save_json()

@@ -165,11 +165,20 @@ class TAMD():
 				angle = self.draw_tools.getSmallestAngle(top_m1, p_int, tib_knee)
 				self.draw_tools.create_mytext(ankle_m1, '{0:.2f}'.format(angle), [self.tag,side,"TAMD_ANGLE"], x_offset=60, y_offset=60, color="blue")
 
+
+
+				# check if value exists
+				if self.dict["EXCEL"][self.op_type][side]["TAMD"] == None:
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["TAMD"]	 	= '{0:.2f}'.format(angle)
+					# save after insert
+					self.controller.save_json()
+
+
 				# # find angle ray intersection point
 				# p_int = self.draw_tools.line_intersection(
 				# 		(p_tib, bot_m1),
 				# 		(tib_joint_p1, tib_joint_p2))
-
 
 			# 	L_tib, R_tib = self.draw_tools.retPointsLeftRight(tib_joint_p1, tib_joint_p2)
 

@@ -138,7 +138,7 @@ class P_TILT():
 
 				# angle = self.draw_tools.getSmallestAngle(p1, p_int, knee_cap_line_p1)
 				
-
+				angle = ""
 
 				if side == "LEFT":
 					# angle = self.draw_tools.create_myAngle(U_p, p_int, R_p, [self.tag,"PTILT_ANGLE"])
@@ -159,6 +159,13 @@ class P_TILT():
 						self.draw_tools.create_mytext(R_p, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
 
 				# self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
+
+				# check if value exists
+				if angle != "" and self.dict["EXCEL"][self.op_type][side]["PTILT"] == None:
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["PTILT"]	 	= '{0:.2f}'.format(angle)
+					# save after insert
+					self.controller.save_json()
 
 
 

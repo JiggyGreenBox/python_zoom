@@ -189,7 +189,18 @@ class ACOR():
 							print('pcor_val = {}'.format(pcor_val))
 
 							# self.draw_tools.create_mytext(self.getAnchorPoint(side), y_offset=-50, color="blue", mytext='ACOR {}'.format(acor_val), mytag=[self.tag, side, "P_label"])
+							
 
+							# check if value exists
+							if self.dict["EXCEL"][self.op_type][side]["ACOR"] == None:
+								self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+								self.dict["EXCEL"][self.op_type][side]["ACOR"]	= '{0:.2f}'.format(acor_val)								
+								self.controller.save_json()
+
+							if self.dict["EXCEL"][self.op_type][side]["PCOR"] == None:
+								self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+								self.dict["EXCEL"][self.op_type][side]["PCOR"]	= '{0:.2f}'.format(pcor_val)								
+								self.controller.save_json()
 
 
 

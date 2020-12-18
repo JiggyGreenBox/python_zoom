@@ -38,9 +38,9 @@ class DETAILS_View(tk.Frame):
 
 
 		self.sex = tk.StringVar()
-		m_btn = tk.Radiobutton(self, text='M', variable=self.sex, value="M")		
+		m_btn = tk.Radiobutton(self, text='M', variable=self.sex, value="M",tristatevalue="x")
 		m_btn.grid(row=3, column=1)
-		f_btn = tk.Radiobutton(self, text='F', variable=self.sex, value="F")		
+		f_btn = tk.Radiobutton(self, text='F', variable=self.sex, value="F",tristatevalue="x")
 		f_btn.grid(row=4, column=1)
 
 

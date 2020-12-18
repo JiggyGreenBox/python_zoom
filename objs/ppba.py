@@ -123,6 +123,14 @@ class PPBA():
 
 				angle = self.draw_tools.getSmallestAngle(p1, p_int, knee_cap_line_p1)
 				self.draw_tools.create_mytext(p2, '{0:.2f}'.format(angle), [self.tag,"PPBA_ANGLE"], y_offset=-40, color="blue")
+
+				# check if value exists
+				if self.dict["EXCEL"][self.op_type][side]["PPBA"] == None:
+				# if self.dict["EXCEL"][self.op_type][side]["TSLOPE"] == None:
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["PPBA"]	= '{0:.2f}'.format(angle)
+					# save after insert
+					self.controller.save_json()
 			
 
 			# if isP2 and isP3:							
