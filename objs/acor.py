@@ -190,7 +190,7 @@ class ACOR():
 
 							# self.draw_tools.create_mytext(self.getAnchorPoint(side), y_offset=-50, color="blue", mytext='ACOR {}'.format(acor_val), mytag=[self.tag, side, "P_label"])
 							
-
+							
 							# check if value exists
 							if self.dict["EXCEL"][self.op_type][side]["ACOR"] == None:
 								self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
@@ -722,3 +722,11 @@ class ACOR():
 		self.draw_tools.setHoverPointLabel(None)
 		self.draw_tools.setHoverBool(False)
 		self.draw_tools.clear_by_tag(self.tag)
+
+
+	def drag_start(self, tags):
+		pass		
+	def drag(self, P_mouse):
+		pass
+	def drag_stop(self, P_mouse):
+		self.draw()

@@ -163,6 +163,11 @@ class TAMD():
 				p_int = self.draw_tools.line_intersection((bot_m1, top_m1),(tib_knee, ankle_m1))
 
 				angle = self.draw_tools.getSmallestAngle(top_m1, p_int, tib_knee)
+				angle2 = self.draw_tools.getAnglePoints(top_m1, p_int, tib_knee)
+				angle3 = self.draw_tools.getAnglePointsNeg(top_m1, p_int, tib_knee)
+				print('angle1: {0:.2f}'.format(angle))
+				print('angle2: {0:.2f}'.format(angle2))
+				print('angle3: {0:.2f}'.format(angle3))
 				self.draw_tools.create_mytext(ankle_m1, '{0:.2f}'.format(angle), [self.tag,side,"TAMD_ANGLE"], x_offset=60, y_offset=60, color="blue")
 
 

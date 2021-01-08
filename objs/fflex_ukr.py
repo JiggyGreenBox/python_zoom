@@ -227,12 +227,16 @@ class FFLEX_UKR():
 
 					angle = self.draw_tools.getSmallestAngle(D_peg_m1, p_int, D_m1)
 					
+					fflex = 0
+					fflex_ext = 0
 
 					# intersection point is above
 					# FLEXTION
 					# positive value
 					# for eg: if flextion is 2deg then FFLEX:90-2, FFLEX-EXT:2
 					if(self.draw_tools.retIsPointUp(p_int,D_peg_m1)):
+						fflex 		= angle
+						fflex_ext 	= 90-angle
 						self.draw_tools.create_mytext(axis_peg_bot_p2, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
 						self.draw_tools.create_mytext(axis_peg_bot_p2, '{0:.2f}'.format(90-angle), [self.tag,"PTILT_ANGLE"], y_offset=120, color="blue")
 					# intersection point is below
@@ -242,9 +246,24 @@ class FFLEX_UKR():
 					# for eg: if flextion is 7deg then, FFLEX-EXT:-(7), FFLEX:90-(-7)=97, 
 					else:
 						angle = angle*-1
+						fflex 		= angle
+						fflex_ext 	= 90-angle
 						self.draw_tools.create_mytext(axis_peg_bot_p2, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
 						self.draw_tools.create_mytext(axis_peg_bot_p2, '{0:.2f}'.format(90-angle), [self.tag,"PTILT_ANGLE"], y_offset=120, color="blue")
 						
+					# save to excel
+					if fflex != 0 and fflex_ext != 0:
+						if self.dict["EXCEL"][self.op_type][side]["FFLEX"] == None:
+							self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+							self.dict["EXCEL"][self.op_type][side]["FFLEX"]	= '{0:.2f}'.format(fflex)								
+							self.controller.save_json() 
+
+
+						if self.dict["EXCEL"][self.op_type][side]["FFLE/EXT"] == None:
+							self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+							self.dict["EXCEL"][self.op_type][side]["FFLE/EXT"]	= '{0:.2f}'.format(fflex_ext)								
+							self.controller.save_json()
+
 
 
 
@@ -317,6 +336,18 @@ class FFLEX_UKR():
 		if hover_label == "P1_fem":
 			self.draw_tools.clear_by_tag("hover_line")
 			self.draw_tools.create_myline(P_stored, P_mouse, "hover_line")
+
+		# peg hover
+		# top
+		if hover_label == "P1_peg_top":
+			self.draw_tools.clear_by_tag("hover_line")
+			m = self.draw_tools.midpoint(P_stored, P_mouse)
+			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line")
+		# bot
+		if hover_label == "P1_peg_bot":
+			self.draw_tools.clear_by_tag("hover_line")
+			m = self.draw_tools.midpoint(P_stored, P_mouse)
+			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line")
 
 	def regainHover(self, side):
 		pass
@@ -462,34 +493,34 @@ class FFLEX_UKR():
 				if axis_peg_top_p1 == None:
 					# axis_fem_top_p1 = P					
 					self.dict["FFLEX_UKR"][self.op_type][self.side]["AXIS_PEG"]["TOP"]["P1"] = P
-					# self.draw_tools.setHoverPointLabel("P1_top")
-					# self.draw_tools.setHoverPoint(P)
-					# self.draw_tools.setHoverBool(True)
+					self.draw_tools.setHoverPointLabel("P1_peg_top")
+					self.draw_tools.setHoverPoint(P)
+					self.draw_tools.setHoverBool(True)
 					return True
 
 				# check if P2 is None
 				if axis_peg_top_p2 == None:
 					self.dict["FFLEX_UKR"][self.op_type][self.side]["AXIS_PEG"]["TOP"]["M1"] = self.draw_tools.midpoint(self.dict["FFLEX_UKR"][self.op_type][self.side]["AXIS_PEG"]["TOP"]["P1"], P)
 					self.dict["FFLEX_UKR"][self.op_type][self.side]["AXIS_PEG"]["TOP"]["P2"] = P
-					# self.draw_tools.setHoverBool(False)
-					# self.draw_tools.setHoverPointLabel(None)
+					self.draw_tools.setHoverBool(False)
+					self.draw_tools.setHoverPointLabel(None)
 					return True
 
 				# PEG BOT
 				# check if P1 is None
 				if axis_peg_bot_p1 == None:
 					self.dict["FFLEX_UKR"][self.op_type][self.side]["AXIS_PEG"]["BOT"]["P1"] = P
-					# self.draw_tools.setHoverPointLabel("P1_bot")
-					# self.draw_tools.setHoverPoint(P)
-					# self.draw_tools.setHoverBool(True)
+					self.draw_tools.setHoverPointLabel("P1_peg_bot")
+					self.draw_tools.setHoverPoint(P)
+					self.draw_tools.setHoverBool(True)
 					return True
 
 				# check if P2 is None
 				if axis_peg_bot_p2 == None:
 					self.dict["FFLEX_UKR"][self.op_type][self.side]["AXIS_PEG"]["BOT"]["M1"] = self.draw_tools.midpoint(self.dict["FFLEX_UKR"][self.op_type][self.side]["AXIS_PEG"]["BOT"]["P1"], P)
 					self.dict["FFLEX_UKR"][self.op_type][self.side]["AXIS_PEG"]["BOT"]["P2"] = P
-					# self.draw_tools.setHoverBool(False)
-					# self.draw_tools.setHoverPointLabel(None)
+					self.draw_tools.setHoverBool(False)
+					self.draw_tools.setHoverPointLabel(None)
 					return True
 
 

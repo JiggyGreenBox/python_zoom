@@ -648,10 +648,13 @@ class MainWindow(ttk.Frame):
 			post_ppba.append(self.master_dict["EXCEL"]["POST-OP"][side]["PPBA"])
 			post_miscel.append(x)
 
-			fvarval.append(x)
-			tvarval.append(x)
-			ffleext.append(x)
-			tfleext.append(x)
+			fvarval.append(self.master_dict["EXCEL"]["POST-OP"][side]["FVAR/VAL"])
+			tvarval.append(self.master_dict["EXCEL"]["POST-OP"][side]["TVAR/VAL"])
+			ffleext.append(self.master_dict["EXCEL"]["POST-OP"][side]["FFLE/EXT"])
+			tfleext.append(self.master_dict["EXCEL"]["POST-OP"][side]["TFLE/EXT"])
+
+			
+
 
 
 		# print(mtype)

@@ -219,11 +219,8 @@ class TSLOPE():
 
 					# check if value exists
 					if self.dict["EXCEL"][self.op_type][side]["TSLOPE"] == None:
-
 						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
 						self.dict["EXCEL"][self.op_type][side]["TSLOPE"]	= '{0:.2f}'.format(angle)
-
-						# save after insert
 						self.controller.save_json()
 
 					# check T-VAR-VAL
@@ -241,6 +238,8 @@ class TSLOPE():
 						C[0] = p_int[0] + dx
 						C[1] = p_int[1] + dy
 
+						tflexext_angle = -1
+
 						if side == "RIGHT":
 							R_perpend_border = self.draw_tools.line_intersection((C, p_int), (ytop, ybot))
 							tflexext_angle = self.draw_tools.getSmallestAngle(R_perpend_border, p_int, R_p1)
@@ -253,7 +252,12 @@ class TSLOPE():
 							print('LEFT: {0:.2f}'.format(tflexext_angle))
 							self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(tflexext_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
 
-						# self.draw_tools.create_mypoint(C, "orange", [self.tag, side, "NO-DRAG"])
+						# save TFLE/EXT to excel
+						if tflexext_angle != -1:							
+							if self.dict["EXCEL"][self.op_type][side]["TFLE/EXT"] == None:
+								self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+								self.dict["EXCEL"][self.op_type][side]["TFLE/EXT"]	= '{0:.2f}'.format(tflexext_angle)
+								self.controller.save_json()						
 
 
 

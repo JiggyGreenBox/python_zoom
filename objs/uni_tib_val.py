@@ -196,6 +196,14 @@ class UNI_TIB_VAL():
 						self.draw_tools.create_mytext(TibP_R, '{0:.2f}'.format(tib_line_axis_angle), self.tag, y_offset=80, color="blue")
 
 
+					# save to excel
+					# T-VAR-VAL
+					if self.dict["EXCEL"][self.op_type][side]["TVAR/VAL"] == None:
+						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+						self.dict["EXCEL"][self.op_type][side]["TVAR/VAL"]	= '{0:.2f}'.format(tflexext)
+						self.controller.save_json()					
+
+
 
 					'''
 					# fem to axis intersection

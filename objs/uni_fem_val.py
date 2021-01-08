@@ -197,6 +197,13 @@ class UNI_FEM_VAL():
 
 					self.draw_tools.create_mytext(U_fem_p1, '{0:.2f}'.format(angle), self.tag, y_offset=-60, color="blue")
 
+					# F-VAR-VAL
+					if self.dict["EXCEL"][self.op_type][side]["FVAR/VAL"] == None:
+						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+						self.dict["EXCEL"][self.op_type][side]["FVAR/VAL"]	= '{0:.2f}'.format(angle)
+						self.controller.save_json()
+					
+
 			
 			
 
