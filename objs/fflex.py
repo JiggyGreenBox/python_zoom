@@ -32,8 +32,7 @@ class FFLEX():
 				self.controller.save_json()
 				# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
-		self.draw_tools.clear_by_tag(self.tag)
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
 		self.draw()
 		# print(self.dict)
 
@@ -91,7 +90,8 @@ class FFLEX():
 			self.dict["FFLEX"][self.op_type]["RIGHT"]["FEM_JOINT_LINE"]["P2"] = None
 			self.side = "RIGHT"
 
-				
+		# delete excel data from pat.json
+		self.dict["EXCEL"][self.op_type][self.side]["FFLEX"] = None
 		
 		self.draw()		
 		self.regainHover(self.side)
@@ -542,12 +542,14 @@ class FFLEX():
 
 		# FEM JOINT LINE
 		if self.drag_label == "P1_FEM":
-			self.dict["FFLEX"][self.op_type][self.drag_side]["FEM_JOINT_LINE"]["P1"] = P_mouse
+			self.dict["FFLEX"][self.op_type][self.drag_side]["FEM_JOINT_LINE"]["P1"] = P_mouse			
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLEX"] = None		# delete excel data from pat.json
 			self.controller.save_json()
 			self.draw()
 
 		if self.drag_label == "P2_FEM":
 			self.dict["FFLEX"][self.op_type][self.drag_side]["FEM_JOINT_LINE"]["P2"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLEX"] = None		# delete excel data from pat.json
 			self.controller.save_json()
 			self.draw()
 
@@ -555,24 +557,28 @@ class FFLEX():
 		if self.drag_label == "P1_AXIS_FEM_TOP":
 			self.dict["FFLEX"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["P1"] = P_mouse
 			self.dict["FFLEX"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLEX"] = None		# delete excel data from pat.json
 			self.controller.save_json()
 			self.draw()
 
 		if self.drag_label == "P2_AXIS_FEM_TOP":
 			self.dict["FFLEX"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["P2"] = P_mouse
 			self.dict["FFLEX"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLEX"] = None		# delete excel data from pat.json
 			self.controller.save_json()
 			self.draw()
 
 		if self.drag_label == "P1_AXIS_FEM_BOT":
 			self.dict["FFLEX"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["P1"] = P_mouse
 			self.dict["FFLEX"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLEX"] = None		# delete excel data from pat.json
 			self.controller.save_json()
 			self.draw()
 
 		if self.drag_label == "P2_AXIS_FEM_BOT":
 			self.dict["FFLEX"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["P2"] = P_mouse
 			self.dict["FFLEX"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLEX"] = None		# delete excel data from pat.json
 			self.controller.save_json()
 			self.draw()
 

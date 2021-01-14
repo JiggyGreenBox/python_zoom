@@ -34,69 +34,69 @@ class MAIN:
 										"PRE-OP": 	{
 													"LEFT":	{
 															"HIP":		{"type":"point","P1":None},
-															"FEM_KNEE":	{"type":"point","P1":None},
-															"TIB_KNEE":	{"type":"point","P1":None},
-															"ANKLE":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 															"AXIS_FEM":	{
 																			"type":	"axis",
 																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
 																		},
+															"FEM_KNEE":	{"type":"point","P1":None},
+															"TIB_KNEE":	{"type":"point","P1":None},
 															"AXIS_TIB":	{
 																			"type":	"axis",
 																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
-																		}
+																		},
+															"ANKLE":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
 															},
 													"RIGHT":{
 															"HIP":		{"type":"point","P1":None},
-															"FEM_KNEE":	{"type":"point","P1":None},
-															"TIB_KNEE":	{"type":"point","P1":None},
-															"ANKLE":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 															"AXIS_FEM":	{
 																			"type":	"axis",
 																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
 																		},
+															"FEM_KNEE":	{"type":"point","P1":None},
+															"TIB_KNEE":	{"type":"point","P1":None},
 															"AXIS_TIB":	{
 																			"type":	"axis",
 																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
-																		}
+																		},
+															"ANKLE":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
 															}
 												},
 										"POST-OP": 	{
 													"LEFT":	{
 															"HIP":		{"type":"point","P1":None},
-															"FEM_KNEE":	{"type":"point","P1":None},
-															"TIB_KNEE":	{"type":"point","P1":None},
-															"ANKLE":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 															"AXIS_FEM":	{
 																			"type":	"axis",
 																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
 																		},
+															"FEM_KNEE":	{"type":"point","P1":None},
+															"TIB_KNEE":	{"type":"point","P1":None},
 															"AXIS_TIB":	{
 																			"type":	"axis",
 																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
-																		}
+																		},
+															"ANKLE":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
 															},
 													"RIGHT":{
 															"HIP":		{"type":"point","P1":None},
-															"FEM_KNEE":	{"type":"point","P1":None},
-															"TIB_KNEE":	{"type":"point","P1":None},
-															"ANKLE":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 															"AXIS_FEM":	{
 																			"type":	"axis",
 																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
 																		},
+															"FEM_KNEE":	{"type":"point","P1":None},
+															"TIB_KNEE":	{"type":"point","P1":None},
 															"AXIS_TIB":	{
 																			"type":	"axis",
 																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
-																		}
+																		},
+															"ANKLE":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
 															}
 													}
 												
@@ -171,51 +171,61 @@ class MAIN:
 		if action == "DEL-LEFT-HIP":
 			self.dict["MAIN"][self.op_type]["LEFT"]["HIP"]["P1"] = None
 			self.side = "LEFT"
+			self.updateExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.side)
 
 		if action == "DEL-RIGHT-HIP":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["HIP"]["P1"] = None
 			self.side = "RIGHT"
+			self.updateExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.side)
 
 		if action == "DEL-LEFT-FEM-KNEE":
 			self.dict["MAIN"][self.op_type]["LEFT"]["FEM_KNEE"]["P1"] = None
 			self.side = "LEFT"
+			self.updateExcelValues(["HKA", "VCA", "mLDFA"], self.side)
 
 		if action == "DEL-RIGHT-FEM-KNEE":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["FEM_KNEE"]["P1"] = None
 			self.side = "RIGHT"
+			self.updateExcelValues(["HKA", "VCA", "mLDFA"], self.side)
 
 
 		if action == "DEL-LEFT-TIB-KNEE":
 			self.dict["MAIN"][self.op_type]["LEFT"]["TIB_KNEE"]["P1"] = None
 			self.side = "LEFT"
+			self.updateExcelValues(["HKA", "TAMD", "MPTA"], self.side)
 
 		if action == "DEL-RIGHT-TIB-KNEE":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["TIB_KNEE"]["P1"] = None
 			self.side = "RIGHT"
+			self.updateExcelValues(["HKA", "TAMD", "MPTA"], self.side)
 
 		if action == "DEL-LEFT-ANKLE":
 			self.dict["MAIN"][self.op_type]["LEFT"]["ANKLE"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["ANKLE"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["ANKLE"]["M1"] = None
 			self.side = "LEFT"
+			self.updateExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL"], self.side)
 
 		if action == "DEL-RIGHT-ANKLE":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["ANKLE"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["ANKLE"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["ANKLE"]["M1"] = None
 			self.side = "RIGHT"
+			self.updateExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL"], self.side)
 
 		if action == "DEL-LEFT-FEM-TOP":
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_FEM"]["TOP"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_FEM"]["TOP"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_FEM"]["TOP"]["M1"] = None
 			self.side = "LEFT"
+			self.updateExcelValues(["MNSA", "aFTA", "aLDFA"], self.side)
 
 		if action == "DEL-RIGHT-FEM-TOP":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_FEM"]["TOP"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_FEM"]["TOP"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_FEM"]["TOP"]["M1"] = None
 			self.side = "RIGHT"
+			self.updateExcelValues(["MNSA", "aFTA", "aLDFA"], self.side)
 
 
 		if action == "DEL-LEFT-FEM-BOT":
@@ -223,12 +233,14 @@ class MAIN:
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_FEM"]["BOT"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_FEM"]["BOT"]["M1"] = None
 			self.side = "LEFT"
+			self.updateExcelValues(["MNSA", "aFTA", "aLDFA"], self.side)
 
 		if action == "DEL-RIGHT-FEM-BOT":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_FEM"]["BOT"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_FEM"]["BOT"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_FEM"]["BOT"]["M1"] = None
 			self.side = "RIGHT"
+			self.updateExcelValues(["MNSA", "aFTA", "aLDFA"], self.side)
 
 
 		if action == "DEL-LEFT-TIB-TOP":
@@ -236,24 +248,28 @@ class MAIN:
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_TIB"]["TOP"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_TIB"]["TOP"]["M1"] = None
 			self.side = "LEFT"
+			self.updateExcelValues(["aFTA", "TAMD"], self.side)
 
 		if action == "DEL-RIGHT-TIB-TOP":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_TIB"]["TOP"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_TIB"]["TOP"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_TIB"]["TOP"]["M1"] = None
 			self.side = "RIGHT"
+			self.updateExcelValues(["aFTA", "TAMD"], self.side)
 
 		if action == "DEL-LEFT-TIB-BOT":
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_TIB"]["BOT"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_TIB"]["BOT"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_TIB"]["BOT"]["M1"] = None
 			self.side = "LEFT"
+			self.updateExcelValues(["aFTA", "TAMD"], self.side)
 
 		if action == "DEL-RIGHT-TIB-BOT":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["M1"] = None
 			self.side = "RIGHT"
+			self.updateExcelValues(["aFTA", "TAMD"], self.side)
 
 
 		
@@ -909,52 +925,65 @@ class MAIN:
 
 		if self.drag_label == "HIP":
 			self.dict["MAIN"][self.op_type][self.drag_side]["HIP"]["P1"] = P_mouse
+			self.updateExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.drag_side)		# clear excel values
 			
 		elif self.drag_label == "FEM_KNEE":
 			self.dict["MAIN"][self.op_type][self.drag_side]["FEM_KNEE"]["P1"] = P_mouse
+			self.updateExcelValues(["HKA", "VCA", "mLDFA"], self.drag_side)		# clear excel values
 
 		elif self.drag_label == "TIB_KNEE":
 			self.dict["MAIN"][self.op_type][self.drag_side]["TIB_KNEE"]["P1"] = P_mouse
+			self.updateExcelValues(["HKA", "TAMD", "MPTA"], self.drag_side)		# clear excel values
 
 
 		elif self.drag_label == "P1_ANKLE":
 			self.dict["MAIN"][self.op_type][self.drag_side]["ANKLE"]["P1"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["ANKLE"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.updateExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL"], self.drag_side)		# clear excel values
 		elif self.drag_label == "P2_ANKLE":
 			self.dict["MAIN"][self.op_type][self.drag_side]["ANKLE"]["P2"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["ANKLE"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.updateExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL"], self.drag_side)		# clear excel values
 
 
 		elif self.drag_label == "P1_AXIS_FEM_TOP":
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["P1"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.updateExcelValues(["MNSA", "aFTA", "aLDFA"], self.drag_side)		# clear excel values
 		elif self.drag_label == "P2_AXIS_FEM_TOP":
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["P2"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.updateExcelValues(["MNSA", "aFTA", "aLDFA"], self.drag_side)		# clear excel values
 
 
 		elif self.drag_label == "P1_AXIS_FEM_BOT":
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["P1"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.updateExcelValues(["MNSA", "aFTA", "aLDFA"], self.drag_side)		# clear excel values
 		elif self.drag_label == "P2_AXIS_FEM_BOT":
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["P2"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.updateExcelValues(["MNSA", "aFTA", "aLDFA"], self.drag_side)		# clear excel values
 
 
 		elif self.drag_label == "P1_AXIS_TIB_TOP":
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_TIB"]["TOP"]["P1"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_TIB"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.updateExcelValues(["aFTA", "TAMD"], self.drag_side)		# clear excel values
 		elif self.drag_label == "P2_AXIS_TIB_TOP":
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_TIB"]["TOP"]["P2"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_TIB"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.updateExcelValues(["aFTA", "TAMD"], self.drag_side)		# clear excel values
 
 
 		elif self.drag_label == "P1_AXIS_TIB_BOT":
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_TIB"]["BOT"]["P1"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_TIB"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.updateExcelValues(["aFTA", "TAMD"], self.drag_side)		# clear excel values
 		elif self.drag_label == "P2_AXIS_TIB_BOT":
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_TIB"]["BOT"]["P2"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_TIB"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.updateExcelValues(["aFTA", "TAMD"], self.drag_side)		# clear excel values
 
 		self.controller.save_json()
 		self.draw()
@@ -997,4 +1026,40 @@ class MAIN:
 			elif val.get() == 1:
 				self.draw_hover = True
 			self.draw()
+
+
+	def updateExcelValues(self, del_list, side=None):
+
+		# HKA 		hip, tib-knee, fem-knee, ankle
+		# MNSA 		fem-top-bot, hip
+		# VCA 		hip, fem-knee
+		# AFTA 		fem-top-bot, tib-top-bot
+		# MLDFA 	hip, fem-knee
+		# ALDFA 	fem-top-bot
+		# TAMD 		tib-top-bot, tib-knee, ankle
+		# MPTA 		tib-knee, ankle
+		# KJLO 		ankle
+		# KAOL 		ankle
+
+
+		# hip 			HKA, MNSA, VCA, MLDFA
+		# fem-top-bot	MNSA, AFTA, ALDFA
+		# fem-knee 		HKA, VCA, MLDFA
+		# tib-knee 		HKA, TAMD, MPTA
+		# tib-top-bot 	AFTA, TAMD
+		# ankle 		HKA, TAMD, MPTA, KJLO, KAOL
+
+		for key in del_list:
+			print(key)
+
+			if side != None:
+				print(side)
+				self.dict["EXCEL"][self.op_type][side][key] = None
+			else:
+				print("left and right")
+				self.dict["EXCEL"][self.op_type]["LEFT"][key] = None
+				self.dict["EXCEL"][self.op_type]["RIGHT"][key] = None
+
+
+
 

@@ -31,8 +31,7 @@ class ISR():
 				self.controller.save_json()
 				# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
-		self.draw_tools.clear_by_tag(self.tag)
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
 		self.draw()
 
 
@@ -77,8 +76,11 @@ class ISR():
 			self.dict[self.name][self.op_type]["RIGHT"]["P3"]["P1"] = None
 			self.side = "RIGHT"
 
-		# self.draw_tools.clear_by_tag(self.tag)		
-		
+
+		# delete excel data from pat.json	
+		self.dict["EXCEL"][self.op_type][self.side]["ISR"] = None
+
+
 		self.draw()
 		self.regainHover(self.side)
 
@@ -375,17 +377,20 @@ class ISR():
 		# # FEM JOINT LINE
 		if self.drag_label == "P1":
 			self.dict["ISR"][self.op_type][self.drag_side]["P1"]["P1"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["ISR"] = None	# delete excel data from pat.json
 			self.controller.save_json()
 			self.draw()
 
 		if self.drag_label == "P2":
 			self.dict["ISR"][self.op_type][self.drag_side]["P2"]["P1"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["ISR"] = None	# delete excel data from pat.json
 			self.controller.save_json()
 			self.draw()
 
 
 		if self.drag_label == "P3":
-			self.dict["ISR"][self.op_type][self.drag_side]["P3"]["P1"] = P_mouse			
+			self.dict["ISR"][self.op_type][self.drag_side]["P3"]["P1"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["ISR"] = None	# delete excel data from pat.json	
 			self.controller.save_json()
 			self.draw()
 

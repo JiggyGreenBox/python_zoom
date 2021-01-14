@@ -237,9 +237,13 @@ class MLDFA():
 		self.draw_tools.clear_by_tag("drag_line")
 
 		if self.drag_label == "P1_MLDFA":
-			self.dict["MLDFA"][self.op_type][self.drag_side]["FEM_JOINT_LINE"]["P1"] = P_mouse			
+			self.dict["MLDFA"][self.op_type][self.drag_side]["FEM_JOINT_LINE"]["P1"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["mLDFA"] = None 	# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["aLDFA"] = None 	# delete excel data from pat.json
 		elif self.drag_label == "P2_MLDFA":
 			self.dict["MLDFA"][self.op_type][self.drag_side]["FEM_JOINT_LINE"]["P2"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["mLDFA"] = None 	# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["aLDFA"] = None 	# delete excel data from pat.json
 
 		self.controller.save_json()
 		self.draw()
@@ -262,14 +266,16 @@ class MLDFA():
 		if action == "DEL-LEFT-FEM-LINE":
 			self.dict["MLDFA"][self.op_type]["LEFT"]["FEM_JOINT_LINE"]["P1"] = None
 			self.dict["MLDFA"][self.op_type]["LEFT"]["FEM_JOINT_LINE"]["P2"] = None
-			self.draw_tools.clear_by_tag(self.tag)
+			self.dict["EXCEL"][self.op_type]["LEFT"]["mLDFA"] = None 	# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type]["LEFT"]["aLDFA"] = None 	# delete excel data from pat.json
 			self.draw()
 			self.controller.save_json()
 
 		if action == "DEL-RIGHT-FEM-LINE":
 			self.dict["MLDFA"][self.op_type]["RIGHT"]["FEM_JOINT_LINE"]["P1"] = None
 			self.dict["MLDFA"][self.op_type]["RIGHT"]["FEM_JOINT_LINE"]["P2"] = None
-			self.draw_tools.clear_by_tag(self.tag)
+			self.dict["EXCEL"][self.op_type]["RIGHT"]["mLDFA"] = None 	# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type]["LEFT"]["aLDFA"] = None 	# delete excel data from pat.json
 			self.draw()
 			self.controller.save_json()
 

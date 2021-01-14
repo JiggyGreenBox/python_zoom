@@ -302,8 +302,12 @@ class KJLO():
 
 		if self.drag_label == "P1_JOINT_LINE":			
 			self.dict["KJLO"][self.op_type][self.drag_side]["JOINT_LINE"]["P1"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["KJLO"] = None 	# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["KAOL"] = None 	# delete excel data from pat.json
 		elif self.drag_label == "P2_JOINT_LINE":
 			self.dict["KJLO"][self.op_type][self.drag_side]["JOINT_LINE"]["P2"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["KJLO"] = None 	# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["KAOL"] = None 	# delete excel data from pat.json
 
 		self.controller.save_json()
 		self.draw()
@@ -335,13 +339,17 @@ class KJLO():
 
 		if action == "DEL-LEFT-JOINT-LINE":
 			self.dict["KJLO"][self.op_type]["LEFT"]["JOINT_LINE"]["P1"] = None
-			self.dict["KJLO"][self.op_type]["LEFT"]["JOINT_LINE"]["P2"] = None			
+			self.dict["KJLO"][self.op_type]["LEFT"]["JOINT_LINE"]["P2"] = None
+			self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"] = None 	# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type]["LEFT"]["KAOL"] = None 	# delete excel data from pat.json
 			self.draw()
 			self.controller.save_json()
 
 		if action == "DEL-RIGHT-JOINT-LINE":
 			self.dict["KJLO"][self.op_type]["RIGHT"]["JOINT_LINE"]["P1"] = None
-			self.dict["KJLO"][self.op_type]["RIGHT"]["JOINT_LINE"]["P2"] = None			
+			self.dict["KJLO"][self.op_type]["RIGHT"]["JOINT_LINE"]["P2"] = None
+			self.dict["EXCEL"][self.op_type]["RIGHT"]["KJLO"] = None 	# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type]["RIGHT"]["KAOL"] = None 	# delete excel data from pat.json
 			self.draw()
 			self.controller.save_json()
 

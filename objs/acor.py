@@ -423,6 +423,10 @@ class ACOR():
 			self.side = "RIGHT"
 
 		
+		# delete from excel pat.json
+		self.dict["EXCEL"][self.op_type][self.side]["ACOR"] = None
+		self.dict["EXCEL"][self.op_type][self.side]["PCOR"] = None
+
 		# print(self.name)
 		# print(self.op_type)
 		# self.side = None # to reduce hover complexity		

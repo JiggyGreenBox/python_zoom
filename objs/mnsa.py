@@ -434,9 +434,11 @@ class MNSA():
 		if self.drag_label == "P1_NECK_AXIS":
 			self.dict["MNSA"][self.op_type][self.drag_side]["NECK_AXIS"]["P1"] = P_mouse
 			self.dict["MNSA"][self.op_type][self.drag_side]["NECK_AXIS"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.dict["EXCEL"][self.op_type][self.drag_side]["MNSA"] = None 	# delete excel data from pat.json
 		elif self.drag_label == "P2_NECK_AXIS":
 			self.dict["MNSA"][self.op_type][self.drag_side]["NECK_AXIS"]["P2"] = P_mouse
 			self.dict["MNSA"][self.op_type][self.drag_side]["NECK_AXIS"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.dict["EXCEL"][self.op_type][self.drag_side]["MNSA"] = None 	# delete excel data from pat.json
 
 		self.controller.save_json()
 		self.draw()
@@ -455,8 +457,8 @@ class MNSA():
 			self.dict["MNSA"][self.op_type]["LEFT"]["NECK_AXIS"]["P1"] = None
 			self.dict["MNSA"][self.op_type]["LEFT"]["NECK_AXIS"]["P2"] = None
 			self.dict["MNSA"][self.op_type]["LEFT"]["NECK_AXIS"]["M1"] = None
-
-			self.draw_tools.clear_by_tag(self.tag)
+			self.dict["EXCEL"][self.op_type]["LEFT"]["MNSA"] = None 	# delete excel data from pat.json
+			
 			self.draw()
 			self.controller.save_json()
 
@@ -464,10 +466,8 @@ class MNSA():
 			self.dict["MNSA"][self.op_type]["RIGHT"]["NECK_AXIS"]["P1"] = None
 			self.dict["MNSA"][self.op_type]["RIGHT"]["NECK_AXIS"]["P2"] = None
 			self.dict["MNSA"][self.op_type]["RIGHT"]["NECK_AXIS"]["M1"] = None
-
-
-
-			self.draw_tools.clear_by_tag(self.tag)
+			self.dict["EXCEL"][self.op_type]["RIGHT"]["MNSA"] = None 	# delete excel data from pat.json
+			
 			self.draw()
 			self.controller.save_json()
 

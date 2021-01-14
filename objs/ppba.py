@@ -31,8 +31,7 @@ class PPBA():
 				self.controller.save_json()
 				# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
-		self.draw_tools.clear_by_tag(self.tag)
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
 		self.draw()
 
 
@@ -68,6 +67,9 @@ class PPBA():
 			self.dict[self.name][self.op_type]["RIGHT"]["KNEE_CAP_LINE"]["P2"] = None
 			self.side = "RIGHT"
 
+
+		# delete excel data from pat.json
+		self.dict["EXCEL"][self.op_type][self.side]["PPBA"] = None
 
 		self.draw()
 		self.regainHover(self.side)
@@ -319,12 +321,14 @@ class PPBA():
 
 		# # FEM JOINT LINE
 		if self.drag_label == "KNEE_P1":
-			self.dict["PPBA"][self.op_type][self.drag_side]["KNEE_CAP_LINE"]["P1"] = P_mouse
+			self.dict["PPBA"][self.op_type][self.drag_side]["KNEE_CAP_LINE"]["P1"] = P_mouse		
+			self.dict["EXCEL"][self.op_type][self.drag_side]["PPBA"] = None	# delete excel data from pat.json
 			self.controller.save_json()
 			self.draw()
 
 		if self.drag_label == "KNEE_P2":
 			self.dict["PPBA"][self.op_type][self.drag_side]["KNEE_CAP_LINE"]["P2"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["PPBA"] = None	# delete excel data from pat.json
 			self.controller.save_json()
 			self.draw()
 			

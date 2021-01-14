@@ -1,2 +1,6 @@
 *.pyc
 *.pyo
+
+app.spec
+build/
+dist/

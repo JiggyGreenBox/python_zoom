@@ -214,9 +214,11 @@ class MPTA():
 
 		if self.drag_label == "P1_TIB_JOINT_LINE":
 			self.dict["MPTA"][self.op_type][self.drag_side]["TIB_JOINT_LINE"]["P1"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["MPTA"] = None 	# delete excel data from pat.json
 
 		elif self.drag_label == "P2_TIB_JOINT_LINE":
 			self.dict["MPTA"][self.op_type][self.drag_side]["TIB_JOINT_LINE"]["P2"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["MPTA"] = None 	# delete excel data from pat.json
 
 		self.controller.save_json()
 		self.draw()		
@@ -268,14 +270,14 @@ class MPTA():
 		if action == "DEL-LEFT-TIB-LINE":
 			self.dict["MPTA"][self.op_type]["LEFT"]["TIB_JOINT_LINE"]["P1"] = None
 			self.dict["MPTA"][self.op_type]["LEFT"]["TIB_JOINT_LINE"]["P2"] = None
-			self.draw_tools.clear_by_tag(self.tag)
+			self.dict["EXCEL"][self.op_type]["LEFT"]["MPTA"] = None 	# delete excel data from pat.json
 			self.draw()
 			self.controller.save_json()
 
 		if action == "DEL-RIGHT-TIB-LINE":
 			self.dict["MPTA"][self.op_type]["RIGHT"]["TIB_JOINT_LINE"]["P1"] = None
 			self.dict["MPTA"][self.op_type]["RIGHT"]["TIB_JOINT_LINE"]["P2"] = None
-			self.draw_tools.clear_by_tag(self.tag)
+			self.dict["EXCEL"][self.op_type]["RIGHT"]["MPTA"] = None 	# delete excel data from pat.json
 			self.draw()
 			self.controller.save_json()
 

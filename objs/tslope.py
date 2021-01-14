@@ -34,8 +34,7 @@ class TSLOPE():
 				self.controller.save_json()
 				# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
-		self.draw_tools.clear_by_tag(self.tag)
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
 		self.draw()		
 		# print(self.dict)
 
@@ -57,10 +56,12 @@ class TSLOPE():
 		if action == "DEL-LEFT-TIB-LINE":
 			self.dict["TSLOPE"][self.op_type]["LEFT"]["TIB_JOINT_LINE"]["P1"] = None
 			self.dict["TSLOPE"][self.op_type]["LEFT"]["TIB_JOINT_LINE"]["P2"] = None
+			self.side = "LEFT"
 
 		if action == "DEL-RIGHT-TIB-LINE":
 			self.dict["TSLOPE"][self.op_type]["RIGHT"]["TIB_JOINT_LINE"]["P1"] = None
 			self.dict["TSLOPE"][self.op_type]["RIGHT"]["TIB_JOINT_LINE"]["P2"] = None
+			self.side = "RIGHT"
 
 
 
@@ -68,24 +69,32 @@ class TSLOPE():
 			self.dict["TSLOPE"][self.op_type]["LEFT"]["AXIS_TIB"]["TOP"]["P1"] = None
 			self.dict["TSLOPE"][self.op_type]["LEFT"]["AXIS_TIB"]["TOP"]["P2"] = None
 			self.dict["TSLOPE"][self.op_type]["LEFT"]["AXIS_TIB"]["TOP"]["M1"] = None
+			self.side = "LEFT"
 
 		if action == "DEL-RIGHT-TIB-TOP":
 			self.dict["TSLOPE"][self.op_type]["RIGHT"]["AXIS_TIB"]["TOP"]["P1"] = None
 			self.dict["TSLOPE"][self.op_type]["RIGHT"]["AXIS_TIB"]["TOP"]["P2"] = None
 			self.dict["TSLOPE"][self.op_type]["RIGHT"]["AXIS_TIB"]["TOP"]["M1"] = None
+			self.side = "RIGHT"
 
 		if action == "DEL-LEFT-TIB-BOT":
 			self.dict["TSLOPE"][self.op_type]["LEFT"]["AXIS_TIB"]["BOT"]["P1"] = None
 			self.dict["TSLOPE"][self.op_type]["LEFT"]["AXIS_TIB"]["BOT"]["P2"] = None
 			self.dict["TSLOPE"][self.op_type]["LEFT"]["AXIS_TIB"]["BOT"]["M1"] = None
+			self.side = "LEFT"
 
 		if action == "DEL-RIGHT-TIB-BOT":
 			self.dict["TSLOPE"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["P1"] = None
 			self.dict["TSLOPE"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["P2"] = None
 			self.dict["TSLOPE"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["M1"] = None
+			self.side = "RIGHT"
 
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
-		self.draw_tools.clear_by_tag(self.tag)
+
+		# delete excel data from pat.json
+		self.dict["EXCEL"][self.op_type][self.side]["TSLOPE"] = None
+		self.dict["EXCEL"][self.op_type][self.side]["TFLE/EXT"] = None
+
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
 		self.controller.save_json()
 		self.draw()
 
@@ -587,11 +596,17 @@ class TSLOPE():
 		# FEM JOINT LINE
 		if self.drag_label == "P1_JOINT":
 			self.dict["TSLOPE"][self.op_type][self.drag_side]["TIB_JOINT_LINE"]["P1"] = P_mouse
+			# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["TSLOPE"] = None
+			self.dict["EXCEL"][self.op_type][self.drag_side]["TFLE/EXT"] = None
 			self.controller.save_json()
 			self.draw()
 
 		if self.drag_label == "P2_JOINT":
 			self.dict["TSLOPE"][self.op_type][self.drag_side]["TIB_JOINT_LINE"]["P2"] = P_mouse
+			# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["TSLOPE"] = None
+			self.dict["EXCEL"][self.op_type][self.drag_side]["TFLE/EXT"] = None
 			self.controller.save_json()
 			self.draw()
 
@@ -599,24 +614,36 @@ class TSLOPE():
 		if self.drag_label == "P1_AXIS_TIB_TOP":
 			self.dict["TSLOPE"][self.op_type][self.drag_side]["AXIS_TIB"]["TOP"]["P1"] = P_mouse
 			self.dict["TSLOPE"][self.op_type][self.drag_side]["AXIS_TIB"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["TSLOPE"] = None
+			self.dict["EXCEL"][self.op_type][self.drag_side]["TFLE/EXT"] = None
 			self.controller.save_json()
 			self.draw()
 
 		if self.drag_label == "P2_AXIS_TIB_TOP":
 			self.dict["TSLOPE"][self.op_type][self.drag_side]["AXIS_TIB"]["TOP"]["P2"] = P_mouse
 			self.dict["TSLOPE"][self.op_type][self.drag_side]["AXIS_TIB"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["TSLOPE"] = None
+			self.dict["EXCEL"][self.op_type][self.drag_side]["TFLE/EXT"] = None
 			self.controller.save_json()
 			self.draw()
 
 		if self.drag_label == "P1_AXIS_TIB_BOT":
 			self.dict["TSLOPE"][self.op_type][self.drag_side]["AXIS_TIB"]["BOT"]["P1"] = P_mouse
 			self.dict["TSLOPE"][self.op_type][self.drag_side]["AXIS_TIB"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["TSLOPE"] = None
+			self.dict["EXCEL"][self.op_type][self.drag_side]["TFLE/EXT"] = None
 			self.controller.save_json()
 			self.draw()
 
 		if self.drag_label == "P2_AXIS_TIB_BOT":
 			self.dict["TSLOPE"][self.op_type][self.drag_side]["AXIS_TIB"]["BOT"]["P2"] = P_mouse
 			self.dict["TSLOPE"][self.op_type][self.drag_side]["AXIS_TIB"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.side]["TSLOPE"] = None
+			self.dict["EXCEL"][self.op_type][self.side]["TFLE/EXT"] = None
 			self.controller.save_json()
 			self.draw()
 

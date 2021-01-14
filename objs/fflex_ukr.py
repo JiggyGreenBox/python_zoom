@@ -34,8 +34,7 @@ class FFLEX_UKR():
 				self.controller.save_json()
 				# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
-		self.draw_tools.clear_by_tag(self.tag)
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
 		self.draw()
 		# print(self.dict)
 
@@ -104,6 +103,10 @@ class FFLEX_UKR():
 			self.side = "LEFT"
 				
 		
+		# delete excel data from pat.json
+		self.dict["EXCEL"][self.op_type][self.side]["FFLEX"] = None
+		self.dict["EXCEL"][self.op_type][self.side]["FFLE/EXT"] = None
+
 		self.draw()		
 		self.regainHover(self.side)
 
@@ -573,151 +576,218 @@ class FFLEX_UKR():
 			return (self.side + " Done")
 		return None
 
-	'''
-		def drag_start(self, tags):
-			
-			tags.remove('token')
-			tags.remove('current')
-			tags.remove(self.tag)
-			print(tags)
+	
+	def drag_start(self, tags):
+		
+		tags.remove('token')
+		tags.remove('current')
+		tags.remove(self.tag)
+		print(tags)
 
-			side = ""
+		side = ""
 
-			# find side
-			if "LEFT" in tags:
-				side = "LEFT"
-			elif "RIGHT" in tags:
-				side = "RIGHT"
+		# find side
+		if "LEFT" in tags:
+			side = "LEFT"
+		elif "RIGHT" in tags:
+			side = "RIGHT"
 
-			# vars for code readability
-			axis_fem_top_p1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
-			axis_fem_top_p2 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
-			axis_fem_top_m1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
+		# vars for code readability
+		axis_fem_top_p1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
+		axis_fem_top_p2 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
+		axis_fem_top_m1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
 
-			axis_fem_bot_p1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
-			axis_fem_bot_p2 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
-			axis_fem_bot_m1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
-
-
-			fem_joint_p1 = self.dict["FFLEX_UKR"][self.op_type][side]["FEM_JOINT_LINE"]["P1"]
-			fem_joint_p2 = self.dict["FFLEX_UKR"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
-
-			
-			# find item type
-			if "AXIS_FEM" in tags:
-				item = "AXIS_FEM"
-
-				# axis has top and bot
-				if "TOP" in tags:
-					topbot = "TOP"
-				elif "BOT" in tags:
-					topbot = "BOT"
-
-			elif "FEM_JOINT_LINE" in tags:
-				item = "FEM_JOINT_LINE"
+		axis_fem_bot_p1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
+		axis_fem_bot_p2 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
+		axis_fem_bot_m1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
 
 
-			if "P1" in tags:
-				if item == "AXIS_FEM":
-					if topbot == "TOP":
-						self.drag_point = axis_fem_top_p2
-						self.drag_label = "P1_AXIS_FEM_TOP"
-						self.drag_side 	= side
+		axis_peg_top_p1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_PEG"]["TOP"]["P1"]
+		axis_peg_top_p2 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_PEG"]["TOP"]["P2"]
+		axis_peg_top_m1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_PEG"]["TOP"]["M1"]
 
-					elif topbot == "BOT":
-						self.drag_point = axis_fem_bot_p2
-						self.drag_label = "P1_AXIS_FEM_BOT"
-						self.drag_side 	= side
+		axis_peg_bot_p1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_PEG"]["BOT"]["P1"]
+		axis_peg_bot_p2 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_PEG"]["BOT"]["P2"]
+		axis_peg_bot_m1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_PEG"]["BOT"]["M1"]
+		
 
-				elif item == "FEM_JOINT_LINE":
-					self.draw_tools.clear_by_tag("FFLEX_angle")
-					self.drag_point = fem_joint_p2
-					self.drag_label = "P1_FEM"
+		
+		# find item type
+		if "AXIS_FEM" in tags:
+			item = "AXIS_FEM"
+
+			# axis has top and bot
+			if "TOP" in tags:
+				topbot = "TOP"
+			elif "BOT" in tags:
+				topbot = "BOT"
+
+		elif "AXIS_PEG" in tags:
+			item = "AXIS_PEG"
+
+			# axis has top and bot
+			if "TOP" in tags:
+				topbot = "TOP"
+			elif "BOT" in tags:
+				topbot = "BOT"
+
+
+		if "P1" in tags:
+			if item == "AXIS_FEM":
+				if topbot == "TOP":
+					self.drag_point = axis_fem_top_p2
+					self.drag_label = "P1_AXIS_FEM_TOP"
+					self.drag_side 	= side
+
+				elif topbot == "BOT":
+					self.drag_point = axis_fem_bot_p2
+					self.drag_label = "P1_AXIS_FEM_BOT"
+					self.drag_side 	= side
+
+			elif item == "AXIS_PEG":
+				if topbot == "TOP":
+					self.drag_point = axis_peg_top_p2
+					self.drag_label = "P1_AXIS_PEG_TOP"
+					self.drag_side 	= side
+
+				elif topbot == "BOT":
+					self.drag_point = axis_peg_bot_p2
+					self.drag_label = "P1_AXIS_PEG_BOT"
 					self.drag_side 	= side
 
 
-			if "P2" in tags:
-				if item == "AXIS_FEM":
-					if topbot == "TOP":
-						self.drag_point = axis_fem_top_p1
-						self.drag_label = "P2_AXIS_FEM_TOP"
-						self.drag_side 	= side
+		if "P2" in tags:
+			if item == "AXIS_FEM":
+				if topbot == "TOP":
+					self.drag_point = axis_fem_top_p1
+					self.drag_label = "P2_AXIS_FEM_TOP"
+					self.drag_side 	= side
 
-					elif topbot == "BOT":
-						self.drag_point = axis_fem_bot_p1
-						self.drag_label = "P2_AXIS_FEM_BOT"
-						self.drag_side 	= side
+				elif topbot == "BOT":
+					self.drag_point = axis_fem_bot_p1
+					self.drag_label = "P2_AXIS_FEM_BOT"
+					self.drag_side 	= side
 
-				elif item == "FEM_JOINT_LINE":
-					self.draw_tools.clear_by_tag("FFLEX_angle")
-					self.drag_point = fem_joint_p1
-					self.drag_label = "P2_FEM"
+			elif item == "AXIS_PEG":
+				if topbot == "TOP":
+					self.drag_point = axis_peg_top_p1
+					self.drag_label = "P2_AXIS_PEG_TOP"
+					self.drag_side 	= side
+
+				elif topbot == "BOT":
+					self.drag_point = axis_peg_bot_p1
+					self.drag_label = "P2_AXIS_PEG_BOT"
 					self.drag_side 	= side
 
 
-		def drag(self, P_mouse):
-			if self.drag_label == "P1_FEM" or self.drag_label == "P2_FEM":
-				if self.drag_point != None:
-					self.draw_tools.clear_by_tag("FEM_LINE")
-					self.draw_tools.clear_by_tag("drag_line")
-					self.draw_tools.create_myline(self.drag_point, P_mouse, "drag_line")
+	def drag(self, P_mouse):
+
+		if self.drag_label == "P1_AXIS_FEM_TOP" or self.drag_label == "P2_AXIS_FEM_TOP":
+			if self.drag_point != None:
+				self.draw_tools.clear_by_tag("TOP_AXIS_LINE")
+				self.draw_tools.clear_by_tag("drag_line")
+				m = self.draw_tools.midpoint(self.drag_point, P_mouse)
+				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line")
+
+		if self.drag_label == "P1_AXIS_FEM_BOT" or self.drag_label == "P2_AXIS_FEM_BOT":
+			if self.drag_point != None:
+				self.draw_tools.clear_by_tag("BOT_AXIS_LINE")
+				self.draw_tools.clear_by_tag("drag_line")
+				m = self.draw_tools.midpoint(self.drag_point, P_mouse)
+				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line")
+
+		if self.drag_label == "P1_AXIS_PEG_TOP" or self.drag_label == "P2_AXIS_PEG_TOP":
+			if self.drag_point != None:
+				self.draw_tools.clear_by_tag("TOP_AXIS_LINE")
+				self.draw_tools.clear_by_tag("drag_line")
+				m = self.draw_tools.midpoint(self.drag_point, P_mouse)
+				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line")
+
+		if self.drag_label == "P1_AXIS_PEG_BOT" or self.drag_label == "P2_AXIS_PEG_BOT":
+			if self.drag_point != None:
+				self.draw_tools.clear_by_tag("BOT_AXIS_LINE")
+				self.draw_tools.clear_by_tag("drag_line")
+				m = self.draw_tools.midpoint(self.drag_point, P_mouse)
+				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line")
 
 
-			if self.drag_label == "P1_AXIS_FEM_TOP" or self.drag_label == "P2_AXIS_FEM_TOP":
-				if self.drag_point != None:
-					self.draw_tools.clear_by_tag("TOP_AXIS_LINE")
-					self.draw_tools.clear_by_tag("drag_line")
-					m = self.draw_tools.midpoint(self.drag_point, P_mouse)
-					self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line")
-
-			if self.drag_label == "P1_AXIS_FEM_BOT" or self.drag_label == "P2_AXIS_FEM_BOT":
-				if self.drag_point != None:
-					self.draw_tools.clear_by_tag("BOT_AXIS_LINE")
-					self.draw_tools.clear_by_tag("drag_line")
-					m = self.draw_tools.midpoint(self.drag_point, P_mouse)
-					self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line")
+	def drag_stop(self, P_mouse):
+		self.draw_tools.clear_by_tag("drag_line")
 
 
-		def drag_stop(self, P_mouse):
-			self.draw_tools.clear_by_tag("drag_line")
+		if self.drag_label == "P1_AXIS_FEM_TOP":
+			self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["P1"] = P_mouse
+			self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLEX"] = None
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLE/EXT"] = None
+			self.controller.save_json()
+			self.draw()
 
-			# FEM JOINT LINE
-			if self.drag_label == "P1_FEM":
-				self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["FEM_JOINT_LINE"]["P1"] = P_mouse
-				self.controller.save_json()
-				self.draw()
+		if self.drag_label == "P2_AXIS_FEM_TOP":
+			self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["P2"] = P_mouse
+			self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLEX"] = None
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLE/EXT"] = None
+			self.controller.save_json()
+			self.draw()
 
-			if self.drag_label == "P2_FEM":
-				self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["FEM_JOINT_LINE"]["P2"] = P_mouse
-				self.controller.save_json()
-				self.draw()
+		if self.drag_label == "P1_AXIS_FEM_BOT":
+			self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["P1"] = P_mouse
+			self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLEX"] = None
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLE/EXT"] = None
+			self.controller.save_json()
+			self.draw()
+
+		if self.drag_label == "P2_AXIS_FEM_BOT":
+			self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["P2"] = P_mouse
+			self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLEX"] = None
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLE/EXT"] = None
+			self.controller.save_json()
+			self.draw()
+
+		if self.drag_label == "P1_AXIS_PEG_TOP":
+			self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_PEG"]["TOP"]["P1"] = P_mouse
+			self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_PEG"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLEX"] = None
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLE/EXT"] = None
+			self.controller.save_json()
+			self.draw()
+
+		if self.drag_label == "P2_AXIS_PEG_TOP":
+			self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_PEG"]["TOP"]["P2"] = P_mouse
+			self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_PEG"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLEX"] = None
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLE/EXT"] = None
+			self.controller.save_json()
+			self.draw()
+
+		if self.drag_label == "P1_AXIS_PEG_BOT":
+			self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_PEG"]["BOT"]["P1"] = P_mouse
+			self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_PEG"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLEX"] = None
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLE/EXT"] = None
+			self.controller.save_json()
+			self.draw()
+
+		if self.drag_label == "P2_AXIS_PEG_BOT":
+			self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_PEG"]["BOT"]["P2"] = P_mouse
+			self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_PEG"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLEX"] = None
+			self.dict["EXCEL"][self.op_type][self.drag_side]["FFLE/EXT"] = None
+			self.controller.save_json()
+			self.draw()
 
 
-			if self.drag_label == "P1_AXIS_FEM_TOP":
-				self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["P1"] = P_mouse
-				self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
-				self.controller.save_json()
-				self.draw()
-
-			if self.drag_label == "P2_AXIS_FEM_TOP":
-				self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["P2"] = P_mouse
-				self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
-				self.controller.save_json()
-				self.draw()
-
-			if self.drag_label == "P1_AXIS_FEM_BOT":
-				self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["P1"] = P_mouse
-				self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
-				self.controller.save_json()
-				self.draw()
-
-			if self.drag_label == "P2_AXIS_FEM_BOT":
-				self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["P2"] = P_mouse
-				self.dict["FFLEX_UKR"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
-				self.controller.save_json()
-				self.draw()
-
-	'''
 	def update_canvas(self, draw_tools):
 		self.draw_tools = draw_tools
 
@@ -733,12 +803,12 @@ class FFLEX_UKR():
 
 
 
-	def drag_start(self, tags):
-		pass
-	def drag(self, P_mouse):
-		pass
-	def drag_stop(self, P_mouse):
-		pass
+	# def drag_start(self, tags):
+	# 	pass
+	# def drag(self, P_mouse):
+	# 	pass
+	# def drag_stop(self, P_mouse):
+	# 	pass
 
 
 		

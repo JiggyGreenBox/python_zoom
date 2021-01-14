@@ -107,10 +107,9 @@ class VCA():
 			self.dict["VCA"][self.op_type]["LEFT"]["DIST_FEM"]["P1"] = None
 			self.dict["VCA"][self.op_type]["LEFT"]["DIST_FEM"]["P2"] = None
 			self.dict["VCA"][self.op_type]["LEFT"]["DIST_FEM"]["M1"] = None
-
-			self.dict["EXCEL"][self.op_type]["LEFT"]["VCA"] = None
-
-			self.draw_tools.clear_by_tag(self.tag)
+			
+			self.dict["EXCEL"][self.op_type]["LEFT"]["VCA"] = None	# delete excel data from pat.json
+			
 			self.draw()
 			self.controller.save_json()
 
@@ -118,12 +117,9 @@ class VCA():
 			self.dict["VCA"][self.op_type]["RIGHT"]["DIST_FEM"]["P1"] = None
 			self.dict["VCA"][self.op_type]["RIGHT"]["DIST_FEM"]["P2"] = None
 			self.dict["VCA"][self.op_type]["RIGHT"]["DIST_FEM"]["M1"] = None
-
-			self.dict["EXCEL"][self.op_type]["RIGHT"]["VCA"] = None
-
-
-
-			self.draw_tools.clear_by_tag(self.tag)
+			
+			self.dict["EXCEL"][self.op_type]["RIGHT"]["VCA"] = None	# delete excel data from pat.json
+			
 			self.draw()
 			self.controller.save_json()
 
@@ -276,9 +272,11 @@ class VCA():
 		if self.drag_label == "P1_DIST_FEM":
 			self.dict["VCA"][self.op_type][self.drag_side]["DIST_FEM"]["P1"] = P_mouse
 			self.dict["VCA"][self.op_type][self.drag_side]["DIST_FEM"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.dict["EXCEL"][self.op_type][self.drag_side]["VCA"] = None	# delete excel data from pat.json
 		elif self.drag_label == "P2_DIST_FEM":
 			self.dict["VCA"][self.op_type][self.drag_side]["DIST_FEM"]["P2"] = P_mouse
 			self.dict["VCA"][self.op_type][self.drag_side]["DIST_FEM"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.dict["EXCEL"][self.op_type][self.drag_side]["VCA"] = None	# delete excel data from pat.json
 
 		self.controller.save_json()
 		self.draw()

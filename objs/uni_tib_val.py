@@ -29,8 +29,7 @@ class UNI_TIB_VAL():
 				self.controller.save_json()
 				# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
-		self.draw_tools.clear_by_tag(self.tag)
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
 		self.draw()
 
 
@@ -50,30 +49,39 @@ class UNI_TIB_VAL():
 		if action == "DEL-LEFT-FEM-LINE":
 			self.dict["UNI_TIB_VAL"][self.op_type]["LEFT"]["TIB_JOINT_LINE"]["P1"] = None
 			self.dict["UNI_TIB_VAL"][self.op_type]["LEFT"]["TIB_JOINT_LINE"]["P2"] = None
+			self.side = "LEFT"
 
 		if action == "DEL-RIGHT-FEM-LINE":
 			self.dict["UNI_TIB_VAL"][self.op_type]["RIGHT"]["TIB_JOINT_LINE"]["P1"] = None
 			self.dict["UNI_TIB_VAL"][self.op_type]["RIGHT"]["TIB_JOINT_LINE"]["P2"] = None
+			self.side = "RIGHT"
 
 		if action == "DEL-LEFT-TIB-TOP":			
 			self.dict["UNI_TIB_VAL"][self.op_type]["LEFT"]["AXIS_TIB"]["TOP"]["P1"] = None
 			self.dict["UNI_TIB_VAL"][self.op_type]["LEFT"]["AXIS_TIB"]["TOP"]["P2"] = None
 			self.dict["UNI_TIB_VAL"][self.op_type]["LEFT"]["AXIS_TIB"]["TOP"]["M1"] = None
+			self.side = "LEFT"
 
 		if action == "DEL-RIGHT-TIB-TOP":
 			self.dict["UNI_TIB_VAL"][self.op_type]["RIGHT"]["AXIS_TIB"]["TOP"]["P1"] = None
 			self.dict["UNI_TIB_VAL"][self.op_type]["RIGHT"]["AXIS_TIB"]["TOP"]["P2"] = None
 			self.dict["UNI_TIB_VAL"][self.op_type]["RIGHT"]["AXIS_TIB"]["TOP"]["M1"] = None
+			self.side = "RIGHT"
 
 		if action == "DEL-LEFT-TIB-BOT":
 			self.dict["UNI_TIB_VAL"][self.op_type]["LEFT"]["AXIS_TIB"]["BOT"]["P1"] = None
 			self.dict["UNI_TIB_VAL"][self.op_type]["LEFT"]["AXIS_TIB"]["BOT"]["P2"] = None
 			self.dict["UNI_TIB_VAL"][self.op_type]["LEFT"]["AXIS_TIB"]["BOT"]["M1"] = None
+			self.side = "LEFT"
 
 		if action == "DEL-RIGHT-TIB-BOT":
 			self.dict["UNI_TIB_VAL"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["P1"] = None
 			self.dict["UNI_TIB_VAL"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["P2"] = None
 			self.dict["UNI_TIB_VAL"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["M1"] = None
+			self.side = "RIGHT"
+
+		# delete excel data from pat.json
+		self.dict["EXCEL"][self.op_type][self.side]["TVAR/VAL"] = None
 
 		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)	
 		self.controller.save_json()
@@ -581,11 +589,13 @@ class UNI_TIB_VAL():
 		# FEM JOINT LINE
 		if self.drag_label == "P1_JOINT":
 			self.dict["UNI_TIB_VAL"][self.op_type][self.drag_side]["TIB_JOINT_LINE"]["P1"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["TVAR/VAL"] = None
 			self.controller.save_json()
 			self.draw()
 
 		if self.drag_label == "P2_JOINT":
 			self.dict["UNI_TIB_VAL"][self.op_type][self.drag_side]["TIB_JOINT_LINE"]["P2"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["TVAR/VAL"] = None
 			self.controller.save_json()
 			self.draw()
 
@@ -593,24 +603,28 @@ class UNI_TIB_VAL():
 		if self.drag_label == "P1_AXIS_TIB_TOP":
 			self.dict["UNI_TIB_VAL"][self.op_type][self.drag_side]["AXIS_TIB"]["TOP"]["P1"] = P_mouse
 			self.dict["UNI_TIB_VAL"][self.op_type][self.drag_side]["AXIS_TIB"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.dict["EXCEL"][self.op_type][self.drag_side]["TVAR/VAL"] = None
 			self.controller.save_json()
 			self.draw()
 
 		if self.drag_label == "P2_AXIS_TIB_TOP":
 			self.dict["UNI_TIB_VAL"][self.op_type][self.drag_side]["AXIS_TIB"]["TOP"]["P2"] = P_mouse
 			self.dict["UNI_TIB_VAL"][self.op_type][self.drag_side]["AXIS_TIB"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.dict["EXCEL"][self.op_type][self.drag_side]["TVAR/VAL"] = None
 			self.controller.save_json()
 			self.draw()
 
 		if self.drag_label == "P1_AXIS_TIB_BOT":
 			self.dict["UNI_TIB_VAL"][self.op_type][self.drag_side]["AXIS_TIB"]["BOT"]["P1"] = P_mouse
 			self.dict["UNI_TIB_VAL"][self.op_type][self.drag_side]["AXIS_TIB"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.dict["EXCEL"][self.op_type][self.drag_side]["TVAR/VAL"] = None
 			self.controller.save_json()
 			self.draw()
 
 		if self.drag_label == "P2_AXIS_TIB_BOT":
 			self.dict["UNI_TIB_VAL"][self.op_type][self.drag_side]["AXIS_TIB"]["BOT"]["P2"] = P_mouse
 			self.dict["UNI_TIB_VAL"][self.op_type][self.drag_side]["AXIS_TIB"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			self.dict["EXCEL"][self.op_type][self.drag_side]["TVAR/VAL"] = None
 			self.controller.save_json()
 			self.draw()
 

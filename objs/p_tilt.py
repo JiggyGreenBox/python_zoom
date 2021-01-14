@@ -28,8 +28,7 @@ class P_TILT():
 				self.controller.save_json()
 				# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
-		self.draw_tools.clear_by_tag(self.tag)
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
 		self.draw()
 
 
@@ -71,18 +70,25 @@ class P_TILT():
 		if action == "DEL-LEFT-PAT-P1":			
 			self.dict["P_TILT"][self.op_type]["LEFT"]["PAT_CROSS_SECTION"]["P1"] = None
 			self.side = "LEFT"
+			self.dict["EXCEL"][self.op_type][self.side]["PPBA"] = None
 
 		if action == "DEL-RIGHT-PAT-P1":			
 			self.dict["P_TILT"][self.op_type]["RIGHT"]["PAT_CROSS_SECTION"]["P1"] = None
 			self.side = "RIGHT"
+			self.dict["EXCEL"][self.op_type][self.side]["PPBA"] = None
 
 		if action == "DEL-LEFT-PAT-P2":
 			self.dict["P_TILT"][self.op_type]["LEFT"]["PAT_CROSS_SECTION"]["P2"] = None
 			self.side = "LEFT"
+			self.dict["EXCEL"][self.op_type][self.side]["PPBA"] = None
 
 		if action == "DEL-RIGHT-PAT-P2":
 			self.dict["P_TILT"][self.op_type]["RIGHT"]["PAT_CROSS_SECTION"]["P2"] = None
 			self.side = "RIGHT"
+			self.dict["EXCEL"][self.op_type][self.side]["PPBA"] = None
+
+		# delete excel data from pat.json
+		self.dict["EXCEL"][self.op_type][self.side]["PTILT"] = None
 
 		
 		self.draw()
@@ -504,22 +510,28 @@ class P_TILT():
 		# # FEM JOINT LINE
 		if self.drag_label == "P1":
 			self.dict["P_TILT"][self.op_type][self.drag_side]["P1P2_LINE"]["P1"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["PTILT"] = None		# delete excel data from pat.json
 			self.controller.save_json()
 			self.draw()
 
 		if self.drag_label == "P2":
 			self.dict["P_TILT"][self.op_type][self.drag_side]["P1P2_LINE"]["P2"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["PTILT"] = None		# delete excel data from pat.json
 			self.controller.save_json()
 			self.draw()
 
 
 		if self.drag_label == "PAT_P1":
 			self.dict["P_TILT"][self.op_type][self.drag_side]["PAT_CROSS_SECTION"]["P1"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["PTILT"] = None		# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["PPBA"] = None			# delete excel data from pat.json
 			self.controller.save_json()
 			self.draw()
 
 		if self.drag_label == "PAT_P2":
 			self.dict["P_TILT"][self.op_type][self.drag_side]["PAT_CROSS_SECTION"]["P2"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["PTILT"] = None		# delete excel data from pat.json
+			self.dict["EXCEL"][self.op_type][self.drag_side]["PPBA"] = None			# delete excel data from pat.json
 			self.controller.save_json()
 			self.draw()
 

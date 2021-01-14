@@ -32,8 +32,7 @@ class SA():
 				self.controller.save_json()
 				# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
-		self.draw_tools.clear_by_tag(self.tag)
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
 		self.draw()
 
 
@@ -77,7 +76,10 @@ class SA():
 			self.dict["SA"][self.op_type]["RIGHT"]["P3"]["P1"] = None
 			self.side = "RIGHT"
 			
-		self.draw_tools.clear_by_tag(self.tag)		
+		
+		# delete excel data from pat.json
+		self.dict["EXCEL"][self.op_type][self.side]["SA"] = None
+
 		self.controller.save_json()
 		self.draw()
 		self.regainHover(self.side)
@@ -414,17 +416,20 @@ class SA():
 	def drag_stop(self, P_mouse):
 		self.draw_tools.clear_by_tag("drag_line")
 		if self.drag_label == "P1":
-			self.dict["SA"][self.op_type][self.drag_side]["P1"]["P1"] = P_mouse
+			self.dict["SA"][self.op_type][self.drag_side]["P1"]["P1"] = P_mouse			
+			self.dict["EXCEL"][self.op_type][self.drag_side]["SA"] = None	# delete excel data from pat.json
 			self.controller.save_json()
 			self.draw()
 
 		if self.drag_label == "P2":
 			self.dict["SA"][self.op_type][self.drag_side]["P2"]["P1"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["SA"] = None	# delete excel data from pat.json
 			self.controller.save_json()
 			self.draw()
 
 		if self.drag_label == "P3":
 			self.dict["SA"][self.op_type][self.drag_side]["P3"]["P1"] = P_mouse
+			self.dict["EXCEL"][self.op_type][self.drag_side]["SA"] = None	# delete excel data from pat.json
 			self.controller.save_json()
 			self.draw()
 
