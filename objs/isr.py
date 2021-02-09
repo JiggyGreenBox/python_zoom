@@ -16,6 +16,8 @@ class ISR():
 		# if not populate the dictionary
 		self.checkMasterDict()
 
+		self.point_size = None
+
 
 	def click(self, event):
 		# print("click from "+self.name)
@@ -90,8 +92,11 @@ class ISR():
 
 
 	def draw(self):
-		# self.draw_tools.clear_by_tag("hover_line")
+		
 		self.draw_tools.clear_by_tag(self.tag)
+
+		self.point_size = self.controller.getViewPointSize()
+
 		# loop left and right				
 		for side in ["LEFT","RIGHT"]:
 			
@@ -105,15 +110,15 @@ class ISR():
 
 			
 			if p1 != None:
-				self.draw_tools.create_mypoint(p1, "orange", [self.tag, side, "P1"])
+				self.draw_tools.create_mypoint(p1, "orange", [self.tag, side, "P1"], point_thickness=self.point_size)
 				isP1 = True
 
 			if p2 != None:
-				self.draw_tools.create_mypoint(p2, "orange", [self.tag, side, "P2"])
+				self.draw_tools.create_mypoint(p2, "orange", [self.tag, side, "P2"], point_thickness=self.point_size)
 				isP2 = True
 
 			if p3 != None:
-				self.draw_tools.create_mypoint(p3, "orange", [self.tag, side, "P3"])
+				self.draw_tools.create_mypoint(p3, "orange", [self.tag, side, "P3"], point_thickness=self.point_size)
 				isP3 = True
 
 

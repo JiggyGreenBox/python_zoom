@@ -16,14 +16,15 @@ class PPBA():
 		# if not populate the dictionary
 		self.checkMasterDict()
 
+		self.point_size = None
+
 
 	def click(self, event):
 		# print("click from "+self.name)
 		# self.draw()
 		if self.side == None:
 			print("please choose side")
-			self.controller.warningBox("Please select a Side")
-			self.controller.testbubble()
+			self.controller.warningBox("Please select a Side")			
 			print(self.dict)
 		else:
 			ret =  self.addDict(event)
@@ -80,8 +81,11 @@ class PPBA():
 
 
 	def draw(self):
-		# self.draw_tools.clear_by_tag("hover_line")
+		
 		self.draw_tools.clear_by_tag(self.tag)
+
+		self.point_size = self.controller.getViewPointSize()
+
 		# loop left and right				
 		for side in ["LEFT","RIGHT"]:
 			
@@ -102,19 +106,19 @@ class PPBA():
 
 			
 			if p1 != None:
-				self.draw_tools.create_mypoint(p1, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 			if p2 != None:
-				self.draw_tools.create_mypoint(p2, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 			if p1 != None and p2 != None:
 				self.draw_tools.create_myline(p1, p2, [self.tag, side, "NO-DRAG"])
 				line1 = True
 
 
 			if knee_cap_line_p1 != None:
-				self.draw_tools.create_mypoint(knee_cap_line_p1, "orange", [self.tag, side, "KNEE_P1"])
+				self.draw_tools.create_mypoint(knee_cap_line_p1, "orange", [self.tag, side, "KNEE_P1"], point_thickness=self.point_size)
 				self.draw_tools.create_mytext(knee_cap_line_p1, "P1", [self.tag,"P_LABEL"], y_offset=30)
 			if knee_cap_line_p2 != None:
-				self.draw_tools.create_mypoint(knee_cap_line_p2, "orange", [self.tag, side, "KNEE_P2"])
+				self.draw_tools.create_mypoint(knee_cap_line_p2, "orange", [self.tag, side, "KNEE_P2"], point_thickness=self.point_size)
 				self.draw_tools.create_mytext(knee_cap_line_p2, "P2", [self.tag,"P_LABEL"], y_offset=30)
 			if knee_cap_line_p1 != None and knee_cap_line_p2 != None:
 				self.draw_tools.create_myline(knee_cap_line_p1, knee_cap_line_p2, [self.tag, side, "KNEE_LINE"])

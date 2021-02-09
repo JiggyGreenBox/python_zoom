@@ -10,6 +10,8 @@ class ALDFA():
 		self.controller = controller
 		self.side = None
 		self.op_type = op_type
+
+		self.point_size = None
 		
 	def click(self, event):
 		print("click from "+self.name)
@@ -19,6 +21,8 @@ class ALDFA():
 	def draw(self):
 
 		self.draw_tools.clear_by_tag(self.tag)
+
+		self.point_size = self.controller.getViewPointSize()
 
 		# loop left and right
 		for side in ["LEFT","RIGHT"]:
@@ -45,10 +49,10 @@ class ALDFA():
 			# FROM MLDFA
 			# ------------------------
 			if fem_joint_p1 != None:
-				self.draw_tools.create_mypoint(fem_joint_p1, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(fem_joint_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if fem_joint_p2 != None:
-				self.draw_tools.create_mypoint(fem_joint_p2, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(fem_joint_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if fem_joint_p1 != None and fem_joint_p2 != None:
 				self.draw_tools.create_myline(fem_joint_p1, fem_joint_p2, self.tag)
@@ -62,25 +66,25 @@ class ALDFA():
 			# FEM AXIS
 			# TOP
 			if fem_top_p1 != None:
-				self.draw_tools.create_mypoint(fem_top_p1, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(fem_top_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if fem_top_p2 != None:
-				self.draw_tools.create_mypoint(fem_top_p2, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(fem_top_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if fem_top_p1 != None and fem_top_p2 != None:								
-				self.draw_tools.create_midpoint_line(fem_top_p1, fem_top_p2, top_m1, self.tag)
+				self.draw_tools.create_midpoint_line(fem_top_p1, fem_top_p2, top_m1, self.tag, point_thickness=self.point_size)
 				isFemTop = True
 
 
 			# BOT
 			if fem_bot_p1 != None:
-				self.draw_tools.create_mypoint(fem_bot_p1, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(fem_bot_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if fem_bot_p2 != None:
-				self.draw_tools.create_mypoint(fem_bot_p2, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(fem_bot_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if fem_bot_p1 != None and fem_bot_p2 != None:								
-				self.draw_tools.create_midpoint_line(fem_bot_p1, fem_bot_p2, bot_m1, self.tag)
+				self.draw_tools.create_midpoint_line(fem_bot_p1, fem_bot_p2, bot_m1, self.tag, point_thickness=self.point_size)
 				isFemBot = True
 
 

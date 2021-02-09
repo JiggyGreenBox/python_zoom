@@ -1,0 +1,12 @@
+{
+    "POINT_SIZES": {
+        "PRE-SCANNO": 7,
+        "PRE-AP": 7,
+        "PRE-LAT": 7,
+        "PRE-SKY": 7,
+        "POST-SCANNO": 7,
+        "POST-AP": 7,
+        "POST-LAT": 7,
+        "POST-SKY": 7
+    }
+}

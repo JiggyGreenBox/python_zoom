@@ -12,7 +12,7 @@ class ACOR_Menu(tk.Frame):
 		self.obj_name = "ACOR"		
 
 
-		header_label = tk.Label(self, text=self.obj_name,font=("TkDefaultFont",20))
+		header_label = tk.Label(self, text=self.obj_name, font=("TkDefaultFont",20))
 		header_label.grid(column=1, row=1,columnspan=2,pady=[20,0])
 
 		self.label = tk.Label(self, text="CHOOSE SIDE")

@@ -205,3 +205,15 @@ class PRE_AP_View(tk.Frame):
 			self.objects[obj_name].checkbox_click(action,val)
 		except Exception as e:
 			raise e			
+
+
+	# point resize functs
+	def getViewPointSize(self):
+		return int(self.master_dict["POINT_SIZES"]["PRE-AP"])
+
+	def resizeRedraw(self):
+		'''redraw with new point size'''
+		print('resizeRedraw')
+		for obj in self.objects:
+			self.objects[obj].draw()
+			self.objects[obj].unset()

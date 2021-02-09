@@ -22,6 +22,8 @@ class ACOR():
 		# if not populate the dictionary
 		self.checkMasterDict()
 
+		self.point_size = None
+
 	def click(self, event):
 		# print("click from "+self.name)
 		# self.draw()
@@ -79,6 +81,8 @@ class ACOR():
 
 		self.draw_tools.clear_by_tag(self.tag)
 
+		self.point_size = self.controller.getViewPointSize()
+
 		# loop left and right
 		for side in ["LEFT","RIGHT"]:
 			
@@ -111,8 +115,8 @@ class ACOR():
 
 					if acor_p1 != None:
 						# print("P1 Found")
-						# self.draw_tools.create_mypoint(acor_p1, "orange", self.tag)
-						self.draw_tools.create_mypoint(acor_p1, "orange", [self.tag, side, "P1"])
+						# self.draw_tools.create_mypoint(acor_p1, "orange", self.tag, point_thickness=self.point_size)
+						self.draw_tools.create_mypoint(acor_p1, "orange", [self.tag, side, "P1"], point_thickness=self.point_size)
 
 						# join the point to the top parallel to femGuideRay
 						p_xtop = (-acor_p1[1] / slope) + acor_p1[0]
@@ -122,8 +126,8 @@ class ACOR():
 
 					if acor_p2 != None:
 						# print("P2 Found")
-						# self.draw_tools.create_mypoint(acor_p2, "orange", self.tag)
-						self.draw_tools.create_mypoint(acor_p2, "orange", [self.tag, side, "P2"])
+						# self.draw_tools.create_mypoint(acor_p2, "orange", self.tag, point_thickness=self.point_size)
+						self.draw_tools.create_mypoint(acor_p2, "orange", [self.tag, side, "P2"], point_thickness=self.point_size)
 						# join the point to the top parallel to femGuideRay
 						p_xtop = (-acor_p2[1] / slope) + acor_p2[0]
 						self.draw_tools.create_myline(acor_p2, [p_xtop,0], [self.tag, side, "P2_line"])
@@ -131,8 +135,8 @@ class ACOR():
 
 					if acor_p3 != None:
 						# print("P3 Found")
-						# self.draw_tools.create_mypoint(acor_p2, "orange", self.tag)
-						self.draw_tools.create_mypoint(acor_p3, "orange", [self.tag, side, "P3"])
+						# self.draw_tools.create_mypoint(acor_p2, "orange", self.tag, point_thickness=self.point_size)
+						self.draw_tools.create_mypoint(acor_p3, "orange", [self.tag, side, "P3"], point_thickness=self.point_size)
 
 						# join the point to the top parallel to femGuideRay
 						p_xtop = (-acor_p3[1] / slope) + acor_p3[0]
@@ -208,13 +212,13 @@ class ACOR():
 				if item_type == "guideline":
 
 					if guide_fem_p1 != None:
-						self.draw_tools.create_mypoint(guide_fem_p1, "orange", [self.tag, side, "GUIDE_FEM", "P1"])
+						self.draw_tools.create_mypoint(guide_fem_p1, "orange", [self.tag, side, "GUIDE_FEM", "P1"], point_thickness=self.point_size)
 
 					if guide_fem_p2 != None:
-						self.draw_tools.create_mypoint(guide_fem_p2, "orange", [self.tag, side, "GUIDE_FEM", "P2"])
+						self.draw_tools.create_mypoint(guide_fem_p2, "orange", [self.tag, side, "GUIDE_FEM", "P2"], point_thickness=self.point_size)
 
 					if guide_fem_p1 != None and guide_fem_p2 != None:						
-						# self.draw_tools.create_midpoint_line(axis_fem_top_p1, axis_fem_top_p2, axis_fem_top_m1, self.tag)
+						# self.draw_tools.create_midpoint_line(axis_fem_top_p1, axis_fem_top_p2, axis_fem_top_m1, self.tag, point_thickness=self.point_size)
 						# isFemTop = True
 
 						p_top, p_bot = self.getFemGuideRayPoints(guide_fem_p1, guide_fem_p2)
@@ -452,7 +456,7 @@ class ACOR():
 			slope = self.getFemRaySlope(self.side)
 			p_xtop_p1 = (-P_mouse[1] / slope) + P_mouse[0]
 									
-			# self.draw_tools.create_mypoint([x_val, 0], "orange", self.tag)
+			# self.draw_tools.create_mypoint([x_val, 0], "orange", self.tag, point_thickness=self.point_size)
 			self.draw_tools.clear_by_tag("hover_line")
 			self.draw_tools.create_myline(P_mouse, [p_xtop_p1,0], "hover_line")
 
@@ -462,7 +466,7 @@ class ACOR():
 			dx, dy = self.getHorizontalDxDy(self.side)
 			H_point[0] = P_mouse[0] + dx
 			H_point[1] = P_mouse[1] + dy
-			# self.draw_tools.create_mypoint(H_point, "orange", ["hover_line"])
+			# self.draw_tools.create_mypoint(H_point, "orange", ["hover_line"], point_thickness=self.point_size)
 
 			# find angle ray intersection point
 			p_int = self.draw_tools.line_intersection(
@@ -470,7 +474,7 @@ class ACOR():
 					(self.dict[self.name][self.op_type][self.side]["GUIDE_FEM"]["P1"], self.dict[self.name][self.op_type][self.side]["GUIDE_FEM"]["P2"]))
 			self.draw_tools.create_myline(P_mouse, p_int, "hover_line")
 
-			self.draw_tools.create_mypoint(p_int, "orange", ["hover_line"])
+			self.draw_tools.create_mypoint(p_int, "orange", ["hover_line"], point_thickness=self.point_size, hover_point=True)
 
 		elif hover_label == "P1" or hover_label == "P2":
 			slope = self.getFemRaySlope(self.side)
@@ -496,11 +500,11 @@ class ACOR():
 
 
 
-			# self.draw_tools.create_mypoint([x_val, 0], "orange", self.tag)
+			# self.draw_tools.create_mypoint([x_val, 0], "orange", self.tag, point_thickness=self.point_size)
 			if p_int != "":
 				self.draw_tools.clear_by_tag("hover_line")
 				self.draw_tools.create_myline(P_mouse, [p_xtop_p1,0], "hover_line")
-				self.draw_tools.create_mypoint(p_int, "orange", ["hover_line"])
+				self.draw_tools.create_mypoint(p_int, "orange", ["hover_line"], point_thickness=self.point_size, hover_point=True)
 
 		
 
@@ -726,6 +730,12 @@ class ACOR():
 		self.draw_tools.setHoverPointLabel(None)
 		self.draw_tools.setHoverBool(False)
 		self.draw_tools.clear_by_tag(self.tag)
+
+
+	def escapeObjFunc(self):
+		self.side = None
+		self.draw_tools.setHoverPointLabel(None)
+		self.draw_tools.setHoverBool(False)
 
 
 	def drag_start(self, tags):

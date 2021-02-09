@@ -16,6 +16,8 @@ class MPTA():
 		# if not populate the dictionary
 		self.checkMasterDict()
 
+		self.point_size = None
+
 
 	def checkMasterDict(self):
 		if "MPTA" not in self.dict.keys():
@@ -61,6 +63,8 @@ class MPTA():
 
 		self.draw_tools.clear_by_tag(self.tag)
 
+		self.point_size = self.controller.getViewPointSize()
+
 		# loop left and right
 		for side in ["LEFT","RIGHT"]:
 
@@ -81,10 +85,10 @@ class MPTA():
 			# FROM TAMD
 			# ------------------------
 			if tib_joint_p1 != None:
-				self.draw_tools.create_mypoint(tib_joint_p1, "orange", [self.tag, side, "P1_TIB_JOINT_LINE"])
+				self.draw_tools.create_mypoint(tib_joint_p1, "orange", [self.tag, side, "P1_TIB_JOINT_LINE"], point_thickness=self.point_size)
 
 			if tib_joint_p2 != None:
-				self.draw_tools.create_mypoint(tib_joint_p2, "orange", [self.tag, side, "P2_TIB_JOINT_LINE"])
+				self.draw_tools.create_mypoint(tib_joint_p2, "orange", [self.tag, side, "P2_TIB_JOINT_LINE"], point_thickness=self.point_size)
 
 			if tib_joint_p1 != None and tib_joint_p2 != None:
 				self.draw_tools.create_myline(tib_joint_p1, tib_joint_p2, [self.tag,side,"TIB_JOINT_LINE"])
@@ -97,15 +101,15 @@ class MPTA():
 			# KNEE
 			if knee != None:
 				isKnee = True
-				self.draw_tools.create_mypoint(knee, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(knee, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 
 			# ANKLE
 			if ankle_p1 != None and ankle_p2 != None:
 				
-				self.draw_tools.create_mypoint(ankle_p1, "orange", [self.tag, side, "NO-DRAG"])
-				self.draw_tools.create_mypoint(ankle_p2, "orange", [self.tag, side, "NO-DRAG"])
-				self.draw_tools.create_midpoint_line(ankle_p1, ankle_p2, ankle_m1, self.tag)
+				self.draw_tools.create_mypoint(ankle_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
+				self.draw_tools.create_mypoint(ankle_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
+				self.draw_tools.create_midpoint_line(ankle_p1, ankle_p2, ankle_m1, self.tag, point_thickness=self.point_size)
 
 				if isTamd and isKnee:
 

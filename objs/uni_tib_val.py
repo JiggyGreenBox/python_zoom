@@ -16,6 +16,8 @@ class UNI_TIB_VAL():
 		# if not populate the dictionary
 		self.checkMasterDict()
 
+		self.point_size = None
+
 
 	def click(self, event):
 		# print("click from "+self.name)
@@ -93,6 +95,8 @@ class UNI_TIB_VAL():
 	def draw(self):
 
 		self.draw_tools.clear_by_tag(self.tag)
+
+		self.point_size = self.controller.getViewPointSize()
 		
 		# loop left and right				
 		for side in ["LEFT","RIGHT"]:
@@ -108,10 +112,10 @@ class UNI_TIB_VAL():
 
 			# TIB JOINT LINE
 			if tib_joint_p1 != None:
-				self.draw_tools.create_mypoint(tib_joint_p1, "orange", [self.tag,side,"TIB_JOINT_LINE","P1"])
+				self.draw_tools.create_mypoint(tib_joint_p1, "orange", [self.tag,side,"TIB_JOINT_LINE","P1"], point_thickness=self.point_size)
 
 			if tib_joint_p2 != None:
-				self.draw_tools.create_mypoint(tib_joint_p2, "orange", [self.tag,side,"TIB_JOINT_LINE","P2"])
+				self.draw_tools.create_mypoint(tib_joint_p2, "orange", [self.tag,side,"TIB_JOINT_LINE","P2"], point_thickness=self.point_size)
 
 			if tib_joint_p1 != None and tib_joint_p2 != None:
 				self.draw_tools.create_myline(tib_joint_p1, tib_joint_p2, [self.tag,side,"TIB_LINE"])
@@ -130,27 +134,27 @@ class UNI_TIB_VAL():
 
 
 			if top_axis_tib_p1 != None:
-				self.draw_tools.create_mypoint(top_axis_tib_p1, "orange", [self.tag,side,"AXIS_TIB","TOP","P1"])
+				self.draw_tools.create_mypoint(top_axis_tib_p1, "orange", [self.tag,side,"AXIS_TIB","TOP","P1"], point_thickness=self.point_size)
 
 			if top_axis_tib_p2 != None:
-				self.draw_tools.create_mypoint(top_axis_tib_p2, "orange", [self.tag,side,"AXIS_TIB","TOP","P2"])
+				self.draw_tools.create_mypoint(top_axis_tib_p2, "orange", [self.tag,side,"AXIS_TIB","TOP","P2"], point_thickness=self.point_size)
 
 			if top_axis_tib_p1 != None and top_axis_tib_p2 != None:				
 				
-				self.draw_tools.create_midpoint_line(top_axis_tib_p1, top_axis_tib_p2, top_axis_tib_m1, [self.tag,side,"TOP_AXIS_LINE"])
+				self.draw_tools.create_midpoint_line(top_axis_tib_p1, top_axis_tib_p2, top_axis_tib_m1, [self.tag,side,"TOP_AXIS_LINE"], point_thickness=self.point_size)
 				isTibTop = True
 
 
 			# BOT
 			if bot_axis_tib_p1 != None:
-				self.draw_tools.create_mypoint(bot_axis_tib_p1, "orange", [self.tag,side,"AXIS_TIB","BOT","P1"])
+				self.draw_tools.create_mypoint(bot_axis_tib_p1, "orange", [self.tag,side,"AXIS_TIB","BOT","P1"], point_thickness=self.point_size)
 
 			if bot_axis_tib_p2 != None:
-				self.draw_tools.create_mypoint(bot_axis_tib_p2, "orange", [self.tag,side,"AXIS_TIB","BOT","P2"])
+				self.draw_tools.create_mypoint(bot_axis_tib_p2, "orange", [self.tag,side,"AXIS_TIB","BOT","P2"], point_thickness=self.point_size)
 
 			if bot_axis_tib_p1 != None and bot_axis_tib_p2 != None:				
 				# m1 = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["TOP"]["M1"]
-				self.draw_tools.create_midpoint_line(bot_axis_tib_p1, bot_axis_tib_p2, bot_axis_tib_m1, [self.tag,side,"BOT_AXIS_LINE"])
+				self.draw_tools.create_midpoint_line(bot_axis_tib_p1, bot_axis_tib_p2, bot_axis_tib_m1, [self.tag,side,"BOT_AXIS_LINE"], point_thickness=self.point_size)
 				isTibBot = True
 
 			# if isFemJointLine and isFemTop and isFemBot:
@@ -216,7 +220,7 @@ class UNI_TIB_VAL():
 					'''
 					# fem to axis intersection
 					p_int = self.draw_tools.line_intersection((tib_joint_p1, tib_joint_p2), (p_top, D_m1))
-					self.draw_tools.create_mypoint(p_int, "orange", [self.tag, side, "NO-DRAG"])
+					self.draw_tools.create_mypoint(p_int, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 					# find parallel point
 					# slope = self.slope(U_m1, D_m1)
@@ -228,7 +232,7 @@ class UNI_TIB_VAL():
 					C[0] = p_int[0] + dx
 					C[1] = p_int[1] + dy
 
-					# self.draw_tools.create_mypoint(C, "orange", [self.tag, side, "NO-DRAG"])
+					# self.draw_tools.create_mypoint(C, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 					# find L R point
 					L_fem, R_fem = self.draw_tools.retPointsLeftRight(tib_joint_p1, tib_joint_p2)
@@ -439,7 +443,7 @@ class UNI_TIB_VAL():
 		if hover_label == "P1_AXIS_TIB_TOP":
 			self.draw_tools.clear_by_tag("hover_line")
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
-			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line")
+			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
 
 			bot_axis_tib_m1 = self.dict[self.name][self.op_type][self.side]["AXIS_TIB"]["BOT"]["M1"]
 
@@ -454,7 +458,7 @@ class UNI_TIB_VAL():
 		if hover_label == "P1_AXIS_TIB_BOT":
 			self.draw_tools.clear_by_tag("hover_line")
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
-			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line")
+			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
 
 			top_axis_tib_m1 = self.dict[self.name][self.op_type][self.side]["AXIS_TIB"]["TOP"]["M1"]
 
@@ -574,14 +578,14 @@ class UNI_TIB_VAL():
 				self.draw_tools.clear_by_tag("TOP_AXIS_LINE")
 				self.draw_tools.clear_by_tag("drag_line")
 				m = self.draw_tools.midpoint(self.drag_point, P_mouse)
-				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line")
+				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line", point_thickness=self.point_size)
 
 		if self.drag_label == "P1_AXIS_TIB_BOT" or self.drag_label == "P2_AXIS_TIB_BOT":
 			if self.drag_point != None:
 				self.draw_tools.clear_by_tag("BOT_AXIS_LINE")
 				self.draw_tools.clear_by_tag("drag_line")
 				m = self.draw_tools.midpoint(self.drag_point, P_mouse)
-				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line")
+				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line", point_thickness=self.point_size)
 
 	def drag_stop(self, P_mouse):
 		self.draw_tools.clear_by_tag("drag_line")

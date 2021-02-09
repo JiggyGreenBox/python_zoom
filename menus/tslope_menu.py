@@ -34,21 +34,24 @@ class TSLOPE_Menu(tk.Frame):
 		del_label.grid(column=1, row=4,columnspan=2,pady=(110, 10),sticky=N)
 
 
-		button = ttk.Button(self, text="TIB LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-TIB-LINE"))
-		button.grid(column=1, row=5)
-		button = ttk.Button(self, text="TIB LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-TIB-LINE"))
-		button.grid(column=2, row=5)
+		
 
 
 		button = ttk.Button(self, text="TIB TOP", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-TIB-TOP"))
-		button.grid(column=1, row=6)
+		button.grid(column=1, row=5)
 		button = ttk.Button(self, text="TIB TOP", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-TIB-TOP"))
-		button.grid(column=2, row=6)
+		button.grid(column=2, row=5)
 
 
 		button = ttk.Button(self, text="TIB BOT", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-TIB-BOT"))
-		button.grid(column=1, row=7)
+		button.grid(column=1, row=6)
 		button = ttk.Button(self, text="TIB BOT", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-TIB-BOT"))
+		button.grid(column=2, row=6)
+
+
+		button = ttk.Button(self, text="TIB LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-TIB-LINE"))
+		button.grid(column=1, row=7)
+		button = ttk.Button(self, text="TIB LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-TIB-LINE"))
 		button.grid(column=2, row=7)
 
 

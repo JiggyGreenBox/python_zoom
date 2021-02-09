@@ -20,7 +20,9 @@ class TSLOPE():
 
 		self.drag_point = None
 		self.drag_label = None
-		self.drag_side 	= None	
+		self.drag_side 	= None
+
+		self.point_size = None
 
 	def click(self, event):
 		# print("click from "+self.name)
@@ -103,6 +105,8 @@ class TSLOPE():
 
 		self.draw_tools.clear_by_tag(self.tag)
 
+		self.point_size = self.controller.getViewPointSize()
+
 		# loop left and right
 		for side in ["LEFT","RIGHT"]:
 
@@ -122,10 +126,10 @@ class TSLOPE():
 
 
 			if joint_line_p1 != None:
-				self.draw_tools.create_mypoint(joint_line_p1, "orange", [self.tag,side,"TIB_JOINT_LINE","P1"])
+				self.draw_tools.create_mypoint(joint_line_p1, "orange", [self.tag,side,"TIB_JOINT_LINE","P1"], point_thickness=self.point_size)
 
 			if joint_line_p2 != None:
-				self.draw_tools.create_mypoint(joint_line_p2, "orange", [self.tag,side,"TIB_JOINT_LINE","P2"])
+				self.draw_tools.create_mypoint(joint_line_p2, "orange", [self.tag,side,"TIB_JOINT_LINE","P2"], point_thickness=self.point_size)
 
 			if joint_line_p1 != None and joint_line_p2 != None:
 				self.draw_tools.create_myline(joint_line_p1, joint_line_p2, [self.tag,side,"FEM_LINE"])
@@ -135,25 +139,25 @@ class TSLOPE():
 			# TIB AXIS
 			# TOP
 			if top_axis_tib_p1 != None:
-				self.draw_tools.create_mypoint(top_axis_tib_p1, "orange", [self.tag,side,"AXIS_TIB","TOP","P1"])
+				self.draw_tools.create_mypoint(top_axis_tib_p1, "orange", [self.tag,side,"AXIS_TIB","TOP","P1"], point_thickness=self.point_size)
 
 			if top_axis_tib_p2 != None:
-				self.draw_tools.create_mypoint(top_axis_tib_p2, "orange", [self.tag,side,"AXIS_TIB","TOP","P2"])
+				self.draw_tools.create_mypoint(top_axis_tib_p2, "orange", [self.tag,side,"AXIS_TIB","TOP","P2"], point_thickness=self.point_size)
 
 			if top_axis_tib_p1 != None and top_axis_tib_p2 != None:				
-				self.draw_tools.create_midpoint_line(top_axis_tib_p1, top_axis_tib_p2, top_axis_tib_m1, [self.tag,side,"TOP_AXIS_LINE"])
+				self.draw_tools.create_midpoint_line(top_axis_tib_p1, top_axis_tib_p2, top_axis_tib_m1, [self.tag,side,"TOP_AXIS_LINE"], point_thickness=self.point_size)
 				isTibTop = True
 
 
 			# BOT
 			if bot_axis_tib_p1 != None:
-				self.draw_tools.create_mypoint(bot_axis_tib_p1, "orange", [self.tag,side,"AXIS_TIB","BOT","P1"])
+				self.draw_tools.create_mypoint(bot_axis_tib_p1, "orange", [self.tag,side,"AXIS_TIB","BOT","P1"], point_thickness=self.point_size)
 
 			if bot_axis_tib_p2 != None:
-				self.draw_tools.create_mypoint(bot_axis_tib_p2, "orange", [self.tag,side,"AXIS_TIB","BOT","P2"])
+				self.draw_tools.create_mypoint(bot_axis_tib_p2, "orange", [self.tag,side,"AXIS_TIB","BOT","P2"], point_thickness=self.point_size)
 
 			if bot_axis_tib_p1 != None and bot_axis_tib_p2 != None:				
-				self.draw_tools.create_midpoint_line(bot_axis_tib_p1, bot_axis_tib_p2, bot_axis_tib_m1, [self.tag,side,"BOT_AXIS_LINE"])
+				self.draw_tools.create_midpoint_line(bot_axis_tib_p1, bot_axis_tib_p2, bot_axis_tib_m1, [self.tag,side,"BOT_AXIS_LINE"], point_thickness=self.point_size)
 				isTibBot = True
 
 			xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
@@ -236,7 +240,7 @@ class TSLOPE():
 					if self.tflexext:
 						# fem to axis intersection
 						# p_int
-						# self.draw_tools.create_mypoint(p_int, "orange", [self.tag, side, "NO-DRAG"])
+						# self.draw_tools.create_mypoint(p_int, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 						# find perpendicular point
 						slope = self.draw_tools.slope(U_m1, D_m1)				
@@ -449,7 +453,7 @@ class TSLOPE():
 		if hover_label == "P1_top":
 			self.draw_tools.clear_by_tag("hover_line")
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
-			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line")
+			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
 
 			axis_fem_bot_m1 = self.dict["TSLOPE"][self.op_type][self.side]["AXIS_TIB"]["BOT"]["M1"]
 			xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
@@ -464,7 +468,7 @@ class TSLOPE():
 		if hover_label == "P1_bot":
 			self.draw_tools.clear_by_tag("hover_line")
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
-			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line")
+			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
 
 			axis_fem_top_m1 = self.dict["TSLOPE"][self.op_type][self.side]["AXIS_TIB"]["TOP"]["M1"]
 			xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
@@ -581,14 +585,14 @@ class TSLOPE():
 				self.draw_tools.clear_by_tag("TOP_AXIS_LINE")
 				self.draw_tools.clear_by_tag("drag_line")
 				m = self.draw_tools.midpoint(self.drag_point, P_mouse)
-				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line")
+				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line", point_thickness=self.point_size)
 
 		if self.drag_label == "P1_AXIS_TIB_BOT" or self.drag_label == "P2_AXIS_TIB_BOT":
 			if self.drag_point != None:
 				self.draw_tools.clear_by_tag("BOT_AXIS_LINE")
 				self.draw_tools.clear_by_tag("drag_line")
 				m = self.draw_tools.midpoint(self.drag_point, P_mouse)
-				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line")
+				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line", point_thickness=self.point_size)
 
 	def drag_stop(self, P_mouse):
 		self.draw_tools.clear_by_tag("drag_line")

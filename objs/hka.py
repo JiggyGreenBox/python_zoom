@@ -10,6 +10,8 @@ class HKA():
 		self.op_type = op_type
 		self.controller = controller
 
+		self.point_size = None
+
 		
 	def click(self, event):
 		print("click from "+self.name)		
@@ -19,6 +21,8 @@ class HKA():
 	def draw(self):
 
 		self.draw_tools.clear_by_tag(self.tag)
+
+		self.point_size = self.controller.getViewPointSize()
 
 		# loop left and right
 		for side in ["LEFT","RIGHT"]:
@@ -39,24 +43,24 @@ class HKA():
 			# HIP
 			if hip != None:
 				isHip = True
-				self.draw_tools.create_mypoint(hip, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(hip, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			# KNEE
 			if fem_knee != None:
 				isFemKnee = True
-				self.draw_tools.create_mypoint(fem_knee, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(fem_knee, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if tib_knee != None:
 				isTibKnee = True
-				self.draw_tools.create_mypoint(tib_knee, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(tib_knee, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 
 			# ANKLE
 			if ankle_p1 != None and ankle_p2 != None:
 				
-				self.draw_tools.create_mypoint(ankle_p1, "orange", [self.tag, side, "NO-DRAG"])
-				self.draw_tools.create_mypoint(ankle_p2, "orange", [self.tag, side, "NO-DRAG"])
-				self.draw_tools.create_midpoint_line(ankle_p1, ankle_p2, ankle_m1, self.tag)
+				self.draw_tools.create_mypoint(ankle_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
+				self.draw_tools.create_mypoint(ankle_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
+				self.draw_tools.create_midpoint_line(ankle_p1, ankle_p2, ankle_m1, self.tag, point_thickness=self.point_size)
 
 				if isHip and isTibKnee and isFemKnee:
 

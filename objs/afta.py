@@ -10,12 +10,16 @@ class AFTA():
 		self.op_type = op_type
 		self.controller = controller
 
+		self.point_size = None
+
 	def click(self, event):
 		print("click from "+self.name)
 
 	def draw(self):
 
 		self.draw_tools.clear_by_tag(self.tag)
+
+		self.point_size = self.controller.getViewPointSize()
 		
 		# loop left and right
 		for side in ["LEFT","RIGHT"]:
@@ -47,50 +51,50 @@ class AFTA():
 			# FEM AXIS
 			# TOP
 			if fem_top_p1 != None:
-				self.draw_tools.create_mypoint(fem_top_p1, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(fem_top_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if fem_top_p2 != None:
-				self.draw_tools.create_mypoint(fem_top_p2, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(fem_top_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if fem_top_p1 != None and fem_top_p2 != None:
-				self.draw_tools.create_midpoint_line(fem_top_p1, fem_top_p2, fem_top_m1, self.tag)
+				self.draw_tools.create_midpoint_line(fem_top_p1, fem_top_p2, fem_top_m1, self.tag, point_thickness=self.point_size)
 				isFemTop = True
 
 
 			# BOT
 			if fem_bot_p1 != None:
-				self.draw_tools.create_mypoint(fem_bot_p1, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(fem_bot_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if fem_bot_p2 != None:
-				self.draw_tools.create_mypoint(fem_bot_p2, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(fem_bot_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if fem_bot_p1 != None and fem_bot_p2 != None:				
-				self.draw_tools.create_midpoint_line(fem_bot_p1, fem_bot_p2, fem_bot_m1, self.tag)
+				self.draw_tools.create_midpoint_line(fem_bot_p1, fem_bot_p2, fem_bot_m1, self.tag, point_thickness=self.point_size)
 				isFemBot = True
 
 
 			# TIB AXIS
 			# TOP
 			if tib_top_p1 != None:
-				self.draw_tools.create_mypoint(tib_top_p1, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(tib_top_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if tib_top_p2 != None:
-				self.draw_tools.create_mypoint(tib_top_p2, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(tib_top_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if tib_top_p1 != None and tib_top_p2 != None:				
-				self.draw_tools.create_midpoint_line(tib_top_p1, tib_top_p2, tib_top_m1, self.tag)
+				self.draw_tools.create_midpoint_line(tib_top_p1, tib_top_p2, tib_top_m1, self.tag, point_thickness=self.point_size)
 				isTibTop = True
 
 
 			# BOT
 			if tib_bot_p1 != None:
-				self.draw_tools.create_mypoint(tib_bot_p1, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(tib_bot_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if tib_bot_p2 != None:
-				self.draw_tools.create_mypoint(tib_bot_p2, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(tib_bot_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if tib_bot_p1 != None and tib_bot_p2 != None:				
-				self.draw_tools.create_midpoint_line(tib_bot_p1, tib_bot_p2, tib_bot_m1, self.tag)
+				self.draw_tools.create_midpoint_line(tib_bot_p1, tib_bot_p2, tib_bot_m1, self.tag, point_thickness=self.point_size)
 				isTibBot = True
 
 
@@ -123,7 +127,7 @@ class AFTA():
 					(fem_bot_m1, fem_top_m1))
 
 				# int debug
-				self.draw_tools.create_mypoint(p_int, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(p_int, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 				self.draw_tools.create_myline(fem_top_m1, p_int, self.tag)
 
 				a1 = self.draw_tools.getAnglePoints(p_tib, p_int, fem_top_m1)

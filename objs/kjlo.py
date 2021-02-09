@@ -16,6 +16,8 @@ class KJLO():
 		# if not populate the dictionary
 		self.checkMasterDict()
 
+		self.point_size = None
+
 	def checkMasterDict(self):
 		if "KJLO" not in self.dict.keys():
 			self.dict["KJLO"] = 	{
@@ -96,6 +98,8 @@ class KJLO():
 
 		self.draw_tools.clear_by_tag(self.tag)
 
+		self.point_size = self.controller.getViewPointSize()
+
 		isLeftAnkle = False
 		isRightAnkle = False
 
@@ -120,10 +124,10 @@ class KJLO():
 			# FROM KJLO
 			# ------------------------
 			if joint_p1 != None:
-				self.draw_tools.create_mypoint(joint_p1, "orange", [self.tag, side, "P1_JOINT_LINE"])
+				self.draw_tools.create_mypoint(joint_p1, "orange", [self.tag, side, "P1_JOINT_LINE"], point_thickness=self.point_size)
 
 			if joint_p2 != None:
-				self.draw_tools.create_mypoint(joint_p2, "orange", [self.tag, side, "P2_JOINT_LINE"])
+				self.draw_tools.create_mypoint(joint_p2, "orange", [self.tag, side, "P2_JOINT_LINE"], point_thickness=self.point_size)
 
 			if joint_p1 != None and joint_p2 != None:
 				self.draw_tools.create_myline(joint_p1, joint_p2, [self.tag,side,"LINE_KJLO"])
@@ -136,9 +140,9 @@ class KJLO():
 			# ANKLE
 			if ankle_p1 != None and ankle_p2 != None:
 				
-				self.draw_tools.create_mypoint(ankle_p1, "orange", [self.tag, side, "NO-DRAG"])
-				self.draw_tools.create_mypoint(ankle_p2, "orange", [self.tag, side, "NO-DRAG"])
-				self.draw_tools.create_midpoint_line(ankle_p1, ankle_p2, ankle_m1, self.tag)
+				self.draw_tools.create_mypoint(ankle_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
+				self.draw_tools.create_mypoint(ankle_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
+				self.draw_tools.create_midpoint_line(ankle_p1, ankle_p2, ankle_m1, self.tag, point_thickness=self.point_size)
 
 				if side == "RIGHT":
 					isRightAnkle = True

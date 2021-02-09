@@ -16,6 +16,8 @@ class VCA():
 		# if not populate the dictionary
 		self.checkMasterDict()
 
+		self.point_size = None
+
 		# DEL-LEFT-DIST-FEM
 
 	def checkMasterDict(self):
@@ -130,6 +132,8 @@ class VCA():
 	def draw(self):
 
 		self.draw_tools.clear_by_tag(self.tag)
+
+		self.point_size = self.controller.getViewPointSize()
 		
 		# loop left and right
 		for side in ["LEFT","RIGHT"]:
@@ -146,13 +150,13 @@ class VCA():
 			isDist = False
 
 			if dist_fem_p1 != None:
-				self.draw_tools.create_mypoint(dist_fem_p1, "orange", [self.tag, side, "P1_DIST_FEM"])
+				self.draw_tools.create_mypoint(dist_fem_p1, "orange", [self.tag, side, "P1_DIST_FEM"], point_thickness=self.point_size)
 
 			if dist_fem_p2 != None:
-				self.draw_tools.create_mypoint(dist_fem_p2, "orange", [self.tag, side, "P2_DIST_FEM"])
+				self.draw_tools.create_mypoint(dist_fem_p2, "orange", [self.tag, side, "P2_DIST_FEM"], point_thickness=self.point_size)
 
 			if dist_fem_p1 != None and dist_fem_p2 != None:				
-				self.draw_tools.create_midpoint_line(dist_fem_p1, dist_fem_p2, dist_fem_m1, [self.tag,side,"DIST_FEM_LINE"])
+				self.draw_tools.create_midpoint_line(dist_fem_p1, dist_fem_p2, dist_fem_m1, [self.tag,side,"DIST_FEM_LINE"], point_thickness=self.point_size)
 				isDist = True
 
 
@@ -169,12 +173,12 @@ class VCA():
 			# HIP
 			if hip != None:
 				isHip = True
-				self.draw_tools.create_mypoint(hip, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(hip, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			# KNEE
 			if knee != None:
 				isKnee = True
-				self.draw_tools.create_mypoint(knee, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(knee, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			# HIP-KNEE-LINE
 			if hip != None and knee != None:
@@ -213,7 +217,7 @@ class VCA():
 		if hover_label == "P1_VCA":
 			self.draw_tools.clear_by_tag("hover_line")
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
-			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line")
+			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
 	def regainHover(self, side):
 		pass
 
@@ -264,7 +268,7 @@ class VCA():
 			
 			self.draw_tools.clear_by_tag("drag_line")
 			m = self.draw_tools.midpoint(self.drag_point, P_mouse)
-			self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line")
+			self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line", point_thickness=self.point_size)
 
 	def drag_stop(self, P_mouse):
 		self.draw_tools.clear_by_tag("drag_line")

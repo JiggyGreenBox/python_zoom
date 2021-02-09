@@ -16,6 +16,8 @@ class MLDFA():
 		# if not populate the dictionary
 		self.checkMasterDict()
 
+		self.point_size = None
+
 	def click(self, event):
 		print("click from "+self.name)
 
@@ -92,6 +94,8 @@ class MLDFA():
 
 		self.draw_tools.clear_by_tag(self.tag)
 
+		self.point_size = self.controller.getViewPointSize()
+
 		# loop left and right
 		for side in ["LEFT","RIGHT"]:
 
@@ -109,10 +113,10 @@ class MLDFA():
 			# FROM MLDFA
 			# ------------------------
 			if fem_p1 != None:
-				self.draw_tools.create_mypoint(fem_p1, "orange", [self.tag, side, "P1_MLDFA"])
+				self.draw_tools.create_mypoint(fem_p1, "orange", [self.tag, side, "P1_MLDFA"], point_thickness=self.point_size)
 
 			if fem_p2 != None:
-				self.draw_tools.create_mypoint(fem_p2, "orange", [self.tag, side, "P2_MLDFA"])
+				self.draw_tools.create_mypoint(fem_p2, "orange", [self.tag, side, "P2_MLDFA"], point_thickness=self.point_size)
 
 			if fem_p1 != None and fem_p2 != None:
 				self.draw_tools.create_myline(fem_p1, fem_p2, [self.tag,side,"LINE_MLDFA"])
@@ -125,12 +129,12 @@ class MLDFA():
 			# HIP
 			if hip != None:
 				isHip = True
-				self.draw_tools.create_mypoint(hip, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(hip, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			# KNEE
 			if knee != None:
 				isKnee = True
-				self.draw_tools.create_mypoint(knee, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(knee, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 
 			if not isMldfa:

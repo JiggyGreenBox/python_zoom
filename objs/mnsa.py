@@ -16,6 +16,8 @@ class MNSA():
 		# if not populate the dictionary
 		self.checkMasterDict()
 
+		self.point_size = None
+
 
 
 	def checkMasterDict(self):
@@ -101,6 +103,8 @@ class MNSA():
 
 		self.draw_tools.clear_by_tag(self.tag)
 
+		self.point_size = self.controller.getViewPointSize()
+
 		# check if dictionary exists
 		if "MAIN" not in self.dict.keys():
 			return
@@ -116,16 +120,16 @@ class MNSA():
 			# FROM MNSA
 			# ------------------------
 			if self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"], "orange", [self.tag, side, "P1_NECK_AXIS"])
+				self.draw_tools.create_mypoint(self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"], "orange", [self.tag, side, "P1_NECK_AXIS"], point_thickness=self.point_size)
 
 			if self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P2"], "orange", [self.tag, side, "P2_NECK_AXIS"])
+				self.draw_tools.create_mypoint(self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P2"], "orange", [self.tag, side, "P2_NECK_AXIS"], point_thickness=self.point_size)
 
 			if self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"] != None and self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P2"] != None:
 				p1 = self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"]
 				p2 = self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P2"]
 				m1 = self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["M1"]
-				self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag,side,"NECK_AXIS_LINE"])
+				self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag,side,"NECK_AXIS_LINE"], point_thickness=self.point_size)
 				isNeck = True
 
 
@@ -135,37 +139,37 @@ class MNSA():
 			# ------------------------
 			# HIP
 			if self.dict["MAIN"][self.op_type][side]["HIP"]["P1"] != None:				
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["HIP"]["P1"], "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["HIP"]["P1"], "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 
 			# FEM AXIS
 			# TOP
 			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"], "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"], "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"], "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"], "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"] != None and self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"] != None:
 				p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
 				p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
 				m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
-				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
+				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag, point_thickness=self.point_size)
 				isFemTop = True
 
 
 			# BOT
 			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"], "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"], "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"], "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"], "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"] != None and self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"] != None:
 				p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
 				p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
 				m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
-				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag)
+				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag, point_thickness=self.point_size)
 				isFemBot = True
 
 			'''
@@ -295,7 +299,7 @@ class MNSA():
 		if hover_label == "P1_MNSA":
 			self.draw_tools.clear_by_tag("hover_line")
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
-			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line")
+			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
 
 			if self.side != None and self.dict["MAIN"][self.op_type][self.side]["HIP"]["P1"] != None:
 

@@ -89,14 +89,15 @@ class DrawTools(CanvasImage):
 		self.canvas.delete(tag)
 
 
-	def create_token(self, event, color, mytag):
+	def create_token(self, event, color, mytag, point_thickness=7):
 		"""Create a token at the given coordinate in the given color"""
 		# x = round(self.canvas.canvasx(event.x))  # get coordinates of the event on the canvas
 		# y = round(self.canvas.canvasy(event.y))
 		x = self.canvas.canvasx(event.x)  # get coordinates of the event on the canvas
 		y = self.canvas.canvasy(event.y)
 		# print("points: "+str(x)+" "+str(y))
-		thickness = 7 * self.imscale
+		# thickness = 7 * self.imscale
+		thickness = point_thickness * self.imscale
 		self.canvas.create_oval(
 			x - thickness,
 			y - thickness,
@@ -108,14 +109,15 @@ class DrawTools(CanvasImage):
 		)
 
 
-	def create_mypoint(self, point, color, mytag, hover_point=False):
+	def create_mypoint(self, point, color, mytag, hover_point=False, point_thickness=7):
 		"""Create a token at the given coordinate in the given color"""
 		if not hover_point:
 			mytag.append("token")
 		p1 = self.getScaledCoords(point)
 		x = p1[0]
 		y = p1[1]
-		thickness = 7 * self.imscale
+		# thickness = 7 * self.imscale
+		thickness = point_thickness * self.imscale
 		self.canvas.create_oval(
 			x - thickness,
 			y - thickness,
@@ -145,14 +147,15 @@ class DrawTools(CanvasImage):
 
 
 
-	def create_midpoint(self, point, color, mytag):
+	def create_midpoint(self, point, color, mytag, point_thickness=7):
 		"""Create a token at the given coordinate in the given color"""
 		# x = round(self.canvas.canvasx(event.x))  # get coordinates of the event on the canvas
 		# y = round(self.canvas.canvasy(event.y))
 		x = point[0]
 		y = point[1]
 		# print("points: "+str(x)+" "+str(y))
-		thickness = 7 * self.imscale
+		# thickness = 7 * self.imscale
+		thickness = point_thickness * self.imscale
 		self.canvas.create_oval(
 			x - thickness,
 			y - thickness,
@@ -174,7 +177,7 @@ class DrawTools(CanvasImage):
 		self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="orange", width=2, tags=mytag)
 
 
-	def create_midpoint_line(self, point1, point2, mid1, mytag):
+	def create_midpoint_line(self, point1, point2, mid1, mytag, point_thickness=7):
 
 		p1 = self.getScaledCoords(point1)
 		p2 = self.getScaledCoords(point2)
@@ -183,7 +186,7 @@ class DrawTools(CanvasImage):
 		# self.create_midpoint(m1,"red", mytag)
 		# self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="red", width=2, tags=("del","lines", mytag))
 		# 696969
-		self.create_midpoint(m1,"#404040", mytag)
+		self.create_midpoint(m1,"#404040", mytag, point_thickness)
 		# self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="orange", width=2, tags=("del","lines", mytag))
 		self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="orange", width=2, tags=mytag)
 

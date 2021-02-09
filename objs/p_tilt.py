@@ -14,7 +14,9 @@ class P_TILT():
 
 		# check if master dictionary has values
 		# if not populate the dictionary
-		self.checkMasterDict()		
+		self.checkMasterDict()
+
+		self.point_size = None
 
 	def click(self, event):
 		# print("click from "+self.name)
@@ -101,6 +103,8 @@ class P_TILT():
 
 		self.draw_tools.clear_by_tag(self.tag)
 
+		self.point_size = self.controller.getViewPointSize()
+
 		# loop left and right
 		for side in ["LEFT","RIGHT"]:
 
@@ -112,11 +116,11 @@ class P_TILT():
 
 
 			if p1 != None:
-				self.draw_tools.create_mypoint(p1, "orange", [self.tag,side,"P1P2_LINE","P1"])
+				self.draw_tools.create_mypoint(p1, "orange", [self.tag,side,"P1P2_LINE","P1"], point_thickness=self.point_size)
 
 
 			if p2 != None:
-				self.draw_tools.create_mypoint(p2, "orange", [self.tag,side,"P1P2_LINE","P2"])
+				self.draw_tools.create_mypoint(p2, "orange", [self.tag,side,"P1P2_LINE","P2"], point_thickness=self.point_size)
 
 			if p1 != None and p2 != None:
 				self.draw_tools.create_myline(p1, p2, [self.tag,side,"P1P2_LINE","P1P2_LINE_LINE"])
@@ -124,11 +128,11 @@ class P_TILT():
 
 
 			if pat_p1 != None:
-				self.draw_tools.create_mypoint(pat_p1, "orange", [self.tag,side,"PAT_CROSS_SECTION","P1"])
+				self.draw_tools.create_mypoint(pat_p1, "orange", [self.tag,side,"PAT_CROSS_SECTION","P1"], point_thickness=self.point_size)
 				self.draw_tools.create_mytext(pat_p1, "PAT P1", [self.tag,"PAT_CROSS_SECTION"], y_offset=-30)
 
 			if pat_p2 != None:
-				self.draw_tools.create_mypoint(pat_p2, "orange", [self.tag,side,"PAT_CROSS_SECTION","P2"])
+				self.draw_tools.create_mypoint(pat_p2, "orange", [self.tag,side,"PAT_CROSS_SECTION","P2"], point_thickness=self.point_size)
 				self.draw_tools.create_mytext(pat_p2, "PAT P2", [self.tag,"PAT_CROSS_SECTION"], y_offset=-30)
 
 			if pat_p1 != None and pat_p2 != None:

@@ -20,6 +20,8 @@ class SA():
 		self.drag_label = None
 		self.drag_side 	= None
 
+		self.point_size = None
+
 	def click(self, event):
 		# print("click from "+self.name)
 		# self.draw()
@@ -89,6 +91,8 @@ class SA():
 
 		self.draw_tools.clear_by_tag(self.tag)
 
+		self.point_size = self.controller.getViewPointSize()
+
 		# loop left and right
 		for side in ["LEFT","RIGHT"]:
 
@@ -97,13 +101,13 @@ class SA():
 			p3 = self.dict["SA"][self.op_type][side]["P3"]["P1"]
 
 			if p1 != None:
-				self.draw_tools.create_mypoint(p1, "orange", [self.tag, side, "P1"])
+				self.draw_tools.create_mypoint(p1, "orange", [self.tag, side, "P1"], point_thickness=self.point_size)
 
 			if p2 != None:
-				self.draw_tools.create_mypoint(p2, "orange", [self.tag, side, "P2"])
+				self.draw_tools.create_mypoint(p2, "orange", [self.tag, side, "P2"], point_thickness=self.point_size)
 
 			if p3 != None:
-				self.draw_tools.create_mypoint(p3, "orange", [self.tag, side, "P3"])
+				self.draw_tools.create_mypoint(p3, "orange", [self.tag, side, "P3"], point_thickness=self.point_size)
 
 
 			if p1 != None and p2 != None:

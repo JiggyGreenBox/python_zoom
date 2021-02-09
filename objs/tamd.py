@@ -12,6 +12,8 @@ class TAMD():
 		self.side = None
 		self.op_type = op_type
 
+		self.point_size = None
+
 
 	def click(self, event):
 		print("click from "+self.name)		
@@ -59,6 +61,8 @@ class TAMD():
 	def draw(self):
 
 		self.draw_tools.clear_by_tag(self.tag)
+
+		self.point_size = self.controller.getViewPointSize()
 		
 		# loop left and right
 		for side in ["LEFT","RIGHT"]:
@@ -107,43 +111,43 @@ class TAMD():
 
 			# TOP
 			if tib_top_p1 != None:
-				self.draw_tools.create_mypoint(tib_top_p1, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(tib_top_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if tib_top_p2 != None:
-				self.draw_tools.create_mypoint(tib_top_p2, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(tib_top_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if tib_top_p1 != None and tib_top_p2 != None:				
-				self.draw_tools.create_midpoint_line(tib_top_p1, tib_top_p2, top_m1, self.tag)
+				self.draw_tools.create_midpoint_line(tib_top_p1, tib_top_p2, top_m1, self.tag, point_thickness=self.point_size)
 				isTibTop = True
 
 
 			# BOT
 			if tib_bot_p1 != None:
-				self.draw_tools.create_mypoint(tib_bot_p1, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(tib_bot_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if tib_bot_p2 != None:
-				self.draw_tools.create_mypoint(tib_bot_p2, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(tib_bot_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if tib_bot_p1 != None and tib_bot_p2 != None:				
-				self.draw_tools.create_midpoint_line(tib_bot_p1, tib_bot_p2, bot_m1, self.tag)
+				self.draw_tools.create_midpoint_line(tib_bot_p1, tib_bot_p2, bot_m1, self.tag, point_thickness=self.point_size)
 				isTibBot = True
 
 
 			# tib knee
 			if tib_knee != None:
-				self.draw_tools.create_mypoint(tib_knee, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(tib_knee, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 				isKnee = True
 
 
 			# ankle
 			if ankle_p1 != None:
-				self.draw_tools.create_mypoint(ankle_p1, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(ankle_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if ankle_p2 != None:
-				self.draw_tools.create_mypoint(ankle_p2, "orange", [self.tag, side, "NO-DRAG"])
+				self.draw_tools.create_mypoint(ankle_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 			if ankle_p1 != None and ankle_p2 != None:				
-				self.draw_tools.create_midpoint_line(ankle_p1, ankle_p2, ankle_m1, self.tag)
+				self.draw_tools.create_midpoint_line(ankle_p1, ankle_p2, ankle_m1, self.tag, point_thickness=self.point_size)
 				isAnkle = True
 
 

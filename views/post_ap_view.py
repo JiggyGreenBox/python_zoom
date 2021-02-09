@@ -206,4 +206,15 @@ class POST_AP_View(tk.Frame):
 		except Exception as e:
 			raise e
 
+	# point resize functs
+	def getViewPointSize(self):
+		return int(self.master_dict["POINT_SIZES"]["POST-AP"])
+
+	def resizeRedraw(self):
+		'''redraw with new point size'''
+		print('resizeRedraw')
+		for obj in self.objects:
+			self.objects[obj].draw()
+			self.objects[obj].unset()
+
 			

@@ -52,6 +52,9 @@ class MainWindow(ttk.Frame):
 
 		self.master.bind('<Escape>', lambda event: self.master.after_idle(self.key_funct, event))
 
+		# check for user prefs, if not found create user_prefs.json
+		self.point_size_obj = "" 	# store json data view-wise of point sizes
+		self.check_user_prefs()
 
 		self.working_dir = ""		
 		self.master_dict = {}
@@ -183,6 +186,49 @@ class MainWindow(ttk.Frame):
 
 		with open(self.working_dir + '/pat.json', 'w', encoding='utf-8') as f:
 			json.dump(self.master_dict, f, ensure_ascii=False, indent=4)
+
+
+	def check_user_prefs(self):
+		script_dir = os.path.dirname(os.path.realpath(__file__))
+		file_prefs = Path(script_dir + "/user_prefs.json")
+
+		
+		try:
+			# check if exists
+			if file_prefs.is_file():
+				print('exists')
+				with open(file_prefs) as f:
+					self.point_size_obj = json.load(f)
+					print(self.point_size_obj)
+
+
+			# create if not found
+			else:				
+				user_json = {}
+				if "POINT_SIZES" not in user_json.keys():
+					user_json["POINT_SIZES"] = 	{
+												"PRE-SCANNO":7,
+												"PRE-AP":7,
+												"PRE-LAT":7,
+												"PRE-SKY":7,
+												"POST-SCANNO":7,
+												"POST-AP":7,
+												"POST-LAT":7,
+												"POST-SKY":7
+											}
+
+				with open(script_dir + '/user_prefs.json', 'w', encoding='utf-8') as f:
+					json.dump(user_json, f, ensure_ascii=False, indent=4)
+
+				self.point_size_obj = json.loads(json.dumps(user_json))
+				print(self.point_size_obj)
+
+
+		except Exception as e:
+			print(e)
+			raise e
+		
+
 
 
 	def add_image_path_masterdict(self):
@@ -344,6 +390,35 @@ class MainWindow(ttk.Frame):
 													}
 												}
 											}
+
+
+		if "POINT_SIZES" not in self.master_dict.keys():
+
+			print('point val is {}'.format(self.point_size_obj["POINT_SIZES"]["PRE-SCANNO"]))
+
+			if self.point_size_obj != "":
+				self.master_dict["POINT_SIZES"] = 	{
+											"PRE-SCANNO":	self.point_size_obj["POINT_SIZES"]["PRE-SCANNO"],
+											"PRE-AP":		self.point_size_obj["POINT_SIZES"]["PRE-AP"],
+											"PRE-LAT":		self.point_size_obj["POINT_SIZES"]["PRE-LAT"],
+											"PRE-SKY":		self.point_size_obj["POINT_SIZES"]["PRE-SKY"],
+											"POST-SCANNO":	self.point_size_obj["POINT_SIZES"]["POST-SCANNO"],
+											"POST-AP":		self.point_size_obj["POINT_SIZES"]["POST-AP"],
+											"POST-LAT":		self.point_size_obj["POINT_SIZES"]["POST-LAT"],
+											"POST-SKY":		self.point_size_obj["POINT_SIZES"]["POST-SKY"]
+										}
+			else:				
+				self.master_dict["POINT_SIZES"] = 	{
+											"PRE-SCANNO":None,
+											"PRE-AP":None,
+											"PRE-LAT":None,
+											"PRE-SKY":None,
+											"POST-SCANNO":None,
+											"POST-AP":None,
+											"POST-LAT":None,
+											"POST-SKY":None
+										}
+
 
 	def rotateImage(self):
 		
@@ -682,6 +757,14 @@ class MainWindow(ttk.Frame):
 		# update all dictionaries
 		for view in self.views:
 			self.views[view].update_dict(self.master_dict)
+
+
+	def redrawNewPointSize(self, page_name):
+
+		page_name = page_name.replace("-", "_")	+ "_View"			
+		view = self.views[page_name]
+		
+		view.resizeRedraw()		
 
 
 app = MainWindow(tk.Tk())

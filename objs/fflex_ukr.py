@@ -20,6 +20,8 @@ class FFLEX_UKR():
 		self.drag_label = None
 		self.drag_side 	= None
 
+		self.point_size = None
+
 
 
 	def click(self, event):
@@ -115,9 +117,10 @@ class FFLEX_UKR():
 
 	
 	def draw(self):
-		
-		
+				
 		self.draw_tools.clear_by_tag(self.tag)
+
+		self.point_size = self.controller.getViewPointSize()
 
 		# loop left and right
 		for side in ["LEFT","RIGHT"]:
@@ -153,25 +156,25 @@ class FFLEX_UKR():
 			# FEM AXIS
 			# TOP
 			if axis_fem_top_p1 != None:
-				self.draw_tools.create_mypoint(axis_fem_top_p1, "orange", [self.tag,side,"AXIS_FEM","TOP","P1"])
+				self.draw_tools.create_mypoint(axis_fem_top_p1, "orange", [self.tag,side,"AXIS_FEM","TOP","P1"], point_thickness=self.point_size)
 
 			if axis_fem_top_p2 != None:
-				self.draw_tools.create_mypoint(axis_fem_top_p2, "orange", [self.tag,side,"AXIS_FEM","TOP","P2"])
+				self.draw_tools.create_mypoint(axis_fem_top_p2, "orange", [self.tag,side,"AXIS_FEM","TOP","P2"], point_thickness=self.point_size)
 
 			if axis_fem_top_p1 != None and axis_fem_top_p2 != None:				
-				self.draw_tools.create_midpoint_line(axis_fem_top_p1, axis_fem_top_p2, axis_fem_top_m1, [self.tag,side,"TOP_AXIS_LINE"])
+				self.draw_tools.create_midpoint_line(axis_fem_top_p1, axis_fem_top_p2, axis_fem_top_m1, [self.tag,side,"TOP_AXIS_LINE"], point_thickness=self.point_size)
 				isFemTop = True
 				
 
 			# BOT
 			if axis_fem_bot_p1 != None:
-				self.draw_tools.create_mypoint(axis_fem_bot_p1, "orange", [self.tag,side,"AXIS_FEM","BOT","P1"])
+				self.draw_tools.create_mypoint(axis_fem_bot_p1, "orange", [self.tag,side,"AXIS_FEM","BOT","P1"], point_thickness=self.point_size)
 
 			if axis_fem_bot_p2 != None:
-				self.draw_tools.create_mypoint(axis_fem_bot_p2, "orange", [self.tag,side,"AXIS_FEM","BOT","P2"])
+				self.draw_tools.create_mypoint(axis_fem_bot_p2, "orange", [self.tag,side,"AXIS_FEM","BOT","P2"], point_thickness=self.point_size)
 
 			if axis_fem_bot_p1 != None and axis_fem_bot_p2 != None:				
-				self.draw_tools.create_midpoint_line(axis_fem_bot_p1, axis_fem_bot_p2, axis_fem_bot_m1, [self.tag,"BOT_AXIS_LINE"])
+				self.draw_tools.create_midpoint_line(axis_fem_bot_p1, axis_fem_bot_p2, axis_fem_bot_m1, [self.tag,"BOT_AXIS_LINE"], point_thickness=self.point_size)
 				isFemBot = True
 
 
@@ -179,25 +182,25 @@ class FFLEX_UKR():
 			# PEG AXIS
 			# TOP
 			if axis_peg_top_p1 != None:
-				self.draw_tools.create_mypoint(axis_peg_top_p1, "orange", [self.tag,side,"AXIS_PEG","TOP","P1"])
+				self.draw_tools.create_mypoint(axis_peg_top_p1, "orange", [self.tag,side,"AXIS_PEG","TOP","P1"], point_thickness=self.point_size)
 
 			if axis_peg_top_p2 != None:
-				self.draw_tools.create_mypoint(axis_peg_top_p2, "orange", [self.tag,side,"AXIS_PEG","TOP","P2"])
+				self.draw_tools.create_mypoint(axis_peg_top_p2, "orange", [self.tag,side,"AXIS_PEG","TOP","P2"], point_thickness=self.point_size)
 
 			if axis_peg_top_p1 != None and axis_peg_top_p2 != None:				
-				self.draw_tools.create_midpoint_line(axis_peg_top_p1, axis_peg_top_p2, axis_peg_top_m1, [self.tag,side,"TOP_AXIS_LINE"])
+				self.draw_tools.create_midpoint_line(axis_peg_top_p1, axis_peg_top_p2, axis_peg_top_m1, [self.tag,side,"TOP_AXIS_LINE"], point_thickness=self.point_size)
 				isPegTop = True
 				
 
 			# BOT
 			if axis_peg_bot_p1 != None:
-				self.draw_tools.create_mypoint(axis_peg_bot_p1, "orange", [self.tag,side,"AXIS_PEG","BOT","P1"])
+				self.draw_tools.create_mypoint(axis_peg_bot_p1, "orange", [self.tag,side,"AXIS_PEG","BOT","P1"], point_thickness=self.point_size)
 
 			if axis_peg_bot_p2 != None:
-				self.draw_tools.create_mypoint(axis_peg_bot_p2, "orange", [self.tag,side,"AXIS_PEG","BOT","P2"])
+				self.draw_tools.create_mypoint(axis_peg_bot_p2, "orange", [self.tag,side,"AXIS_PEG","BOT","P2"], point_thickness=self.point_size)
 
 			if axis_peg_bot_p1 != None and axis_peg_bot_p2 != None:				
-				self.draw_tools.create_midpoint_line(axis_peg_bot_p1, axis_peg_bot_p2, axis_peg_bot_m1, [self.tag,"BOT_AXIS_LINE"])
+				self.draw_tools.create_midpoint_line(axis_peg_bot_p1, axis_peg_bot_p2, axis_peg_bot_m1, [self.tag,"BOT_AXIS_LINE"], point_thickness=self.point_size)
 				isPegBot = True
 
 
@@ -307,7 +310,7 @@ class FFLEX_UKR():
 		if hover_label == "P1_top":
 			self.draw_tools.clear_by_tag("hover_line")
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
-			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line")
+			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
 
 			axis_fem_bot_m1 = self.dict["FFLEX_UKR"][self.op_type][self.side]["AXIS_FEM"]["BOT"]["M1"]
 			xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
@@ -323,7 +326,7 @@ class FFLEX_UKR():
 		if hover_label == "P1_bot":
 			self.draw_tools.clear_by_tag("hover_line")
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
-			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line")
+			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
 
 			axis_fem_top_m1 = self.dict["FFLEX_UKR"][self.op_type][self.side]["AXIS_FEM"]["TOP"]["M1"]
 			xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
@@ -345,12 +348,12 @@ class FFLEX_UKR():
 		if hover_label == "P1_peg_top":
 			self.draw_tools.clear_by_tag("hover_line")
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
-			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line")
+			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
 		# bot
 		if hover_label == "P1_peg_bot":
 			self.draw_tools.clear_by_tag("hover_line")
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
-			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line")
+			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
 
 	def regainHover(self, side):
 		pass
@@ -687,28 +690,28 @@ class FFLEX_UKR():
 				self.draw_tools.clear_by_tag("TOP_AXIS_LINE")
 				self.draw_tools.clear_by_tag("drag_line")
 				m = self.draw_tools.midpoint(self.drag_point, P_mouse)
-				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line")
+				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line", point_thickness=self.point_size)
 
 		if self.drag_label == "P1_AXIS_FEM_BOT" or self.drag_label == "P2_AXIS_FEM_BOT":
 			if self.drag_point != None:
 				self.draw_tools.clear_by_tag("BOT_AXIS_LINE")
 				self.draw_tools.clear_by_tag("drag_line")
 				m = self.draw_tools.midpoint(self.drag_point, P_mouse)
-				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line")
+				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line", point_thickness=self.point_size)
 
 		if self.drag_label == "P1_AXIS_PEG_TOP" or self.drag_label == "P2_AXIS_PEG_TOP":
 			if self.drag_point != None:
 				self.draw_tools.clear_by_tag("TOP_AXIS_LINE")
 				self.draw_tools.clear_by_tag("drag_line")
 				m = self.draw_tools.midpoint(self.drag_point, P_mouse)
-				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line")
+				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line", point_thickness=self.point_size)
 
 		if self.drag_label == "P1_AXIS_PEG_BOT" or self.drag_label == "P2_AXIS_PEG_BOT":
 			if self.drag_point != None:
 				self.draw_tools.clear_by_tag("BOT_AXIS_LINE")
 				self.draw_tools.clear_by_tag("drag_line")
 				m = self.draw_tools.midpoint(self.drag_point, P_mouse)
-				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line")
+				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line", point_thickness=self.point_size)
 
 
 	def drag_stop(self, P_mouse):

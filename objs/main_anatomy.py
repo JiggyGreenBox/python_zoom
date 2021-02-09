@@ -23,8 +23,9 @@ class MAIN:
 		self.draw_anat_axis = False
 
 		self.drag_label = None
+		self.point_size = None
 
-		self.hover_text = None
+		self.hover_text = None			
 
 
 
@@ -116,8 +117,7 @@ class MAIN:
 
 		if self.side == None:
 			print("please choose side")
-			self.controller.warningBox("Please select a Side")
-			# self.controller.testbubble()
+			self.controller.warningBox("Please select a Side")			
 		else:
 			# print("proceed")
 			ret =  self.addDict(event)
@@ -440,6 +440,8 @@ class MAIN:
 		# for items in self.dict["MAIN"]:
 		self.draw_tools.clear_by_tag(self.tag)
 
+		self.point_size = self.controller.getViewPointSize()
+
 		if self.draw_anat_axis:
 			print("draw draw_anat_axis")
 
@@ -459,7 +461,7 @@ class MAIN:
 				if item_type == "point":
 					if self.dict["MAIN"][self.op_type][side][item]["P1"] != None:
 
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P1"], "orange", [self.tag, side, item,"P1"])
+						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P1"], "orange", [self.tag, side, item,"P1"], point_thickness=self.point_size)
 						# self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"], x_offset=80, mytext=(side_pre+item), mytag=self.tag)
 
 						if self.draw_labels:
@@ -474,17 +476,17 @@ class MAIN:
 				# ANKLE
 				if item_type == "midpoint":
 					if self.dict["MAIN"][self.op_type][side][item]["P1"] != None:
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P1"], "orange", [self.tag, side, "ANKLE", "P1"])
+						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P1"], "orange", [self.tag, side, "ANKLE", "P1"], point_thickness=self.point_size)
 
 					if self.dict["MAIN"][self.op_type][side][item]["P2"] != None:
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P2"], "orange", [self.tag, side, "ANKLE", "P2"])
+						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P2"], "orange", [self.tag, side, "ANKLE", "P2"], point_thickness=self.point_size)
 
 
 					if self.dict["MAIN"][self.op_type][side][item]["P1"] != None and self.dict["MAIN"][self.op_type][side][item]["P2"] != None:
 						p1 = self.dict["MAIN"][self.op_type][side][item]["P1"]
 						p2 = self.dict["MAIN"][self.op_type][side][item]["P2"]
 						m1 = self.dict["MAIN"][self.op_type][side][item]["M1"]
-						self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag, side, "ANKLE_LINE"])
+						self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag, side, "ANKLE_LINE"], point_thickness=self.point_size)
 						if self.draw_labels:
 							self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P2"], x_offset=80, mytext=(side_pre+item), mytag=[self.tag, side, "ANKLE_LINE"], color="blue")
 
@@ -493,16 +495,16 @@ class MAIN:
 				if item_type == "axis":
 					
 					if self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"] != None:						
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"], "orange", [self.tag, side, item, "TOP", "P1"])
+						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"], "orange", [self.tag, side, item, "TOP", "P1"], point_thickness=self.point_size)
 
 					if self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"] != None:
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"], "orange", [self.tag, side, item, "TOP", "P2"])
+						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"], "orange", [self.tag, side, item, "TOP", "P2"], point_thickness=self.point_size)
 
 					if self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"] != None and self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"] != None:
 						p1 = self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"]
 						p2 = self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"]
 						m1 = self.dict["MAIN"][self.op_type][side][item]["TOP"]["M1"]
-						self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag,side,"AXIS_LINE"])
+						self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag,side,"AXIS_LINE"], point_thickness=self.point_size)
 
 						axis_text = side_pre + item.replace("AXIS_", "") + "_TOP"
 						if self.draw_labels:
@@ -510,16 +512,16 @@ class MAIN:
 
 
 					if self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"] != None:						
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"], "orange", [self.tag, side, item, "BOT", "P1"])
+						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"], "orange", [self.tag, side, item, "BOT", "P1"], point_thickness=self.point_size)
 
 					if self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"] != None:						
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"], "orange", [self.tag, side, item, "BOT", "P2"])
+						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"], "orange", [self.tag, side, item, "BOT", "P2"], point_thickness=self.point_size)
 
 					if self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"] != None and self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"] != None:
 						p1 = self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"]
 						p2 = self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"]
 						m1 = self.dict["MAIN"][self.op_type][side][item]["BOT"]["M1"]
-						self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag,side,"AXIS_LINE"])
+						self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag,side,"AXIS_LINE"], point_thickness=self.point_size)
 
 						axis_text = side_pre + item.replace("AXIS_", "") + "_BOT"
 						if self.draw_labels:
@@ -548,7 +550,7 @@ class MAIN:
 				hover_label == "P0_AXIS_TIB_BOT"
 				):
 				self.draw_tools.clear_by_tag("hover_line")
-				self.draw_tools.create_mypoint(P_mouse, "red", [self.tag, "hover_line"], hover_point=True)
+				self.draw_tools.create_mypoint(P_mouse, "red", [self.tag, "hover_line"], hover_point=True, point_thickness=self.point_size)
 				if self.draw_labels:
 					self.draw_tools.create_mytext(P_mouse,x_offset=80, mytext=(side_pre+self.hover_text), mytag=[self.tag, "hover_line"])
 
@@ -562,7 +564,7 @@ class MAIN:
 			):
 			self.draw_tools.clear_by_tag("hover_line")
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
-			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line")
+			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
 
 
 	def mainHoverUsingNextLabel(self):
@@ -831,7 +833,7 @@ class MAIN:
 
 		side = ""
 		item = ""
-		topbot = ""
+		topbot = ""		
 
 		# find side
 		if "LEFT" in tags:
@@ -903,7 +905,7 @@ class MAIN:
 			self.draw_tools.clear_by_tag("ANKLE_LINE")
 			self.draw_tools.clear_by_tag("drag_line")
 			m = self.draw_tools.midpoint(self.drag_point, P_mouse)
-			self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line")
+			self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line", point_thickness=self.point_size)
 
 
 		if (self.drag_label == "P1_AXIS_FEM_TOP" or self.drag_label == "P2_AXIS_FEM_TOP" or self.drag_label == "P1_AXIS_FEM_BOT" or self.drag_label == "P2_AXIS_FEM_BOT" or
@@ -911,7 +913,7 @@ class MAIN:
 			self.draw_tools.clear_by_tag("AXIS_LINE")
 			self.draw_tools.clear_by_tag("drag_line")
 			m = self.draw_tools.midpoint(self.drag_point, P_mouse)
-			self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line")
+			self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line", point_thickness=self.point_size)
 
 
 		# self.drag_label = "P2_AXIS_FEM_"+topbot

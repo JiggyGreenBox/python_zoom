@@ -205,4 +205,16 @@ class PRE_SKY_View(tk.Frame):
 		try:
 			self.objects[obj_name].checkbox_click(action,val)
 		except Exception as e:
-			raise e				
+			raise e
+
+
+	# point resize functs
+	def getViewPointSize(self):
+		return int(self.master_dict["POINT_SIZES"]["PRE-SKY"])
+
+	def resizeRedraw(self):
+		'''redraw with new point size'''
+		print('resizeRedraw')
+		for obj in self.objects:
+			self.objects[obj].draw()
+			self.objects[obj].unset()

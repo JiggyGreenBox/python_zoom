@@ -136,7 +136,7 @@ class PRE_SCANNO_View(tk.Frame):
 		'''bubble to top'''
 		self.controller.save_json()
 
-	def escapeFunc(self):		
+	def escapeFunc(self):
 		if self.canvas != "":
 			try:
 				self.canvas.cur_obj.escapeObjFunc()
@@ -251,4 +251,16 @@ class PRE_SCANNO_View(tk.Frame):
 			self.objects[obj_name].checkbox_click(action,val)
 		except Exception as e:
 			raise e
+
+	# point resize functs
+	def getViewPointSize(self):
+		return int(self.master_dict["POINT_SIZES"]["PRE-SCANNO"])
+
+	def resizeRedraw(self):
+		'''redraw with new point size'''
+		print('resizeRedraw')
+		for obj in self.objects:			
+			self.objects[obj].draw()
+			self.objects[obj].unset()
+
 		
