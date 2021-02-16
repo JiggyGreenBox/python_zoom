@@ -250,12 +250,12 @@ class MPTA():
 				if item_type == "line":
 
 					# check if P1 is None				
-					if self.dict["MPTA"][self.op_type][self.side][item]["P1"] == None:					
+					if self.dict["MPTA"][self.op_type][self.side][item]["P1"] == None:
 						return (self.side + " " + item + " P1")
 
 
 					# check if P2 is None				
-					if self.dict["MPTA"][self.op_type][self.side][item]["P2"] == None:				
+					if self.dict["MPTA"][self.op_type][self.side][item]["P2"] == None:
 						return (self.side + " " + item + " P2")
 
 				return (self.side + " Done")

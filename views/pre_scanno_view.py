@@ -14,6 +14,8 @@ from menus.mpta_menu import MPTA_Menu
 from menus.vca_menu import VCA_Menu
 from menus.kjlo_menu import KJLO_Menu
 from menus.kaol_menu import KAOL_Menu
+from menus.mad_menu import MAD_Menu
+from menus.eadf_menu import EADF_Menu
 from menus.main_menu import MAIN_Menu
 
 # objs
@@ -27,6 +29,8 @@ from objs.mpta import MPTA
 from objs.vca import VCA
 from objs.kjlo import KJLO
 from objs.kaol import KAOL
+from objs.mad import MAD
+from objs.eadf import EADF
 from objs.main_anatomy import MAIN
 
 # choose file
@@ -60,7 +64,7 @@ class PRE_SCANNO_View(tk.Frame):
 		self.topbar.pack(anchor=E, fill=X, expand=False, side=TOP)
 
 		# make buttons in the topbar
-		for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","KJLO", "KAOL"]):
+		for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","KJLO","KAOL","MAD","EADF"]):
 		# for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","ALDFA","MLDFA","TAMD","MPTA","KJLO", "KAOL"]):
 			# print(text)
 			button = ttk.Button(self.topbar, text=text, command=lambda text=text: self.show_menu(text))
@@ -91,6 +95,8 @@ class PRE_SCANNO_View(tk.Frame):
 					VCA_Menu,
 					KJLO_Menu,
 					KAOL_Menu,
+					MAD_Menu,
+					EADF_Menu,
 					MAIN_Menu
 				):
 			page_name = M.__name__
@@ -115,6 +121,8 @@ class PRE_SCANNO_View(tk.Frame):
 					VCA,
 					KJLO,
 					KAOL,
+					MAD,
+					EADF,
 					MAIN
 				):
 			obj_name = Obj.__name__
