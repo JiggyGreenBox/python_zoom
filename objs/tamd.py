@@ -238,4 +238,85 @@ class TAMD():
 		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)
 
+	# similiar to draw but nothing is drawn on the canvas
+	def updateExcelValues(self):
+
+		# loop left and right
+		for side in ["LEFT","RIGHT"]:
+
+			isTibTop = False
+			isTibBot = False
+			isKnee = False
+			isAnkle = False
+			
+
+			tib_top_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["P1"]
+			tib_top_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["P2"]
+			top_m1 		= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["M1"]
+
+			tib_bot_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["P1"]
+			tib_bot_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["P2"]
+			bot_m1 		= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["M1"]
+			
+
+
+			tib_knee 	= self.dict["MAIN"][self.op_type][side]["TIB_KNEE"]["P1"]
+			ankle_p1 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["P1"]
+			ankle_p2 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]
+			ankle_m1 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["M1"]
+
+
+			
+
+
+
+			# TOP
+			if tib_top_p1 != None and tib_top_p2 != None:				
+				isTibTop = True
+
+
+			# BOT
+			if tib_bot_p1 != None and tib_bot_p2 != None:				
+				isTibBot = True
+
+
+			# tib knee
+			if tib_knee != None:
+				isKnee = True
+
+
+			# ankle
+			if ankle_p1 != None and ankle_p2 != None:				
+				isAnkle = True
+
+
+			if isTibTop and isTibBot and isKnee and isAnkle:
+
+				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
+
+				# TIB-AXIS ray
+				# p_tib = self.draw_tools.line_intersection((bot_m1, top_m1),(xtop, ytop))
+				# self.draw_tools.create_myline(bot_m1, p_tib, self.tag)
+
+				# TIB-KNEE - ANKLE line
+
+				p_int = self.draw_tools.line_intersection((bot_m1, top_m1),(tib_knee, ankle_m1))
+
+				angle = self.draw_tools.getSmallestAngle(top_m1, p_int, tib_knee)
+				# angle2 = self.draw_tools.getAnglePoints(top_m1, p_int, tib_knee)
+				# angle3 = self.draw_tools.getAnglePointsNeg(top_m1, p_int, tib_knee)
+				# print('angle1: {0:.2f}'.format(angle))
+				# print('angle2: {0:.2f}'.format(angle2))
+				# print('angle3: {0:.2f}'.format(angle3))
+
+
+
+				# check if value exists
+				if self.dict["EXCEL"][self.op_type][side]["TAMD"] == None:
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["TAMD"]	 	= '{0:.2f}'.format(angle)
+					# save after insert
+					self.controller.save_json()
+
+
 		

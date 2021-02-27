@@ -66,28 +66,32 @@ class DETAILS_View(tk.Frame):
 
 
 		tk.Label(self, text="PRE-SCANNO").grid(sticky="W", column=0, row=8, padx=(10,0))
-		sp1 = Spinbox(self, textvariable=self.pre_scanno_var, from_= 5, to = 30, width=10).grid(column=1, row=8)
+		sp1 = Spinbox(self, textvariable=self.pre_scanno_var, from_= 1, to = 30, width=10).grid(column=1, row=8)
 
 		tk.Label(self, text="PRE-AP").grid(sticky="W", column=0, row=9, padx=(10,0))
-		sp2 = Spinbox(self, textvariable=self.pre_ap_var, from_= 5, to = 30, width=10).grid(column=1, row=9)
+		sp2 = Spinbox(self, textvariable=self.pre_ap_var, from_= 1, to = 30, width=10).grid(column=1, row=9)
 
 		tk.Label(self, text="PRE-LAT").grid(sticky="W", column=0, row=10, padx=(10,0))
-		sp3 = Spinbox(self, textvariable=self.pre_lat_var, from_= 5, to = 30, width=10).grid(column=1, row=10)
+		sp3 = Spinbox(self, textvariable=self.pre_lat_var, from_= 1, to = 30, width=10).grid(column=1, row=10)
 
 		tk.Label(self, text="PRE-SKY").grid(sticky="W", column=0, row=11, padx=(10,0))
-		sp4 = Spinbox(self, textvariable=self.pre_sky_var, from_= 5, to = 30, width=10).grid(column=1, row=11)
+		sp4 = Spinbox(self, textvariable=self.pre_sky_var, from_= 1, to = 30, width=10).grid(column=1, row=11)
 
 		tk.Label(self, text="POST-SCANNO").grid(sticky="W", column=0, row=12, padx=(10,0), pady=(20, 0))
-		sp5 = Spinbox(self, textvariable=self.post_scanno_var, from_= 5, to = 30, width=10).grid(column=1, row=12, pady=(20, 0))
+		sp5 = Spinbox(self, textvariable=self.post_scanno_var, from_= 1, to = 30, width=10).grid(column=1, row=12, pady=(20, 0))
 
 		tk.Label(self, text="POST-AP").grid(sticky="W", column=0, row=13, padx=(10,0))
-		sp6 = Spinbox(self, textvariable=self.post_ap_var, from_= 5, to = 30, width=10).grid(column=1, row=13)
+		sp6 = Spinbox(self, textvariable=self.post_ap_var, from_= 1, to = 30, width=10).grid(column=1, row=13)
 
 		tk.Label(self, text="POST-LAT").grid(sticky="W", column=0, row=14, padx=(10,0))
-		sp7 = Spinbox(self, textvariable=self.post_lat_var, from_= 5, to = 30, width=10).grid(column=1, row=14)
+		sp7 = Spinbox(self, textvariable=self.post_lat_var, from_= 1, to = 30, width=10).grid(column=1, row=14)
 
 		tk.Label(self, text="POST-SKY").grid(sticky="W", column=0, row=15, padx=(10,0))
-		sp8 = Spinbox(self, textvariable=self.post_sky_var, from_= 5, to = 30, width=10).grid(column=1, row=15)
+		sp8 = Spinbox(self, textvariable=self.post_sky_var, from_= 1, to = 30, width=10).grid(column=1, row=15)
+
+
+
+		tk.Label(self, text="v0.3").grid(sticky="W", row=16, pady=(30,0), padx=(10,0))
 
 
 		# self.pre_scanno_var.set(self.master_dict["POINT_SIZES"]["PRE-SCANNO"])
@@ -225,7 +229,8 @@ class DETAILS_View(tk.Frame):
 				# make sure positive
 				# and in range of 5 - 30
 				int_check = int(var.get())
-				if int_check > 4 and int_check < 31:
+				# int_check = float(var.get())
+				if int_check > 0 and int_check < 31:
 					self.master_dict["POINT_SIZES"][dict_key] = int_check
 
 					# pass the dictkey which is also the view(page_name) which updates all objects with new point size

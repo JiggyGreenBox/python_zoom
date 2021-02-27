@@ -14,7 +14,7 @@ class KJLO():
 
 		# check if master dictionary has values
 		# if not populate the dictionary
-		self.checkMasterDict()
+		# self.checkMasterDict()
 
 		self.point_size = None
 
@@ -42,17 +42,17 @@ class KJLO():
 	def click(self, event):
 		print("click from "+self.name)
 
-		if self.side == None:
-			print("please choose side")
-			self.controller.warningBox("Please select a Side")
-		else:
-			# print(self.dict)
-			ret =  self.addDict(event)
-			if ret:
-				self.controller.save_json()
-				# pass
+		# if self.side == None:
+		# 	print("please choose side")
+		# 	self.controller.warningBox("Please select a Side")
+		# else:
+		# 	# print(self.dict)
+		# 	ret =  self.addDict(event)
+		# 	if ret:
+		# 		self.controller.save_json()
+		# 		# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		# self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 		self.draw()
 
 
@@ -113,8 +113,8 @@ class KJLO():
 			# tib_joint_p1 = self.dict["MPTA"][self.op_type][side]["TIB_JOINT_LINE"]["P1"]
 			# tib_joint_p2 = self.dict["MPTA"][self.op_type][side]["TIB_JOINT_LINE"]["P2"]
 
-			joint_p1 = self.dict["KJLO"][self.op_type][side]["JOINT_LINE"]["P1"]
-			joint_p2 = self.dict["KJLO"][self.op_type][side]["JOINT_LINE"]["P2"]
+			joint_p1 = self.dict["MAIN"][self.op_type][side]["KJLO_LINE"]["P1"]
+			joint_p2 = self.dict["MAIN"][self.op_type][side]["KJLO_LINE"]["P2"]
 
 			ankle_p1 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P1"]
 			ankle_p2 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]
@@ -204,10 +204,10 @@ class KJLO():
 			# R_tib_joint_p1 = self.dict["MPTA"][self.op_type]["RIGHT"]["TIB_JOINT_LINE"]["P1"]
 			# R_tib_joint_p2 = self.dict["MPTA"][self.op_type]["RIGHT"]["TIB_JOINT_LINE"]["P2"]
 
-			L_tib_joint_p1 = self.dict["KJLO"][self.op_type]["LEFT"]["JOINT_LINE"]["P1"]
-			L_tib_joint_p2 = self.dict["KJLO"][self.op_type]["LEFT"]["JOINT_LINE"]["P2"]
-			R_tib_joint_p1 = self.dict["KJLO"][self.op_type]["RIGHT"]["JOINT_LINE"]["P1"]
-			R_tib_joint_p2 = self.dict["KJLO"][self.op_type]["RIGHT"]["JOINT_LINE"]["P2"]
+			L_tib_joint_p1 = self.dict["MAIN"][self.op_type]["LEFT"]["KJLO_LINE"]["P1"]
+			L_tib_joint_p2 = self.dict["MAIN"][self.op_type]["LEFT"]["KJLO_LINE"]["P2"]
+			R_tib_joint_p1 = self.dict["MAIN"][self.op_type]["RIGHT"]["KJLO_LINE"]["P1"]
+			R_tib_joint_p2 = self.dict["MAIN"][self.op_type]["RIGHT"]["KJLO_LINE"]["P2"]
 
 
 
@@ -264,65 +264,65 @@ class KJLO():
 
 
 
-	def drag_start(self, tags):
-		tags.remove('token')
-		tags.remove('current')
-		tags.remove(self.tag)
-		print(tags)
+	# def drag_start(self, tags):
+	# 	tags.remove('token')
+	# 	tags.remove('current')
+	# 	tags.remove(self.tag)
+	# 	print(tags)
 		
 
-		side = ""
+	# 	side = ""
 
-		# find side
-		if "LEFT" in tags:
-			side = "LEFT"
-		elif "RIGHT" in tags:
-			side = "RIGHT"
+	# 	# find side
+	# 	if "LEFT" in tags:
+	# 		side = "LEFT"
+	# 	elif "RIGHT" in tags:
+	# 		side = "RIGHT"
 
 
-		if "P1_JOINT_LINE" in tags:
-			self.drag_point = self.dict["KJLO"][self.op_type][side]["JOINT_LINE"]["P2"]
-			self.drag_label = "P1_JOINT_LINE"
-			self.drag_side 	= side
-		elif "P2_JOINT_LINE" in tags:
-			self.drag_point = self.dict["KJLO"][self.op_type][side]["JOINT_LINE"]["P1"]
-			self.drag_label = "P2_JOINT_LINE"
-			self.drag_side 	= side
+	# 	if "P1_JOINT_LINE" in tags:
+	# 		self.drag_point = self.dict["KJLO"][self.op_type][side]["JOINT_LINE"]["P2"]
+	# 		self.drag_label = "P1_JOINT_LINE"
+	# 		self.drag_side 	= side
+	# 	elif "P2_JOINT_LINE" in tags:
+	# 		self.drag_point = self.dict["KJLO"][self.op_type][side]["JOINT_LINE"]["P1"]
+	# 		self.drag_label = "P2_JOINT_LINE"
+	# 		self.drag_side 	= side
 
-		else:
-			self.drag_point = None
-			self.drag_label = None
-			self.drag_side 	= None
+	# 	else:
+	# 		self.drag_point = None
+	# 		self.drag_label = None
+	# 		self.drag_side 	= None
 
-	def drag(self, P_mouse):
-		if self.drag_label == "P1_JOINT_LINE" and self.drag_point != None or self.drag_label == "P2_JOINT_LINE" and self.drag_point != None:
-			self.draw_tools.clear_by_tag("LINE_KJLO")
-			self.draw_tools.clear_by_tag("ANGLE_KJLO")			
-			self.draw_tools.clear_by_tag("drag_line")
-			self.draw_tools.create_myline(P_mouse, self.drag_point, "drag_line")
+	# def drag(self, P_mouse):
+	# 	if self.drag_label == "P1_JOINT_LINE" and self.drag_point != None or self.drag_label == "P2_JOINT_LINE" and self.drag_point != None:
+	# 		self.draw_tools.clear_by_tag("LINE_KJLO")
+	# 		self.draw_tools.clear_by_tag("ANGLE_KJLO")			
+	# 		self.draw_tools.clear_by_tag("drag_line")
+	# 		self.draw_tools.create_myline(P_mouse, self.drag_point, "drag_line")
 
-	def drag_stop(self, P_mouse):
-		self.draw_tools.clear_by_tag("drag_line")
+	# def drag_stop(self, P_mouse):
+	# 	self.draw_tools.clear_by_tag("drag_line")
 
-		if self.drag_label == "P1_JOINT_LINE":			
-			self.dict["KJLO"][self.op_type][self.drag_side]["JOINT_LINE"]["P1"] = P_mouse
-			self.dict["EXCEL"][self.op_type][self.drag_side]["KJLO"] = None 	# delete excel data from pat.json
-			self.dict["EXCEL"][self.op_type][self.drag_side]["KAOL"] = None 	# delete excel data from pat.json
-		elif self.drag_label == "P2_JOINT_LINE":
-			self.dict["KJLO"][self.op_type][self.drag_side]["JOINT_LINE"]["P2"] = P_mouse
-			self.dict["EXCEL"][self.op_type][self.drag_side]["KJLO"] = None 	# delete excel data from pat.json
-			self.dict["EXCEL"][self.op_type][self.drag_side]["KAOL"] = None 	# delete excel data from pat.json
+	# 	if self.drag_label == "P1_JOINT_LINE":			
+	# 		self.dict["KJLO"][self.op_type][self.drag_side]["JOINT_LINE"]["P1"] = P_mouse
+	# 		self.dict["EXCEL"][self.op_type][self.drag_side]["KJLO"] = None 	# delete excel data from pat.json
+	# 		self.dict["EXCEL"][self.op_type][self.drag_side]["KAOL"] = None 	# delete excel data from pat.json
+	# 	elif self.drag_label == "P2_JOINT_LINE":
+	# 		self.dict["KJLO"][self.op_type][self.drag_side]["JOINT_LINE"]["P2"] = P_mouse
+	# 		self.dict["EXCEL"][self.op_type][self.drag_side]["KJLO"] = None 	# delete excel data from pat.json
+	# 		self.dict["EXCEL"][self.op_type][self.drag_side]["KAOL"] = None 	# delete excel data from pat.json
 
-		self.controller.save_json()
-		self.draw()
+	# 	self.controller.save_json()
+	# 	self.draw()
 
-	def hover(self, P_mouse, P_stored, hover_label):
-		if hover_label == "P1_KJLO":
-			self.draw_tools.clear_by_tag("hover_line")
-			self.draw_tools.create_myline(P_mouse, P_stored, "hover_line")
+	# def hover(self, P_mouse, P_stored, hover_label):
+	# 	if hover_label == "P1_KJLO":
+	# 		self.draw_tools.clear_by_tag("hover_line")
+	# 		self.draw_tools.create_myline(P_mouse, P_stored, "hover_line")
 
-	def regainHover(self, side):
-		pass
+	# def regainHover(self, side):
+		# pass
 
 	def escapeObjFunc(self):
 		self.side = None
@@ -331,60 +331,60 @@ class KJLO():
 
 
 	# menu button clicks are routed here
-	def menu_btn_click(self, action):
-		print(action)
-		if action == "SET-LEFT":
-			self.side = "LEFT"
+	# def menu_btn_click(self, action):
+	# 	print(action)
+	# 	if action == "SET-LEFT":
+	# 		self.side = "LEFT"
 
-		if action == "SET-RIGHT":
-			self.side = "RIGHT"
-
-
-
-		if action == "DEL-LEFT-JOINT-LINE":
-			self.dict["KJLO"][self.op_type]["LEFT"]["JOINT_LINE"]["P1"] = None
-			self.dict["KJLO"][self.op_type]["LEFT"]["JOINT_LINE"]["P2"] = None
-			self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"] = None 	# delete excel data from pat.json
-			self.dict["EXCEL"][self.op_type]["LEFT"]["KAOL"] = None 	# delete excel data from pat.json
-			self.draw()
-			self.controller.save_json()
-
-		if action == "DEL-RIGHT-JOINT-LINE":
-			self.dict["KJLO"][self.op_type]["RIGHT"]["JOINT_LINE"]["P1"] = None
-			self.dict["KJLO"][self.op_type]["RIGHT"]["JOINT_LINE"]["P2"] = None
-			self.dict["EXCEL"][self.op_type]["RIGHT"]["KJLO"] = None 	# delete excel data from pat.json
-			self.dict["EXCEL"][self.op_type]["RIGHT"]["KAOL"] = None 	# delete excel data from pat.json
-			self.draw()
-			self.controller.save_json()
-
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+	# 	if action == "SET-RIGHT":
+	# 		self.side = "RIGHT"
 
 
 
-	def getNextLabel(self):
+	# 	if action == "DEL-LEFT-JOINT-LINE":
+	# 		self.dict["KJLO"][self.op_type]["LEFT"]["JOINT_LINE"]["P1"] = None
+	# 		self.dict["KJLO"][self.op_type]["LEFT"]["JOINT_LINE"]["P2"] = None
+	# 		self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"] = None 	# delete excel data from pat.json
+	# 		self.dict["EXCEL"][self.op_type]["LEFT"]["KAOL"] = None 	# delete excel data from pat.json
+	# 		self.draw()
+	# 		self.controller.save_json()
 
-		if self.side != None:
+	# 	if action == "DEL-RIGHT-JOINT-LINE":
+	# 		self.dict["KJLO"][self.op_type]["RIGHT"]["JOINT_LINE"]["P1"] = None
+	# 		self.dict["KJLO"][self.op_type]["RIGHT"]["JOINT_LINE"]["P2"] = None
+	# 		self.dict["EXCEL"][self.op_type]["RIGHT"]["KJLO"] = None 	# delete excel data from pat.json
+	# 		self.dict["EXCEL"][self.op_type]["RIGHT"]["KAOL"] = None 	# delete excel data from pat.json
+	# 		self.draw()
+	# 		self.controller.save_json()
 
-			for item in self.dict["KJLO"][self.op_type][self.side]:
+	# 	self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+
+
+
+	# def getNextLabel(self):
+
+	# 	if self.side != None:
+
+	# 		for item in self.dict["KJLO"][self.op_type][self.side]:
 				
-				# get item type 
-				item_type = self.dict["KJLO"][self.op_type][self.side][item]["type"]
+	# 			# get item type 
+	# 			item_type = self.dict["KJLO"][self.op_type][self.side][item]["type"]
 
-				# line has P1 and P2
-				if item_type == "line":
+	# 			# line has P1 and P2
+	# 			if item_type == "line":
 
-					# check if P1 is None				
-					if self.dict["KJLO"][self.op_type][self.side][item]["P1"] == None:						
-						return (self.side + " " + item + " P1")
+	# 				# check if P1 is None				
+	# 				if self.dict["KJLO"][self.op_type][self.side][item]["P1"] == None:						
+	# 					return (self.side + " " + item + " P1")
 
 
-					# check if P2 is None				
-					if self.dict["KJLO"][self.op_type][self.side][item]["P2"] == None:						
-						return (self.side + " " + item + " P2")
+	# 				# check if P2 is None				
+	# 				if self.dict["KJLO"][self.op_type][self.side][item]["P2"] == None:						
+	# 					return (self.side + " " + item + " P2")
 
-				return (self.side + " Done")
+	# 			return (self.side + " Done")
 
-		return None
+	# 	return None
 
 
 	def update_canvas(self, draw_tools):
@@ -397,7 +397,146 @@ class KJLO():
 
 	def unset(self):
 		# print("unset from "+self.name)
-		self.draw_tools.clear_by_tag(self.tag)		
+		self.draw_tools.clear_by_tag(self.tag)
+
+
+	def drag_start(self, P_mouse):
+		pass
+	def drag(self, P_mouse):
+		pass
+	def drag_stop(self, P_mouse):
+		pass
+	def menu_btn_click(self, action):
+		pass
+	def getNextLabel(self):
+		pass
+	def hover(self, P_mouse, P_stored, hover_label):
+		pass
+	def regainHover(self, side):
+		pass
 	
+	# similiar to draw but nothing is drawn on the canvas
+	def updateExcelValues(self):
+
+		isLeftAnkle = False
+		isRightAnkle = False
+
+		# loop left and right
+		for side in ["LEFT","RIGHT"]:
+
+			isJointLine = False
+
+			joint_p1 = self.dict["MAIN"][self.op_type][side]["KJLO_LINE"]["P1"]
+			joint_p2 = self.dict["MAIN"][self.op_type][side]["KJLO_LINE"]["P2"]
+
+			ankle_p1 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P1"]
+			ankle_p2 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]
+			ankle_m1 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["M1"]
+
+
+			if joint_p1 != None and joint_p2 != None:
+				isJointLine = True
+
+
+			# ------------------------
+			# FROM MAIN
+			# ------------------------			
+			# ANKLE
+			if ankle_p1 != None and ankle_p2 != None:
+				if side == "RIGHT":
+					isRightAnkle = True
+				if side == "LEFT":
+					isLeftAnkle = True
+
+		if isLeftAnkle and isRightAnkle:
+			L_ankle = self.dict["MAIN"][self.op_type]["LEFT"]["ANKLE"]["M1"]
+			R_ankle = self.dict["MAIN"][self.op_type]["RIGHT"]["ANKLE"]["M1"]
+
+			# join ankles
+
+			slope = self.slope(L_ankle, R_ankle)
+
+			# points perpendicular to LR-ankle-line
+			L = [0,0]
+			R = [0,0]
+			# D = p1
+
+			dy = math.sqrt(100**2/(slope**2+1))
+			dx = -slope*dy
+			# print("DX"+str(dx))
+			# print("DY"+str(dy))
+			L[0] = L_ankle[0] + dx
+			L[1] = L_ankle[1] + dy
+
+			R[0] = R_ankle[0] + dx
+			R[1] = R_ankle[1] + dy
+
+			# self.draw_tools.create_mypoint(L, "orange", [self.tag, side, "NO-DRAG"])
+			# self.draw_tools.create_mypoint(R, "orange", [self.tag, side, "NO-DRAG"])
+
+			xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
+
+			# hip-knee ray
+			p_top_L = self.draw_tools.line_intersection(
+				(L_ankle, L),
+				(xtop, ytop))
+
+			p_top_R = self.draw_tools.line_intersection(
+				(R_ankle, R),
+				(xtop, ytop))
+
+			
+			L_tib_joint_p1 = self.dict["MAIN"][self.op_type]["LEFT"]["KJLO_LINE"]["P1"]
+			L_tib_joint_p2 = self.dict["MAIN"][self.op_type]["LEFT"]["KJLO_LINE"]["P2"]
+			R_tib_joint_p1 = self.dict["MAIN"][self.op_type]["RIGHT"]["KJLO_LINE"]["P1"]
+			R_tib_joint_p2 = self.dict["MAIN"][self.op_type]["RIGHT"]["KJLO_LINE"]["P2"]
+
+
+
+
+			# find points on edges
+			if L_tib_joint_p1 != None and L_tib_joint_p2 != None:
+				L_tib_joint_L_limit = self.draw_tools.line_intersection((L_tib_joint_p1, L_tib_joint_p2),(xtop, xbot))
+				L_tib_joint_R_limit = self.draw_tools.line_intersection((L_tib_joint_p1, L_tib_joint_p2),(ytop, ybot))
+
+				# intersection points
+				p_int_L = self.draw_tools.line_intersection((p_top_L, L_ankle),(L_tib_joint_L_limit, L_tib_joint_R_limit))
+
+				# find LR points
+				LL_tib, LR_tib = self.draw_tools.retPointsLeftRight(L_tib_joint_p1, L_tib_joint_p2)
+
+				# draw angles
+				# L_angle = self.draw_tools.create_myAngle(LR_tib, p_int_L, L_ankle, [self.tag,"ANGLE_KJLO"])
+				L_angle = self.draw_tools.getAnglePoints(LR_tib, p_int_L, L_ankle)
+
+				# check if value exists
+				if self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"] == None:
+					self.dict["EXCEL"][self.op_type]["LEFT"]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"]	 	= '{0:.2f}'.format(L_angle)
+					# save after insert
+					self.controller.save_json()	
+
+
+			if R_tib_joint_p1 != None and R_tib_joint_p2 != None:
+				R_tib_joint_L_limit = self.draw_tools.line_intersection((R_tib_joint_p1, R_tib_joint_p2),(xtop, xbot))
+				R_tib_joint_R_limit = self.draw_tools.line_intersection((R_tib_joint_p1, R_tib_joint_p2),(ytop, ybot))
+
+				# intersection points
+				p_int_R = self.draw_tools.line_intersection((p_top_R, R_ankle),(R_tib_joint_L_limit, R_tib_joint_R_limit))
+
+				# find LR points
+				RL_tib, RR_tib = self.draw_tools.retPointsLeftRight(R_tib_joint_p1, R_tib_joint_p2)
+				
+				# draw angles
+				# R_angle = self.draw_tools.create_myAngle(R_ankle, p_int_R, RL_tib, [self.tag,"ANGLE_KJLO"])
+				R_angle = self.draw_tools.getAnglePoints(R_ankle, p_int_R, RL_tib)
+
+				# check if value exists
+				if self.dict["EXCEL"][self.op_type]["RIGHT"]["KJLO"] == None:
+					# print("enter right")
+					self.dict["EXCEL"][self.op_type]["RIGHT"]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type]["RIGHT"]["KJLO"]	 	= '{0:.2f}'.format(R_angle)
+					# save after insert
+					self.controller.save_json()
 
 						

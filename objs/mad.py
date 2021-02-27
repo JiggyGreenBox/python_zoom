@@ -14,7 +14,7 @@ class MAD():
 
 		# check if master dictionary has values
 		# if not populate the dictionary
-		self.checkMasterDict()		
+		# self.checkMasterDict()		
 
 		self.point_size = None
 
@@ -44,43 +44,43 @@ class MAD():
 	def click(self, event):
 		print("click from "+self.name)
 
-		if self.side == None:
-			print("please choose side")
-			self.controller.warningBox("Please select a Side")
-		else:
-			# print(self.dict)			
-			ret =  self.addDict(event)
-			if ret:
-				self.controller.save_json()
-				# pass
+		# if self.side == None:
+		# 	print("please choose side")
+		# 	self.controller.warningBox("Please select a Side")
+		# else:
+		# 	# print(self.dict)			
+		# 	ret =  self.addDict(event)
+		# 	if ret:
+		# 		self.controller.save_json()
+		# 		# pass
 
 
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
+		# self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
 		self.draw()
 
 
 
-	def getNextLabel(self):
-		if self.side != None:
-			for item in self.dict["MAD"][self.op_type][self.side]:
+	# def getNextLabel(self):
+	# 	if self.side != None:
+	# 		for item in self.dict["MAD"][self.op_type][self.side]:
 				
-				# get item type 
-				item_type = self.dict["MAD"][self.op_type][self.side][item]["type"]
+	# 			# get item type 
+	# 			item_type = self.dict["MAD"][self.op_type][self.side][item]["type"]
 
-				# line has P1 and P2
-				if item_type == "line":
+	# 			# line has P1 and P2
+	# 			if item_type == "line":
 
-					# check if P1 is None				
-					if self.dict["MAD"][self.op_type][self.side][item]["P1"] == None:
-						return (self.side + " " + item + " P1")
+	# 				# check if P1 is None				
+	# 				if self.dict["MAD"][self.op_type][self.side][item]["P1"] == None:
+	# 					return (self.side + " " + item + " P1")
 
 
-					# check if P2 is None				
-					if self.dict["MAD"][self.op_type][self.side][item]["P2"] == None:
-						return (self.side + " " + item + " P2")
+	# 				# check if P2 is None				
+	# 				if self.dict["MAD"][self.op_type][self.side][item]["P2"] == None:
+	# 					return (self.side + " " + item + " P2")
 
-				return (self.side + " Done")
-		return None
+	# 			return (self.side + " Done")
+	# 	return None
 
 	def draw(self):
 
@@ -97,8 +97,8 @@ class MAD():
 			ankle_p2 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]
 			ankle_m1 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["M1"]
 
-			mad_p1 = self.dict["MAD"][self.op_type][side]["MAD_LINE"]["P1"]
-			mad_p2 = self.dict["MAD"][self.op_type][side]["MAD_LINE"]["P2"]
+			mad_p1 = self.dict["MAIN"][self.op_type][side]["MAD_LINE"]["P1"]
+			mad_p2 = self.dict["MAIN"][self.op_type][side]["MAD_LINE"]["P2"]
 
 			if hip != None:
 				isHip = True
@@ -129,10 +129,10 @@ class MAD():
 				# isTamd = True
 
 				# draw the points for division
-				self.draw_tools.create_mypoint(self.getLineSegmentByPercentage(0.2, mad_p1, mad_p2), "orange", [self.tag, side, "MAD_LINE"], point_thickness=self.point_size)
-				self.draw_tools.create_mypoint(self.getLineSegmentByPercentage(0.4, mad_p1, mad_p2), "orange", [self.tag, side, "MAD_LINE"], point_thickness=self.point_size)
-				self.draw_tools.create_mypoint(self.getLineSegmentByPercentage(0.6, mad_p1, mad_p2), "orange", [self.tag, side, "MAD_LINE"], point_thickness=self.point_size)
-				self.draw_tools.create_mypoint(self.getLineSegmentByPercentage(0.8, mad_p1, mad_p2), "orange", [self.tag, side, "MAD_LINE"], point_thickness=self.point_size)
+				self.draw_tools.create_mypoint(self.draw_tools.getLineSegmentByPercentage(0.2, mad_p1, mad_p2), "orange", [self.tag, side, "MAD_LINE"], point_thickness=self.point_size)
+				self.draw_tools.create_mypoint(self.draw_tools.getLineSegmentByPercentage(0.4, mad_p1, mad_p2), "orange", [self.tag, side, "MAD_LINE"], point_thickness=self.point_size)
+				self.draw_tools.create_mypoint(self.draw_tools.getLineSegmentByPercentage(0.6, mad_p1, mad_p2), "orange", [self.tag, side, "MAD_LINE"], point_thickness=self.point_size)
+				self.draw_tools.create_mypoint(self.draw_tools.getLineSegmentByPercentage(0.8, mad_p1, mad_p2), "orange", [self.tag, side, "MAD_LINE"], point_thickness=self.point_size)
 
 
 				if side == "RIGHT":
@@ -142,11 +142,11 @@ class MAD():
 					R_mad, L_mad = self.draw_tools.retPointsLeftRight(mad_p1,mad_p2)
 
 
-				self.draw_tools.create_mytext(self.getLineSegmentByPercentage(0.1, L_mad, R_mad), y_offset=-10, mytext="4", mytag=[self.tag, side, "MAD_LINE"], color="blue")
-				self.draw_tools.create_mytext(self.getLineSegmentByPercentage(0.3, L_mad, R_mad), y_offset=-10, mytext="3", mytag=[self.tag, side, "MAD_LINE"], color="blue")
-				self.draw_tools.create_mytext(self.getLineSegmentByPercentage(0.5, L_mad, R_mad), y_offset=-10, mytext="C", mytag=[self.tag, side, "MAD_LINE"], color="blue")
-				self.draw_tools.create_mytext(self.getLineSegmentByPercentage(0.7, L_mad, R_mad), y_offset=-10, mytext="2", mytag=[self.tag, side, "MAD_LINE"], color="blue")
-				self.draw_tools.create_mytext(self.getLineSegmentByPercentage(0.9, L_mad, R_mad), y_offset=-10, mytext="1", mytag=[self.tag, side, "MAD_LINE"], color="blue")
+				self.draw_tools.create_mytext(self.draw_tools.getLineSegmentByPercentage(0.1, L_mad, R_mad), y_offset=-10, mytext="4", mytag=[self.tag, side, "MAD_LINE"], color="blue")
+				self.draw_tools.create_mytext(self.draw_tools.getLineSegmentByPercentage(0.3, L_mad, R_mad), y_offset=-10, mytext="3", mytag=[self.tag, side, "MAD_LINE"], color="blue")
+				self.draw_tools.create_mytext(self.draw_tools.getLineSegmentByPercentage(0.5, L_mad, R_mad), y_offset=-10, mytext="C", mytag=[self.tag, side, "MAD_LINE"], color="blue")
+				self.draw_tools.create_mytext(self.draw_tools.getLineSegmentByPercentage(0.7, L_mad, R_mad), y_offset=-10, mytext="2", mytag=[self.tag, side, "MAD_LINE"], color="blue")
+				self.draw_tools.create_mytext(self.draw_tools.getLineSegmentByPercentage(0.9, L_mad, R_mad), y_offset=-10, mytext="1", mytag=[self.tag, side, "MAD_LINE"], color="blue")
 
 
 
@@ -183,95 +183,95 @@ class MAD():
 
 
 	# menu button clicks are routed here
-	def menu_btn_click(self, action):
-		print(action)
-		if action == "SET-LEFT":
-			self.side = "LEFT"
-			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
-			self.draw()
-			self.regainHover(self.side)
-			return
+	# def menu_btn_click(self, action):
+	# 	print(action)
+	# 	if action == "SET-LEFT":
+	# 		self.side = "LEFT"
+	# 		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+	# 		self.draw()
+	# 		self.regainHover(self.side)
+	# 		return
 
-		if action == "SET-RIGHT":
-			self.side = "RIGHT"
-			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
-			self.draw()
-			self.regainHover(self.side)
-			return
+	# 	if action == "SET-RIGHT":
+	# 		self.side = "RIGHT"
+	# 		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+	# 		self.draw()
+	# 		self.regainHover(self.side)
+	# 		return
 
-		if action == "DEL-LEFT-MAD-LINE":
-			self.dict["MAD"][self.op_type]["LEFT"]["MAD_LINE"]["P1"] = None
-			self.dict["MAD"][self.op_type]["LEFT"]["MAD_LINE"]["P2"] = None
-			self.dict["EXCEL"][self.op_type]["LEFT"]["MAD"] = None 	# delete excel data from pat.json
-			self.draw()
-			self.controller.save_json()
+	# 	if action == "DEL-LEFT-MAD-LINE":
+	# 		self.dict["MAD"][self.op_type]["LEFT"]["MAD_LINE"]["P1"] = None
+	# 		self.dict["MAD"][self.op_type]["LEFT"]["MAD_LINE"]["P2"] = None
+	# 		self.dict["EXCEL"][self.op_type]["LEFT"]["MAD"] = None 	# delete excel data from pat.json
+	# 		self.draw()
+	# 		self.controller.save_json()
 
-		if action == "DEL-RIGHT-MAD-LINE":
-			self.dict["MAD"][self.op_type]["RIGHT"]["MAD_LINE"]["P1"] = None
-			self.dict["MAD"][self.op_type]["RIGHT"]["MAD_LINE"]["P2"] = None
-			self.dict["EXCEL"][self.op_type]["RIGHT"]["MAD"] = None 	# delete excel data from pat.json
-			self.draw()
-			self.controller.save_json()
+	# 	if action == "DEL-RIGHT-MAD-LINE":
+	# 		self.dict["MAD"][self.op_type]["RIGHT"]["MAD_LINE"]["P1"] = None
+	# 		self.dict["MAD"][self.op_type]["RIGHT"]["MAD_LINE"]["P2"] = None
+	# 		self.dict["EXCEL"][self.op_type]["RIGHT"]["MAD"] = None 	# delete excel data from pat.json
+	# 		self.draw()
+	# 		self.controller.save_json()
 
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+	# 	self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 
 
-	def drag_start(self, tags):
-		tags.remove('token')
-		tags.remove('current')
-		tags.remove(self.tag)
-		print(tags)
+	# def drag_start(self, tags):
+	# 	tags.remove('token')
+	# 	tags.remove('current')
+	# 	tags.remove(self.tag)
+	# 	print(tags)
 		
 
-		side = ""
+	# 	side = ""
 
-		# find side
-		if "LEFT" in tags:
-			side = "LEFT"
-		elif "RIGHT" in tags:
-			side = "RIGHT"
+	# 	# find side
+	# 	if "LEFT" in tags:
+	# 		side = "LEFT"
+	# 	elif "RIGHT" in tags:
+	# 		side = "RIGHT"
 
-		if "P1_MAD_LINE" in tags:
-			self.drag_point = self.dict["MAD"][self.op_type][side]["MAD_LINE"]["P2"]
-			self.drag_label = "P1_MAD_LINE"
-			self.drag_side 	= side
-		elif "P2_MAD_LINE" in tags:
-			self.drag_point = self.dict["MAD"][self.op_type][side]["MAD_LINE"]["P1"]
-			self.drag_label = "P2_MAD_LINE"
-			self.drag_side 	= side
+	# 	if "P1_MAD_LINE" in tags:
+	# 		self.drag_point = self.dict["MAD"][self.op_type][side]["MAD_LINE"]["P2"]
+	# 		self.drag_label = "P1_MAD_LINE"
+	# 		self.drag_side 	= side
+	# 	elif "P2_MAD_LINE" in tags:
+	# 		self.drag_point = self.dict["MAD"][self.op_type][side]["MAD_LINE"]["P1"]
+	# 		self.drag_label = "P2_MAD_LINE"
+	# 		self.drag_side 	= side
 
-		else:
-			self.drag_point = None
-			self.drag_label = None
-			self.drag_side 	= None
+	# 	else:
+	# 		self.drag_point = None
+	# 		self.drag_label = None
+	# 		self.drag_side 	= None
 
-	def drag(self, P_mouse):
-		if self.drag_label == "P1_MAD_LINE" and self.drag_point != None or self.drag_label == "P2_MAD_LINE" and self.drag_point != None:
-			self.draw_tools.clear_by_tag("MAD_LINE")			
-			self.draw_tools.clear_by_tag("drag_line")
-			self.draw_tools.create_myline(P_mouse, self.drag_point, "drag_line")
+	# def drag(self, P_mouse):
+	# 	if self.drag_label == "P1_MAD_LINE" and self.drag_point != None or self.drag_label == "P2_MAD_LINE" and self.drag_point != None:
+	# 		self.draw_tools.clear_by_tag("MAD_LINE")			
+	# 		self.draw_tools.clear_by_tag("drag_line")
+	# 		self.draw_tools.create_myline(P_mouse, self.drag_point, "drag_line")
 
-	def drag_stop(self, P_mouse):
-		self.draw_tools.clear_by_tag("drag_line")
+	# def drag_stop(self, P_mouse):
+	# 	self.draw_tools.clear_by_tag("drag_line")
 
-		if self.drag_label == "P1_MAD_LINE":
-			self.dict["MAD"][self.op_type][self.drag_side]["MAD_LINE"]["P1"] = P_mouse
-			self.dict["EXCEL"][self.op_type][self.drag_side]["MAD"] = None 	# delete excel data from pat.json
+	# 	if self.drag_label == "P1_MAD_LINE":
+	# 		self.dict["MAD"][self.op_type][self.drag_side]["MAD_LINE"]["P1"] = P_mouse
+	# 		self.dict["EXCEL"][self.op_type][self.drag_side]["MAD"] = None 	# delete excel data from pat.json
 
-		elif self.drag_label == "P2_MAD_LINE":
-			self.dict["MAD"][self.op_type][self.drag_side]["MAD_LINE"]["P2"] = P_mouse
-			self.dict["EXCEL"][self.op_type][self.drag_side]["MAD"] = None 	# delete excel data from pat.json
+	# 	elif self.drag_label == "P2_MAD_LINE":
+	# 		self.dict["MAD"][self.op_type][self.drag_side]["MAD_LINE"]["P2"] = P_mouse
+	# 		self.dict["EXCEL"][self.op_type][self.drag_side]["MAD"] = None 	# delete excel data from pat.json
 
-		self.controller.save_json()
-		self.draw()	
+	# 	self.controller.save_json()
+	# 	self.draw()	
 
-	def hover(self, P_mouse, P_stored, hover_label):
-		if hover_label == "P1_MAD":
-			self.draw_tools.clear_by_tag("hover_line")
-			self.draw_tools.create_myline(P_mouse, P_stored, "hover_line")
+	# def hover(self, P_mouse, P_stored, hover_label):
+	# 	if hover_label == "P1_MAD":
+	# 		self.draw_tools.clear_by_tag("hover_line")
+	# 		self.draw_tools.create_myline(P_mouse, P_stored, "hover_line")
 
-	def regainHover(self, side):
-		pass
+	# def regainHover(self, side):
+	# 	pass
 
 	def escapeObjFunc(self):
 		self.side = None
@@ -291,19 +291,37 @@ class MAD():
 		self.side = None
 
 
-	def getLineSegmentByPercentage(self, percent, p1, p2):
-		# Cx = Ax * (1-t) + Bx * t
-		# Cy = Ay * (1-t) + By * t
+	# def getLineSegmentByPercentage(self, percent, p1, p2):
+	# 	# Cx = Ax * (1-t) + Bx * t
+	# 	# Cy = Ay * (1-t) + By * t
 
 		
-		# Cx = Ax * (1-t) + Bx * t
-		# X = (x1*(1-percent)) + (x2*percent)
-		# X = p1[0]*(1-percent) + p2[0] * percent
+	# 	# Cx = Ax * (1-t) + Bx * t
+	# 	# X = (x1*(1-percent)) + (x2*percent)
+	# 	# X = p1[0]*(1-percent) + p2[0] * percent
 
-		# Cy = Ay * (1-t) + By * t  
-		# Y = (y1*(1-percent)) + (y2*percent)
-		# Y = p1[1]*(1-percent) + p2[1]*percent
+	# 	# Cy = Ay * (1-t) + By * t  
+	# 	# Y = (y1*(1-percent)) + (y2*percent)
+	# 	# Y = p1[1]*(1-percent) + p2[1]*percent
 		
-		return (p1[0]*(1-percent) + p2[0]*percent, p1[1]*(1-percent) + p2[1]*percent)
+	# 	return (p1[0]*(1-percent) + p2[0]*percent, p1[1]*(1-percent) + p2[1]*percent)
 
-						
+
+	def drag_start(self, P_mouse):
+		pass
+	def drag(self, P_mouse):
+		pass
+	def drag_stop(self, P_mouse):
+		pass
+	def menu_btn_click(self, action):
+		pass
+	def getNextLabel(self):
+		pass
+	def hover(self, P_mouse, P_stored, hover_label):
+		pass
+	def regainHover(self, side):
+		pass
+
+	# similiar to draw but nothing is drawn on the canvas
+	def updateExcelValues(self):
+		pass						

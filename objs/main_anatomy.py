@@ -19,6 +19,13 @@ class MAIN:
 		# unique to main
 		self.draw_labels = True
 		self.draw_hover = True
+		self.draw_dissapear_mode = True
+		self.draw_fem_j_var = True
+		self.draw_tib_j_var = True
+		self.draw_kjlo_line = True
+		self.draw_mad_line = True
+		self.draw_tib_knee = True
+		self.draw_fem_knee = True
 		self.draw_mech_axis = False
 		self.draw_anat_axis = False
 
@@ -27,6 +34,7 @@ class MAIN:
 
 		self.hover_text = None			
 
+		self.curr_display_item = None
 
 
 	def checkMasterDict(self):
@@ -34,70 +42,94 @@ class MAIN:
 				self.dict["MAIN"] = 	{
 										"PRE-OP": 	{
 													"LEFT":	{
-															"HIP":		{"type":"point","P1":None},
-															"AXIS_FEM":	{
-																			"type":	"axis",
-																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
-																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
-																		},
-															"FEM_KNEE":	{"type":"point","P1":None},
-															"TIB_KNEE":	{"type":"point","P1":None},
-															"AXIS_TIB":	{
-																			"type":	"axis",
-																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
-																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
-																		},
-															"ANKLE":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+															"HIP":				{"type":"point", "P1":None},
+															"NECK_AXIS":		{"type":"midpoint","P1":None, "P2":None, "M1":None},
+															"AXIS_FEM":			{
+																					"type":	"axis",
+																					"TOP":	{"type":"midpoint", "P1":None, "P2":None, "M1":None},
+																					"BOT":	{"type":"midpoint", "P1":None, "P2":None, "M1":None}
+																				},
+															"FEM_KNEE":			{"type":"point", "P1":None},
+															"TIB_KNEE":			{"type":"point", "P1":None},
+															"FEM_JOINT_LINE":	{"type":"line", "P1":None, "P2":None},
+															"TIB_JOINT_LINE":	{"type":"line", "P1":None, "P2":None},
+															"AXIS_TIB":			{
+																					"type":	"axis",
+																					"TOP":	{"type":"midpoint", "P1":None, "P2":None, "M1":None},
+																					"BOT":	{"type":"midpoint", "P1":None, "P2":None, "M1":None}
+																				},
+															"ANKLE":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
+															"DIST_FEM":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
+															"KJLO_LINE":		{"type":"line","P1":None,"P2":None},
+															"MAD_LINE":			{"type":"line","P1":None,"P2":None}
 															},
 													"RIGHT":{
-															"HIP":		{"type":"point","P1":None},
-															"AXIS_FEM":	{
-																			"type":	"axis",
-																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
-																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
-																		},
-															"FEM_KNEE":	{"type":"point","P1":None},
-															"TIB_KNEE":	{"type":"point","P1":None},
-															"AXIS_TIB":	{
-																			"type":	"axis",
-																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
-																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
-																		},
-															"ANKLE":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+															"HIP":				{"type":"point","P1":None},
+															"NECK_AXIS":		{"type":"midpoint","P1":None,"P2":None, "M1":None},
+															"AXIS_FEM":			{
+																					"type":	"axis",		
+																					"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
+																					"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																				},
+															"FEM_KNEE":			{"type":"point","P1":None},
+															"TIB_KNEE":			{"type":"point","P1":None},
+															"FEM_JOINT_LINE":			{"type":"line","P1":None,"P2":None},
+															"TIB_JOINT_LINE":			{"type":"line","P1":None,"P2":None},
+															"AXIS_TIB":			{
+																					"type":	"axis",
+																					"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
+																					"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																				},
+															"ANKLE":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
+															"DIST_FEM":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
+															"KJLO_LINE":		{"type":"line","P1":None,"P2":None},
+															"MAD_LINE":			{"type":"line","P1":None,"P2":None}
 															}
 												},
 										"POST-OP": 	{
 													"LEFT":	{
-															"HIP":		{"type":"point","P1":None},
-															"AXIS_FEM":	{
-																			"type":	"axis",
-																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
-																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
-																		},
-															"FEM_KNEE":	{"type":"point","P1":None},
-															"TIB_KNEE":	{"type":"point","P1":None},
-															"AXIS_TIB":	{
-																			"type":	"axis",
-																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
-																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
-																		},
-															"ANKLE":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+															"HIP":				{"type":"point","P1":None},
+															"NECK_AXIS":		{"type":"midpoint","P1":None,"P2":None, "M1":None},
+															"AXIS_FEM":			{
+																					"type":	"axis",
+																					"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
+																					"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																				},
+															"FEM_KNEE":			{"type":"point","P1":None},
+															"TIB_KNEE":			{"type":"point","P1":None},
+															"FEM_JOINT_LINE":	{"type":"line","P1":None,"P2":None},
+															"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None},		
+															"AXIS_TIB":			{
+																					"type":	"axis",
+																					"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
+																					"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																				},
+															"ANKLE":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
+															"DIST_FEM":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
+															"KJLO_LINE":		{"type":"line","P1":None,"P2":None},
+															"MAD_LINE":			{"type":"line","P1":None,"P2":None}
 															},
 													"RIGHT":{
-															"HIP":		{"type":"point","P1":None},
-															"AXIS_FEM":	{
-																			"type":	"axis",
-																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
-																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
-																		},
-															"FEM_KNEE":	{"type":"point","P1":None},
-															"TIB_KNEE":	{"type":"point","P1":None},
-															"AXIS_TIB":	{
-																			"type":	"axis",
-																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
-																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
-																		},
-															"ANKLE":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+															"HIP":				{"type":"point","P1":None},
+															"NECK_AXIS":		{"type":"midpoint","P1":None,"P2":None, "M1":None},
+															"AXIS_FEM":			{
+																					"type":	"axis",
+																					"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
+																					"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																				},
+															"FEM_KNEE":			{"type":"point","P1":None},
+															"TIB_KNEE":			{"type":"point","P1":None},
+															"FEM_JOINT_LINE":	{"type":"line","P1":None,"P2":None},
+															"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None},
+															"AXIS_TIB":			{
+																					"type":	"axis",
+																					"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
+																					"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																				},
+															"ANKLE":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
+															"DIST_FEM":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
+															"KJLO_LINE":		{"type":"line","P1":None,"P2":None},
+															"MAD_LINE":			{"type":"line","P1":None,"P2":None}
 															}
 													}
 												
@@ -106,14 +138,8 @@ class MAIN:
 
 	def click(self, event):
 		print("click from "+self.name)
-		# print(self.dict)
 
-		# self.controller.updateMenuLabel("jiggy", "MAIN_Menu")
-		# self.updateLabel(self.getNextLabel())
-		# self.controller.updateMenuLabel(self.getNextLabel(), "MAIN_Menu")
-
-
-		# self.draw()
+		# self.controller.calculateExcel()
 
 		if self.side == None:
 			print("please choose side")
@@ -129,16 +155,6 @@ class MAIN:
 
 		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
 		self.draw()
-
-			# self.controller.updateMenuLabel("jiggy", "MAIN_Menu")
-
-		# ret, cur_tag = self.addDict(event), cur_tag = self.addDict(event)	
-		# if ret:
-		# 	print(cur_tag)
-		# 	self.draw_tools.create_token(event, "white", cur_tag)
-		# 	self.drawLines()
-		# else:
-		# 	print(self.dict)
 
 
 
@@ -171,61 +187,93 @@ class MAIN:
 		if action == "DEL-LEFT-HIP":
 			self.dict["MAIN"][self.op_type]["LEFT"]["HIP"]["P1"] = None
 			self.side = "LEFT"
-			self.updateExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.side)
+			self.deleteExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.side)
 
 		if action == "DEL-RIGHT-HIP":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["HIP"]["P1"] = None
 			self.side = "RIGHT"
-			self.updateExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.side)
+			self.deleteExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.side)
+
+
+		if action == "DEL-LEFT-NECK-AXIS":			
+			self.dict["MAIN"][self.op_type]["LEFT"]["NECK_AXIS"]["P1"] = None
+			self.dict["MAIN"][self.op_type]["LEFT"]["NECK_AXIS"]["P2"] = None
+			self.dict["MAIN"][self.op_type]["LEFT"]["NECK_AXIS"]["M1"] = None
+			self.side = "LEFT"
+			# self.deleteExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.side)
+
+		if action == "DEL-RIGHT-NECK-AXIS":			
+			self.dict["MAIN"][self.op_type]["RIGHT"]["NECK_AXIS"]["P1"] = None
+			self.dict["MAIN"][self.op_type]["RIGHT"]["NECK_AXIS"]["P2"] = None
+			self.dict["MAIN"][self.op_type]["RIGHT"]["NECK_AXIS"]["M1"] = None
+			self.side = "RIGHT"
+			# self.deleteExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.side)
+
+
+		if action == "DEL-LEFT-DIST-FEM":			
+			self.dict["MAIN"][self.op_type]["LEFT"]["DIST_FEM"]["P1"] = None
+			self.dict["MAIN"][self.op_type]["LEFT"]["DIST_FEM"]["P2"] = None
+			self.dict["MAIN"][self.op_type]["LEFT"]["DIST_FEM"]["M1"] = None
+			self.side = "LEFT"
+			# self.deleteExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.side)
+
+		if action == "DEL-RIGHT-DIST-FEM":			
+			self.dict["MAIN"][self.op_type]["RIGHT"]["DIST_FEM"]["P1"] = None
+			self.dict["MAIN"][self.op_type]["RIGHT"]["DIST_FEM"]["P2"] = None
+			self.dict["MAIN"][self.op_type]["RIGHT"]["DIST_FEM"]["M1"] = None
+			self.side = "RIGHT"
+			# self.deleteExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.side)
+
+			
 
 		if action == "DEL-LEFT-FEM-KNEE":
 			self.dict["MAIN"][self.op_type]["LEFT"]["FEM_KNEE"]["P1"] = None
 			self.side = "LEFT"
-			self.updateExcelValues(["HKA", "VCA", "mLDFA"], self.side)
+			self.deleteExcelValues(["HKA", "VCA", "mLDFA"], self.side)
 
 		if action == "DEL-RIGHT-FEM-KNEE":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["FEM_KNEE"]["P1"] = None
 			self.side = "RIGHT"
-			self.updateExcelValues(["HKA", "VCA", "mLDFA"], self.side)
+			self.deleteExcelValues(["HKA", "VCA", "mLDFA"], self.side)
 
 
 		if action == "DEL-LEFT-TIB-KNEE":
 			self.dict["MAIN"][self.op_type]["LEFT"]["TIB_KNEE"]["P1"] = None
 			self.side = "LEFT"
-			self.updateExcelValues(["HKA", "TAMD", "MPTA"], self.side)
+			self.deleteExcelValues(["HKA", "TAMD", "MPTA"], self.side)
 
 		if action == "DEL-RIGHT-TIB-KNEE":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["TIB_KNEE"]["P1"] = None
 			self.side = "RIGHT"
-			self.updateExcelValues(["HKA", "TAMD", "MPTA"], self.side)
+			self.deleteExcelValues(["HKA", "TAMD", "MPTA"], self.side)
 
 		if action == "DEL-LEFT-ANKLE":
 			self.dict["MAIN"][self.op_type]["LEFT"]["ANKLE"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["ANKLE"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["ANKLE"]["M1"] = None
 			self.side = "LEFT"
-			self.updateExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL"], self.side)
+			self.deleteExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL"], self.side)
 
 		if action == "DEL-RIGHT-ANKLE":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["ANKLE"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["ANKLE"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["ANKLE"]["M1"] = None
 			self.side = "RIGHT"
-			self.updateExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL"], self.side)
+			self.deleteExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL"], self.side)
 
 		if action == "DEL-LEFT-FEM-TOP":
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_FEM"]["TOP"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_FEM"]["TOP"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_FEM"]["TOP"]["M1"] = None
 			self.side = "LEFT"
-			self.updateExcelValues(["MNSA", "aFTA", "aLDFA"], self.side)
+			self.deleteExcelValues(["MNSA", "aFTA", "aLDFA"], self.side)
 
 		if action == "DEL-RIGHT-FEM-TOP":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_FEM"]["TOP"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_FEM"]["TOP"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_FEM"]["TOP"]["M1"] = None
 			self.side = "RIGHT"
-			self.updateExcelValues(["MNSA", "aFTA", "aLDFA"], self.side)
+			self.deleteExcelValues(["MNSA", "aFTA", "aLDFA"], self.side)
 
 
 		if action == "DEL-LEFT-FEM-BOT":
@@ -233,14 +281,14 @@ class MAIN:
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_FEM"]["BOT"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_FEM"]["BOT"]["M1"] = None
 			self.side = "LEFT"
-			self.updateExcelValues(["MNSA", "aFTA", "aLDFA"], self.side)
+			self.deleteExcelValues(["MNSA", "aFTA", "aLDFA"], self.side)
 
 		if action == "DEL-RIGHT-FEM-BOT":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_FEM"]["BOT"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_FEM"]["BOT"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_FEM"]["BOT"]["M1"] = None
 			self.side = "RIGHT"
-			self.updateExcelValues(["MNSA", "aFTA", "aLDFA"], self.side)
+			self.deleteExcelValues(["MNSA", "aFTA", "aLDFA"], self.side)
 
 
 		if action == "DEL-LEFT-TIB-TOP":
@@ -248,28 +296,72 @@ class MAIN:
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_TIB"]["TOP"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_TIB"]["TOP"]["M1"] = None
 			self.side = "LEFT"
-			self.updateExcelValues(["aFTA", "TAMD"], self.side)
+			self.deleteExcelValues(["aFTA", "TAMD"], self.side)
 
 		if action == "DEL-RIGHT-TIB-TOP":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_TIB"]["TOP"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_TIB"]["TOP"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_TIB"]["TOP"]["M1"] = None
 			self.side = "RIGHT"
-			self.updateExcelValues(["aFTA", "TAMD"], self.side)
+			self.deleteExcelValues(["aFTA", "TAMD"], self.side)
 
 		if action == "DEL-LEFT-TIB-BOT":
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_TIB"]["BOT"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_TIB"]["BOT"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_TIB"]["BOT"]["M1"] = None
 			self.side = "LEFT"
-			self.updateExcelValues(["aFTA", "TAMD"], self.side)
+			self.deleteExcelValues(["aFTA", "TAMD"], self.side)
 
 		if action == "DEL-RIGHT-TIB-BOT":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["M1"] = None
 			self.side = "RIGHT"
-			self.updateExcelValues(["aFTA", "TAMD"], self.side)
+			self.deleteExcelValues(["aFTA", "TAMD"], self.side)
+
+
+
+		if action == "DEL-RIGHT-FEM-JOINT-LINE":
+			self.dict["MAIN"][self.op_type]["RIGHT"]["FEM_JOINT_LINE"]["P1"] = None
+			self.dict["MAIN"][self.op_type]["RIGHT"]["FEM_JOINT_LINE"]["P2"] = None
+			self.side = "RIGHT"
+		if action == "DEL-LEFT-FEM-JOINT-LINE":
+			self.dict["MAIN"][self.op_type]["LEFT"]["FEM_JOINT_LINE"]["P1"] = None
+			self.dict["MAIN"][self.op_type]["LEFT"]["FEM_JOINT_LINE"]["P2"] = None
+			self.side = "LEFT"
+
+
+		if action == "DEL-RIGHT-TIB-JOINT-LINE":
+			self.dict["MAIN"][self.op_type]["RIGHT"]["TIB_JOINT_LINE"]["P1"] = None
+			self.dict["MAIN"][self.op_type]["RIGHT"]["TIB_JOINT_LINE"]["P2"] = None
+			self.side = "RIGHT"
+		if action == "DEL-LEFT-TIB-JOINT-LINE":
+			self.dict["MAIN"][self.op_type]["LEFT"]["TIB_JOINT_LINE"]["P1"] = None
+			self.dict["MAIN"][self.op_type]["LEFT"]["TIB_JOINT_LINE"]["P2"] = None
+			self.side = "LEFT"
+
+
+
+
+		if action == "DEL-RIGHT-KJLO-LINE":
+			self.dict["MAIN"][self.op_type]["RIGHT"]["KJLO_LINE"]["P1"] = None
+			self.dict["MAIN"][self.op_type]["RIGHT"]["KJLO_LINE"]["P2"] = None
+			self.side = "RIGHT"
+		if action == "DEL-LEFT-KJLO-LINE":
+			self.dict["MAIN"][self.op_type]["LEFT"]["KJLO_LINE"]["P1"] = None
+			self.dict["MAIN"][self.op_type]["LEFT"]["KJLO_LINE"]["P2"] = None
+			self.side = "LEFT"
+
+
+		if action == "DEL-RIGHT-MAD-LINE":
+			self.dict["MAIN"][self.op_type]["RIGHT"]["MAD_LINE"]["P1"] = None
+			self.dict["MAIN"][self.op_type]["RIGHT"]["MAD_LINE"]["P2"] = None
+			self.side = "RIGHT"
+		if action == "DEL-LEFT-MAD-LINE":
+			self.dict["MAIN"][self.op_type]["LEFT"]["MAD_LINE"]["P1"] = None
+			self.dict["MAIN"][self.op_type]["LEFT"]["MAD_LINE"]["P2"] = None
+			self.side = "LEFT"
+
 
 
 		
@@ -297,12 +389,12 @@ class MAIN:
 				# point has P1 and P2, M1 is calculated
 				if item_type == "midpoint":
 
-					# check if P1 is None				
+					# check if P1 is None
 					if self.dict["MAIN"][self.op_type][self.side][item]["P1"] == None:
 						return (self.side + " " + item + " P1")
 
 
-					# check if P2 is None				
+					# check if P2 is None
 					if self.dict["MAIN"][self.op_type][self.side][item]["P2"] == None:
 						return (self.side + " " + item + " P2")
 
@@ -328,6 +420,15 @@ class MAIN:
 					if self.dict["MAIN"][self.op_type][self.side][item]["BOT"]["P2"] == None:
 						return (self.side + " " + item + " BOT P2")
 
+				# fem/tib joint line
+				if item_type == "line":
+					# check if P1 is None
+					if self.dict["MAIN"][self.op_type][self.side][item]["P1"] == None:
+						return (self.side + " " + item + " P1")
+					# check if P2 is None
+					if self.dict["MAIN"][self.op_type][self.side][item]["P2"] == None:
+						return (self.side + " " + item + " P2")
+
 			return (self.side + " Done")
 
 		return None
@@ -342,6 +443,9 @@ class MAIN:
 			# get real point
 			P = self.draw_tools.getRealCoords(event)
 
+			# store ref for dissapearing items
+			self.curr_display_item = item
+
 
 			# point only has P1
 			if item_type == "point":
@@ -351,13 +455,18 @@ class MAIN:
 					return True
 
 			# point has P1 and P2, M1 is calculated
-			# ANKLE
+			# ANKLE / NECK-AXIS
 			if item_type == "midpoint":
 
 				# check if P1 is None				
-				if self.dict["MAIN"][self.op_type][self.side][item]["P1"] == None:					
+				if self.dict["MAIN"][self.op_type][self.side][item]["P1"] == None:
 					self.dict["MAIN"][self.op_type][self.side][item]["P1"] = P
-					self.draw_tools.setHoverPointLabel("P1_ANKLE")
+					if item == "ANKLE":
+						self.draw_tools.setHoverPointLabel("P1_ANKLE")
+					elif item == "NECK_AXIS":
+						self.draw_tools.setHoverPointLabel("P1_MNSA")
+					elif item == "DIST_FEM":
+						self.draw_tools.setHoverPointLabel("P1_VCA")					
 					self.draw_tools.setHoverPoint(P)
 					self.draw_tools.setHoverBool(True)
 					return True
@@ -409,31 +518,36 @@ class MAIN:
 					self.draw_tools.setHoverPointLabel(None)
 					return True					
 
+
+			# line has P1 and P2
+			if item_type == "line":
+
+				# check if P1 is None
+				if self.dict["MAIN"][self.op_type][self.side][item]["P1"] == None:
+					self.dict["MAIN"][self.op_type][self.side][item]["P1"] = P
+					if item == "FEM_JOINT_LINE":
+						self.draw_tools.setHoverPointLabel("P1_FEM_J_LINE")
+					elif item == "TIB_JOINT_LINE":
+						self.draw_tools.setHoverPointLabel("P1_TIB_J_LINE")
+					elif item == "KJLO_LINE":
+						self.draw_tools.setHoverPointLabel("P1_KJLO_LINE")
+					elif item == "MAD_LINE":
+						self.draw_tools.setHoverPointLabel("P1_MAD_LINE")
+					self.draw_tools.setHoverPoint(P)
+					self.draw_tools.setHoverBool(True)
+					return True
+
+
+				# check if P2 is None
+				if self.dict["MAIN"][self.op_type][self.side][item]["P2"] == None:
+					self.dict["MAIN"][self.op_type][self.side][item]["P2"] = P
+					self.draw_tools.setHoverBool(False)
+					self.draw_tools.setHoverPointLabel(None)
+					return True
+
 		return False				
 
 	
-
-
-	def drawLines(self):
-		for lines in self.dict:
-			for points in self.dict[lines]:
-
-				# if type is point cannot draw line
-				if self.dict[lines]["type"] != "point":
-					# draw line if P1 and P2 have values
-					if self.dict[lines]["P1"] != None and self.dict[lines]["P2"] != None:
-
-						p1 = self.dict[lines]["P1"]
-						p2 = self.dict[lines]["P2"]
-
-						# if it has a midpoint draw it
-						if self.dict[lines]["type"] == "midpoint":
-							m1 = self.dict[lines]["M1"]
-							tag = "MNSA_"+str(lines)+"_"+str()
-							self.draw_tools.create_midpoint_line(p1, p2, m1)
-						else:
-							self.draw_tools.create_myline(p1, p2)
-
 
 
 	def draw(self):
@@ -452,81 +566,108 @@ class MAIN:
 		for side in ["LEFT","RIGHT"]:
 			for item in self.dict["MAIN"][self.op_type][side]:
 
+				# if dissapearing is checked
+				# only draw curr item
+				# else see list of checked items
+
+				if self.draw_dissapear_mode:
+					if item == self.curr_display_item:
+						self.common_draw_func(item,side)
+				else:
+					self.common_draw_func(item,side)
 
 
-				item_type = self.dict["MAIN"][self.op_type][side][item]["type"]
-				side_pre = side[0]+"_" # R/L
+				# item_type = self.dict["MAIN"][self.op_type][side][item]["type"]
+				# side_pre = side[0]+"_" # R/L
 
-				# HIP & KNEE
-				if item_type == "point":
-					if self.dict["MAIN"][self.op_type][side][item]["P1"] != None:
+				# # HIP & KNEE
+				# if item_type == "point":
+				# 	if self.dict["MAIN"][self.op_type][side][item]["P1"] != None:
 
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P1"], "orange", [self.tag, side, item,"P1"], point_thickness=self.point_size)
-						# self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"], x_offset=80, mytext=(side_pre+item), mytag=self.tag)
+				# 		self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P1"], "orange", [self.tag, side, item,"P1"], point_thickness=self.point_size)
+				# 		# self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"], x_offset=80, mytext=(side_pre+item), mytag=self.tag)
 
-						if self.draw_labels:
-							if item == "TIB_KNEE" and side == "RIGHT":
-								self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"],x_offset=-80, mytext=(side_pre+item), mytag=self.tag, color="blue")
-							elif item == "FEM_KNEE" and side == "LEFT":
-								self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"],x_offset=-80, mytext=(side_pre+item), mytag=self.tag, color="blue")
-							else:
-								self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"],x_offset=80, mytext=(side_pre+item), mytag=self.tag, color="blue")
-						# self, point, color="white", font_size=8, mytext, mytag):
+				# 		if self.draw_labels:
+				# 			if item == "TIB_KNEE" and side == "RIGHT":
+				# 				self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"],x_offset=-80, mytext=(side_pre+item), mytag=self.tag, color="blue")
+				# 			elif item == "FEM_KNEE" and side == "LEFT":
+				# 				self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"],x_offset=-80, mytext=(side_pre+item), mytag=self.tag, color="blue")
+				# 			else:
+				# 				self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"],x_offset=80, mytext=(side_pre+item), mytag=self.tag, color="blue")
+				# 		# self, point, color="white", font_size=8, mytext, mytag):
 
-				# ANKLE
-				if item_type == "midpoint":
-					if self.dict["MAIN"][self.op_type][side][item]["P1"] != None:
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P1"], "orange", [self.tag, side, "ANKLE", "P1"], point_thickness=self.point_size)
+				# # ANKLE
+				# if item_type == "midpoint":
+				# 	if self.dict["MAIN"][self.op_type][side][item]["P1"] != None:
+				# 		self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P1"], "orange", [self.tag, side, "ANKLE", "P1"], point_thickness=self.point_size)
 
-					if self.dict["MAIN"][self.op_type][side][item]["P2"] != None:
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P2"], "orange", [self.tag, side, "ANKLE", "P2"], point_thickness=self.point_size)
-
-
-					if self.dict["MAIN"][self.op_type][side][item]["P1"] != None and self.dict["MAIN"][self.op_type][side][item]["P2"] != None:
-						p1 = self.dict["MAIN"][self.op_type][side][item]["P1"]
-						p2 = self.dict["MAIN"][self.op_type][side][item]["P2"]
-						m1 = self.dict["MAIN"][self.op_type][side][item]["M1"]
-						self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag, side, "ANKLE_LINE"], point_thickness=self.point_size)
-						if self.draw_labels:
-							self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P2"], x_offset=80, mytext=(side_pre+item), mytag=[self.tag, side, "ANKLE_LINE"], color="blue")
+				# 	if self.dict["MAIN"][self.op_type][side][item]["P2"] != None:
+				# 		self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P2"], "orange", [self.tag, side, "ANKLE", "P2"], point_thickness=self.point_size)
 
 
-				# AXIS_TIB & AXIS_FEM
-				if item_type == "axis":
+				# 	if self.dict["MAIN"][self.op_type][side][item]["P1"] != None and self.dict["MAIN"][self.op_type][side][item]["P2"] != None:
+				# 		p1 = self.dict["MAIN"][self.op_type][side][item]["P1"]
+				# 		p2 = self.dict["MAIN"][self.op_type][side][item]["P2"]
+				# 		m1 = self.dict["MAIN"][self.op_type][side][item]["M1"]
+				# 		self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag, side, "ANKLE_LINE"], point_thickness=self.point_size)
+				# 		if self.draw_labels:
+				# 			self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P2"], x_offset=80, mytext=(side_pre+item), mytag=[self.tag, side, "ANKLE_LINE"], color="blue")
+
+
+				# # AXIS_TIB & AXIS_FEM
+				# if item_type == "axis":
 					
-					if self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"] != None:						
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"], "orange", [self.tag, side, item, "TOP", "P1"], point_thickness=self.point_size)
+				# 	if self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"] != None:						
+				# 		self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"], "orange", [self.tag, side, item, "TOP", "P1"], point_thickness=self.point_size)
 
-					if self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"] != None:
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"], "orange", [self.tag, side, item, "TOP", "P2"], point_thickness=self.point_size)
+				# 	if self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"] != None:
+				# 		self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"], "orange", [self.tag, side, item, "TOP", "P2"], point_thickness=self.point_size)
 
-					if self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"] != None and self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"] != None:
-						p1 = self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"]
-						p2 = self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"]
-						m1 = self.dict["MAIN"][self.op_type][side][item]["TOP"]["M1"]
-						self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag,side,"AXIS_LINE"], point_thickness=self.point_size)
+				# 	if self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"] != None and self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"] != None:
+				# 		p1 = self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"]
+				# 		p2 = self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"]
+				# 		m1 = self.dict["MAIN"][self.op_type][side][item]["TOP"]["M1"]
+				# 		self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag,side,"AXIS_LINE"], point_thickness=self.point_size)
 
-						axis_text = side_pre + item.replace("AXIS_", "") + "_TOP"
-						if self.draw_labels:
-							self.draw_tools.create_mytext(p2, x_offset=80, mytext=axis_text, mytag=self.tag, color="blue")
+				# 		axis_text = side_pre + item.replace("AXIS_", "") + "_TOP"
+				# 		if self.draw_labels:
+				# 			self.draw_tools.create_mytext(p2, x_offset=80, mytext=axis_text, mytag=self.tag, color="blue")
 
 
-					if self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"] != None:						
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"], "orange", [self.tag, side, item, "BOT", "P1"], point_thickness=self.point_size)
+				# 	if self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"] != None:						
+				# 		self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"], "orange", [self.tag, side, item, "BOT", "P1"], point_thickness=self.point_size)
 
-					if self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"] != None:						
-						self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"], "orange", [self.tag, side, item, "BOT", "P2"], point_thickness=self.point_size)
+				# 	if self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"] != None:						
+				# 		self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"], "orange", [self.tag, side, item, "BOT", "P2"], point_thickness=self.point_size)
 
-					if self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"] != None and self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"] != None:
-						p1 = self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"]
-						p2 = self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"]
-						m1 = self.dict["MAIN"][self.op_type][side][item]["BOT"]["M1"]
-						self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag,side,"AXIS_LINE"], point_thickness=self.point_size)
+				# 	if self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"] != None and self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"] != None:
+				# 		p1 = self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"]
+				# 		p2 = self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"]
+				# 		m1 = self.dict["MAIN"][self.op_type][side][item]["BOT"]["M1"]
+				# 		self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag,side,"AXIS_LINE"], point_thickness=self.point_size)
 
-						axis_text = side_pre + item.replace("AXIS_", "") + "_BOT"
-						if self.draw_labels:
-							self.draw_tools.create_mytext(p2, x_offset=80, mytext=axis_text, mytag=self.tag, color="blue")
-					
+				# 		axis_text = side_pre + item.replace("AXIS_", "") + "_BOT"
+				# 		if self.draw_labels:
+				# 			self.draw_tools.create_mytext(p2, x_offset=80, mytext=axis_text, mytag=self.tag, color="blue")
+
+
+				# # NOT ANLE
+				# if item_type == "line":
+				# 	if self.dict["MAIN"][self.op_type][side][item]["P1"] != None:
+				# 		self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P1"], "orange", [self.tag, side, "ANKLE", "P1"], point_thickness=self.point_size)
+
+				# 	if self.dict["MAIN"][self.op_type][side][item]["P2"] != None:
+				# 		self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P2"], "orange", [self.tag, side, "ANKLE", "P2"], point_thickness=self.point_size)
+
+
+				# 	if self.dict["MAIN"][self.op_type][side][item]["P1"] != None and self.dict["MAIN"][self.op_type][side][item]["P2"] != None:
+				# 		p1 = self.dict["MAIN"][self.op_type][side][item]["P1"]
+				# 		p2 = self.dict["MAIN"][self.op_type][side][item]["P2"]						
+				# 		self.draw_tools.create_myline(self.dict["MAIN"][self.op_type][side][item]["P1"], self.dict["MAIN"][self.op_type][side][item]["P2"], [self.tag,side,"LINE_MLDFA"])
+				# 		# self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag, side, "ANKLE_LINE"], point_thickness=self.point_size)
+				# 		# if self.draw_labels:
+				# 			# self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P2"], x_offset=80, mytext=(side_pre+item), mytag=[self.tag, side, "ANKLE_LINE"], color="blue")
+				
 
 
 	def update_canvas(self, draw_tools):
@@ -540,14 +681,21 @@ class MAIN:
 
 			side_pre = self.side[0]+"_"
 
+
 			if(	hover_label == "P0_HIP" or
+				hover_label == "P0_NECK_AXIS" or
 				hover_label == "P0_FEM_KNEE" or
 				hover_label == "P0_TIB_KNEE" or
 				hover_label == "P0_ANKLE" or
+				hover_label == "P0_DIST_FEM" or
 				hover_label == "P0_AXIS_FEM_TOP" or
 				hover_label == "P0_AXIS_FEM_BOT" or
 				hover_label == "P0_AXIS_TIB_TOP" or
-				hover_label == "P0_AXIS_TIB_BOT"
+				hover_label == "P0_FEM_J_LINE" or
+				hover_label == "P0_TIB_J_LINE" or
+				hover_label == "P0_AXIS_TIB_BOT" or
+				hover_label == "P0_KJLO_LINE" or
+				hover_label == "P0_MAD_LINE"
 				):
 				self.draw_tools.clear_by_tag("hover_line")
 				self.draw_tools.create_mypoint(P_mouse, "red", [self.tag, "hover_line"], hover_point=True, point_thickness=self.point_size)
@@ -555,8 +703,10 @@ class MAIN:
 					self.draw_tools.create_mytext(P_mouse,x_offset=80, mytext=(side_pre+self.hover_text), mytag=[self.tag, "hover_line"])
 
 
-
+		
 		if(	hover_label == "P1_ANKLE" or
+			hover_label == "P1_MNSA" or
+			hover_label == "P1_VCA" or
 			hover_label == "P1_TOP_AXIS_FEM" or
 			hover_label == "P1_TOP_AXIS_TIB" or
 			hover_label == "P1_BOT_AXIS_FEM" or
@@ -565,6 +715,16 @@ class MAIN:
 			self.draw_tools.clear_by_tag("hover_line")
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
 			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
+
+
+		if( hover_label == "P1_FEM_J_LINE" or
+			hover_label == "P1_TIB_J_LINE" or 
+			hover_label == "P1_KJLO_LINE" or
+			hover_label == "P1_MAD_LINE"
+			):
+			self.draw_tools.clear_by_tag("hover_line")			
+			self.draw_tools.create_myline(P_mouse, P_stored, "hover_line")
+			
 
 
 	def mainHoverUsingNextLabel(self):
@@ -582,6 +742,21 @@ class MAIN:
 			self.draw_tools.setHoverPointLabel("P0_HIP")
 			self.draw_tools.setHoverPoint(None)
 			self.draw_tools.setHoverBool(True)
+
+
+		elif label == "RIGHT NECK_AXIS P1":
+			self.side = "RIGHT"
+			self.hover_text = "NECK_AXIS"
+			self.draw_tools.setHoverPointLabel("P0_NECK_AXIS")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT NECK_AXIS P1":
+			self.side = "LEFT"
+			self.hover_text = "NECK_AXIS"
+			self.draw_tools.setHoverPointLabel("P0_NECK_AXIS")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
 
 		elif label == "RIGHT FEM_KNEE":			
 			self.side = "RIGHT"
@@ -619,6 +794,20 @@ class MAIN:
 			self.side = "LEFT"
 			self.hover_text = "ANKLE_P1"
 			self.draw_tools.setHoverPointLabel("P0_ANKLE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+
+		elif label == "RIGHT DIST_FEM P1":
+			self.side = "RIGHT"
+			self.hover_text = "DIST_FEM_P1"
+			self.draw_tools.setHoverPointLabel("P0_DIST_FEM")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT DIST_FEM P1":
+			self.side = "LEFT"
+			self.hover_text = "DIST_FEM_P1"
+			self.draw_tools.setHoverPointLabel("P0_DIST_FEM")
 			self.draw_tools.setHoverPoint(None)
 			self.draw_tools.setHoverBool(True)
 
@@ -676,10 +865,65 @@ class MAIN:
 			self.draw_tools.setHoverPoint(None)
 			self.draw_tools.setHoverBool(True)
 
+
+		# FEM and TIB joint lines
+		elif label == "LEFT FEM_JOINT_LINE P1":
+			self.side = "LEFT"
+			self.hover_text = "FEM_J_LINE_P1"
+			self.draw_tools.setHoverPointLabel("P0_FEM_J_LINE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "RIGHT FEM_JOINT_LINE P1":
+			self.side = "RIGHT"
+			self.hover_text = "FEM_J_LINE_P1"
+			self.draw_tools.setHoverPointLabel("P0_FEM_J_LINE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT TIB_JOINT_LINE P1":
+			self.side = "LEFT"
+			self.hover_text = "TIB_J_LINE_P1"
+			self.draw_tools.setHoverPointLabel("P0_TIB_J_LINE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "RIGHT TIB_JOINT_LINE P1":
+			self.side = "RIGHT"
+			self.hover_text = "TIB_J_LINE_P1"
+			self.draw_tools.setHoverPointLabel("P0_TIB_J_LINE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+		elif label == "LEFT KJLO_LINE P1":
+			self.side = "LEFT"
+			self.hover_text = "KJLO_LINE_P1"
+			self.draw_tools.setHoverPointLabel("P0_KJLO_LINE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "RIGHT KJLO_LINE P1":
+			self.side = "RIGHT"
+			self.hover_text = "KJLO_LINE_P1"
+			self.draw_tools.setHoverPointLabel("P0_KJLO_LINE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+		elif label == "LEFT MAD_LINE P1":
+			self.side = "LEFT"
+			self.hover_text = "MAD_LINE_P1"
+			self.draw_tools.setHoverPointLabel("P0_MAD_LINE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "RIGHT MAD_LINE P1":
+			self.side = "RIGHT"
+			self.hover_text = "MAD_LINE_P1"
+			self.draw_tools.setHoverPointLabel("P0_MAD_LINE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+
 		elif label == "LEFT Done" or label == "RIGHT Done":
 			self.draw_tools.setHoverPointLabel("")
 			self.draw_tools.setHoverPoint(None)
 			self.draw_tools.setHoverBool(False)
+			self.drawFromMain()
 
 		# else:
 		# 	self.draw_tools.setHoverPointLabel(None)
@@ -694,6 +938,9 @@ class MAIN:
 		p1_ankle = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P1"]
 		p2_ankle = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]
 
+		p1_neck_axis = self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["P1"]
+		p2_neck_axis = self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["P2"]
+
 		p1_axis_fem_top = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
 		p2_axis_fem_top = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
 		p1_axis_fem_bot = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
@@ -707,15 +954,15 @@ class MAIN:
 		# find if P0 hovers are required
 		self.mainHoverUsingNextLabel()
 
-		if p1_ankle == None and p2_ankle != None:
+		if p1_ankle != None and p2_ankle == None:
 			self.draw_tools.setHoverPointLabel("P1_ANKLE")
-			self.draw_tools.setHoverPoint(p2_ankle)
+			self.draw_tools.setHoverPoint(p1_ankle)
 			self.draw_tools.setHoverBool(True)
 
-		# elif p1_ankle != None and p2_ankle == None:
-		# 	self.draw_tools.setHoverPointLabel("P1_ANKLE")
-		# 	self.draw_tools.setHoverPoint(P)
-		# 	self.draw_tools.setHoverBool(True)
+		elif p1_neck_axis != None and p2_neck_axis == None:
+			self.draw_tools.setHoverPointLabel("P1_MNSA")
+			self.draw_tools.setHoverPoint(p1_neck_axis)
+			self.draw_tools.setHoverBool(True)
 
 		elif p1_axis_fem_top != None and p2_axis_fem_top == None:						
 			self.draw_tools.setHoverPointLabel("P1_TOP_AXIS_FEM")
@@ -875,6 +1122,67 @@ class MAIN:
 				self.drag_label = "P2_ANKLE"
 				self.drag_side 	= side
 
+		elif "NECK_AXIS" in tags:
+			if "P1" in tags:
+				self.drag_point = self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["P2"]
+				self.drag_label = "P1_NECK_AXIS"
+				self.drag_side 	= side
+			elif "P2" in tags:
+				self.drag_point = self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["P1"]
+				self.drag_label = "P2_NECK_AXIS"
+				self.drag_side 	= side
+
+		elif "DIST_FEM" in tags:
+			if "P1" in tags:
+				self.drag_point = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["P2"]
+				self.drag_label = "P1_DIST_FEM"
+				self.drag_side 	= side
+			elif "P2" in tags:
+				self.drag_point = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["P1"]
+				self.drag_label = "P2_DIST_FEM"
+				self.drag_side 	= side
+
+		elif "FEM_JOINT_LINE" in tags:
+			if "P1" in tags:
+				self.drag_point = self.dict["MAIN"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
+				self.drag_label = "P1_FEM_JOINT_LINE"
+				self.drag_side 	= side
+			elif "P2" in tags:
+				self.drag_point = self.dict["MAIN"][self.op_type][side]["FEM_JOINT_LINE"]["P1"]
+				self.drag_label = "P2_FEM_JOINT_LINE"
+				self.drag_side 	= side
+
+		elif "TIB_JOINT_LINE" in tags:
+			if "P1" in tags:
+				self.drag_point = self.dict["MAIN"][self.op_type][side]["TIB_JOINT_LINE"]["P2"]
+				self.drag_label = "P1_TIB_JOINT_LINE"
+				self.drag_side 	= side
+			elif "P2" in tags:
+				self.drag_point = self.dict["MAIN"][self.op_type][side]["TIB_JOINT_LINE"]["P1"]
+				self.drag_label = "P2_TIB_JOINT_LINE"
+				self.drag_side 	= side
+
+
+		elif "KJLO_LINE" in tags:
+			if "P1" in tags:
+				self.drag_point = self.dict["MAIN"][self.op_type][side]["KJLO_LINE"]["P2"]
+				self.drag_label = "P1_KJLO_LINE"
+				self.drag_side 	= side
+			elif "P2" in tags:
+				self.drag_point = self.dict["MAIN"][self.op_type][side]["KJLO_LINE"]["P1"]
+				self.drag_label = "P2_KJLO_LINE"
+				self.drag_side 	= side
+
+		elif "MAD_LINE" in tags:
+			if "P1" in tags:
+				self.drag_point = self.dict["MAIN"][self.op_type][side]["MAD_LINE"]["P2"]
+				self.drag_label = "P1_MAD_LINE"
+				self.drag_side 	= side
+			elif "P2" in tags:
+				self.drag_point = self.dict["MAIN"][self.op_type][side]["MAD_LINE"]["P1"]
+				self.drag_label = "P2_MAD_LINE"
+				self.drag_side 	= side
+
 
 		elif "AXIS_FEM" in tags:
 			if "P1" in tags:
@@ -901,7 +1209,13 @@ class MAIN:
 
 		# self.drag_label = "HIP"
 		# self.drag_label = "KNEE"
-		if self.drag_label == "P1_ANKLE" and self.drag_point != None or self.drag_label == "P2_ANKLE" and self.drag_point != None:
+		if (self.drag_label == "P1_ANKLE" and self.drag_point != None or 
+			self.drag_label == "P2_ANKLE" and self.drag_point != None or
+			self.drag_label == "P1_NECK_AXIS" and self.drag_point != None or 
+			self.drag_label == "P2_NECK_AXIS" and self.drag_point != None or
+			self.drag_label == "P1_DIST_FEM" and self.drag_point != None or
+			self.drag_label == "P2_DIST_FEM" and self.drag_point != None
+			):
 			self.draw_tools.clear_by_tag("ANKLE_LINE")
 			self.draw_tools.clear_by_tag("drag_line")
 			m = self.draw_tools.midpoint(self.drag_point, P_mouse)
@@ -916,6 +1230,26 @@ class MAIN:
 			self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line", point_thickness=self.point_size)
 
 
+		if (self.drag_label == "P1_FEM_JOINT_LINE" and self.drag_point != None or 
+			self.drag_label == "P2_FEM_JOINT_LINE" and self.drag_point != None or
+			self.drag_label == "P1_TIB_JOINT_LINE" and self.drag_point != None or 
+			self.drag_label == "P2_TIB_JOINT_LINE" and self.drag_point != None or
+			self.drag_label == "P1_KJLO_LINE" and self.drag_point != None or
+			self.drag_label == "P2_KJLO_LINE" and self.drag_point != None			
+			):
+			self.draw_tools.clear_by_tag("JOINT_LINE")
+			self.draw_tools.clear_by_tag("drag_line")
+			self.draw_tools.create_myline(P_mouse, self.drag_point, "drag_line")
+
+
+		if (self.drag_label == "P1_MAD_LINE" and self.drag_point != None or
+			self.drag_label == "P2_MAD_LINE" and self.drag_point != None
+			):
+			self.draw_tools.clear_by_tag("MAD_DIV_PTS")
+			self.draw_tools.clear_by_tag("drag_line")
+			self.draw_tools.create_myline(P_mouse, self.drag_point, "drag_line")
+
+		
 		# self.drag_label = "P2_AXIS_FEM_"+topbot
 		# self.drag_label = "P1_AXIS_TIB_"+topbot
 		# self.drag_label = "P2_AXIS_TIB_"+topbot
@@ -927,65 +1261,113 @@ class MAIN:
 
 		if self.drag_label == "HIP":
 			self.dict["MAIN"][self.op_type][self.drag_side]["HIP"]["P1"] = P_mouse
-			self.updateExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.drag_side)		# clear excel values
+			self.deleteExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.drag_side)		# clear excel values
 			
 		elif self.drag_label == "FEM_KNEE":
 			self.dict["MAIN"][self.op_type][self.drag_side]["FEM_KNEE"]["P1"] = P_mouse
-			self.updateExcelValues(["HKA", "VCA", "mLDFA"], self.drag_side)		# clear excel values
+			self.deleteExcelValues(["HKA", "VCA", "mLDFA"], self.drag_side)		# clear excel values
 
 		elif self.drag_label == "TIB_KNEE":
 			self.dict["MAIN"][self.op_type][self.drag_side]["TIB_KNEE"]["P1"] = P_mouse
-			self.updateExcelValues(["HKA", "TAMD", "MPTA"], self.drag_side)		# clear excel values
+			self.deleteExcelValues(["HKA", "TAMD", "MPTA"], self.drag_side)		# clear excel values
 
 
 		elif self.drag_label == "P1_ANKLE":
 			self.dict["MAIN"][self.op_type][self.drag_side]["ANKLE"]["P1"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["ANKLE"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
-			self.updateExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL"], self.drag_side)		# clear excel values
+			self.deleteExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL"], self.drag_side)		# clear excel values
 		elif self.drag_label == "P2_ANKLE":
 			self.dict["MAIN"][self.op_type][self.drag_side]["ANKLE"]["P2"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["ANKLE"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
-			self.updateExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL"], self.drag_side)		# clear excel values
+			self.deleteExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL"], self.drag_side)		# clear excel values
 
 
 		elif self.drag_label == "P1_AXIS_FEM_TOP":
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["P1"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
-			self.updateExcelValues(["MNSA", "aFTA", "aLDFA"], self.drag_side)		# clear excel values
+			self.deleteExcelValues(["MNSA", "aFTA", "aLDFA"], self.drag_side)		# clear excel values
 		elif self.drag_label == "P2_AXIS_FEM_TOP":
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["P2"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
-			self.updateExcelValues(["MNSA", "aFTA", "aLDFA"], self.drag_side)		# clear excel values
+			self.deleteExcelValues(["MNSA", "aFTA", "aLDFA"], self.drag_side)		# clear excel values
 
 
 		elif self.drag_label == "P1_AXIS_FEM_BOT":
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["P1"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
-			self.updateExcelValues(["MNSA", "aFTA", "aLDFA"], self.drag_side)		# clear excel values
+			self.deleteExcelValues(["MNSA", "aFTA", "aLDFA"], self.drag_side)		# clear excel values
 		elif self.drag_label == "P2_AXIS_FEM_BOT":
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["P2"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
-			self.updateExcelValues(["MNSA", "aFTA", "aLDFA"], self.drag_side)		# clear excel values
+			self.deleteExcelValues(["MNSA", "aFTA", "aLDFA"], self.drag_side)		# clear excel values
 
 
 		elif self.drag_label == "P1_AXIS_TIB_TOP":
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_TIB"]["TOP"]["P1"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_TIB"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
-			self.updateExcelValues(["aFTA", "TAMD"], self.drag_side)		# clear excel values
+			self.deleteExcelValues(["aFTA", "TAMD"], self.drag_side)		# clear excel values
 		elif self.drag_label == "P2_AXIS_TIB_TOP":
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_TIB"]["TOP"]["P2"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_TIB"]["TOP"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
-			self.updateExcelValues(["aFTA", "TAMD"], self.drag_side)		# clear excel values
+			self.deleteExcelValues(["aFTA", "TAMD"], self.drag_side)		# clear excel values
 
 
 		elif self.drag_label == "P1_AXIS_TIB_BOT":
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_TIB"]["BOT"]["P1"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_TIB"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
-			self.updateExcelValues(["aFTA", "TAMD"], self.drag_side)		# clear excel values
+			self.deleteExcelValues(["aFTA", "TAMD"], self.drag_side)		# clear excel values
 		elif self.drag_label == "P2_AXIS_TIB_BOT":
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_TIB"]["BOT"]["P2"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_TIB"]["BOT"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
-			self.updateExcelValues(["aFTA", "TAMD"], self.drag_side)		# clear excel values
+			self.deleteExcelValues(["aFTA", "TAMD"], self.drag_side)		# clear excel values
+
+
+		elif self.drag_label == "P1_NECK_AXIS":
+			self.dict["MAIN"][self.op_type][self.drag_side]["NECK_AXIS"]["P1"] = P_mouse
+			self.dict["MAIN"][self.op_type][self.drag_side]["NECK_AXIS"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			# self.deleteExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL"], self.drag_side)		# clear excel values
+		elif self.drag_label == "P2_NECK_AXIS":
+			self.dict["MAIN"][self.op_type][self.drag_side]["NECK_AXIS"]["P2"] = P_mouse
+			self.dict["MAIN"][self.op_type][self.drag_side]["NECK_AXIS"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			# self.deleteExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL"], self.drag_side)		# clear excel values
+
+		elif self.drag_label == "P1_FEM_JOINT_LINE":
+			self.dict["MAIN"][self.op_type][self.drag_side]["FEM_JOINT_LINE"]["P1"] = P_mouse
+			# self.deleteExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.drag_side)		# clear excel values
+		elif self.drag_label == "P2_FEM_JOINT_LINE":
+			self.dict["MAIN"][self.op_type][self.drag_side]["FEM_JOINT_LINE"]["P2"] = P_mouse
+			# self.deleteExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.drag_side)		# clear excel values
+
+		elif self.drag_label == "P1_TIB_JOINT_LINE":
+			self.dict["MAIN"][self.op_type][self.drag_side]["TIB_JOINT_LINE"]["P1"] = P_mouse
+			# self.deleteExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.drag_side)		# clear excel values
+		elif self.drag_label == "P2_TIB_JOINT_LINE":
+			self.dict["MAIN"][self.op_type][self.drag_side]["TIB_JOINT_LINE"]["P2"] = P_mouse
+			# self.deleteExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.drag_side)		# clear excel values
+
+
+		elif self.drag_label == "P1_DIST_FEM":
+			self.dict["MAIN"][self.op_type][self.drag_side]["DIST_FEM"]["P1"] = P_mouse
+			self.dict["MAIN"][self.op_type][self.drag_side]["DIST_FEM"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			# self.deleteExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL"], self.drag_side)		# clear excel values
+		elif self.drag_label == "P2_DIST_FEM":
+			self.dict["MAIN"][self.op_type][self.drag_side]["DIST_FEM"]["P2"] = P_mouse
+			self.dict["MAIN"][self.op_type][self.drag_side]["DIST_FEM"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+			# self.deleteExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL"], self.drag_side)		# clear excel values
+
+		elif self.drag_label == "P1_KJLO_LINE":
+			self.dict["MAIN"][self.op_type][self.drag_side]["KJLO_LINE"]["P1"] = P_mouse
+			# self.deleteExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.drag_side)		# clear excel values
+		elif self.drag_label == "P2_KJLO_LINE":
+			self.dict["MAIN"][self.op_type][self.drag_side]["KJLO_LINE"]["P2"] = P_mouse
+			# self.deleteExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.drag_side)		# clear excel values
+
+		elif self.drag_label == "P1_MAD_LINE":
+			self.dict["MAIN"][self.op_type][self.drag_side]["MAD_LINE"]["P1"] = P_mouse
+			# self.deleteExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.drag_side)		# clear excel values
+		elif self.drag_label == "P2_MAD_LINE":
+			self.dict["MAIN"][self.op_type][self.drag_side]["MAD_LINE"]["P2"] = P_mouse
+			# self.deleteExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.drag_side)		# clear excel values
 
 		self.controller.save_json()
 		self.draw()
@@ -1001,11 +1383,11 @@ class MAIN:
 
 		print('checkbox {} val{}'.format(action,val.get()))
 
-		if action == "TOGGLE_MECH_AXIS":
+		if action == "TOGGLE_DISSAPEAR_MODE":
 			if val.get() == 0:
-				self.draw_mech_axis = False
+				self.draw_dissapear_mode = False
 			elif val.get() == 1:
-				self.draw_mech_axis = True
+				self.draw_dissapear_mode = True
 			self.draw()
 
 		if action == "TOGGLE_ANAT_AXIS":
@@ -1030,7 +1412,51 @@ class MAIN:
 			self.draw()
 
 
-	def updateExcelValues(self, del_list, side=None):
+		if action == "TOGGLE_FEM_J":
+			if val.get() == 0:
+				self.draw_fem_j_var = False
+			elif val.get() == 1:
+				self.draw_fem_j_var = True
+			self.draw()
+
+		if action == "TOGGLE_TIB_J":
+			if val.get() == 0:
+				self.draw_tib_j_var = False
+			elif val.get() == 1:
+				self.draw_tib_j_var = True
+			self.draw()
+
+		if action == "TOGGLE_KJLO_LINE":
+			if val.get() == 0:
+				self.draw_kjlo_line = False
+			elif val.get() == 1:
+				self.draw_kjlo_line = True
+			self.draw()
+
+		if action == "TOGGLE_MAD_LINE":
+			if val.get() == 0:
+				self.draw_mad_line = False
+			elif val.get() == 1:
+				self.draw_mad_line = True
+			self.draw()
+
+
+		if action == "TOGGLE_FEM_KNEE":
+			if val.get() == 0:
+				self.draw_fem_knee = False
+			elif val.get() == 1:
+				self.draw_fem_knee = True
+			self.draw()
+
+		if action == "TOGGLE_TIB_KNEE":
+			if val.get() == 0:
+				self.draw_tib_knee = False
+			elif val.get() == 1:
+				self.draw_tib_knee = True
+			self.draw()
+
+
+	def deleteExcelValues(self, del_list, side=None):
 
 		# HKA 		hip, tib-knee, fem-knee, ankle
 		# MNSA 		fem-top-bot, hip
@@ -1061,6 +1487,154 @@ class MAIN:
 				print("left and right")
 				self.dict["EXCEL"][self.op_type]["LEFT"][key] = None
 				self.dict["EXCEL"][self.op_type]["RIGHT"][key] = None
+
+
+
+	def common_draw_func(self, item, side):
+		item_type = self.dict["MAIN"][self.op_type][side][item]["type"]
+		side_pre = side[0]+"_" # R/L
+
+		# HIP & KNEE
+		if item_type == "point":
+			if self.dict["MAIN"][self.op_type][side][item]["P1"] != None:
+
+				if( item == "TIB_KNEE" and self.draw_tib_knee or
+					item == "FEM_KNEE" and self.draw_fem_knee or
+					item == "HIP"
+					):
+
+					self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P1"], "orange", [self.tag, side, item,"P1"], point_thickness=self.point_size)
+					# self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"], x_offset=80, mytext=(side_pre+item), mytag=self.tag)
+
+					if self.draw_labels:
+						if item == "TIB_KNEE":
+							self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"],y_offset=20, mytext=(side_pre+item), mytag=self.tag, color="blue")
+						elif item == "FEM_KNEE":
+							self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"],y_offset=-20, mytext=(side_pre+item), mytag=self.tag, color="blue")
+						else:
+							self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"],y_offset=-30, mytext=(side_pre+item), mytag=self.tag, color="blue")
+					# self, point, color="white", font_size=8, mytext, mytag):
+
+		# ANKLE / NECK_AXIS
+		if item_type == "midpoint":			
+			if self.dict["MAIN"][self.op_type][side][item]["P1"] != None:
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P1"], "orange", [self.tag, side, item, "P1"], point_thickness=self.point_size)
+
+			if self.dict["MAIN"][self.op_type][side][item]["P2"] != None:
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P2"], "orange", [self.tag, side, item, "P2"], point_thickness=self.point_size)
+
+
+			if self.dict["MAIN"][self.op_type][side][item]["P1"] != None and self.dict["MAIN"][self.op_type][side][item]["P2"] != None:
+				p1 = self.dict["MAIN"][self.op_type][side][item]["P1"]
+				p2 = self.dict["MAIN"][self.op_type][side][item]["P2"]
+				m1 = self.dict["MAIN"][self.op_type][side][item]["M1"]
+				self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag, side, "ANKLE_LINE"], point_thickness=self.point_size)
+				if self.draw_labels:
+					self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P2"], x_offset=80, mytext=(side_pre+item), mytag=[self.tag, side, "ANKLE_LINE"], color="blue")
+
+
+		# AXIS_TIB & AXIS_FEM
+		if item_type == "axis":
+			
+			if self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"] != None:						
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"], "orange", [self.tag, side, item, "TOP", "P1"], point_thickness=self.point_size)
+
+			if self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"] != None:
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"], "orange", [self.tag, side, item, "TOP", "P2"], point_thickness=self.point_size)
+
+			if self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"] != None and self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"] != None:
+				p1 = self.dict["MAIN"][self.op_type][side][item]["TOP"]["P1"]
+				p2 = self.dict["MAIN"][self.op_type][side][item]["TOP"]["P2"]
+				m1 = self.dict["MAIN"][self.op_type][side][item]["TOP"]["M1"]
+				self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag,side,"AXIS_LINE"], point_thickness=self.point_size)
+
+				axis_text = side_pre + item.replace("AXIS_", "") + "_TOP"
+				if self.draw_labels:
+					self.draw_tools.create_mytext(p2, x_offset=80, mytext=axis_text, mytag=self.tag, color="blue")
+
+
+			if self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"] != None:						
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"], "orange", [self.tag, side, item, "BOT", "P1"], point_thickness=self.point_size)
+
+			if self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"] != None:						
+				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"], "orange", [self.tag, side, item, "BOT", "P2"], point_thickness=self.point_size)
+
+			if self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"] != None and self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"] != None:
+				p1 = self.dict["MAIN"][self.op_type][side][item]["BOT"]["P1"]
+				p2 = self.dict["MAIN"][self.op_type][side][item]["BOT"]["P2"]
+				m1 = self.dict["MAIN"][self.op_type][side][item]["BOT"]["M1"]
+				self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag,side,"AXIS_LINE"], point_thickness=self.point_size)
+
+				axis_text = side_pre + item.replace("AXIS_", "") + "_BOT"
+				if self.draw_labels:
+					self.draw_tools.create_mytext(p2, x_offset=80, mytext=axis_text, mytag=self.tag, color="blue")
+
+
+		# FEM and TIB JOINT LINES
+		if item_type == "line":
+
+			if( item == "FEM_JOINT_LINE" and self.draw_fem_j_var or
+				item == "TIB_JOINT_LINE" and self.draw_tib_j_var or
+				item == "KJLO_LINE" and self.draw_kjlo_line			
+				):
+
+				if self.dict["MAIN"][self.op_type][side][item]["P1"] != None:
+					self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P1"], "orange", [self.tag, side, item, "P1"], point_thickness=self.point_size)
+
+				if self.dict["MAIN"][self.op_type][side][item]["P2"] != None:
+					self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side][item]["P2"], "orange", [self.tag, side, item, "P2"], point_thickness=self.point_size)
+
+
+				if self.dict["MAIN"][self.op_type][side][item]["P1"] != None and self.dict["MAIN"][self.op_type][side][item]["P2"] != None:
+					p1 = self.dict["MAIN"][self.op_type][side][item]["P1"]
+					p2 = self.dict["MAIN"][self.op_type][side][item]["P2"]						
+					self.draw_tools.create_myline(self.dict["MAIN"][self.op_type][side][item]["P1"], self.dict["MAIN"][self.op_type][side][item]["P2"], [self.tag,side,"JOINT_LINE"])
+					# self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag, side, "ANKLE_LINE"], point_thickness=self.point_size)
+					if self.draw_labels:
+						if item == "FEM_JOINT_LINE" or item == "KJLO_LINE":
+							self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"], y_offset=-20, mytext=(side_pre+item), mytag=[self.tag,side,"JOINT_LINE"], color="blue")
+						if item == "TIB_JOINT_LINE":
+							self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P1"], y_offset=20, mytext=(side_pre+item), mytag=[self.tag,side,"JOINT_LINE"], color="blue")
+
+
+			# MAD differences
+			if item == "MAD_LINE" and self.draw_mad_line:
+				mad_p1 = self.dict["MAIN"][self.op_type][side][item]["P1"]
+				mad_p2 = self.dict["MAIN"][self.op_type][side][item]["P2"]
+				if mad_p1 != None:
+					self.draw_tools.create_mypoint(mad_p1, "orange", [self.tag, side, item, "P1"], point_thickness=self.point_size)
+
+				if mad_p2 != None:
+					self.draw_tools.create_mypoint(mad_p2, "orange", [self.tag, side, item, "P2"], point_thickness=self.point_size)
+
+				if mad_p1 != None and mad_p2 != None:
+					self.draw_tools.create_myline(mad_p1, mad_p2, [self.tag,side,"MAD_DIV_PTS"])
+
+					# draw the points for division
+					self.draw_tools.create_mypoint(self.draw_tools.getLineSegmentByPercentage(0.2, mad_p1, mad_p2), "orange", [self.tag, side, "MAD_DIV_PTS"], point_thickness=self.point_size)
+					self.draw_tools.create_mypoint(self.draw_tools.getLineSegmentByPercentage(0.4, mad_p1, mad_p2), "orange", [self.tag, side, "MAD_DIV_PTS"], point_thickness=self.point_size)
+					self.draw_tools.create_mypoint(self.draw_tools.getLineSegmentByPercentage(0.6, mad_p1, mad_p2), "orange", [self.tag, side, "MAD_DIV_PTS"], point_thickness=self.point_size)
+					self.draw_tools.create_mypoint(self.draw_tools.getLineSegmentByPercentage(0.8, mad_p1, mad_p2), "orange", [self.tag, side, "MAD_DIV_PTS"], point_thickness=self.point_size)
+
+					if self.draw_labels:
+						if side == "RIGHT":
+							L_mad, R_mad = self.draw_tools.retPointsLeftRight(mad_p1,mad_p2)
+						else:
+							# invert the direction for the LEFT case
+							R_mad, L_mad = self.draw_tools.retPointsLeftRight(mad_p1,mad_p2)
+
+						self.draw_tools.create_mytext(self.draw_tools.getLineSegmentByPercentage(0.1, L_mad, R_mad), y_offset=10, mytext="4", mytag=[self.tag, side, "MAD_DIV_PTS"], color="blue")
+						self.draw_tools.create_mytext(self.draw_tools.getLineSegmentByPercentage(0.3, L_mad, R_mad), y_offset=10, mytext="3", mytag=[self.tag, side, "MAD_DIV_PTS"], color="blue")
+						self.draw_tools.create_mytext(self.draw_tools.getLineSegmentByPercentage(0.5, L_mad, R_mad), y_offset=10, mytext="C", mytag=[self.tag, side, "MAD_DIV_PTS"], color="blue")
+						self.draw_tools.create_mytext(self.draw_tools.getLineSegmentByPercentage(0.7, L_mad, R_mad), y_offset=10, mytext="2", mytag=[self.tag, side, "MAD_DIV_PTS"], color="blue")
+						self.draw_tools.create_mytext(self.draw_tools.getLineSegmentByPercentage(0.9, L_mad, R_mad), y_offset=10, mytext="1", mytag=[self.tag, side, "MAD_DIV_PTS"], color="blue")
+
+	def drawFromMain(self):
+		self.controller.calculateExcel()
+
+
+
+
 
 
 

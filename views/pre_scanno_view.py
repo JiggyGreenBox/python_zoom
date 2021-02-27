@@ -271,4 +271,14 @@ class PRE_SCANNO_View(tk.Frame):
 			self.objects[obj].draw()
 			self.objects[obj].unset()
 
+	# calls the draw function without drawing the points on the canvas
+	def calculateExcel(self):
+		for obj in self.objects:
+			# if obj == "HKA":
+
+			if obj in ["HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","KJLO","KAOL","MAD","EADF"]:
+				print("{} draw".format(obj))
+				self.objects[obj].updateExcelValues()
+			# self.objects[obj].updateExcelValues()
+
 		

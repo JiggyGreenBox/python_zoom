@@ -134,4 +134,48 @@ class HKA():
 		self.draw_tools.clear_by_tag(self.tag)
 		self.side = None
 
+
+	# similiar to draw but nothing is drawn on the canvas
+	def updateExcelValues(self):
+
+		for side in ["LEFT","RIGHT"]:
+
+			hip 		= self.dict["MAIN"][self.op_type][side]["HIP"]["P1"]
+			fem_knee 	= self.dict["MAIN"][self.op_type][side]["FEM_KNEE"]["P1"]
+			tib_knee 	= self.dict["MAIN"][self.op_type][side]["TIB_KNEE"]["P1"]
+			
+			ankle_p1 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["P1"]
+			ankle_p2 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]
+			ankle_m1 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["M1"]
+
+
+			if( ankle_p1 != None and 
+				ankle_p2 != None and
+				hip != None and
+				fem_knee != None and
+				tib_knee != None				
+				):
+
+				# fem-tib-intersection
+				hka_point = self.draw_tools.line_intersection((ankle_m1, tib_knee), (hip, fem_knee))				
+
+				# draw angle
+				angle = ""
+				if side == "LEFT":						
+					# angle = self.draw_tools.create_myAngle(ankle_m1, hka_point, hip, self.tag)
+					angle = self.draw_tools.getAnglePoints(ankle_m1, hka_point, hip)
+				else:
+					# angle = self.draw_tools.create_myAngle(hip, hka_point, ankle_m1, self.tag)
+					angle = self.draw_tools.getAnglePoints(hip, hka_point, ankle_m1)
+				
+
+				# check if value exists
+				if self.dict["EXCEL"][self.op_type][side]["HKA"] == None:
+
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["HKA"]	 	= '{0:.2f}'.format(angle)
+
+					# save after insert
+					self.controller.save_json()
+
 						

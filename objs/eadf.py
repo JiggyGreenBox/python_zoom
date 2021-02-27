@@ -102,9 +102,9 @@ class EADF():
 			hip 		= self.dict["MAIN"][self.op_type][side]["HIP"]["P1"]
 			fem_knee 	= self.dict["MAIN"][self.op_type][side]["FEM_KNEE"]["P1"]
 
-			mnsa_p1		= self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"]
-			mnsa_p2		= self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P2"]
-			mnsa_m1		= self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["M1"]
+			mnsa_p1		= self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["P1"]
+			mnsa_p2		= self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["P2"]
+			mnsa_m1		= self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["M1"]
 
 			eadf_p1 = self.dict["EADF"][self.op_type][side]["EADF_LINE"]["P1"]
 			eadf_p2 = self.dict["EADF"][self.op_type][side]["EADF_LINE"]["P2"]
@@ -355,4 +355,7 @@ class EADF():
 		self.draw_tools.clear_by_tag(self.tag)
 		self.side = None
 
+	# similiar to draw but nothing is drawn on the canvas
+	def updateExcelValues(self):
+		pass
 						

@@ -31,8 +31,8 @@ class ALDFA():
 			isFemBot = False
 			isMldfa = False
 
-			fem_joint_p1 = self.dict["MLDFA"][self.op_type][side]["FEM_JOINT_LINE"]["P1"]
-			fem_joint_p2 = self.dict["MLDFA"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
+			fem_joint_p1 = self.dict["MAIN"][self.op_type][side]["FEM_JOINT_LINE"]["P1"]
+			fem_joint_p2 = self.dict["MAIN"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
 
 			fem_top_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
 			fem_top_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
@@ -147,3 +147,83 @@ class ALDFA():
 	def unset(self):
 		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)
+
+
+	# similiar to draw but nothing is drawn on the canvas
+	def updateExcelValues(self):
+
+		# loop left and right
+		for side in ["LEFT","RIGHT"]:
+
+			isFemTop = False
+			isFemBot = False
+			isMldfa = False
+
+			fem_joint_p1 = self.dict["MAIN"][self.op_type][side]["FEM_JOINT_LINE"]["P1"]
+			fem_joint_p2 = self.dict["MAIN"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
+
+			fem_top_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
+			fem_top_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
+
+			fem_bot_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
+			fem_bot_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
+
+
+			bot_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
+			top_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
+
+
+			# ------------------------
+			# FROM MLDFA
+			# ------------------------			
+			if fem_joint_p1 != None and fem_joint_p2 != None:
+				isMldfa = True
+
+
+
+			# ------------------------
+			# FROM MAIN
+			# ------------------------
+			# FEM AXIS
+			# TOP			
+			if fem_top_p1 != None and fem_top_p2 != None:								
+				isFemTop = True
+
+
+			# BOT
+			if fem_bot_p1 != None and fem_bot_p2 != None:								
+				isFemBot = True
+
+
+			if isMldfa and isFemBot and isFemTop:
+
+				# fem ray
+				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
+
+				p_bot = self.draw_tools.line_intersection(
+						(top_m1, bot_m1),
+						(xbot, ybot))
+
+				# find angle ray intersection point
+				p_int = self.draw_tools.line_intersection(
+						(top_m1, p_bot),
+						(fem_joint_p1, fem_joint_p2))
+
+
+				L_fem, R_fem = self.draw_tools.retPointsLeftRight(fem_joint_p1, fem_joint_p2)
+
+				if side == "LEFT":
+					# angle = self.draw_tools.create_myAngle(top_m1, p_int, R_fem, self.tag)
+					angle = self.draw_tools.getAnglePoints(top_m1, p_int, R_fem)
+
+				if side == "RIGHT":
+					# angle = self.draw_tools.create_myAngle(L_fem, p_int, top_m1, self.tag)
+					angle = self.draw_tools.getAnglePoints(L_fem, p_int, top_m1)
+
+
+				# check if value exists
+				if self.dict["EXCEL"][self.op_type][side]["aLDFA"] == None:
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["aLDFA"]	 	= '{0:.2f}'.format(angle)
+					# save after insert
+					self.controller.save_json()	

@@ -349,7 +349,9 @@ class DrawTools(CanvasImage):
 		self._drag_data["y"] = y
 		tags = list(self.canvas.gettags(self._drag_data["item"]))
 		self._drag_data["tags"] = list(self.canvas.gettags(self._drag_data["item"]))
-		self.cur_obj.drag_start(tags)
+
+		if self.cur_obj != None:
+			self.cur_obj.drag_start(tags)
 
 
 
@@ -394,7 +396,8 @@ class DrawTools(CanvasImage):
 		self._drag_data["tags"].clear()
 
 		P_mouse = self.getRealCoords(event)
-		self.cur_obj.drag_stop(P_mouse)
+		if self.cur_obj != None:
+			self.cur_obj.drag_stop(P_mouse)
 
 
 
@@ -415,7 +418,8 @@ class DrawTools(CanvasImage):
 		self._drag_data["y"] = y_find	
 
 		P_mouse = self.getRealCoords(event)
-		self.cur_obj.drag(P_mouse)
+		if self.cur_obj != None:
+			self.cur_obj.drag(P_mouse)
 		# self.cur_obj.draw()
 
 
@@ -466,6 +470,22 @@ class DrawTools(CanvasImage):
 
 	def getHoverPointLabel(self):
 		return self.hover_label
+
+
+	def getLineSegmentByPercentage(self, percent, p1, p2):
+		# Cx = Ax * (1-t) + Bx * t
+		# Cy = Ay * (1-t) + By * t
+
+		
+		# Cx = Ax * (1-t) + Bx * t
+		# X = (x1*(1-percent)) + (x2*percent)
+		# X = p1[0]*(1-percent) + p2[0] * percent
+
+		# Cy = Ay * (1-t) + By * t  
+		# Y = (y1*(1-percent)) + (y2*percent)
+		# Y = p1[1]*(1-percent) + p2[1]*percent
+		
+		return (p1[0]*(1-percent) + p2[0]*percent, p1[1]*(1-percent) + p2[1]*percent)
 
 	# def __del__(self): 
 	# 	print("deleted instance no {}".format(self.id))

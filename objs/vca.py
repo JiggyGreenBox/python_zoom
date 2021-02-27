@@ -14,7 +14,7 @@ class VCA():
 
 		# check if master dictionary has values
 		# if not populate the dictionary
-		self.checkMasterDict()
+		# self.checkMasterDict()
 
 		self.point_size = None
 
@@ -46,18 +46,18 @@ class VCA():
 	def click(self, event):
 		print("click from " + self.name)
 
-		if self.side == None:
-			print("please choose side")
-			self.controller.warningBox("Please select a Side")
-		else:
-			# print(self.dict)
-			ret =  self.addDict(event)
-			if ret:										
-				self.controller.save_json()
-				# pass
+		# if self.side == None:
+		# 	print("please choose side")
+		# 	self.controller.warningBox("Please select a Side")
+		# else:
+		# 	# print(self.dict)
+		# 	ret =  self.addDict(event)
+		# 	if ret:										
+		# 		self.controller.save_json()
+		# 		# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
-		self.draw_tools.clear_by_tag(self.tag)
+		# self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		# self.draw_tools.clear_by_tag(self.tag)
 		self.draw()
 
 
@@ -97,35 +97,35 @@ class VCA():
 
 
 	# menu button clicks are routed here
-	def menu_btn_click(self, action):
-		print(action)
-		if action == "SET-LEFT":
-			self.side = "LEFT"
+	# def menu_btn_click(self, action):
+	# 	print(action)
+	# 	if action == "SET-LEFT":
+	# 		self.side = "LEFT"
 
-		if action == "SET-RIGHT":
-			self.side = "RIGHT"
+	# 	if action == "SET-RIGHT":
+	# 		self.side = "RIGHT"
 
-		if action == "DEL-LEFT-DIST-FEM":
-			self.dict["VCA"][self.op_type]["LEFT"]["DIST_FEM"]["P1"] = None
-			self.dict["VCA"][self.op_type]["LEFT"]["DIST_FEM"]["P2"] = None
-			self.dict["VCA"][self.op_type]["LEFT"]["DIST_FEM"]["M1"] = None
+	# 	if action == "DEL-LEFT-DIST-FEM":
+	# 		self.dict["VCA"][self.op_type]["LEFT"]["DIST_FEM"]["P1"] = None
+	# 		self.dict["VCA"][self.op_type]["LEFT"]["DIST_FEM"]["P2"] = None
+	# 		self.dict["VCA"][self.op_type]["LEFT"]["DIST_FEM"]["M1"] = None
 			
-			self.dict["EXCEL"][self.op_type]["LEFT"]["VCA"] = None	# delete excel data from pat.json
+	# 		self.dict["EXCEL"][self.op_type]["LEFT"]["VCA"] = None	# delete excel data from pat.json
 			
-			self.draw()
-			self.controller.save_json()
+	# 		self.draw()
+	# 		self.controller.save_json()
 
-		if action == "DEL-RIGHT-DIST-FEM":
-			self.dict["VCA"][self.op_type]["RIGHT"]["DIST_FEM"]["P1"] = None
-			self.dict["VCA"][self.op_type]["RIGHT"]["DIST_FEM"]["P2"] = None
-			self.dict["VCA"][self.op_type]["RIGHT"]["DIST_FEM"]["M1"] = None
+	# 	if action == "DEL-RIGHT-DIST-FEM":
+	# 		self.dict["VCA"][self.op_type]["RIGHT"]["DIST_FEM"]["P1"] = None
+	# 		self.dict["VCA"][self.op_type]["RIGHT"]["DIST_FEM"]["P2"] = None
+	# 		self.dict["VCA"][self.op_type]["RIGHT"]["DIST_FEM"]["M1"] = None
 			
-			self.dict["EXCEL"][self.op_type]["RIGHT"]["VCA"] = None	# delete excel data from pat.json
+	# 		self.dict["EXCEL"][self.op_type]["RIGHT"]["VCA"] = None	# delete excel data from pat.json
 			
-			self.draw()
-			self.controller.save_json()
+	# 		self.draw()
+	# 		self.controller.save_json()
 
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+	# 	self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 
 
 
@@ -143,9 +143,9 @@ class VCA():
 			# FROM VCA
 			# ------------------------
 
-			dist_fem_p1 = self.dict["VCA"][self.op_type][side]["DIST_FEM"]["P1"]
-			dist_fem_p2 = self.dict["VCA"][self.op_type][side]["DIST_FEM"]["P2"]
-			dist_fem_m1 = self.dict["VCA"][self.op_type][side]["DIST_FEM"]["M1"]
+			dist_fem_p1 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["P1"]
+			dist_fem_p2 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["P2"]
+			dist_fem_m1 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["M1"]
 
 			isDist = False
 
@@ -213,13 +213,13 @@ class VCA():
 					self.controller.save_json()
 
 
-	def hover(self, P_mouse, P_stored, hover_label):
-		if hover_label == "P1_VCA":
-			self.draw_tools.clear_by_tag("hover_line")
-			m = self.draw_tools.midpoint(P_stored, P_mouse)
-			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
-	def regainHover(self, side):
-		pass
+	# def hover(self, P_mouse, P_stored, hover_label):
+	# 	if hover_label == "P1_VCA":
+	# 		self.draw_tools.clear_by_tag("hover_line")
+	# 		m = self.draw_tools.midpoint(P_stored, P_mouse)
+	# 		self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
+	# def regainHover(self, side):
+	# 	pass
 
 	def escapeObjFunc(self):
 		self.side = None
@@ -228,62 +228,62 @@ class VCA():
 
 
 
-	def drag_start(self, tags):
-		tags.remove('token')
-		tags.remove('current')
-		tags.remove(self.tag)
-		print(tags)
+	# def drag_start(self, tags):
+	# 	tags.remove('token')
+	# 	tags.remove('current')
+	# 	tags.remove(self.tag)
+	# 	print(tags)
 		
 
-		side = ""
+	# 	side = ""
 
-		# find side
-		if "LEFT" in tags:
-			side = "LEFT"
-		elif "RIGHT" in tags:
-			side = "RIGHT"
+	# 	# find side
+	# 	if "LEFT" in tags:
+	# 		side = "LEFT"
+	# 	elif "RIGHT" in tags:
+	# 		side = "RIGHT"
 
 
-		if "P1_DIST_FEM" in tags:
-			self.drag_point = self.dict["VCA"][self.op_type][side]["DIST_FEM"]["P2"]
-			self.drag_label = "P1_DIST_FEM"
-			self.drag_side 	= side
-		elif "P2_DIST_FEM" in tags:
-			self.drag_point = self.dict["VCA"][self.op_type][side]["DIST_FEM"]["P1"]
-			self.drag_label = "P2_DIST_FEM"
-			self.drag_side 	= side
-		else:
-			self.drag_point = None
-			self.drag_label = None
-			self.drag_side 	= None
+	# 	if "P1_DIST_FEM" in tags:
+	# 		self.drag_point = self.dict["VCA"][self.op_type][side]["DIST_FEM"]["P2"]
+	# 		self.drag_label = "P1_DIST_FEM"
+	# 		self.drag_side 	= side
+	# 	elif "P2_DIST_FEM" in tags:
+	# 		self.drag_point = self.dict["VCA"][self.op_type][side]["DIST_FEM"]["P1"]
+	# 		self.drag_label = "P2_DIST_FEM"
+	# 		self.drag_side 	= side
+	# 	else:
+	# 		self.drag_point = None
+	# 		self.drag_label = None
+	# 		self.drag_side 	= None
 		
 
 
 			
-	def drag(self, P_mouse):
+	# def drag(self, P_mouse):
 		
-		if self.drag_label == "P1_DIST_FEM" and self.drag_point != None or self.drag_label == "P2_DIST_FEM" and self.drag_point != None:
-			self.draw_tools.clear_by_tag("DIST_FEM_LINE")
-			self.draw_tools.clear_by_tag("VCA_ANGLE")
+	# 	if self.drag_label == "P1_DIST_FEM" and self.drag_point != None or self.drag_label == "P2_DIST_FEM" and self.drag_point != None:
+	# 		self.draw_tools.clear_by_tag("DIST_FEM_LINE")
+	# 		self.draw_tools.clear_by_tag("VCA_ANGLE")
 			
-			self.draw_tools.clear_by_tag("drag_line")
-			m = self.draw_tools.midpoint(self.drag_point, P_mouse)
-			self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line", point_thickness=self.point_size)
+	# 		self.draw_tools.clear_by_tag("drag_line")
+	# 		m = self.draw_tools.midpoint(self.drag_point, P_mouse)
+	# 		self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line", point_thickness=self.point_size)
 
-	def drag_stop(self, P_mouse):
-		self.draw_tools.clear_by_tag("drag_line")
+	# def drag_stop(self, P_mouse):
+	# 	self.draw_tools.clear_by_tag("drag_line")
 
-		if self.drag_label == "P1_DIST_FEM":
-			self.dict["VCA"][self.op_type][self.drag_side]["DIST_FEM"]["P1"] = P_mouse
-			self.dict["VCA"][self.op_type][self.drag_side]["DIST_FEM"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
-			self.dict["EXCEL"][self.op_type][self.drag_side]["VCA"] = None	# delete excel data from pat.json
-		elif self.drag_label == "P2_DIST_FEM":
-			self.dict["VCA"][self.op_type][self.drag_side]["DIST_FEM"]["P2"] = P_mouse
-			self.dict["VCA"][self.op_type][self.drag_side]["DIST_FEM"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
-			self.dict["EXCEL"][self.op_type][self.drag_side]["VCA"] = None	# delete excel data from pat.json
+	# 	if self.drag_label == "P1_DIST_FEM":
+	# 		self.dict["VCA"][self.op_type][self.drag_side]["DIST_FEM"]["P1"] = P_mouse
+	# 		self.dict["VCA"][self.op_type][self.drag_side]["DIST_FEM"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+	# 		self.dict["EXCEL"][self.op_type][self.drag_side]["VCA"] = None	# delete excel data from pat.json
+	# 	elif self.drag_label == "P2_DIST_FEM":
+	# 		self.dict["VCA"][self.op_type][self.drag_side]["DIST_FEM"]["P2"] = P_mouse
+	# 		self.dict["VCA"][self.op_type][self.drag_side]["DIST_FEM"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
+	# 		self.dict["EXCEL"][self.op_type][self.drag_side]["VCA"] = None	# delete excel data from pat.json
 
-		self.controller.save_json()
-		self.draw()
+	# 	self.controller.save_json()
+	# 	self.draw()
 
 	def update_canvas(self, draw_tools):
 		self.draw_tools = draw_tools
@@ -293,33 +293,116 @@ class VCA():
 		self.dict = master_dict		
 
 
-	def getNextLabel(self):
+	# def getNextLabel(self):
 
-		if self.side != None:
+	# 	if self.side != None:
 			
-			for item in self.dict["VCA"][self.op_type][self.side]:
+	# 		for item in self.dict["VCA"][self.op_type][self.side]:
 
-				# get item type 
-				item_type = self.dict["VCA"][self.op_type][self.side][item]["type"]
-
-
-				# point has P1 and P2, M1 is calculated
-				if item_type == "midpoint":
-
-					# check if P1 is None				
-					if self.dict["VCA"][self.op_type][self.side][item]["P1"] == None:
-						return (self.side + " " + item + " P1")
+	# 			# get item type 
+	# 			item_type = self.dict["VCA"][self.op_type][self.side][item]["type"]
 
 
-					# check if P2 is None				
-					if self.dict["VCA"][self.op_type][self.side][item]["P2"] == None:
-						return (self.side + " " + item + " P2")
+	# 			# point has P1 and P2, M1 is calculated
+	# 			if item_type == "midpoint":
 
-			return (self.side + " Done")
+	# 				# check if P1 is None				
+	# 				if self.dict["VCA"][self.op_type][self.side][item]["P1"] == None:
+	# 					return (self.side + " " + item + " P1")
 
-		return None
+
+	# 				# check if P2 is None				
+	# 				if self.dict["VCA"][self.op_type][self.side][item]["P2"] == None:
+	# 					return (self.side + " " + item + " P2")
+
+	# 		return (self.side + " Done")
+
+	# 	return None
 
 
 	def unset(self):
 		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)
+
+
+	def drag_start(self, P_mouse):
+		pass
+	def drag(self, P_mouse):
+		pass
+	def drag_stop(self, P_mouse):
+		pass
+	def menu_btn_click(self, action):
+		pass
+	def getNextLabel(self):
+		pass
+	def hover(self, P_mouse, P_stored, hover_label):
+		pass
+	def regainHover(self, side):
+		pass
+		
+	# similiar to draw but nothing is drawn on the canvas
+	def updateExcelValues(self):
+		# loop left and right
+		for side in ["LEFT","RIGHT"]:
+
+
+			# ------------------------
+			# FROM VCA
+			# ------------------------
+
+			dist_fem_p1 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["P1"]
+			dist_fem_p2 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["P2"]
+			dist_fem_m1 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["M1"]
+
+			isDist = False
+
+			if dist_fem_p1 != None and dist_fem_p2 != None:				
+				isDist = True
+
+
+			# ------------------------
+			# FROM MAIN
+			# ------------------------
+			isHip = False
+			isKnee = False
+
+			hip = self.dict["MAIN"][self.op_type][side]["HIP"]["P1"]
+			knee = self.dict["MAIN"][self.op_type][side]["FEM_KNEE"]["P1"]
+
+
+			# HIP
+			if hip != None:
+				isHip = True
+			# KNEE
+			if knee != None:
+				isKnee = True
+
+
+
+
+			if isHip and isKnee and isDist:
+
+
+				a1 = self.draw_tools.getAnglePoints(hip, knee, dist_fem_m1)
+				a2 = self.draw_tools.getAnglePoints(dist_fem_m1, knee, hip)
+				print('{0:.2f} a1 RIGHT'.format(a1))
+				print('{0:.2f} a2 RIGHT'.format(a2))
+
+				if a1 > a2:					
+					# angle = self.draw_tools.create_myAngle(dist_fem_m1, knee, hip, self.tag)
+					angle = a2
+				else:					
+					# angle = self.draw_tools.create_myAngle(hip, knee, dist_fem_m1, self.tag)
+					angle = a1
+
+
+
+				# check if value exists
+				if self.dict["EXCEL"][self.op_type][side]["VCA"] == None:
+
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					# self.dict["EXCEL"][self.op_type][side]["VCA"]	 	= '{0:.2f}'.format(angle)
+					self.dict["EXCEL"][self.op_type][side]["VCA"]	 	= '{0:.2f}'.format(angle)
+
+					# save after insert
+					self.controller.save_json()

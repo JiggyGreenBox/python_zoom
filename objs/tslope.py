@@ -16,7 +16,7 @@ class TSLOPE():
 		# if not populate the dictionary
 		self.checkMasterDict()
 
-		self.tflexext = False
+		# self.tflexext = False
 
 		self.drag_point = None
 		self.drag_label = None
@@ -237,40 +237,40 @@ class TSLOPE():
 						self.controller.save_json()
 
 					# check T-VAR-VAL
-					if self.tflexext:
-						# fem to axis intersection
-						# p_int
-						# self.draw_tools.create_mypoint(p_int, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
+					# if self.tflexext:
+					# fem to axis intersection
+					# p_int
+					# self.draw_tools.create_mypoint(p_int, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
-						# find perpendicular point
-						slope = self.draw_tools.slope(U_m1, D_m1)				
-						dy = math.sqrt(100**2/(slope**2+1))
-						dx = -slope*dy
+					# find perpendicular point
+					slope = self.draw_tools.slope(U_m1, D_m1)				
+					dy = math.sqrt(100**2/(slope**2+1))
+					dx = -slope*dy
 
-						C = [0,0]
-						C[0] = p_int[0] + dx
-						C[1] = p_int[1] + dy
+					C = [0,0]
+					C[0] = p_int[0] + dx
+					C[1] = p_int[1] + dy
 
-						tflexext_angle = -1
+					tflexext_angle = -1
 
-						if side == "RIGHT":
-							R_perpend_border = self.draw_tools.line_intersection((C, p_int), (ytop, ybot))
-							tflexext_angle = self.draw_tools.getSmallestAngle(R_perpend_border, p_int, R_p1)
-							print('RIGHT: {0:.2f}'.format(tflexext_angle))
-							self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(tflexext_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
+					if side == "RIGHT":
+						R_perpend_border = self.draw_tools.line_intersection((C, p_int), (ytop, ybot))
+						tflexext_angle = self.draw_tools.getSmallestAngle(R_perpend_border, p_int, R_p1)
+						print('RIGHT: {0:.2f}'.format(tflexext_angle))
+						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(tflexext_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
 
-						if side == "LEFT":
-							L_perpend_border = self.draw_tools.line_intersection((C, p_int), (xtop, xbot))
-							tflexext_angle = self.draw_tools.getSmallestAngle(L_p1, p_int, L_perpend_border)
-							print('LEFT: {0:.2f}'.format(tflexext_angle))
-							self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(tflexext_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
+					if side == "LEFT":
+						L_perpend_border = self.draw_tools.line_intersection((C, p_int), (xtop, xbot))
+						tflexext_angle = self.draw_tools.getSmallestAngle(L_p1, p_int, L_perpend_border)
+						print('LEFT: {0:.2f}'.format(tflexext_angle))
+						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(tflexext_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
 
-						# save TFLE/EXT to excel
-						if tflexext_angle != -1:							
-							if self.dict["EXCEL"][self.op_type][side]["TFLE/EXT"] == None:
-								self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-								self.dict["EXCEL"][self.op_type][side]["TFLE/EXT"]	= '{0:.2f}'.format(tflexext_angle)
-								self.controller.save_json()						
+					# save TFLE/EXT to excel
+					if tflexext_angle != -1:							
+						if self.dict["EXCEL"][self.op_type][side]["TFLE/EXT"] == None:
+							self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+							self.dict["EXCEL"][self.op_type][side]["TFLE/EXT"]	= '{0:.2f}'.format(tflexext_angle)
+							self.controller.save_json()						
 
 
 
@@ -665,11 +665,12 @@ class TSLOPE():
 
 		print('checkbox {} val{}'.format(action,val.get()))
 
-		if action == "TOGGLE_TFLEXEXT":
-			if val.get() == 0:
-				self.tflexext = False
-			elif val.get() == 1:
-				self.tflexext = True
-			self.draw()		
+		pass
+		# if action == "TOGGLE_TFLEXEXT":
+		# 	if val.get() == 0:
+		# 		self.tflexext = False
+		# 	elif val.get() == 1:
+		# 		self.tflexext = True
+		# 	self.draw()		
 
 		

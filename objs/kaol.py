@@ -45,8 +45,8 @@ class KAOL():
 			# tib_joint_p1 = self.dict["MPTA"][self.op_type][side]["TIB_JOINT_LINE"]["P1"]
 			# tib_joint_p2 = self.dict["MPTA"][self.op_type][side]["TIB_JOINT_LINE"]["P2"]
 
-			tib_joint_p1 = self.dict["KJLO"][self.op_type][side]["JOINT_LINE"]["P1"]
-			tib_joint_p2 = self.dict["KJLO"][self.op_type][side]["JOINT_LINE"]["P2"]
+			tib_joint_p1 = self.dict["MAIN"][self.op_type][side]["KJLO_LINE"]["P1"]
+			tib_joint_p2 = self.dict["MAIN"][self.op_type][side]["KJLO_LINE"]["P2"]
 
 			ankle_p1 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P1"]
 			ankle_p2 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]
@@ -172,3 +172,85 @@ class KAOL():
 	def unset(self):
 		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)
+
+	# similiar to draw but nothing is drawn on the canvas
+	def updateExcelValues(self):
+
+		# loop left and right
+		for side in ["LEFT","RIGHT"]:
+
+			isTamd = False			
+
+			tib_joint_p1 = self.dict["MAIN"][self.op_type][side]["KJLO_LINE"]["P1"]
+			tib_joint_p2 = self.dict["MAIN"][self.op_type][side]["KJLO_LINE"]["P2"]
+
+			ankle_p1 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P1"]
+			ankle_p2 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]
+			ankle_m1 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["M1"]
+
+
+			# ------------------------
+			# FROM TAMD
+			# ------------------------
+			
+			if tib_joint_p1 != None and tib_joint_p2 != None:
+				isTamd = True
+
+
+			# ------------------------
+			# FROM MAIN
+			# ------------------------			
+			# ANKLE
+			if ankle_p1 != None and ankle_p2 != None:
+				
+				# =============CLEAN UP==================================
+				slope = self.slope(ankle_p1, ankle_p2)
+
+				C = [0,0]
+
+				dy = math.sqrt(100**2/(slope**2+1))
+				dx = -slope*dy
+				# print("DX"+str(dx))
+				# print("DY"+str(dy))
+				C[0] = ankle_m1[0] + dx
+				C[1] = ankle_m1[1] + dy
+				# D[0] = m1[0] - dx
+				# D[1] = m1[1] - dy
+				# print(D)
+
+
+				if isTamd:
+
+					xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
+
+					# hip-knee ray
+					p_top = self.draw_tools.line_intersection((ankle_m1, C),(xtop, ytop))
+
+
+					# find angle ray intersection point
+					p_int = self.draw_tools.line_intersection((ankle_m1, p_top),(tib_joint_p1, tib_joint_p2))
+					L_tib, R_tib = self.draw_tools.retPointsLeftRight(tib_joint_p1, tib_joint_p2)
+
+					if side == "LEFT":
+						# sometimes due to ankle line, the intersection is outside the bounds of the joint line
+						# so find the intersection with the edge of the image
+						# to prevent wrong angle
+						R_p_safe = self.draw_tools.line_intersection((L_tib, R_tib),(xtop, xbot))
+						# angle = self.draw_tools.create_myAngle(ankle_m1, p_int, R_p_safe, self.tag)
+						angle = self.draw_tools.getAnglePoints(ankle_m1, p_int, R_p_safe)
+
+					if side == "RIGHT":
+						# sometimes due to ankle line, the intersection is outside the bounds of the joint line
+						# so find the intersection with the edge of the image
+						# to prevent wrong angle
+						R_p_safe = self.draw_tools.line_intersection((L_tib, R_tib),(ytop, ybot))
+						# angle = self.draw_tools.create_myAngle(R_p_safe, p_int, ankle_m1, self.tag)
+						angle = self.draw_tools.getAnglePoints(R_p_safe, p_int, ankle_m1)
+
+
+					# check if value exists
+					if self.dict["EXCEL"][self.op_type][side]["KAOL"] == None:
+						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+						self.dict["EXCEL"][self.op_type][side]["KAOL"]	 	= '{0:.2f}'.format(angle)
+						# save after insert
+						self.controller.save_json()

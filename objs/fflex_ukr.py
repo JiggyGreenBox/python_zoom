@@ -241,8 +241,13 @@ class FFLEX_UKR():
 					# positive value
 					# for eg: if flextion is 2deg then FFLEX:90-2, FFLEX-EXT:2
 					if(self.draw_tools.retIsPointUp(p_int,D_peg_m1)):
-						fflex 		= angle
-						fflex_ext 	= 90-angle
+						# fflex 		= angle
+						# fflex_ext 	= 90-angle
+
+						# EDIT VALUES EXCHANGED						
+						fflex_ext 	= angle
+						fflex 		= 90-angle
+						
 						self.draw_tools.create_mytext(axis_peg_bot_p2, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
 						self.draw_tools.create_mytext(axis_peg_bot_p2, '{0:.2f}'.format(90-angle), [self.tag,"PTILT_ANGLE"], y_offset=120, color="blue")
 					# intersection point is below
@@ -252,8 +257,13 @@ class FFLEX_UKR():
 					# for eg: if flextion is 7deg then, FFLEX-EXT:-(7), FFLEX:90-(-7)=97, 
 					else:
 						angle = angle*-1
-						fflex 		= angle
-						fflex_ext 	= 90-angle
+						# fflex 		= angle
+						# fflex_ext 	= 90-angle
+
+						# EDIT VALUES EXCHANGED						
+						fflex_ext 	= angle
+						fflex 		= 90-angle
+
 						self.draw_tools.create_mytext(axis_peg_bot_p2, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
 						self.draw_tools.create_mytext(axis_peg_bot_p2, '{0:.2f}'.format(90-angle), [self.tag,"PTILT_ANGLE"], y_offset=120, color="blue")
 						

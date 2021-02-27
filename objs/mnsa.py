@@ -14,7 +14,7 @@ class MNSA():
 
 		# check if master dictionary has values
 		# if not populate the dictionary
-		self.checkMasterDict()
+		# self.checkMasterDict()
 
 		self.point_size = None
 
@@ -46,18 +46,18 @@ class MNSA():
 
 		
 
-		if self.side == None:
-			print("please choose side")
-			self.controller.warningBox("Please select a Side")
-		else:
-			print(self.dict)
-			ret =  self.addDict(event)
-			if ret:										
-				self.controller.save_json()
-				# pass
+		# if self.side == None:
+		# 	print("please choose side")
+		# 	self.controller.warningBox("Please select a Side")
+		# else:
+		# 	print(self.dict)
+		# 	ret =  self.addDict(event)
+		# 	if ret:										
+		# 		self.controller.save_json()
+		# 		# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
-		self.draw()
+		# self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
+		self.draw()		
 
 
 
@@ -116,20 +116,33 @@ class MNSA():
 			isFemTop 	= False
 			isFemBot 	= False
 
+
+			neck_p1 	= self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["P1"]
+			neck_p2 	= self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["P2"]
+			neck_m1 	= self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["M1"]
+
+			hip 		= self.dict["MAIN"][self.op_type][side]["HIP"]["P1"]
+			fem_top_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
+			fem_top_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
+			fem_top_m1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
+
+			fem_bot_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
+			fem_bot_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
+			fem_bot_m1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
+
+
+
 			# ------------------------
 			# FROM MNSA
 			# ------------------------
-			if self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"], "orange", [self.tag, side, "P1_NECK_AXIS"], point_thickness=self.point_size)
+			if neck_p1 != None:
+				self.draw_tools.create_mypoint(neck_p1, "orange", [self.tag, side, "P1_NECK_AXIS"], point_thickness=self.point_size)
 
-			if self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P2"], "orange", [self.tag, side, "P2_NECK_AXIS"], point_thickness=self.point_size)
+			if neck_p2 != None:
+				self.draw_tools.create_mypoint(neck_p2, "orange", [self.tag, side, "P2_NECK_AXIS"], point_thickness=self.point_size)
 
-			if self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"] != None and self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P2"] != None:
-				p1 = self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P1"]
-				p2 = self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["P2"]
-				m1 = self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["M1"]
-				self.draw_tools.create_midpoint_line(p1, p2, m1, [self.tag,side,"NECK_AXIS_LINE"], point_thickness=self.point_size)
+			if neck_p1 != None and neck_p2 != None:				
+				self.draw_tools.create_midpoint_line(neck_p1, neck_p2, neck_m1, [self.tag,side,"NECK_AXIS_LINE"], point_thickness=self.point_size)
 				isNeck = True
 
 
@@ -138,112 +151,39 @@ class MNSA():
 			# FROM MAIN
 			# ------------------------
 			# HIP
-			if self.dict["MAIN"][self.op_type][side]["HIP"]["P1"] != None:				
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["HIP"]["P1"], "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
+			if hip != None:				
+				self.draw_tools.create_mypoint(hip, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 
 			# FEM AXIS
 			# TOP
-			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"], "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
+			if fem_top_p1 != None:
+				self.draw_tools.create_mypoint(fem_top_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
-			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"], "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
+			if fem_top_p2 != None:
+				self.draw_tools.create_mypoint(fem_top_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
-			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"] != None and self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"] != None:
-				p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
-				p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
-				m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
-				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag, point_thickness=self.point_size)
+			if fem_top_p1 != None and fem_top_p2 != None:				
+				self.draw_tools.create_midpoint_line(fem_top_p1, fem_top_p2, fem_top_m1, self.tag, point_thickness=self.point_size)
 				isFemTop = True
 
 
 			# BOT
-			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"], "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
+			if fem_bot_p1 != None:
+				self.draw_tools.create_mypoint(fem_bot_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
-			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"] != None:
-				self.draw_tools.create_mypoint(self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"], "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
+			if fem_bot_p2 != None:
+				self.draw_tools.create_mypoint(fem_bot_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
-			if self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"] != None and self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"] != None:
-				p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
-				p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
-				m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
-				self.draw_tools.create_midpoint_line(p1, p2, m1, self.tag, point_thickness=self.point_size)
+			if fem_bot_p1 != None and fem_bot_p2 != None:				
+				self.draw_tools.create_midpoint_line(fem_bot_p1, fem_bot_p2, fem_bot_m1, self.tag, point_thickness=self.point_size)
 				isFemBot = True
 
-			'''
-			if isNeck and isFemBot and isFemTop:
-				
-				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
-
-				fem_bot_m1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
-				fem_top_m1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
-
-				neck_m1 	= self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["M1"]
-				hip 		= self.dict["MAIN"][self.op_type][side]["HIP"]["P1"]
-
-				# FEM-AXIS ray
-				p_top = self.draw_tools.line_intersection(
-					(fem_bot_m1, fem_top_m1),
-					(xtop, ytop))
-				self.draw_tools.create_myline(fem_bot_m1, p_top, self.tag)
-
-
-				# NECK-SHAFT ray
-				if side == "RIGHT":
-					p_right = self.draw_tools.line_intersection(
-						(neck_m1, hip),
-						(xtop, xbot))
-					self.draw_tools.create_myline(hip, p_right, self.tag)
-
-					# find angle ray intersection point
-					p_int = self.draw_tools.line_intersection(
-							(hip, p_right),
-							(fem_bot_m1, p_top))
-
-					angle = self.draw_tools.create_myAngle(hip, p_int, fem_bot_m1, self.tag)
-					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60)
-
-
-
-
-				if side == "LEFT":
-					p_left = self.draw_tools.line_intersection(
-						(neck_m1, hip),
-						(ytop, ybot))
-					self.draw_tools.create_myline(hip, p_left, self.tag)
-
-					# find angle ray intersection point
-					p_int = self.draw_tools.line_intersection(
-							(hip, p_left),
-							(fem_bot_m1, p_top))
-
-					angle = self.draw_tools.create_myAngle(fem_bot_m1, p_int, hip, self.tag)
-					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60)
-
-
-
-				# check if value exists
-				if self.dict["EXCEL"][self.op_type][side]["MNSA"] == None:
-
-					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["MNSA"]	 	= '{0:.2f}'.format(angle)
-
-					# save after insert
-					self.controller.save_json()
-
-			'''
+			
 			if isFemBot and isFemTop:
 				
 				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
-
-				fem_bot_m1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
-				fem_top_m1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
-
-				neck_m1 	= self.dict["MNSA"][self.op_type][side]["NECK_AXIS"]["M1"]
-				hip 		= self.dict["MAIN"][self.op_type][side]["HIP"]["P1"]
-
+			
 				# FEM-AXIS ray
 				p_top = self.draw_tools.line_intersection(
 					(fem_bot_m1, fem_top_m1),
@@ -294,8 +234,8 @@ class MNSA():
 						# save after insert
 						self.controller.save_json()
 
-
-	def hover(self, P_mouse, P_stored, hover_label):
+	'''
+	def hover(self, P_mouse, P_stored, hover_label):		
 		if hover_label == "P1_MNSA":
 			self.draw_tools.clear_by_tag("hover_line")
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
@@ -342,16 +282,20 @@ class MNSA():
 							(fem_bot_m1, fem_top_m1))
 
 					angle = self.draw_tools.create_myAngle(fem_bot_m1, p_int, hip, "hover_line")
-					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), "hover_line", x_offset=60)
+					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), "hover_line", x_offset=60)		
+	'''
 
+	'''
 	def regainHover(self, side):
 		pass
+	'''
 
 	def escapeObjFunc(self):
 		self.side = None
 		self.draw_tools.setHoverPointLabel(None)
 		self.draw_tools.setHoverBool(False)	
 
+	'''
 	def drag_start(self, tags):
 		tags.remove('token')
 		tags.remove('current')
@@ -476,6 +420,7 @@ class MNSA():
 			self.controller.save_json()
 
 		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+	'''
 
 	def update_canvas(self, draw_tools):
 		self.draw_tools = draw_tools
@@ -485,7 +430,7 @@ class MNSA():
 		self.dict = master_dict
 
 
-
+	'''
 	def getNextLabel(self):
 
 		if self.side != None:
@@ -511,9 +456,100 @@ class MNSA():
 			return (self.side + " Done")
 
 		return None
-
+	'''
  
 	def unset(self):
 		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)
 		self.side = None
+
+
+	def drag(self, P_mouse):
+		pass
+	def drag_start(self, P_mouse):
+		pass
+	def drag_stop(self, P_mouse):
+		pass
+	def menu_btn_click(self, action):
+		pass
+	def getNextLabel(self):
+		pass
+	def hover(self, P_mouse, P_stored, hover_label):
+		pass
+	def regainHover(self, side):
+		pass
+
+	# similiar to draw but nothing is drawn on the canvas
+	def updateExcelValues(self):
+		
+		# loop left and right
+		for side in ["LEFT","RIGHT"]:
+			
+			isNeck 		= False
+			isFemTop 	= False
+			isFemBot 	= False
+
+
+			neck_p1 	= self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["P1"]
+			neck_p2 	= self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["P2"]
+			neck_m1 	= self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["M1"]
+
+			hip 		= self.dict["MAIN"][self.op_type][side]["HIP"]["P1"]
+			fem_top_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
+			fem_top_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
+			fem_top_m1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
+
+			fem_bot_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
+			fem_bot_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
+			fem_bot_m1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
+
+
+
+
+
+			if neck_p1 != None and neck_p2 != None:				
+				isNeck = True
+
+			if fem_top_p1 != None and fem_top_p2 != None:								
+				isFemTop = True
+
+
+
+			if fem_bot_p1 != None and fem_bot_p2 != None:				
+				isFemBot = True
+
+			
+			if isFemBot and isFemTop:
+				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
+			
+				# FEM-AXIS ray
+				p_top = self.draw_tools.line_intersection(
+					(fem_bot_m1, fem_top_m1),
+					(xtop, ytop))
+
+				if isNeck:
+					# NECK-SHAFT ray
+					if side == "RIGHT":						
+						# find angle ray intersection point
+						p_int = self.draw_tools.line_intersection(
+								(hip, neck_m1),
+								(fem_bot_m1, p_top))
+						# angle = self.draw_tools.create_myAngle(hip, p_int, fem_bot_m1, [self.tag,side,"MNSA_ANGLE"])
+						angle = self.draw_tools.getAnglePoints(hip, p_int, fem_bot_m1)
+
+
+					if side == "LEFT":
+						# find angle ray intersection point
+						p_int = self.draw_tools.line_intersection(
+								(hip, neck_m1),
+								(fem_bot_m1, p_top))
+						# angle = self.draw_tools.create_myAngle(fem_bot_m1, p_int, hip, [self.tag,side,"MNSA_ANGLE"])
+						angle = self.draw_tools.getAnglePoints(fem_bot_m1, p_int, hip)
+
+
+					# check if value exists
+					if self.dict["EXCEL"][self.op_type][side]["MNSA"] == None:
+						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+						self.dict["EXCEL"][self.op_type][side]["MNSA"]	 	= '{0:.2f}'.format(angle)
+						# save after insert
+						self.controller.save_json()
