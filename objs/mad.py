@@ -313,8 +313,32 @@ class MAD():
 		pass
 	def drag_stop(self, P_mouse):
 		pass
+
 	def menu_btn_click(self, action):
-		pass
+		if action == "SAVE-MAD":
+			R_val, L_val = self.controller.getMadVals()
+			print('{} {}'.format(R_val,L_val))
+
+
+			if R_val in ['0','1','2','3','4','5','c','C']:
+				# overwrite allowed here
+				self.dict["EXCEL"][self.op_type]["RIGHT"]["HASDATA"] = True
+				self.dict["EXCEL"][self.op_type]["RIGHT"]["MAD"]	 = R_val
+				self.controller.save_json()
+			else:
+				self.controller.warningBox('Values allowed: 0,1,2,C,3,4,5')
+				return
+
+			if L_val in ['0','1','2','3','4','5','c','C']:
+				# overwrite allowed here
+				self.dict["EXCEL"][self.op_type]["LEFT"]["HASDATA"] = True
+				self.dict["EXCEL"][self.op_type]["LEFT"]["MAD"]	 	= L_val
+				self.controller.save_json()
+			else:
+				self.controller.warningBox('Values allowed: 0,1,2,C,3,4,5')
+				return
+
+
 	def getNextLabel(self):
 		pass
 	def hover(self, P_mouse, P_stored, hover_label):

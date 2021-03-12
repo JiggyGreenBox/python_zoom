@@ -17,6 +17,8 @@ class UNI_FEM_VAL():
 		self.checkMasterDict()
 
 		self.point_size = None
+		self.draw_labels = True
+		self.draw_hover = True
 
 
 	def click(self, event):
@@ -27,6 +29,8 @@ class UNI_FEM_VAL():
 			self.controller.warningBox("Please select a Side")
 		else:
 			ret =  self.addDict(event)
+			# find if P0 hovers are required
+			self.mainHoverUsingNextLabel()
 			if ret:				
 				self.controller.save_json()
 				# pass
@@ -40,11 +44,15 @@ class UNI_FEM_VAL():
 		print(action)
 		if action == "SET-LEFT":
 			self.side = "LEFT"
+			self.draw()
+			self.regainHover(self.side)
 			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			return # avoid clear,draw,json_save
 
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"
+			self.draw()
+			self.regainHover(self.side)
 			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			return # avoid clear,draw,json_save
 
@@ -87,8 +95,8 @@ class UNI_FEM_VAL():
 		self.dict["EXCEL"][self.op_type][self.side]["FVAR/VAL"] = None
 		
 		self.draw()
+		self.regainHover(self.side)
 		self.controller.save_json()
-		
 		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 
 
@@ -207,7 +215,8 @@ class UNI_FEM_VAL():
 						angle = angle * -1
 						print('{} point is below so -ve'.format(side))
 
-					self.draw_tools.create_mytext(U_fem_p1, '{0:.2f}'.format(angle), self.tag, y_offset=-60, color="blue")
+					if self.draw_labels:
+						self.draw_tools.create_mytext(U_fem_p1, '{0:.2f}'.format(angle), self.tag, y_offset=-60, color="blue")
 
 					# F-VAR-VAL
 					if self.dict["EXCEL"][self.op_type][side]["FVAR/VAL"] == None:
@@ -215,11 +224,6 @@ class UNI_FEM_VAL():
 						self.dict["EXCEL"][self.op_type][side]["FVAR/VAL"]	= '{0:.2f}'.format(angle)
 						self.controller.save_json()
 					
-
-			
-			
-
-
 
 	def checkMasterDict(self):
 		if "UNI_FEM_VAL" not in self.dict.keys():
@@ -385,6 +389,20 @@ class UNI_FEM_VAL():
 
 	def hover(self, P_mouse, P_stored, hover_label):
 
+
+		if self.draw_hover:
+
+			side_pre = self.side[0]+"_"
+
+			if(	hover_label == "P0_AXIS_FEM" or
+				hover_label == "P0_FEM_JOINT_LINE"
+				):
+				self.draw_tools.clear_by_tag("hover_line")
+				self.draw_tools.create_mypoint(P_mouse, "red", [self.tag, "hover_line"], hover_point=True, point_thickness=self.point_size)
+				if self.draw_labels:
+					self.draw_tools.create_mytext(P_mouse,x_offset=80, mytext=(side_pre+self.hover_text), mytag=[self.tag, "hover_line"])
+
+
 		if hover_label == "P1_AXIS_FEM_TOP":
 			self.draw_tools.clear_by_tag("hover_line")
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
@@ -420,7 +438,30 @@ class UNI_FEM_VAL():
 			self.draw_tools.create_myline(P_stored, P_mouse, "hover_line")
 
 	def regainHover(self, side):
-		pass
+		p1_axis_fem_top = self.dict["UNI_FEM_VAL"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
+		p2_axis_fem_top = self.dict["UNI_FEM_VAL"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
+		p1_axis_fem_bot = self.dict["UNI_FEM_VAL"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
+		p2_axis_fem_bot = self.dict["UNI_FEM_VAL"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
+
+		p1_fem_joint_line = self.dict["UNI_FEM_VAL"][self.op_type][side]["FEM_JOINT_LINE"]["P1"]
+		p2_fem_joint_line = self.dict["UNI_FEM_VAL"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
+
+		# find if P0 hovers are required
+		self.mainHoverUsingNextLabel()
+
+		if p1_axis_fem_top != None and p2_axis_fem_top == None:
+			self.draw_tools.setHoverPointLabel("P1_AXIS_FEM_TOP")
+			self.draw_tools.setHoverPoint(p1_axis_fem_top)
+			self.draw_tools.setHoverBool(True)
+
+		if p1_axis_fem_bot != None and p2_axis_fem_bot == None:
+			self.draw_tools.setHoverPointLabel("P1_AXIS_FEM_BOT")
+			self.draw_tools.setHoverPoint(p1_axis_fem_bot)
+			self.draw_tools.setHoverBool(True)
+		if p1_fem_joint_line != None and p2_fem_joint_line == None:
+			self.draw_tools.setHoverPointLabel("P1_FEM_JOINT_LINE")
+			self.draw_tools.setHoverPoint(p1_fem_joint_line)
+			self.draw_tools.setHoverBool(True)
 
 	def escapeObjFunc(self):
 		self.side = None
@@ -507,7 +548,6 @@ class UNI_FEM_VAL():
 				self.drag_point = fem_joint_p1
 				self.drag_label = "P2_JOINT"
 				self.drag_side 	= side
-
 			
 	def drag(self, P_mouse):
 
@@ -531,6 +571,7 @@ class UNI_FEM_VAL():
 				self.draw_tools.clear_by_tag("drag_line")
 				m = self.draw_tools.midpoint(self.drag_point, P_mouse)
 				self.draw_tools.create_midpoint_line(self.drag_point, P_mouse, m, "drag_line", point_thickness=self.point_size)
+
 	def drag_stop(self, P_mouse):
 		self.draw_tools.clear_by_tag("drag_line")
 
@@ -589,3 +630,51 @@ class UNI_FEM_VAL():
 	def unset(self):
 		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)
+
+
+	def checkbox_click(self,action, val):
+		print('checkbox {} val{}'.format(action,val.get()))
+
+		if action == "TOGGLE_LABEL":
+			if val.get() == 0:
+				self.draw_labels = False
+			elif val.get() == 1:
+				self.draw_labels = True
+			self.draw()
+
+		if action == "TOGGLE_HOVER":
+			if val.get() == 0:
+				self.draw_hover = False
+			elif val.get() == 1:
+				self.draw_hover = True
+			self.draw()
+
+	def mainHoverUsingNextLabel(self):
+		label = self.getNextLabel()
+
+		
+		if label == "RIGHT AXIS_FEM P1":
+			self.side = "RIGHT"
+			self.hover_text = "AXIS_FEM"
+			self.draw_tools.setHoverPointLabel("P0_AXIS_FEM")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT AXIS_FEM P1":
+			self.side = "LEFT"
+			self.hover_text = "AXIS_FEM"
+			self.draw_tools.setHoverPointLabel("P0_AXIS_FEM")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+		elif label == "RIGHT FEM_JOINT_LINE P1":
+			self.side = "RIGHT"
+			self.hover_text = "FEM_JOINT_LINE"
+			self.draw_tools.setHoverPointLabel("P0_FEM_JOINT_LINE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT FEM_JOINT_LINE P1":
+			self.side = "LEFT"
+			self.hover_text = "FEM_JOINT_LINE"
+			self.draw_tools.setHoverPointLabel("P0_FEM_JOINT_LINE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)

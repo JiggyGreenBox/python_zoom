@@ -49,87 +49,87 @@ class MAIN:
 																					"TOP":	{"type":"midpoint", "P1":None, "P2":None, "M1":None},
 																					"BOT":	{"type":"midpoint", "P1":None, "P2":None, "M1":None}
 																				},
+															"DIST_FEM":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
 															"FEM_KNEE":			{"type":"point", "P1":None},
 															"TIB_KNEE":			{"type":"point", "P1":None},
 															"FEM_JOINT_LINE":	{"type":"line", "P1":None, "P2":None},
 															"TIB_JOINT_LINE":	{"type":"line", "P1":None, "P2":None},
+															"KJLO_LINE":		{"type":"line","P1":None,"P2":None},
+															"MAD_LINE":			{"type":"line","P1":None,"P2":None},
 															"AXIS_TIB":			{
 																					"type":	"axis",
 																					"TOP":	{"type":"midpoint", "P1":None, "P2":None, "M1":None},
 																					"BOT":	{"type":"midpoint", "P1":None, "P2":None, "M1":None}
 																				},
-															"ANKLE":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
-															"DIST_FEM":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
-															"KJLO_LINE":		{"type":"line","P1":None,"P2":None},
-															"MAD_LINE":			{"type":"line","P1":None,"P2":None}
+															"ANKLE":			{"type":"midpoint","P1":None,"P2":None, "M1":None}
 															},
 													"RIGHT":{
-															"HIP":				{"type":"point","P1":None},
-															"NECK_AXIS":		{"type":"midpoint","P1":None,"P2":None, "M1":None},
+															"HIP":				{"type":"point", "P1":None},
+															"NECK_AXIS":		{"type":"midpoint","P1":None, "P2":None, "M1":None},
 															"AXIS_FEM":			{
-																					"type":	"axis",		
-																					"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
-																					"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																					"type":	"axis",
+																					"TOP":	{"type":"midpoint", "P1":None, "P2":None, "M1":None},
+																					"BOT":	{"type":"midpoint", "P1":None, "P2":None, "M1":None}
 																				},
-															"FEM_KNEE":			{"type":"point","P1":None},
-															"TIB_KNEE":			{"type":"point","P1":None},
-															"FEM_JOINT_LINE":			{"type":"line","P1":None,"P2":None},
-															"TIB_JOINT_LINE":			{"type":"line","P1":None,"P2":None},
+															"DIST_FEM":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
+															"FEM_KNEE":			{"type":"point", "P1":None},
+															"TIB_KNEE":			{"type":"point", "P1":None},
+															"FEM_JOINT_LINE":	{"type":"line", "P1":None, "P2":None},
+															"TIB_JOINT_LINE":	{"type":"line", "P1":None, "P2":None},
+															"KJLO_LINE":		{"type":"line","P1":None,"P2":None},
+															"MAD_LINE":			{"type":"line","P1":None,"P2":None},
 															"AXIS_TIB":			{
 																					"type":	"axis",
-																					"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
-																					"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																					"TOP":	{"type":"midpoint", "P1":None, "P2":None, "M1":None},
+																					"BOT":	{"type":"midpoint", "P1":None, "P2":None, "M1":None}
 																				},
-															"ANKLE":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
-															"DIST_FEM":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
-															"KJLO_LINE":		{"type":"line","P1":None,"P2":None},
-															"MAD_LINE":			{"type":"line","P1":None,"P2":None}
+															"ANKLE":			{"type":"midpoint","P1":None,"P2":None, "M1":None}
 															}
 												},
 										"POST-OP": 	{
 													"LEFT":	{
-															"HIP":				{"type":"point","P1":None},
-															"NECK_AXIS":		{"type":"midpoint","P1":None,"P2":None, "M1":None},
+															"HIP":				{"type":"point", "P1":None},
+															"NECK_AXIS":		{"type":"midpoint","P1":None, "P2":None, "M1":None},
 															"AXIS_FEM":			{
 																					"type":	"axis",
-																					"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
-																					"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																					"TOP":	{"type":"midpoint", "P1":None, "P2":None, "M1":None},
+																					"BOT":	{"type":"midpoint", "P1":None, "P2":None, "M1":None}
 																				},
-															"FEM_KNEE":			{"type":"point","P1":None},
-															"TIB_KNEE":			{"type":"point","P1":None},
-															"FEM_JOINT_LINE":	{"type":"line","P1":None,"P2":None},
-															"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None},		
+															"DIST_FEM":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
+															"FEM_KNEE":			{"type":"point", "P1":None},
+															"TIB_KNEE":			{"type":"point", "P1":None},
+															"FEM_JOINT_LINE":	{"type":"line", "P1":None, "P2":None},
+															"TIB_JOINT_LINE":	{"type":"line", "P1":None, "P2":None},
+															"KJLO_LINE":		{"type":"line","P1":None,"P2":None},
+															"MAD_LINE":			{"type":"line","P1":None,"P2":None},
 															"AXIS_TIB":			{
 																					"type":	"axis",
-																					"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
-																					"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																					"TOP":	{"type":"midpoint", "P1":None, "P2":None, "M1":None},
+																					"BOT":	{"type":"midpoint", "P1":None, "P2":None, "M1":None}
 																				},
-															"ANKLE":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
-															"DIST_FEM":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
-															"KJLO_LINE":		{"type":"line","P1":None,"P2":None},
-															"MAD_LINE":			{"type":"line","P1":None,"P2":None}
+															"ANKLE":			{"type":"midpoint","P1":None,"P2":None, "M1":None}
 															},
 													"RIGHT":{
-															"HIP":				{"type":"point","P1":None},
-															"NECK_AXIS":		{"type":"midpoint","P1":None,"P2":None, "M1":None},
+															"HIP":				{"type":"point", "P1":None},
+															"NECK_AXIS":		{"type":"midpoint","P1":None, "P2":None, "M1":None},
 															"AXIS_FEM":			{
 																					"type":	"axis",
-																					"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
-																					"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																					"TOP":	{"type":"midpoint", "P1":None, "P2":None, "M1":None},
+																					"BOT":	{"type":"midpoint", "P1":None, "P2":None, "M1":None}
 																				},
-															"FEM_KNEE":			{"type":"point","P1":None},
-															"TIB_KNEE":			{"type":"point","P1":None},
-															"FEM_JOINT_LINE":	{"type":"line","P1":None,"P2":None},
-															"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None},
+															"DIST_FEM":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
+															"FEM_KNEE":			{"type":"point", "P1":None},
+															"TIB_KNEE":			{"type":"point", "P1":None},
+															"FEM_JOINT_LINE":	{"type":"line", "P1":None, "P2":None},
+															"TIB_JOINT_LINE":	{"type":"line", "P1":None, "P2":None},
+															"KJLO_LINE":		{"type":"line","P1":None,"P2":None},
+															"MAD_LINE":			{"type":"line","P1":None,"P2":None},
 															"AXIS_TIB":			{
 																					"type":	"axis",
-																					"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
-																					"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																					"TOP":	{"type":"midpoint", "P1":None, "P2":None, "M1":None},
+																					"BOT":	{"type":"midpoint", "P1":None, "P2":None, "M1":None}
 																				},
-															"ANKLE":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
-															"DIST_FEM":			{"type":"midpoint","P1":None,"P2":None, "M1":None},
-															"KJLO_LINE":		{"type":"line","P1":None,"P2":None},
-															"MAD_LINE":			{"type":"line","P1":None,"P2":None}
+															"ANKLE":			{"type":"midpoint","P1":None,"P2":None, "M1":None}
 															}
 													}
 												

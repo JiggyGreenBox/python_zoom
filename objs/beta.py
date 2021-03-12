@@ -1,0 +1,389 @@
+
+
+class BETA():
+	"""docstring for ClassName"""
+	def __init__(self, draw_tools, master_dict, controller, op_type):
+		self.name = "BETA"
+		self.tag = "beta"
+		self.menu_label = "BETA_Menu"
+		self.draw_tools = draw_tools
+		self.dict = master_dict
+		self.controller = controller
+		self.side = None
+		self.op_type = op_type
+
+		# check if master dictionary has values
+		# if not populate the dictionary
+		self.checkMasterDict()
+
+		self.point_size = None
+		self.draw_labels = True
+		self.draw_hover = True
+
+
+	def checkMasterDict(self):
+		if "BETA" not in self.dict.keys():
+			self.dict["BETA"] = 	{
+									"PRE-OP":{
+											"LEFT":	{
+														"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None}
+													},
+											"RIGHT":{
+														"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None}
+													}
+											},
+
+									"POST-OP":{
+											"LEFT":	{
+														"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None}
+													},
+											"RIGHT":{
+														"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None}
+													}
+											}
+									}
+
+
+	def click(self, event):
+		print("click from "+self.name)
+
+		if self.side == None:
+			print("please choose side")
+			self.controller.warningBox("Please select a Side")
+		else:
+			# print(self.dict)			
+			ret =  self.addDict(event)
+			# find if P0 hovers are required
+			self.mainHoverUsingNextLabel()
+			if ret:
+				self.controller.save_json()
+				# pass
+
+
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
+		self.draw()
+
+	def draw(self):
+
+		self.draw_tools.clear_by_tag(self.tag)
+
+		self.point_size = self.controller.getViewPointSize()
+
+		# loop left and right
+		for side in ["LEFT","RIGHT"]:
+			isTibJointLine = False
+			isTibTop 	= False
+			isTibBot 	= False
+
+			# TIB JOINT LINE
+			tib_joint_p1 = self.dict[self.name][self.op_type][side]["TIB_JOINT_LINE"]["P1"]
+			tib_joint_p2 = self.dict[self.name][self.op_type][side]["TIB_JOINT_LINE"]["P2"]
+
+
+			# TIB JOINT LINE
+			if tib_joint_p1 != None:
+				self.draw_tools.create_mypoint(tib_joint_p1, "orange", [self.tag,side,"TIB_JOINT_LINE","P1"], point_thickness=self.point_size)
+
+			if tib_joint_p2 != None:
+				self.draw_tools.create_mypoint(tib_joint_p2, "orange", [self.tag,side,"TIB_JOINT_LINE","P2"], point_thickness=self.point_size)
+
+			if tib_joint_p1 != None and tib_joint_p2 != None:
+				self.draw_tools.create_myline(tib_joint_p1, tib_joint_p2, [self.tag,side,"TIB_LINE"])
+				isTibJointLine = True
+
+
+			# TIB AXIS
+			# TOP
+			top_axis_tib_p1 = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["TOP"]["P1"]
+			top_axis_tib_p2 = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["TOP"]["P2"]
+			top_axis_tib_m1 = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["TOP"]["M1"]
+			# BOT
+			bot_axis_tib_p1 = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["BOT"]["P1"]
+			bot_axis_tib_p2 = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["BOT"]["P2"]			
+			bot_axis_tib_m1 = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["BOT"]["M1"]
+
+
+			if top_axis_tib_p1 != None:
+				self.draw_tools.create_mypoint(top_axis_tib_p1, "orange", [self.tag,side,"AXIS_TIB","TOP","P1"], point_thickness=self.point_size)
+
+			if top_axis_tib_p2 != None:
+				self.draw_tools.create_mypoint(top_axis_tib_p2, "orange", [self.tag,side,"AXIS_TIB","TOP","P2"], point_thickness=self.point_size)
+
+			if top_axis_tib_p1 != None and top_axis_tib_p2 != None:				
+				
+				self.draw_tools.create_midpoint_line(top_axis_tib_p1, top_axis_tib_p2, top_axis_tib_m1, [self.tag,side,"TOP_AXIS_LINE"], point_thickness=self.point_size)
+				isTibTop = True
+
+
+			# BOT
+			if bot_axis_tib_p1 != None:
+				self.draw_tools.create_mypoint(bot_axis_tib_p1, "orange", [self.tag,side,"AXIS_TIB","BOT","P1"], point_thickness=self.point_size)
+
+			if bot_axis_tib_p2 != None:
+				self.draw_tools.create_mypoint(bot_axis_tib_p2, "orange", [self.tag,side,"AXIS_TIB","BOT","P2"], point_thickness=self.point_size)
+
+			if bot_axis_tib_p1 != None and bot_axis_tib_p2 != None:				
+				# m1 = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["TOP"]["M1"]
+				self.draw_tools.create_midpoint_line(bot_axis_tib_p1, bot_axis_tib_p2, bot_axis_tib_m1, [self.tag,side,"BOT_AXIS_LINE"], point_thickness=self.point_size)
+				isTibBot = True
+
+
+			# if isFemJointLine and isFemTop and isFemBot:
+			if isTibTop and isTibBot:
+				# axis
+				U_tib_m1, D_tib_m1 = self.draw_tools.retPointsUpDown(top_axis_tib_m1, bot_axis_tib_m1)
+				
+
+				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
+
+				# fem axis extension
+				p_axis_bot = self.draw_tools.line_intersection((U_tib_m1, D_tib_m1), (xtop, ytop))
+				self.draw_tools.create_myline(D_tib_m1, p_axis_bot, self.tag)
+
+				if isTibJointLine:
+
+					# find angle ray intersection point
+					p_int = self.draw_tools.line_intersection(
+							(U_tib_m1, D_tib_m1),
+							(tib_joint_p1, tib_joint_p2))
+
+					L_tib, R_tib = self.draw_tools.retPointsLeftRight(tib_joint_p1, tib_joint_p2)
+
+					if side == "RIGHT":
+						angle = self.draw_tools.create_myAngle(R_tib, p_int, D_tib_m1, [self.tag,side,"MPTA_ANGLE"])
+						if self.draw_labels:
+							self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"MPTA_ANGLE"], x_offset=60, y_offset=60, color="blue")
+
+					if side == "LEFT":
+						angle = self.draw_tools.create_myAngle(D_tib_m1, p_int, L_tib, [self.tag,side,"MPTA_ANGLE"])
+						if self.draw_labels:
+							self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"MPTA_ANGLE"], x_offset=-60, y_offset=60, color="blue")
+
+
+		
+
+
+	def addDict(self, event):
+		for item in self.dict["BETA"][self.op_type][self.side]:
+
+			# get real coords
+			P = self.draw_tools.getRealCoords(event)
+			
+			# get item type 
+			item_type = self.dict["BETA"][self.op_type][self.side][item]["type"]
+
+			# line has P1 and P2
+			if item_type == "line":
+
+				# check if P1 is None				
+				if self.dict["BETA"][self.op_type][self.side][item]["P1"] == None:
+					
+					self.dict["BETA"][self.op_type][self.side][item]["P1"] = P
+					self.draw_tools.setHoverPointLabel("P1_BETA")
+					self.draw_tools.setHoverPoint(P)
+					self.draw_tools.setHoverBool(True)
+					return True
+
+
+				# check if P2 is None				
+				if self.dict["BETA"][self.op_type][self.side][item]["P2"] == None:					
+					self.dict["BETA"][self.op_type][self.side][item]["P2"] = P
+					self.draw_tools.setHoverBool(False)
+					self.draw_tools.setHoverPointLabel(None)
+					return True
+
+		return False
+
+
+	# def drag_start(self, tags):
+	# 	tags.remove('token')
+	# 	tags.remove('current')
+	# 	tags.remove(self.tag)
+	# 	print(tags)
+		
+
+	# 	side = ""
+
+	# 	# find side
+	# 	if "LEFT" in tags:
+	# 		side = "LEFT"
+	# 	elif "RIGHT" in tags:
+	# 		side = "RIGHT"
+
+	# 	if "P1_TIB_JOINT_LINE" in tags:
+	# 		self.drag_point = self.dict["MPTA"][self.op_type][side]["TIB_JOINT_LINE"]["P2"]
+	# 		self.drag_label = "P1_TIB_JOINT_LINE"
+	# 		self.drag_side 	= side
+	# 	elif "P2_TIB_JOINT_LINE" in tags:
+	# 		self.drag_point = self.dict["MPTA"][self.op_type][side]["TIB_JOINT_LINE"]["P1"]
+	# 		self.drag_label = "P2_TIB_JOINT_LINE"
+	# 		self.drag_side 	= side
+
+	# 	else:
+	# 		self.drag_point = None
+	# 		self.drag_label = None
+	# 		self.drag_side 	= None
+
+	# def drag(self, P_mouse):
+	# 	if self.drag_label == "P1_TIB_JOINT_LINE" and self.drag_point != None or self.drag_label == "P2_TIB_JOINT_LINE" and self.drag_point != None:
+	# 		self.draw_tools.clear_by_tag("TIB_JOINT_LINE")
+	# 		self.draw_tools.clear_by_tag("MPTA_ANGLE")
+	# 		self.draw_tools.clear_by_tag("drag_line")
+	# 		self.draw_tools.create_myline(P_mouse, self.drag_point, "drag_line")
+
+	# def drag_stop(self, P_mouse):
+	# 	self.draw_tools.clear_by_tag("drag_line")
+
+	# 	if self.drag_label == "P1_TIB_JOINT_LINE":
+	# 		self.dict["MPTA"][self.op_type][self.drag_side]["TIB_JOINT_LINE"]["P1"] = P_mouse
+	# 		self.dict["EXCEL"][self.op_type][self.drag_side]["MPTA"] = None 	# delete excel data from pat.json
+
+	# 	elif self.drag_label == "P2_TIB_JOINT_LINE":
+	# 		self.dict["MPTA"][self.op_type][self.drag_side]["TIB_JOINT_LINE"]["P2"] = P_mouse
+	# 		self.dict["EXCEL"][self.op_type][self.drag_side]["MPTA"] = None 	# delete excel data from pat.json
+
+	# 	self.controller.save_json()
+	# 	self.draw()		
+
+	def hover(self, P_mouse, P_stored, hover_label):
+
+		if self.draw_hover:
+
+			side_pre = self.side[0]+"_"
+
+			if hover_label == "P0_TIB_JOINT_LINE":
+				self.draw_tools.clear_by_tag("hover_line")
+				self.draw_tools.create_mypoint(P_mouse, "red", [self.tag, "hover_line"], hover_point=True, point_thickness=self.point_size)
+				if self.draw_labels:
+					self.draw_tools.create_mytext(P_mouse,x_offset=80, mytext=(side_pre+self.hover_text), mytag=[self.tag, "hover_line"])
+
+		if hover_label == "P1_BETA":
+			self.draw_tools.clear_by_tag("hover_line")
+			self.draw_tools.create_myline(P_mouse, P_stored, "hover_line")
+	
+	def escapeObjFunc(self):
+		self.side = None
+		self.draw_tools.setHoverPointLabel(None)
+		self.draw_tools.setHoverBool(False)
+
+
+	def getNextLabel(self):
+		if self.side != None:
+			for item in self.dict["BETA"][self.op_type][self.side]:
+				
+				# get item type 
+				item_type = self.dict["BETA"][self.op_type][self.side][item]["type"]
+
+				# line has P1 and P2
+				if item_type == "line":
+
+					# check if P1 is None				
+					if self.dict["BETA"][self.op_type][self.side][item]["P1"] == None:
+						return (self.side + " " + item + " P1")
+
+
+					# check if P2 is None				
+					if self.dict["BETA"][self.op_type][self.side][item]["P2"] == None:
+						return (self.side + " " + item + " P2")
+
+				return (self.side + " Done")
+		return None
+
+
+	# menu button clicks are routed here
+	def menu_btn_click(self, action):
+		print(action)
+		if action == "SET-LEFT":
+			self.side = "LEFT"
+
+		if action == "SET-RIGHT":
+			self.side = "RIGHT"
+
+		if action == "DEL-LEFT-TIB-LINE":
+			self.side = "LEFT"
+			self.dict["BETA"][self.op_type]["LEFT"]["TIB_JOINT_LINE"]["P1"] = None
+			self.dict["BETA"][self.op_type]["LEFT"]["TIB_JOINT_LINE"]["P2"] = None
+			self.controller.save_json()
+
+		if action == "DEL-RIGHT-TIB-LINE":
+			self.side = "RIGHT"
+			self.dict["BETA"][self.op_type]["RIGHT"]["TIB_JOINT_LINE"]["P1"] = None
+			self.dict["BETA"][self.op_type]["RIGHT"]["TIB_JOINT_LINE"]["P2"] = None			
+			self.controller.save_json()
+
+		self.draw()
+		self.regainHover(self.side)
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+
+
+	def update_canvas(self, draw_tools):
+		self.draw_tools = draw_tools
+
+
+	def update_dict(self, master_dict):
+		self.dict = master_dict
+
+
+	def unset(self):
+		# print("unset from "+self.name)
+		self.draw_tools.clear_by_tag(self.tag)
+
+
+	def drag_start(self, P_mouse):
+		pass
+	def drag(self, P_mouse):
+		pass
+	def drag_stop(self, P_mouse):
+		pass
+
+	def regainHover(self, side):
+		p1_tib_joint_line = self.dict["BETA"][self.op_type][side]["TIB_JOINT_LINE"]["P1"]
+		p2_tib_joint_line = self.dict["BETA"][self.op_type][side]["TIB_JOINT_LINE"]["P2"]
+
+		# find if P0 hovers are required
+		self.mainHoverUsingNextLabel()
+
+		if p1_tib_joint_line != None and p2_tib_joint_line == None:
+			self.draw_tools.setHoverPointLabel("P1_BETA")
+			self.draw_tools.setHoverPoint(p1_tib_joint_line)
+			self.draw_tools.setHoverBool(True)	
+
+	# similiar to draw but nothing is drawn on the canvas
+	def updateExcelValues(self):
+		pass
+
+
+	def checkbox_click(self,action, val):
+		print('checkbox {} val{}'.format(action,val.get()))
+
+		if action == "TOGGLE_LABEL":
+			if val.get() == 0:
+				self.draw_labels = False
+			elif val.get() == 1:
+				self.draw_labels = True
+			self.draw()
+
+		if action == "TOGGLE_HOVER":
+			if val.get() == 0:
+				self.draw_hover = False
+			elif val.get() == 1:
+				self.draw_hover = True
+			self.draw()
+
+
+	def mainHoverUsingNextLabel(self):
+		label = self.getNextLabel()
+
+		if label == "RIGHT TIB_JOINT_LINE P1":
+			self.side = "RIGHT"
+			self.hover_text = "TIB_JOINT_LINE"
+			self.draw_tools.setHoverPointLabel("P0_TIB_JOINT_LINE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT TIB_JOINT_LINE P1":
+			self.side = "LEFT"
+			self.hover_text = "TIB_JOINT_LINE"
+			self.draw_tools.setHoverPointLabel("P0_TIB_JOINT_LINE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		

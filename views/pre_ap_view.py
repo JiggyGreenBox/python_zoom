@@ -6,10 +6,14 @@ from tkinter import *
 # menus
 from menus.uni_tib_val_menu import UNI_TIB_VAL_Menu
 from menus.uni_fem_val_menu import UNI_FEM_VAL_Menu
+from menus.alpha_menu import ALPHA_Menu
+from menus.beta_menu import BETA_Menu
 
 # objs
 from objs.uni_tib_val import UNI_TIB_VAL
 from objs.uni_fem_val import UNI_FEM_VAL
+from objs.alpha import ALPHA
+from objs.beta import BETA
 
 # choose file
 from tkinter import filedialog
@@ -42,7 +46,8 @@ class PRE_AP_View(tk.Frame):
 		self.topbar.pack(anchor=E, fill=X, expand=False, side=TOP)
 
 		# make buttons in the topbar
-		for x,text in enumerate(["UNI_TIB_VAL","UNI_FEM_VAL"]):
+		# for x,text in enumerate(["UNI_TIB_VAL","UNI_FEM_VAL"]):
+		for x,text in enumerate(["UNI_TIB_VAL","UNI_FEM_VAL","ALPHA","BETA"]):
 			# print(text)
 			button = ttk.Button(self.topbar, text=text, command=lambda text=text: self.show_menu(text))
 			button.grid(column=x, row=1)
@@ -62,7 +67,9 @@ class PRE_AP_View(tk.Frame):
 		self.menus = {}
 		for M in (
 					UNI_TIB_VAL_Menu,
-					UNI_FEM_VAL_Menu
+					UNI_FEM_VAL_Menu,
+					ALPHA_Menu,
+					BETA_Menu
 				):
 			page_name = M.__name__
 			menu = M(parent=self.navbar, controller=self)
@@ -77,7 +84,9 @@ class PRE_AP_View(tk.Frame):
 		self.objects = {}
 		for Obj in (
 					UNI_TIB_VAL,
-					UNI_FEM_VAL
+					UNI_FEM_VAL,
+					ALPHA,
+					BETA
 				):
 			obj_name = Obj.__name__
 			# print(obj_name)

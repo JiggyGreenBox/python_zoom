@@ -226,6 +226,10 @@ class POST_SKY_View(tk.Frame):
 			self.objects[obj].draw()
 			self.objects[obj].unset()
 
+	# unique for MAD
+	def getMadVals(self):
+		return self.menus["MAD_Menu"].getMadEntryVals()
+
 
 
 

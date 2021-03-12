@@ -4,6 +4,18 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import *
 
+# choose file
+from tkinter import filedialog
+
+# warning box for choose-side
+from tkinter import messagebox
+
+# get relpath
+import os
+
+# stitch images
+import sys
+from PIL import Image
 
 
 class DETAILS_View(tk.Frame):
@@ -16,6 +28,11 @@ class DETAILS_View(tk.Frame):
 		
 		# to avoid iteration bugs
 		self.med_image = ""
+
+		# for stitching images
+		self.im1 = ""
+		self.im2 = ""
+		self.im_result_name = ""
 
 
 		vcmd = (self.register(self.callback))
@@ -89,9 +106,28 @@ class DETAILS_View(tk.Frame):
 		tk.Label(self, text="POST-SKY").grid(sticky="W", column=0, row=15, padx=(10,0))
 		sp8 = Spinbox(self, textvariable=self.post_sky_var, from_= 1, to = 30, width=10).grid(column=1, row=15)
 
+		tk.Label(self, text="v0.4").grid(sticky="W", row=16, pady=(30,0), padx=(10,0))
 
 
-		tk.Label(self, text="v0.3").grid(sticky="W", row=16, pady=(30,0), padx=(10,0))
+
+
+		tk.Label(self, text="IMAGE STITCH", font=("TkDefaultFont", 12)).grid(sticky="W", column=3, row=0, pady=(30, 10), padx=(80,0), columnspan=3)
+		
+		btn_set_im1 = ttk.Button(self, text="IMG 1", width=10, command=lambda: self.set_stitch_images("im1"))
+		btn_set_im1.grid(sticky="W", column=3, row=3, padx=(80,0))
+		btn_set_im2 = ttk.Button(self, text="IMG 2", width=10, command=lambda: self.set_stitch_images("im2"))
+		btn_set_im2.grid(sticky="W", column=4, row=3)
+		btn_stitch 	= ttk.Button(self, text="GO", width=10, command=lambda: self.set_stitch_images("go"))
+		btn_stitch.grid(sticky="W", column=5, row=3)
+
+
+		self.label1 = tk.Label(self, text="Img Name:").grid(sticky="W", column=3, row=1, padx=(80,0))
+		self.img_stitch_name = tk.Entry(self)
+		self.img_stitch_name.grid(sticky="W", column=3, row=2, padx=(80,0), columnspan=3)
+
+		# self.label2 = tk.Label(self, text="No Image Selected").grid(sticky="W", column=3, row=3, padx=(10,0))
+
+				
 
 
 		# self.pre_scanno_var.set(self.master_dict["POINT_SIZES"]["PRE-SCANNO"])
@@ -167,7 +203,7 @@ class DETAILS_View(tk.Frame):
 										"F_NAME":None,
 										"L_NAME":None,
 										"AGE":None,
-										"SEX":None										
+										"SEX":None
 									}
 			self.controller.save_json()
 
@@ -243,6 +279,79 @@ class DETAILS_View(tk.Frame):
 			except Exception as e:
 				print(e)
 				# raise e
+
+
+	def set_stitch_images(self, btn_type):
+		if btn_type == "im1" or btn_type == "im2":
+			print("set images")
+
+
+			# get image
+			image = filedialog.askopenfilename(initialdir=self.controller.working_dir)
+
+			if isinstance(image, str) and image != "":
+
+				dir_name = os.path.dirname(image)
+				rel_path = os.path.relpath(image, dir_name)
+
+				# only allow images from the working dir
+				if self.controller.working_dir != dir_name:
+					print("mis-match")
+					self.warningBox("Image not from working directory")
+					return
+
+				if btn_type == "im1":
+					self.im1 = rel_path
+				elif btn_type == "im2":
+					self.im2 = rel_path
+
+		if btn_type == "go":
+			# check if images are set
+			if self.im1 == "":
+				self.warningBox("Image 1 Not Selected")
+				return
+			if self.im2 == "":
+				self.warningBox("Image 2 Not Selected")
+				return
+
+			# check if result image name is set
+			im_name = self.img_stitch_name.get().strip()
+			im_name = self.controller.working_dir + "/" + im_name + '.jpg'
+			if im_name == "":
+				self.warningBox("Stitched Image-name not set")
+				return
+
+
+			images = [Image.open(x) for x in [(self.controller.working_dir + "/" + self.im1), (self.controller.working_dir + "/" + self.im2)]]
+			# images = [Image.open(x) for x in ['post_ap.jpg','post_lat.jpg']]
+
+			
+			widths, heights = zip(*(i.size for i in images))
+
+			total_width = sum(widths)
+			max_height = max(heights)
+
+			new_im = Image.new('RGB', (total_width, max_height))
+
+			x_offset = 0
+			for im in images:
+				new_im.paste(im, (x_offset,0))
+				x_offset += im.size[0]
+
+			new_im.save(im_name)
+			self.im1 = ""
+			self.im2 = ""
+			self.img_stitch_name.delete(0, tk.END)
+			self.warningBox("Success")
+
+
+
+
+
+	def warningBox(self, message):
+		'''Display a warning box with message'''
+		messagebox.showwarning("Warning", message)
+
 				
 				
 

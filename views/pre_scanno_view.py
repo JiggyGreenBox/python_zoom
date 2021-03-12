@@ -172,6 +172,9 @@ class PRE_SCANNO_View(tk.Frame):
 			for obj in self.objects:			
 				self.objects[obj].update_canvas(self.canvas)
 
+		# update mad value
+		self.menus["MAD_Menu"].updateMadLabels(self.master_dict["EXCEL"]["PRE-OP"]["RIGHT"]["MAD"],self.master_dict["EXCEL"]["PRE-OP"]["LEFT"]["MAD"])
+
 
 	def is_set_med_image(self):
 		if self.med_image != "":
@@ -280,5 +283,10 @@ class PRE_SCANNO_View(tk.Frame):
 				print("{} draw".format(obj))
 				self.objects[obj].updateExcelValues()
 			# self.objects[obj].updateExcelValues()
+
+
+	# unique for MAD
+	def getMadVals(self):
+		return self.menus["MAD_Menu"].getMadEntryVals()
 
 		

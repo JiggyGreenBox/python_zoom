@@ -118,7 +118,7 @@ class MPTA():
 					p_top = self.draw_tools.line_intersection((ankle_m1, knee), (xtop, ytop))
 					self.draw_tools.create_myline(ankle_m1, p_top, self.tag)
 
-						# find angle ray intersection point
+					# find angle ray intersection point
 					p_int = self.draw_tools.line_intersection(
 							(p_top, ankle_m1),
 							(tib_joint_p1, tib_joint_p2))

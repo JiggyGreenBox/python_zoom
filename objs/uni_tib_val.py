@@ -18,6 +18,9 @@ class UNI_TIB_VAL():
 
 		self.point_size = None
 
+		self.draw_labels = True
+		self.draw_hover = True
+
 
 	def click(self, event):
 		# print("click from "+self.name)
@@ -27,6 +30,8 @@ class UNI_TIB_VAL():
 			self.controller.warningBox("Please select a Side")
 		else:
 			ret =  self.addDict(event)
+			# find if P0 hovers are required
+			self.mainHoverUsingNextLabel()
 			if ret:				
 				self.controller.save_json()
 				# pass
@@ -40,11 +45,15 @@ class UNI_TIB_VAL():
 		print(action)
 		if action == "SET-LEFT":
 			self.side = "LEFT"
+			self.draw()
+			self.regainHover(self.side)
 			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			return # avoid clear,draw,json_save
 
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"
+			self.draw()
+			self.regainHover(self.side)
 			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			return # avoid clear,draw,json_save
 
@@ -85,9 +94,10 @@ class UNI_TIB_VAL():
 		# delete excel data from pat.json
 		self.dict["EXCEL"][self.op_type][self.side]["TVAR/VAL"] = None
 
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)	
-		self.controller.save_json()
 		self.draw()
+		self.regainHover(self.side)
+		self.controller.save_json()
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
 
 
 
@@ -440,6 +450,18 @@ class UNI_TIB_VAL():
 	def hover(self, P_mouse, P_stored, hover_label):
 		# print(hover_label)
 
+		if self.draw_hover:
+
+			side_pre = self.side[0]+"_"
+
+			if(	hover_label == "P0_AXIS_TIB" or
+				hover_label == "P0_TIB_JOINT_LINE"
+				):
+				self.draw_tools.clear_by_tag("hover_line")
+				self.draw_tools.create_mypoint(P_mouse, "red", [self.tag, "hover_line"], hover_point=True, point_thickness=self.point_size)
+				if self.draw_labels:
+					self.draw_tools.create_mytext(P_mouse,x_offset=80, mytext=(side_pre+self.hover_text), mytag=[self.tag, "hover_line"])
+
 		if hover_label == "P1_AXIS_TIB_TOP":
 			self.draw_tools.clear_by_tag("hover_line")
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
@@ -479,7 +501,30 @@ class UNI_TIB_VAL():
 			self.draw_tools.create_myline(P_stored, P_mouse, "hover_line")
 
 	def regainHover(self, side):
-		pass
+		p1_axis_tib_top = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["TOP"]["P1"]
+		p2_axis_tib_top = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["TOP"]["P2"]
+		p1_axis_tib_bot = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["BOT"]["P1"]
+		p2_axis_tib_bot = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["BOT"]["P2"]
+
+		p1_tib_joint_line = self.dict["UNI_TIB_VAL"][self.op_type][side]["TIB_JOINT_LINE"]["P1"]
+		p2_tib_joint_line = self.dict["UNI_TIB_VAL"][self.op_type][side]["TIB_JOINT_LINE"]["P2"]
+
+		# find if P0 hovers are required
+		self.mainHoverUsingNextLabel()
+
+		if p1_axis_tib_top != None and p2_axis_tib_top == None:
+			self.draw_tools.setHoverPointLabel("P1_AXIS_TIB_TOP")
+			self.draw_tools.setHoverPoint(p1_axis_tib_top)
+			self.draw_tools.setHoverBool(True)
+
+		if p1_axis_tib_bot != None and p2_axis_tib_bot == None:
+			self.draw_tools.setHoverPointLabel("P1_AXIS_TIB_BOT")
+			self.draw_tools.setHoverPoint(p1_axis_tib_bot)
+			self.draw_tools.setHoverBool(True)
+		if p1_tib_joint_line != None and p2_tib_joint_line == None:
+			self.draw_tools.setHoverPointLabel("P1_TIB_JOINT_LINE")
+			self.draw_tools.setHoverPoint(p1_tib_joint_line)
+			self.draw_tools.setHoverBool(True)
 
 	def escapeObjFunc(self):
 		self.side = None
@@ -644,3 +689,52 @@ class UNI_TIB_VAL():
 	def unset(self):
 		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)
+
+
+	def checkbox_click(self,action, val):
+		print('checkbox {} val{}'.format(action,val.get()))
+
+		if action == "TOGGLE_LABEL":
+			if val.get() == 0:
+				self.draw_labels = False
+			elif val.get() == 1:
+				self.draw_labels = True
+			self.draw()
+
+		if action == "TOGGLE_HOVER":
+			if val.get() == 0:
+				self.draw_hover = False
+			elif val.get() == 1:
+				self.draw_hover = True
+			self.draw()
+
+
+	def mainHoverUsingNextLabel(self):
+		label = self.getNextLabel()
+
+		
+		if label == "RIGHT AXIS_TIB P1":
+			self.side = "RIGHT"
+			self.hover_text = "AXIS_TIB"
+			self.draw_tools.setHoverPointLabel("P0_AXIS_TIB")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT AXIS_TIB P1":
+			self.side = "LEFT"
+			self.hover_text = "AXIS_TIB"
+			self.draw_tools.setHoverPointLabel("P0_AXIS_TIB")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+		elif label == "RIGHT TIB_JOINT_LINE P1":
+			self.side = "RIGHT"
+			self.hover_text = "TIB_JOINT_LINE"
+			self.draw_tools.setHoverPointLabel("P0_TIB_JOINT_LINE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT TIB_JOINT_LINE P1":
+			self.side = "LEFT"
+			self.hover_text = "TIB_JOINT_LINE"
+			self.draw_tools.setHoverPointLabel("P0_TIB_JOINT_LINE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)

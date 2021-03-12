@@ -43,7 +43,7 @@ class MainWindow(ttk.Frame):
 	def __init__(self, mainframe):
 		""" Initialize the main Frame """
 		ttk.Frame.__init__(self, master=mainframe)
-		self.master.title('Knee Software v0.3')
+		self.master.title('Knee Software v0.4')
 		# self.master.geometry('800x600')  # size of the main window
 		self.master.geometry('1000x730')  # size of the main window
 		
@@ -76,7 +76,7 @@ class MainWindow(ttk.Frame):
 
 
 		# topbar
-		self.topbar = Frame(self.master, height=100)				
+		self.topbar = Frame(self.master, height=100)
 		self.topbar.grid(row=0, column=0, sticky="nwe") # stick to the top
 
 		# make buttons in the topbar
@@ -696,7 +696,7 @@ class MainWindow(ttk.Frame):
 
 			
 			post_hka.append(self.master_dict["EXCEL"]["POST-OP"][side]["HKA"])
-			post_mad.append(x)
+			post_mad.append(self.master_dict["EXCEL"]["POST-OP"][side]["MAD"])
 			post_mnsa.append(self.master_dict["EXCEL"]["POST-OP"][side]["MNSA"])
 			post_vca.append(self.master_dict["EXCEL"]["POST-OP"][side]["VCA"])
 			post_afta.append(self.master_dict["EXCEL"]["POST-OP"][side]["aFTA"])
