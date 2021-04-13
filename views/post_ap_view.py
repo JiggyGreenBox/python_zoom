@@ -27,6 +27,9 @@ from tkinter import messagebox
 # get relpath
 import os
 
+# make export dir if not exist
+from pathlib import Path
+
 
 
 class POST_AP_View(tk.Frame):
@@ -66,10 +69,10 @@ class POST_AP_View(tk.Frame):
 		# create menus
 		self.menus = {}
 		for M in (
-					UNI_TIB_VAL_Menu,
 					UNI_FEM_VAL_Menu,
 					ALPHA_Menu,
-					BETA_Menu
+					BETA_Menu,
+					UNI_TIB_VAL_Menu
 				):
 			page_name = M.__name__
 			menu = M(parent=self.navbar, controller=self)
@@ -78,15 +81,15 @@ class POST_AP_View(tk.Frame):
 			# put all of the pages in the same location;
 			# the one on the top of the stacking order
 			# will be the one that is visible.
-			menu.grid(row=0, column=0, sticky="nsew")			
+			menu.grid(row=0, column=0, sticky="nsew")
 
 
 		self.objects = {}
 		for Obj in (
-					UNI_TIB_VAL,
 					UNI_FEM_VAL,
 					ALPHA,
-					BETA
+					BETA,
+					UNI_TIB_VAL
 				):
 			obj_name = Obj.__name__
 			# print(obj_name)
@@ -147,6 +150,9 @@ class POST_AP_View(tk.Frame):
 			for obj in self.objects:			
 				self.objects[obj].update_canvas(self.canvas)
 
+			# auto-set curObject to UNI_TIB_VAL
+			self.canvas.setObject(self.objects["UNI_TIB_VAL"])
+
 			# save to json for future sessions
 			# self.master_dict["IMAGES"]["PRE-AP"] = image
 			self.master_dict["IMAGES"]["POST-AP"] = rel_path
@@ -181,6 +187,9 @@ class POST_AP_View(tk.Frame):
 			# update canvas object for children
 			for obj in self.objects:			
 				self.objects[obj].update_canvas(self.canvas)
+
+			# auto-set curObject to UNI_TIB_VAL
+			self.canvas.setObject(self.objects["UNI_TIB_VAL"])
 
 
 	def unsetObjs(self, obj_name):
@@ -225,5 +234,34 @@ class POST_AP_View(tk.Frame):
 		for obj in self.objects:
 			self.objects[obj].draw()
 			self.objects[obj].unset()
+
+
+	def view_draw_pil(self):
+
+		print('post_ap_view.py draw_pil')
+
+		if self.canvas == "":
+			print("no canvas")
+			return
+		
+		# create the pil image
+		# self.draw_tools.createPIL()
+		self.canvas.createPIL(self.med_image)
+
+		# draw from ALPHA
+		self.objects["ALPHA"].obj_draw_pil()
+
+		# draw from BETA
+		self.objects["BETA"].obj_draw_pil()
+
+		# check if export dir exists, create if not
+		Path(self.controller.working_dir +'/export').mkdir(parents=True, exist_ok=True)
+
+		# create platform independent file path
+		file = Path(self.controller.working_dir + '/export/export_post_ap.jpg')
+		# print(file)
+
+		# save to path
+		self.canvas.savePIL(file)
 
 			

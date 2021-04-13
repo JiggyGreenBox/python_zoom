@@ -17,6 +17,9 @@ class P_TILT():
 		self.checkMasterDict()
 
 		self.point_size = None
+		self.draw_labels = True
+		self.draw_hover = True
+
 
 	def click(self, event):
 		# print("click from "+self.name)
@@ -26,6 +29,8 @@ class P_TILT():
 			self.controller.warningBox("Please select a Side")
 		else:
 			ret =  self.addDict(event)
+			# find if P0 hovers are required
+			self.mainHoverUsingNextLabel()
 			if ret:				
 				self.controller.save_json()
 				# pass
@@ -38,17 +43,17 @@ class P_TILT():
 	def menu_btn_click(self, action):
 		print(action)
 		if action == "SET-LEFT":
-			self.side = "LEFT"
-			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+			self.side = "LEFT"			
 			self.draw()
 			self.regainHover(self.side)
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			return
 
 		if action == "SET-RIGHT":
-			self.side = "RIGHT"
-			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+			self.side = "RIGHT"			
 			self.draw()
 			self.regainHover(self.side)
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			return
 
 
@@ -98,7 +103,7 @@ class P_TILT():
 		self.controller.save_json()
 		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 
-	
+
 	def draw(self):
 
 		self.draw_tools.clear_by_tag(self.tag)
@@ -219,8 +224,8 @@ class P_TILT():
 
 			# 	except Exception as e:
 			# 		print(e)
-				
-				
+
+
 	def checkMasterDict(self):
 		if "P_TILT" not in self.dict.keys():
 			'''
@@ -270,7 +275,6 @@ class P_TILT():
 														}
 										}
 									}
-
 
 
 	def addDict(self, event):
@@ -337,7 +341,6 @@ class P_TILT():
 		return False
 
 
-
 	def getNextLabel(self):
 
 		if self.side != None:
@@ -370,8 +373,22 @@ class P_TILT():
 		return None		
 
 
-
 	def hover(self, P_mouse, P_stored, hover_label):
+
+		# prevent auto curObject set bug
+		if self.side == None:
+			return
+
+		if self.draw_hover:
+			side_pre = self.side[0]+"_"			
+			if(	hover_label == "P0_P1" or
+				hover_label == "P0_PAT_P1"
+				):
+				self.draw_tools.clear_by_tag("hover_line")
+				self.draw_tools.create_mypoint(P_mouse, "red", [self.tag, "hover_line"], hover_point=True, point_thickness=self.point_size)
+				if self.draw_labels:
+					self.draw_tools.create_mytext(P_mouse,x_offset=80, mytext=(side_pre+self.hover_text), mytag=[self.tag, "hover_line"])
+
 
 		if hover_label == "P1":
 			self.draw_tools.clear_by_tag("hover_line")
@@ -389,6 +406,8 @@ class P_TILT():
 		p2 = self.dict["P_TILT"][self.op_type][side]["P1P2_LINE"]["P2"]
 		pat_p1 = self.dict["P_TILT"][self.op_type][side]["PAT_CROSS_SECTION"]["P1"]
 		pat_p2 = self.dict["P_TILT"][self.op_type][side]["PAT_CROSS_SECTION"]["P2"]
+
+		
 
 		# no P1 no P2
 		# P1 but no P2
@@ -425,12 +444,14 @@ class P_TILT():
 			self.draw_tools.setHoverPoint(pat_p1)
 			self.draw_tools.setHoverBool(True)
 
+		# find if P0 hovers are required
+		self.mainHoverUsingNextLabel()
+
 
 	def escapeObjFunc(self):
 		self.side = None
 		self.draw_tools.setHoverPointLabel(None)
 		self.draw_tools.setHoverBool(False)
-
 
 
 	def drag_start(self, tags):
@@ -485,7 +506,7 @@ class P_TILT():
 				self.drag_point = pat_p1
 				self.drag_label = "PAT_P2"
 				self.drag_side 	= side
-		
+
 
 	def drag(self, P_mouse):
 
@@ -506,7 +527,7 @@ class P_TILT():
 				self.draw_tools.clear_by_tag("PAT_CROSS_SECTION_LINE")
 				self.draw_tools.clear_by_tag("drag_line")
 				self.draw_tools.create_myline(self.drag_point, P_mouse, "drag_line")
-				
+
 
 	def drag_stop(self, P_mouse):
 		self.draw_tools.clear_by_tag("drag_line")
@@ -540,7 +561,6 @@ class P_TILT():
 			self.draw()
 
 
-
 	def update_canvas(self, draw_tools):
 		self.draw_tools = draw_tools
 
@@ -552,5 +572,131 @@ class P_TILT():
 	def unset(self):
 		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)
+
+
+	def checkbox_click(self,action, val):
+		print('checkbox {} val{}'.format(action,val.get()))
+
+		if action == "TOGGLE_LABEL":
+			if val.get() == 0:
+				self.draw_labels = False
+			elif val.get() == 1:
+				self.draw_labels = True
+			self.draw()
+
+		if action == "TOGGLE_HOVER":
+			if val.get() == 0:
+				self.draw_hover = False
+			elif val.get() == 1:
+				self.draw_hover = True
+			self.draw()
+
+
+	def mainHoverUsingNextLabel(self):
+		label = self.getNextLabel()
+
+		
+		if label == "RIGHT P1":
+			self.side = "RIGHT"
+			self.hover_text = "P1"
+			self.draw_tools.setHoverPointLabel("P0_P1")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT P1":
+			self.side = "LEFT"
+			self.hover_text = "P1"
+			self.draw_tools.setHoverPointLabel("P0_P1")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+
+		elif label == "RIGHT PAT P1":
+			self.side = "RIGHT"
+			self.hover_text = "PAT"
+			self.draw_tools.setHoverPointLabel("P0_PAT_P1")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT PAT P1":
+			self.side = "LEFT"
+			self.hover_text = "PAT"
+			self.draw_tools.setHoverPointLabel("P0_PAT_P1")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+
+	def obj_draw_pil(self):
+		print('draw PIL P_TILT')
+
+
+		self.point_size = self.controller.getViewPointSize()
+
+		# loop left and right
+		for side in ["LEFT","RIGHT"]:
+
+			p1 		= self.dict["P_TILT"][self.op_type][side]["P1P2_LINE"]["P1"]
+			p2 		= self.dict["P_TILT"][self.op_type][side]["P1P2_LINE"]["P2"]
+			pat_p1 	= self.dict["P_TILT"][self.op_type][side]["PAT_CROSS_SECTION"]["P1"]
+			pat_p2 	= self.dict["P_TILT"][self.op_type][side]["PAT_CROSS_SECTION"]["P2"]
+
+
+
+			isP1P2 		= False
+			isPatP1P2 	= False
+
+			if p1 != None and p2 != None:
+				isP1P2 = True
+
+			if pat_p1 != None and pat_p2 != None:
+				isPatP1P2 = True
+			
+
+			if pat_p1 and isPatP1P2:
+
+
+				self.draw_tools.pil_create_mypoint(p1, "orange", point_thickness=self.point_size)
+				self.draw_tools.pil_create_mypoint(p2, "orange", point_thickness=self.point_size)
+				self.draw_tools.pil_create_mypoint(pat_p1, "orange", point_thickness=self.point_size)
+				self.draw_tools.pil_create_mypoint(pat_p2, "orange", point_thickness=self.point_size)
+
+				self.draw_tools.pil_create_myline(p1, p2)
+				self.draw_tools.pil_create_myline(pat_p1, pat_p2)
+
+
+				
+				U_p, D_p = self.draw_tools.retPointsUpDown(pat_p1, pat_p2)
+				L_p, R_p = self.draw_tools.retPointsLeftRight(p1, p2)
+				p_int = self.draw_tools.line_intersection((U_p, D_p), (L_p, R_p))
+
+
+				# angle = self.draw_tools.getSmallestAngle(p1, p_int, knee_cap_line_p1)
+				
+				ptilt_angle = ""
+				multi_text = ""
+				xoffset = 50
+				yoffset = 50
+				p_draw = None
+
+
+				if side == "LEFT":
+					ptilt_angle = self.draw_tools.getSmallestAngle(U_p, p_int, R_p)
+					multi_text = 'PTILT: {0:.2f}'.format(ptilt_angle)
+					xoffset = -1*(xoffset + self.draw_tools.pil_get_multiline_text_size(multi_text))
+					p_draw = L_p
+
+					if ptilt_angle > 8:
+						ptilt_angle = self.draw_tools.pil_create_myAngle(U_p, p_int, R_p)
+
+				else:
+					ptilt_angle = self.draw_tools.getSmallestAngle(L_p, p_int, U_p)
+					multi_text = 'PTILT: {0:.2f}'.format(ptilt_angle)
+					p_draw = R_p
+					
+					if ptilt_angle > 8:
+						ptilt_angle = self.draw_tools.pil_create_myAngle(L_p, p_int, U_p)
+
+
+				x1,y1,x2,y2 = self.draw_tools.pil_get_text_bbox(p_draw, multi_text, x_offset=xoffset, y_offset=yoffset)
+				self.draw_tools.pil_draw_rect([x1,y1,x2,y2], padding=20)
+				self.draw_tools.pil_create_multiline_text(p_draw, multi_text, x_offset=xoffset, y_offset=yoffset, color=(255,255,255,255))
 
 		

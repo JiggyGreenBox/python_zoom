@@ -16,6 +16,7 @@ from menus.kjlo_menu import KJLO_Menu
 from menus.kaol_menu import KAOL_Menu
 from menus.mad_menu import MAD_Menu
 from menus.eadf_menu import EADF_Menu
+from menus.eadt_menu import EADT_Menu
 from menus.main_menu import MAIN_Menu
 
 # objs
@@ -31,6 +32,7 @@ from objs.kjlo import KJLO
 from objs.kaol import KAOL
 from objs.mad import MAD
 from objs.eadf import EADF
+from objs.eadt import EADT
 from objs.main_anatomy import MAIN
 
 # choose file
@@ -44,6 +46,9 @@ from tkinter import messagebox
 
 # get relpath
 import os
+
+# make export dir if not exist
+from pathlib import Path
 
 
 
@@ -64,7 +69,7 @@ class PRE_SCANNO_View(tk.Frame):
 		self.topbar.pack(anchor=E, fill=X, expand=False, side=TOP)
 
 		# make buttons in the topbar
-		for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","KJLO","KAOL","MAD","EADF"]):
+		for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","KJLO","KAOL","MAD","EADF","EADT"]):
 		# for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","ALDFA","MLDFA","TAMD","MPTA","KJLO", "KAOL"]):
 			# print(text)
 			button = ttk.Button(self.topbar, text=text, command=lambda text=text: self.show_menu(text))
@@ -97,6 +102,7 @@ class PRE_SCANNO_View(tk.Frame):
 					KAOL_Menu,
 					MAD_Menu,
 					EADF_Menu,
+					EADT_Menu,
 					MAIN_Menu
 				):
 			page_name = M.__name__
@@ -123,6 +129,7 @@ class PRE_SCANNO_View(tk.Frame):
 					KAOL,
 					MAD,
 					EADF,
+					EADT,
 					MAIN
 				):
 			obj_name = Obj.__name__
@@ -172,6 +179,9 @@ class PRE_SCANNO_View(tk.Frame):
 			for obj in self.objects:			
 				self.objects[obj].update_canvas(self.canvas)
 
+			# auto-set curObject to MAIN
+			self.canvas.setObject(self.objects["MAIN"])
+
 		# update mad value
 		self.menus["MAD_Menu"].updateMadLabels(self.master_dict["EXCEL"]["PRE-OP"]["RIGHT"]["MAD"],self.master_dict["EXCEL"]["PRE-OP"]["LEFT"]["MAD"])
 
@@ -185,7 +195,7 @@ class PRE_SCANNO_View(tk.Frame):
 	def set_med_image(self, image):
 		if image != "":
 			self.med_image = image
-		else:
+		else: 
 			print("image is blank")
 
 	def open_image_loc(self):
@@ -212,6 +222,9 @@ class PRE_SCANNO_View(tk.Frame):
 			# update canvas object for children
 			for obj in self.objects:			
 				self.objects[obj].update_canvas(self.canvas)
+
+			# auto-set curObject to MAIN
+			self.canvas.setObject(self.objects["MAIN"])
 
 			# save to json for future sessions
 			# self.master_dict["IMAGES"]["PRE-SCANNO"] = image
@@ -289,4 +302,38 @@ class PRE_SCANNO_View(tk.Frame):
 	def getMadVals(self):
 		return self.menus["MAD_Menu"].getMadEntryVals()
 
+
+	def view_draw_pil(self):
+
+		print('pre_scanno_view.py draw_pil')
+
+		if self.canvas == "":
+			print("no canvas")
+			return
+
+		# create the pil image
+		# self.draw_tools.createPIL()
+		self.canvas.createPIL(self.med_image)
+
+		# draw from HKA
+		self.objects["HKA"].obj_draw_pil()
+
+		# check if export dir exists, create if not
+		Path(self.controller.working_dir +'/export').mkdir(parents=True, exist_ok=True)
+
+		# create platform independent file path
+		file = Path(self.controller.working_dir + '/export/export_pre_scanno.jpg')
+
+		# save to path
+		self.canvas.savePIL(file)
+
+
+	def view_tryPsFile(self):
+		print('view_tryPsFile')
+
+		try:
+			# self.canvas.postscript(file="try_ps.ps", colormode='color')	
+			self.canvas.my_postscript("try_ps.ps")
+		except Exception as e:
+			raise e
 		

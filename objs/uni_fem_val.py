@@ -389,11 +389,12 @@ class UNI_FEM_VAL():
 
 	def hover(self, P_mouse, P_stored, hover_label):
 
+		# prevent auto curObject set bug
+		if self.side == None:
+			return
 
 		if self.draw_hover:
-
 			side_pre = self.side[0]+"_"
-
 			if(	hover_label == "P0_AXIS_FEM" or
 				hover_label == "P0_FEM_JOINT_LINE"
 				):

@@ -11,6 +11,9 @@ class TSLOPE_Menu(tk.Frame):
 		self.controller = controller
 		self.obj_name = "TSLOPE"
 
+
+		self.label_var = IntVar(value=1)
+		self.hover_var = IntVar(value=1)
 		# self.tflexext = IntVar(value=0)
 
 		header_label = tk.Label(self, text=self.obj_name,font=("TkDefaultFont",20))
@@ -53,6 +56,12 @@ class TSLOPE_Menu(tk.Frame):
 		button.grid(column=1, row=7)
 		button = ttk.Button(self, text="TIB LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-TIB-LINE"))
 		button.grid(column=2, row=7)
+
+		label_cb = Checkbutton(self, text="LABELS", variable=self.label_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_LABEL", self.label_var))
+		label_cb.grid(padx=[5,0], pady=[10,0], sticky="W", column=1, row=8)
+
+		hover_cb = Checkbutton(self, text="HOVER", variable=self.hover_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_HOVER", self.hover_var))
+		hover_cb.grid(padx=[5,0], pady=[10,0], sticky="W", column=2, row=8)
 
 
 		# anat_axis_cb = Checkbutton(self, text="T-FLEX/EXT", variable=self.tflexext,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_TFLEXEXT", self.tflexext))

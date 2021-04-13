@@ -19,6 +19,7 @@ class ALPHA():
 		self.point_size = None
 		self.draw_labels = True
 		self.draw_hover = True
+		self.drag_label = None
 
 
 	def checkMasterDict(self):
@@ -105,25 +106,25 @@ class ALPHA():
 			# FEM AXIS
 			# TOP
 			if axis_fem_top_p1 != None:
-				self.draw_tools.create_mypoint(axis_fem_top_p1, "orange", [self.tag,side,"AXIS_FEM","TOP","P1"], point_thickness=self.point_size)
+				self.draw_tools.create_mypoint(axis_fem_top_p1, "orange", [self.tag,side,"NO-DRAG"], point_thickness=self.point_size)
 
 			if axis_fem_top_p2 != None:
-				self.draw_tools.create_mypoint(axis_fem_top_p2, "orange", [self.tag,side,"AXIS_FEM","TOP","P2"], point_thickness=self.point_size)
+				self.draw_tools.create_mypoint(axis_fem_top_p2, "orange", [self.tag,side,"NO-DRAG"], point_thickness=self.point_size)
 
 			if axis_fem_top_p1 != None and axis_fem_top_p2 != None:				
-				self.draw_tools.create_midpoint_line(axis_fem_top_p1, axis_fem_top_p2, axis_fem_top_m1, [self.tag,side,"TOP_AXIS_LINE"], point_thickness=self.point_size)
+				self.draw_tools.create_midpoint_line(axis_fem_top_p1, axis_fem_top_p2, axis_fem_top_m1, [self.tag,side,"NO-DRAG"], point_thickness=self.point_size)
 				isFemTop = True
 
 
 			# BOT
 			if axis_fem_bot_p1 != None:
-				self.draw_tools.create_mypoint(axis_fem_bot_p1, "orange", [self.tag,side,"AXIS_FEM","BOT","P1"], point_thickness=self.point_size)
+				self.draw_tools.create_mypoint(axis_fem_bot_p1, "orange", [self.tag,side,"NO-DRAG"], point_thickness=self.point_size)
 
 			if axis_fem_bot_p2 != None:
-				self.draw_tools.create_mypoint(axis_fem_bot_p2, "orange", [self.tag,side,"AXIS_FEM","BOT","P2"], point_thickness=self.point_size)
+				self.draw_tools.create_mypoint(axis_fem_bot_p2, "orange", [self.tag,side,"NO-DRAG"], point_thickness=self.point_size)
 
 			if axis_fem_bot_p1 != None and axis_fem_bot_p2 != None:				
-				self.draw_tools.create_midpoint_line(axis_fem_bot_p1, axis_fem_bot_p2, axis_fem_bot_m1, [self.tag,side,"BOT_AXIS_LINE"], point_thickness=self.point_size)
+				self.draw_tools.create_midpoint_line(axis_fem_bot_p1, axis_fem_bot_p2, axis_fem_bot_m1, [self.tag,side,"NO-DRAG"], point_thickness=self.point_size)
 				isFemBot = True
 
 			# if isFemJointLine and isFemTop and isFemBot:
@@ -203,12 +204,21 @@ class ALPHA():
 
 		side = ""
 
+
 		# find side
 		if "LEFT" in tags:
 			side = "LEFT"
 		elif "RIGHT" in tags:
 			side = "RIGHT"
 
+		# dissallow drag from other objects
+		if "NO-DRAG" in tags:
+			self.drag_point = None
+			self.drag_label = "NO-DRAG"
+			self.drag_side 	= None
+
+
+	
 		if "P1" in tags:
 			self.drag_point = self.dict["ALPHA"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
 			self.drag_label = "P1_FEM_JOINT_LINE"
@@ -239,10 +249,12 @@ class ALPHA():
 
 	def hover(self, P_mouse, P_stored, hover_label):
 
+		# prevent auto curObject set bug
+		if self.side == None:
+			return
+
 		if self.draw_hover:
-
 			side_pre = self.side[0]+"_"
-
 			if hover_label == "P0_FEM_JOINT_LINE":
 				self.draw_tools.clear_by_tag("hover_line")
 				self.draw_tools.create_mypoint(P_mouse, "red", [self.tag, "hover_line"], hover_point=True, point_thickness=self.point_size)
@@ -370,4 +382,81 @@ class ALPHA():
 			self.draw_tools.setHoverPointLabel("P0_FEM_JOINT_LINE")
 			self.draw_tools.setHoverPoint(None)
 			self.draw_tools.setHoverBool(True)
+
+
+	def obj_draw_pil(self):
+		print('draw PIL ALPHA')
+
+		self.point_size = self.controller.getViewPointSize()
+
+		# loop left and right				
+		for side in ["LEFT","RIGHT"]:
+
+			isFemJointLine 	= False
+			isFemTop 		= False
+			isFemBot 		= False
+
+
+			fem_line_p1 = self.dict["ALPHA"][self.op_type][side]["FEM_JOINT_LINE"]["P1"]
+			fem_line_p2 = self.dict["ALPHA"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
+
+			axis_fem_top_m1 = self.dict["UNI_FEM_VAL"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
+			axis_fem_bot_m1 = self.dict["UNI_FEM_VAL"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
+
+
+			if fem_line_p1 != None and fem_line_p2 != None:
+				isFemJointLine = True
+
+
+
+			# FEM AXIS
+			# TOP
+			if axis_fem_top_m1 != None:			
+				isFemTop = True
+			# BOT
+			if axis_fem_bot_m1 != None:
+				isFemBot = True
+
+
+			# if isFemJointLine and isFemTop and isFemBot:
+			if isFemTop and isFemBot and isFemJointLine:
+
+				# axis
+				U_fem_m1, D_fem_m1 = self.draw_tools.retPointsUpDown(axis_fem_top_m1, axis_fem_bot_m1)
+
+				# find angle ray intersection point
+				p_int = self.draw_tools.line_intersection((U_fem_m1, D_fem_m1),(fem_line_p1, fem_line_p2))
+
+				self.draw_tools.pil_create_myline(p_int, U_fem_m1)
+				self.draw_tools.pil_create_mypoint(U_fem_m1, "orange", point_thickness=self.point_size)
+
+
+				L_fem, R_fem = self.draw_tools.retPointsLeftRight(fem_line_p1, fem_line_p2)
+
+
+				multi_text = ""
+				p_draw = None
+				xoffset = 120
+				yoffset = -100
+
+				if side == "RIGHT":
+					alpha_angle = self.draw_tools.pil_create_myAngle(U_fem_m1, p_int, R_fem)
+					multi_text = 'ALPHA: {0:.2f}'.format(alpha_angle)
+					self.draw_tools.pil_create_myline(p_int, R_fem)
+					self.draw_tools.pil_create_mypoint(R_fem, "orange", point_thickness=self.point_size)
+					p_draw = R_fem
+
+				if side == "LEFT":
+					alpha_angle = self.draw_tools.pil_create_myAngle(L_fem, p_int, U_fem_m1)
+					multi_text = 'ALPHA: {0:.2f}'.format(alpha_angle)
+					xoffset = -1*(xoffset + self.draw_tools.pil_get_multiline_text_size(multi_text))
+					self.draw_tools.pil_create_myline(p_int, L_fem)
+					self.draw_tools.pil_create_mypoint(L_fem, "orange", point_thickness=self.point_size)
+					p_draw = L_fem
+
+
+				# p_draw is assigned correctly, proceed
+				x1,y1,x2,y2 = self.draw_tools.pil_get_text_bbox(p_draw, multi_text, x_offset=xoffset, y_offset=yoffset)
+				self.draw_tools.pil_draw_rect([x1,y1,x2,y2], padding=20)
+				self.draw_tools.pil_create_multiline_text(p_draw, multi_text, x_offset=xoffset, y_offset=yoffset, color=(255,255,255,255))
 		

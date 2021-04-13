@@ -17,6 +17,8 @@ class PPBA():
 		self.checkMasterDict()
 
 		self.point_size = None
+		self.draw_labels = True
+		self.draw_hover = True
 
 
 	def click(self, event):
@@ -28,6 +30,8 @@ class PPBA():
 			print(self.dict)
 		else:
 			ret =  self.addDict(event)
+			# find if P0 hovers are required
+			self.mainHoverUsingNextLabel()
 			if ret:
 				self.controller.save_json()
 				# pass
@@ -41,14 +45,16 @@ class PPBA():
 		print(action)
 		if action == "SET-LEFT":
 			self.side = "LEFT"
-			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+			self.draw()
 			self.regainHover(self.side)
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			return # avoid clear,draw,json_save
 
 		if action == "SET-RIGHT":
-			self.side = "RIGHT"			
-			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+			self.side = "RIGHT"
+			self.draw()			
 			self.regainHover(self.side)
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			return # avoid clear,draw,json_save
 
 
@@ -74,10 +80,8 @@ class PPBA():
 
 		self.draw()
 		self.regainHover(self.side)
-
 		self.controller.save_json()
 		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)			
-
 
 
 	def draw(self):
@@ -155,7 +159,6 @@ class PPBA():
 			# 		self.draw_tools.create_mytext(p2, x_offset=-60, color="blue", mytext='{:.2f}'.format(isr_val), mytag=[self.tag, side, "ISR_LABEL"])
 
 
-
 	def checkMasterDict(self):
 		if "PPBA" not in self.dict.keys():
 			self.dict["PPBA"] = 	{
@@ -211,17 +214,42 @@ class PPBA():
 
 	def getNextLabel(self):
 
-		if self.side != None:
-			for item in self.dict["ISR"][self.op_type][self.side]:
+		# if self.side != None:
+		# 	for item in self.dict["ISR"][self.op_type][self.side]:
 
-				if self.dict["ISR"][self.op_type][self.side][item]["P1"] == None:					
+		# 		if self.dict["ISR"][self.op_type][self.side][item]["P1"] == None:					
+		# 			return (self.side + " " + item)
+
+		# 	return (self.side + " Done")
+
+		# return None	
+
+		if self.side != None:
+			for item in self.dict["PPBA"][self.op_type][self.side]:
+
+				if self.dict["PPBA"][self.op_type][self.side][item]["P1"] == None:					
 					return (self.side + " " + item)
 
 			return (self.side + " Done")
 
 		return None							
 
+
 	def hover(self, P_mouse, P_stored, hover_label):
+
+		# prevent auto curObject set bug
+		if self.side == None:
+			return
+
+
+		if self.draw_hover:
+			side_pre = self.side[0]+"_"
+			if hover_label == "P0_KNEE_CAP_LINE":
+				self.draw_tools.clear_by_tag("hover_line")
+				self.draw_tools.create_mypoint(P_mouse, "red", [self.tag, "hover_line"], hover_point=True, point_thickness=self.point_size)
+				if self.draw_labels:
+					self.draw_tools.create_mytext(P_mouse,x_offset=80, mytext=(side_pre+self.hover_text), mytag=[self.tag, "hover_line"])
+
 
 		if hover_label == "P1":
 			if P_stored != None:
@@ -247,6 +275,9 @@ class PPBA():
 			self.draw_tools.setHoverPoint(knee_p1)
 			self.draw_tools.setHoverPointLabel("P1")
 			self.draw_tools.setHoverBool(True)
+
+		# find if P0 hovers are required
+		self.mainHoverUsingNextLabel()
 
 
 	def escapeObjFunc(self):
@@ -318,8 +349,6 @@ class PPBA():
 				self.draw_tools.create_myline(self.drag_point, P_mouse, "drag_line")
 
 
-
-
 	def drag_stop(self, P_mouse):
 		self.draw_tools.clear_by_tag("drag_line")
 
@@ -335,7 +364,7 @@ class PPBA():
 			self.dict["EXCEL"][self.op_type][self.drag_side]["PPBA"] = None	# delete excel data from pat.json
 			self.controller.save_json()
 			self.draw()
-			
+
 
 
 	def getPointCount(self, side):
@@ -353,14 +382,53 @@ class PPBA():
 
 		return count, p_hover
 
+
 	def update_canvas(self, draw_tools):
 		self.draw_tools = draw_tools
 
+
 	def update_dict(self, master_dict):
 		self.dict = master_dict
+
 
 	def unset(self):
 		# print("unset from "+self.name)
 		self.draw_tools.setHoverPointLabel(None)
 		self.draw_tools.setHoverBool(False)
 		self.draw_tools.clear_by_tag(self.tag)
+
+
+	def checkbox_click(self,action, val):
+		print('checkbox {} val{}'.format(action,val.get()))
+
+		if action == "TOGGLE_LABEL":
+			if val.get() == 0:
+				self.draw_labels = False
+			elif val.get() == 1:
+				self.draw_labels = True
+			self.draw()
+
+		if action == "TOGGLE_HOVER":
+			if val.get() == 0:
+				self.draw_hover = False
+			elif val.get() == 1:
+				self.draw_hover = True
+			self.draw()
+
+
+	def mainHoverUsingNextLabel(self):
+		label = self.getNextLabel()
+
+		
+		if label == "RIGHT KNEE_CAP_LINE":
+			self.side = "RIGHT"
+			self.hover_text = "KNEE_CAP_LINE"
+			self.draw_tools.setHoverPointLabel("P0_KNEE_CAP_LINE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT KNEE_CAP_LINE":
+			self.side = "LEFT"
+			self.hover_text = "KNEE_CAP_LINE"
+			self.draw_tools.setHoverPointLabel("P0_KNEE_CAP_LINE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)		

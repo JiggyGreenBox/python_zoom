@@ -8,6 +8,9 @@ import math
 # # debug
 # from itertools import count
 
+# for PIL draw
+from PIL import Image, ImageDraw, ImageFont
+
 class DrawTools(CanvasImage):
 	""" Class of Polygons. Inherit CanvasImage class """
 
@@ -41,6 +44,12 @@ class DrawTools(CanvasImage):
 
 		self.isHover = False
 		self.hover_label = ""
+
+		# for PIL image
+		self.pil_image = None
+		self.pil_draw = None
+		# self.pil_font = None
+		self.pil_font = ImageFont.truetype('Roboto-Medium.ttf', 30)
 
 
 	def setObject(self, myobject):
@@ -262,6 +271,12 @@ class DrawTools(CanvasImage):
 			return p1, p2
 		else:
 			return p2, p1
+
+	def retPointsUpDownList(self, p1, p2):
+		if p1[1] < p2[1]:
+			return p1, p2
+		else:
+			return (p2, p1)
 
 
 	def retIsPointUp(self, p1, p2):
@@ -490,3 +505,198 @@ class DrawTools(CanvasImage):
 	# def __del__(self): 
 	# 	print("deleted instance no {}".format(self.id))
 	# 	print("deleted path {}".format(self.path))
+
+
+	# ------------------------------------------------------------------------
+	# create methods for PIL drawing
+	# to save for presentation mode
+
+	# create the PIL image instance
+	def createPIL(self, path):
+		self.pil_image = Image.open(self.path)
+		self.pil_draw = ImageDraw.Draw(self.pil_image)
+
+
+	# save the image
+	def savePIL(self, path):
+		self.pil_image.save(path)
+
+
+	# draw point
+	def pil_create_mypoint(self, point, color=(255,165,0), point_thickness=7):
+		x = point[0]
+		y = point[1]
+		self.pil_draw.ellipse(
+			[x - point_thickness,
+			y - point_thickness,
+			x + point_thickness,
+			y + point_thickness],
+			fill=color,
+			outline=(0,0,0)
+		)
+		# self.pilu_draw.ellipse(
+		# 			[x2 - 7,
+		# 			y2 - 7,
+		# 			x2 + 7,
+		# 			y2 + 7])
+
+	# draw line
+	def pil_create_myline(self, p1, p2):
+
+		# p1 = self.getScaledCoords(point1)
+		# p2 = self.getScaledCoords(point2)
+
+		# self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="red", width=2, tags=("del","lines", mytag))
+		# self.canvas.create_line(p1[0], p1[1], p2[0], p2[1], fill="orange", width=2, tags=("del","lines", mytag))
+		self.pil_draw.line([p1[0], p1[1], p2[0], p2[1]], fill=(255,165,0), width=7)
+
+	# draw angle
+	def pil_create_myAngle(self, point1, point2, point3, radius=50, width=3, outline="orange"):
+		# angle = self.getAnglePoints(point1, point2, point3)
+		# # print('angle: {}'.format(angle))
+
+		# arc_angle = self.getAnglePointsNeg(point3, point2, (self.imwidth, point2[1]))
+		# # print('arc_angle: {}'.format(arc_angle))
+		
+		# # bot_left = self.getScaledCoords(((point2[0] - radius),(point2[1] - radius)))
+		# # top_right = self.getScaledCoords(((point2[0] + radius),(point2[1] + radius)))
+		# # self.canvas.create_arc(x-r, y-r, x+r, y+r, start=t0, extent=angle1, style='arc', width=width, tags="tag")
+		# p1 = self.getScaledCoords(point2)	
+		# x = p1[0]	
+		# y = p1[1]
+		# r = radius
+
+		# # self.canvas.create_arc(x-r, y-r, x+r, y+r, start=arc_angle, extent=angle, style='arc', width=width, tags=mytag)
+		# # self.canvas.create_arc(x-r, y-r, x+r, y+r, start=arc_angle, extent=angle, outline=outline, width=width, tags=mytag)
+		# self.pil_draw.arc([x-r, y-r, x+r, y+r], start=arc_angle, end=angle, fill=(255,165,0), width=7)
+
+
+		# angle rubbish begins
+		angle1 = self.getAnglePoints(point1, point2, point3)
+		angle2 = self.getAnglePoints(point3, point2, point1)
+		print('angle1: {}, angle2: {}'.format(angle1, angle2))
+
+		# co ord system begins with respect to x-axis
+		# (self.imwidth, point2[1]) is horizontal X-Axis at point2
+
+		p_arc_angle = self.getAnglePointsNeg(point3, point2, (self.imwidth,point2[1]))
+		print('angle with x-axis: {}'.format(p_arc_angle))
+
+		arc_angle = -1*p_arc_angle + angle2
+		angle = -1*p_arc_angle
+
+		print('arc_angle, angle: {} {}'.format(arc_angle, angle))
+
+		x = point2[0]
+		y = point2[1]
+		r = 50
+
+		self.pil_draw.arc([x-r, y-r, x+r, y+r], start=arc_angle, end=angle, fill=(255,165,0), width=5)
+
+		return angle1
+
+	# draw text
+	def pil_create_mytext(self, point, mytext, x_offset=0, y_offset=0, color="white", font_size=8):
+
+		x = point[0]
+		y = point[1]
+		x_off = x_offset
+		y_off = y_offset
+		# print('xoff: {}'.format(x_off))
+
+		# font = ImageFont.load_default()
+		# if self.pil_font == None:
+			# self.pil_font = ImageFont.truetype('Roboto-Medium.ttf', 30)
+
+		# self.canvas.create_text(x+x_off, y+y_off, fill=color, text=mytext, font=("TkDefaultFont", font_size), tags=mytag)
+		self.pil_draw.text((x+x_off,y+y_off), mytext, font=self.pil_font, fill=(0,0,255,255))
+		# self.pil_draw.text((x+x_off,y+y_off), mytext, font=self.pil_font, fill=(0,0,255,255),stroke_width=1, stroke_fill=(0,0,0,255))
+		
+
+	def pil_create_multiline_text(self, point, mytext, x_offset=0, y_offset=0, color=(0,0,255,255), font_size=8):
+
+		x = point[0]		
+		y = point[1]
+		x_off = x_offset
+		y_off = y_offset
+
+		self.pil_draw.multiline_text((x+x_off,y+y_off), mytext, font=self.pil_font, fill=color)
+
+
+	def pil_get_text_size(self, text):
+		width  = self.pil_draw.textlength(text, font=self.pil_font)
+		print('textlength: {}'.format(width))
+		print('imscale: {}'.format(self.imscale))
+		width, height = self.pil_draw.textsize(text, font=self.pil_font)
+		print('width: {}'.format(width))
+		return width
+
+
+	def pil_get_multiline_text_size(self, text):
+		
+		width, height = self.pil_draw.multiline_textsize(text, font=self.pil_font)
+		print('width: {}'.format(width))
+		return width
+
+
+	def pil_get_text_bbox(self, point, text, x_offset=0, y_offset=0):
+
+		x = point[0]
+		y = point[1]
+		x_off = x_offset
+		y_off = y_offset
+
+		# x1,y1,x2,y2 = self.pil_draw.textbbox([x,y], text, font=self.pil_font)
+		return self.pil_draw.textbbox((x+x_off,y+y_off), text, font=self.pil_font)
+
+	def pil_draw_rect(self, xy, fill=(0,0,0,255), padding=0):
+
+		xy[0] = xy[0] - padding
+		xy[1] = xy[1] - padding
+		xy[2] = xy[2] + padding
+		xy[3] = xy[3] + padding
+
+		self.pil_draw.rectangle(xy, fill=fill)
+
+
+
+	# ps file attempt
+	def my_postscript(self, path):
+		self.canvas.postscript(file=path, colormode='color')
+
+	# returns adjusted but with L R  
+	def get_yaxis_adjusted_points(self, point1, point2):
+
+		point1 = list(point1)
+		# print(point1)
+		# print(type(point1))
+
+		# print(point2)
+		# print(type(point2))
+
+		point2 = list(point2)
+
+		U, D = self.retPointsUpDownList(point1, point2)
+
+		ydiff = (D[1] - U[1])/2
+
+		U[1] = U[1] + ydiff
+
+		D[1] = D[1] - ydiff
+
+		return self.retPointsLeftRight(U, D)
+
+	def get_yaxis_midpoint(self, point1, point2):
+
+		U, D = self.retPointsUpDown(point1, point2)
+
+		ydiff = (D[1] - U[1])/2
+
+		return ydiff
+
+
+
+
+
+
+

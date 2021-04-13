@@ -21,6 +21,8 @@ class FFLEX_UKR():
 		self.drag_side 	= None
 
 		self.point_size = None
+		self.draw_labels = True
+		self.draw_hover = True
 
 
 
@@ -31,7 +33,9 @@ class FFLEX_UKR():
 			print("please choose side")
 			self.controller.warningBox("Please select a Side")
 		else:
-			ret =  self.addDict(event)			
+			ret =  self.addDict(event)
+			# find if P0 hovers are required
+			self.mainHoverUsingNextLabel()
 			if ret:
 				self.controller.save_json()
 				# pass
@@ -45,17 +49,17 @@ class FFLEX_UKR():
 	def menu_btn_click(self, action):
 		print(action)
 		if action == "SET-LEFT":
-			self.side = "LEFT"
-			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+			self.side = "LEFT"			
 			self.draw()
 			self.regainHover(self.side)
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			return # avoid clear,draw,json_save
 
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"
-			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			self.draw()
 			self.regainHover(self.side)
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			return # avoid clear,draw,json_save
 
 
@@ -111,7 +115,6 @@ class FFLEX_UKR():
 
 		self.draw()		
 		self.regainHover(self.side)
-
 		self.controller.save_json()
 		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 
@@ -317,6 +320,23 @@ class FFLEX_UKR():
 
 	def hover(self, P_mouse, P_stored, hover_label):
 
+		# prevent auto curObject set bug
+		if self.side == None:
+			return
+
+		if self.draw_hover:
+			side_pre = self.side[0]+"_"
+			if(	hover_label == "P0_FEM_TOP" or
+				hover_label == "P0_FEM_BOT" or
+				hover_label == "P0_PEG_TOP" or
+				hover_label == "P0_PEG_BOT"
+				):
+				self.draw_tools.clear_by_tag("hover_line")
+				self.draw_tools.create_mypoint(P_mouse, "red", [self.tag, "hover_line"], hover_point=True, point_thickness=self.point_size)
+				if self.draw_labels:
+					self.draw_tools.create_mytext(P_mouse,x_offset=80, mytext=(side_pre+self.hover_text), mytag=[self.tag, "hover_line"])
+
+
 		if hover_label == "P1_top":
 			self.draw_tools.clear_by_tag("hover_line")
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
@@ -366,19 +386,21 @@ class FFLEX_UKR():
 			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
 
 	def regainHover(self, side):
-		pass
-		'''
+
 		axis_fem_top_p1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
 		axis_fem_top_p2 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
-		axis_fem_top_m1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
 
 		axis_fem_bot_p1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
 		axis_fem_bot_p2 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
-		axis_fem_bot_m1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
 
+		axis_peg_top_p1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_PEG"]["TOP"]["P1"]
+		axis_peg_top_p2 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_PEG"]["TOP"]["P2"]
 
-		fem_joint_p1 = self.dict["FFLEX_UKR"][self.op_type][side]["FEM_JOINT_LINE"]["P1"]
-		fem_joint_p2 = self.dict["FFLEX_UKR"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
+		axis_peg_bot_p1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_PEG"]["BOT"]["P1"]
+		axis_peg_bot_p2 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_PEG"]["BOT"]["P2"]
+
+		# find if P0 hovers are required
+		self.mainHoverUsingNextLabel()
 
 		# if top p1 and not p2
 		if axis_fem_top_p1 != None and axis_fem_top_p2 == None:
@@ -392,12 +414,18 @@ class FFLEX_UKR():
 			self.draw_tools.setHoverPoint(axis_fem_bot_p1)
 			self.draw_tools.setHoverBool(True)
 
-		# if fem p1 and not p2
-		if fem_joint_p1 != None and fem_joint_p2 == None:
-			self.draw_tools.setHoverPointLabel("P1_fem")
-			self.draw_tools.setHoverPoint(fem_joint_p1)
+		# if fem p1 and not p2		
+		if axis_peg_top_p1 != None and axis_peg_top_p2 == None:
+			self.draw_tools.setHoverPointLabel("P1_peg_top")
+			self.draw_tools.setHoverPoint(axis_peg_top_p1)
 			self.draw_tools.setHoverBool(True)
-		'''
+
+		# if bot p1 and not p2
+		if axis_peg_bot_p1 != None and axis_peg_bot_p2 == None:
+			self.draw_tools.setHoverPointLabel("P1_peg_bot")
+			self.draw_tools.setHoverPoint(axis_peg_bot_p1)
+			self.draw_tools.setHoverBool(True)
+
 
 
 
@@ -815,13 +843,179 @@ class FFLEX_UKR():
 
 
 
+	def checkbox_click(self,action, val):
+		print('checkbox {} val{}'.format(action,val.get()))
 
-	# def drag_start(self, tags):
-	# 	pass
-	# def drag(self, P_mouse):
-	# 	pass
-	# def drag_stop(self, P_mouse):
-	# 	pass
+		if action == "TOGGLE_LABEL":
+			if val.get() == 0:
+				self.draw_labels = False
+			elif val.get() == 1:
+				self.draw_labels = True
+			self.draw()
+
+		if action == "TOGGLE_HOVER":
+			if val.get() == 0:
+				self.draw_hover = False
+			elif val.get() == 1:
+				self.draw_hover = True
+			self.draw()
+
+
+	def mainHoverUsingNextLabel(self):
+		label = self.getNextLabel()
+
+		
+		if label == "RIGHT FEM TOP P1":
+			self.side = "RIGHT"
+			self.hover_text = "FEM_TOP"
+			self.draw_tools.setHoverPointLabel("P0_FEM_TOP")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT FEM TOP P1":
+			self.side = "LEFT"
+			self.hover_text = "FEM_TOP"
+			self.draw_tools.setHoverPointLabel("P0_FEM_TOP")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+		elif label == "RIGHT FEM BOT P1":
+			self.side = "RIGHT"
+			self.hover_text = "FEM_BOT"
+			self.draw_tools.setHoverPointLabel("P0_FEM_BOT")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT FEM BOT P1":
+			self.side = "LEFT"
+			self.hover_text = "FEM_BOT"
+			self.draw_tools.setHoverPointLabel("P0_FEM_BOT")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+		elif label == "RIGHT PEG TOP P1":
+			self.side = "RIGHT"
+			self.hover_text = "PEG_TOP"
+			self.draw_tools.setHoverPointLabel("P0_PEG_TOP")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT PEG TOP P1":
+			self.side = "LEFT"
+			self.hover_text = "PEG_TOP"
+			self.draw_tools.setHoverPointLabel("P0_PEG_TOP")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+		elif label == "RIGHT PEG BOT P1":
+			self.side = "RIGHT"
+			self.hover_text = "PEG_BOT"
+			self.draw_tools.setHoverPointLabel("P0_PEG_BOT")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT PEG BOT P1":
+			self.side = "LEFT"
+			self.hover_text = "PEG_BOT"
+			self.draw_tools.setHoverPointLabel("P0_PEG_BOT")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+
+	def obj_draw_pil(self):
+		print('draw PIL FFLEX_UKR')
+
+
+		self.point_size = self.controller.getViewPointSize()
+
+		# loop left and right
+		for side in ["LEFT","RIGHT"]:
+
+			isFemTop 	= False
+			isFemBot 	= False
+			isPegTop 	= False
+			isPegBot 	= False
+
+
+			axis_fem_top_m1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
+			axis_fem_bot_m1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
+
+			axis_peg_top_m1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_PEG"]["TOP"]["M1"]
+			axis_peg_bot_m1 = self.dict["FFLEX_UKR"][self.op_type][side]["AXIS_PEG"]["BOT"]["M1"]
+
+		
+
+
+			# FEM AXIS
+			# TOP
+			if axis_fem_top_m1 != None:
+				isFemTop = True				
+			# BOT			
+			if axis_fem_bot_m1 != None:
+				isFemBot = True
+
+
+			# PEG AXIS
+			# TOP			
+			if axis_peg_top_m1 != None:
+				isPegTop = True
+			# BOT			
+			if axis_peg_bot_m1 != None:
+				isPegBot = True
+
+			
+
+			# draw the axis
+			if isFemTop and isFemBot:			 
+
+				
+				U_m1, D_m1 = self.draw_tools.retPointsUpDown(axis_fem_top_m1, axis_fem_bot_m1)
+
+				if isPegTop and isPegBot:
+					U_peg_m1, D_peg_m1 = self.draw_tools.retPointsUpDown(axis_peg_top_m1, axis_peg_bot_m1)
+
+
+					p_int = self.draw_tools.line_intersection((U_peg_m1, D_peg_m1),(U_m1, D_m1))
+
+					# angle = self.draw_tools.getSmallestAngle(D_peg_m1, p_int, D_m1)
+					fflex_ukr_angle = ""
+					multi_text = ""
+					p_draw = D_peg_m1
+					xoffset = 250
+					yoffset = 0
+
+					# intersection point is above
+					if(self.draw_tools.retIsPointUp(p_int, D_peg_m1)):
+						# draw 
+						self.draw_tools.pil_create_mypoint(D_m1, "orange", point_thickness=self.point_size)
+						self.draw_tools.pil_create_myline(p_int, D_m1)
+
+						self.draw_tools.pil_create_mypoint(D_peg_m1, "orange", point_thickness=self.point_size)
+						self.draw_tools.pil_create_myline(p_int, D_peg_m1)
+
+						if side == "LEFT":
+							fflex_ukr_angle = self.draw_tools.pil_create_myAngle(D_m1, p_int, D_peg_m1)
+							multi_text = 'FFLEX: {0:.2f}'.format(fflex_ukr_angle)
+							xoffset = -1*(xoffset + self.draw_tools.pil_get_multiline_text_size(multi_text))
+
+
+						elif side == "RIGHT":
+							fflex_ukr_angle = self.draw_tools.pil_create_myAngle(D_peg_m1, p_int, D_m1)
+							multi_text = 'FFLEX: {0:.2f}'.format(fflex_ukr_angle)
+
+					else:
+						self.draw_tools.pil_create_mypoint(D_m1, "orange", point_thickness=self.point_size)
+						self.draw_tools.pil_create_myline(p_int, D_m1)
+
+						self.draw_tools.pil_create_mypoint(U_peg_m1, "orange", point_thickness=self.point_size)
+						self.draw_tools.pil_create_myline(p_int, U_peg_m1)
+
+
+					# p_draw is assigned correctly, proceed				
+					x1,y1,x2,y2 = self.draw_tools.pil_get_text_bbox(p_draw, multi_text, x_offset=xoffset, y_offset=yoffset)
+					self.draw_tools.pil_draw_rect([x1,y1,x2,y2], padding=20)
+					self.draw_tools.pil_create_multiline_text(p_draw, multi_text, x_offset=xoffset, y_offset=yoffset, color=(255,255,255,255))
+
+
+
+
+
 
 
 		

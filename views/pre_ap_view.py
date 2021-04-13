@@ -65,11 +65,11 @@ class PRE_AP_View(tk.Frame):
 
 		# create menus
 		self.menus = {}
-		for M in (
-					UNI_TIB_VAL_Menu,
+		for M in (					
 					UNI_FEM_VAL_Menu,
 					ALPHA_Menu,
-					BETA_Menu
+					BETA_Menu,
+					UNI_TIB_VAL_Menu
 				):
 			page_name = M.__name__
 			menu = M(parent=self.navbar, controller=self)
@@ -82,11 +82,11 @@ class PRE_AP_View(tk.Frame):
 
 
 		self.objects = {}
-		for Obj in (
-					UNI_TIB_VAL,
+		for Obj in (					
 					UNI_FEM_VAL,
 					ALPHA,
-					BETA
+					BETA,
+					UNI_TIB_VAL
 				):
 			obj_name = Obj.__name__
 			# print(obj_name)
@@ -147,6 +147,9 @@ class PRE_AP_View(tk.Frame):
 			for obj in self.objects:			
 				self.objects[obj].update_canvas(self.canvas)
 
+			# auto-set curObject to UNI_TIB_VAL
+			self.canvas.setObject(self.objects["UNI_TIB_VAL"])
+
 			# save to json for future sessions
 			# self.master_dict["IMAGES"]["PRE-AP"] = image
 			self.master_dict["IMAGES"]["PRE-AP"] = rel_path
@@ -181,6 +184,9 @@ class PRE_AP_View(tk.Frame):
 			# update canvas object for children
 			for obj in self.objects:			
 				self.objects[obj].update_canvas(self.canvas)
+
+			# auto-set curObject to UNI_TIB_VAL
+			self.canvas.setObject(self.objects["UNI_TIB_VAL"])
 
 
 	def unsetObjs(self, obj_name):

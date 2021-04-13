@@ -157,13 +157,12 @@ class MAIN:
 		self.draw()
 
 
-
-
 	# save dictionary to file
 	def saveDict(self):
 		pass
 		# with open('patient.json', 'w') as fp:
 		# 	json.dump(self.dict, fp, indent=4)		
+
 
 	# menu button clicks are routed here
 	def menu_btn_click(self, action):
@@ -371,7 +370,6 @@ class MAIN:
 		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 
 
-
 	def getNextLabel(self):
 
 		if self.side != None:
@@ -434,7 +432,6 @@ class MAIN:
 		return None
 
 
- 
 	def addDict(self, event):
 
 		for item in self.dict["MAIN"][self.op_type][self.side]:
@@ -546,8 +543,6 @@ class MAIN:
 					return True
 
 		return False				
-
-	
 
 
 	def draw(self):
@@ -669,18 +664,19 @@ class MAIN:
 				# 			# self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side][item]["P2"], x_offset=80, mytext=(side_pre+item), mytag=[self.tag, side, "ANKLE_LINE"], color="blue")
 				
 
-
 	def update_canvas(self, draw_tools):
 		self.draw_tools = draw_tools
 
 
 	def hover(self, P_mouse, P_stored, hover_label):
 
+		# prevent auto curObject set bug
+		if self.side == None:
+			return
+
 
 		if self.draw_hover:
-
 			side_pre = self.side[0]+"_"
-
 
 			if(	hover_label == "P0_HIP" or
 				hover_label == "P0_NECK_AXIS" or
@@ -703,7 +699,6 @@ class MAIN:
 					self.draw_tools.create_mytext(P_mouse,x_offset=80, mytext=(side_pre+self.hover_text), mytag=[self.tag, "hover_line"])
 
 
-		
 		if(	hover_label == "P1_ANKLE" or
 			hover_label == "P1_MNSA" or
 			hover_label == "P1_VCA" or
@@ -931,9 +926,6 @@ class MAIN:
 		# 	self.draw_tools.setHoverBool(False)
 
 
-
-
-
 	def regainHover(self, side):
 		p1_ankle = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P1"]
 		p2_ankle = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]
@@ -988,10 +980,12 @@ class MAIN:
 			self.draw_tools.setHoverBool(True)
 		# elif p1_axis_tib_bot != None and p2_axis_tib_bot == None:
 
+
 	def escapeObjFunc(self):
 		self.side = None
 		self.draw_tools.setHoverPointLabel(None)
 		self.draw_tools.setHoverBool(False)	
+
 
 	def update_dict(self, master_dict):
 		self.dict = master_dict
@@ -1070,7 +1064,6 @@ class MAIN:
 			return
 
 
-
 	def drag_start(self, tags):
 		tags.remove('token')
 		tags.remove('current')
@@ -1080,7 +1073,7 @@ class MAIN:
 
 		side = ""
 		item = ""
-		topbot = ""		
+		topbot = ""
 
 		# find side
 		if "LEFT" in tags:
@@ -1204,6 +1197,7 @@ class MAIN:
 				self.drag_label = "P2_AXIS_TIB_"+topbot
 				self.drag_side 	= side
 
+
 	def drag(self, P_mouse):
 
 
@@ -1254,6 +1248,7 @@ class MAIN:
 		# self.drag_label = "P1_AXIS_TIB_"+topbot
 		# self.drag_label = "P2_AXIS_TIB_"+topbot
 		# pass
+
 
 	def drag_stop(self, P_mouse):
 
@@ -1489,7 +1484,6 @@ class MAIN:
 				self.dict["EXCEL"][self.op_type]["RIGHT"][key] = None
 
 
-
 	def common_draw_func(self, item, side):
 		item_type = self.dict["MAIN"][self.op_type][side][item]["type"]
 		side_pre = side[0]+"_" # R/L
@@ -1629,13 +1623,6 @@ class MAIN:
 						self.draw_tools.create_mytext(self.draw_tools.getLineSegmentByPercentage(0.7, L_mad, R_mad), y_offset=10, mytext="2", mytag=[self.tag, side, "MAD_DIV_PTS"], color="blue")
 						self.draw_tools.create_mytext(self.draw_tools.getLineSegmentByPercentage(0.9, L_mad, R_mad), y_offset=10, mytext="1", mytag=[self.tag, side, "MAD_DIV_PTS"], color="blue")
 
+
 	def drawFromMain(self):
 		self.controller.calculateExcel()
-
-
-
-
-
-
-
-

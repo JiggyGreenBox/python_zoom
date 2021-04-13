@@ -17,6 +17,8 @@ class ISR():
 		self.checkMasterDict()
 
 		self.point_size = None
+		self.draw_labels = True
+		self.draw_hover = True
 
 
 	def click(self, event):
@@ -42,14 +44,16 @@ class ISR():
 		print(action)
 		if action == "SET-LEFT":
 			self.side = "LEFT"
-			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+			self.draw()
 			self.regainHover(self.side)
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			return # avoid clear,draw,json_save
 
 		if action == "SET-RIGHT":
-			self.side = "RIGHT"			
+			self.side = "RIGHT"		
+			self.draw()
+			self.regainHover(self.side)	
 			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
-			self.regainHover(self.side)
 			return # avoid clear,draw,json_save
 
 
@@ -85,7 +89,6 @@ class ISR():
 
 		self.draw()
 		self.regainHover(self.side)
-
 		self.controller.save_json()
 		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)			
 
@@ -249,9 +252,27 @@ class ISR():
 
 	def hover(self, P_mouse, P_stored, hover_label):
 
+		# prevent auto curObject set bug
+		if self.side == None:
+			return
+
+
+		if self.draw_hover:
+			side_pre = self.side[0]+"_"
+			if(	hover_label == "P0_P1" or
+				hover_label == "P0_P2" or
+				hover_label == "P0_P3"
+				):
+				self.draw_tools.clear_by_tag("hover_line")
+				self.draw_tools.create_mypoint(P_mouse, "red", [self.tag, "hover_line"], hover_point=True, point_thickness=self.point_size)
+				if self.draw_labels:
+					self.draw_tools.create_mytext(P_mouse,x_offset=80, mytext=(side_pre+self.hover_text), mytag=[self.tag, "hover_line"])
+
+
 		if hover_label == "P1":
 			self.draw_tools.clear_by_tag("hover_line")
 			self.draw_tools.create_myline(P_stored, P_mouse, "hover_line")
+
 
 		if hover_label == "P2":
 			self.draw_tools.clear_by_tag("hover_line")
@@ -265,8 +286,14 @@ class ISR():
 		p2 = self.dict["ISR"][self.op_type][side]["P2"]["P1"]
 		p3 = self.dict["ISR"][self.op_type][side]["P3"]["P1"]
 
+
+		# find if P0 hovers are required
+		self.mainHoverUsingNextLabel()
+
 		count, p_hover = self.getPointCount(side)
 		# print(count)
+
+		
 
 		if count == 1:
 			self.draw_tools.setHoverPoint(p_hover)
@@ -284,10 +311,12 @@ class ISR():
 			self.draw_tools.setHoverBool(True)
 			self.draw_tools.setHoverPointLabel("P2")
 
+		# # if count == 3 or count == 0:
+		# if count == 3 or count == 0:
+		# 	self.draw_tools.setHoverBool(False)
+		# 	self.draw_tools.setHoverPointLabel(None)
 
-		if count == 3 or count == 0:
-			self.draw_tools.setHoverBool(False)
-			self.draw_tools.setHoverPointLabel(None)
+		
 
 	def escapeObjFunc(self):
 		self.side = None
@@ -371,10 +400,6 @@ class ISR():
 				self.draw_tools.clear_by_tag("drag_line")				
 				self.draw_tools.create_myline(self.drag_point, P_mouse, "drag_line")
 			
-			
-
-
-
 
 	def drag_stop(self, P_mouse):
 		self.draw_tools.clear_by_tag("drag_line")
@@ -426,3 +451,49 @@ class ISR():
 		self.draw_tools.setHoverPointLabel(None)
 		self.draw_tools.setHoverBool(False)
 		self.draw_tools.clear_by_tag(self.tag)
+
+
+	def checkbox_click(self,action, val):
+		print('checkbox {} val{}'.format(action,val.get()))
+
+		if action == "TOGGLE_LABEL":
+			if val.get() == 0:
+				self.draw_labels = False
+			elif val.get() == 1:
+				self.draw_labels = True
+			self.draw()
+
+		if action == "TOGGLE_HOVER":
+			if val.get() == 0:
+				self.draw_hover = False
+			elif val.get() == 1:
+				self.draw_hover = True
+			self.draw()
+
+
+	def mainHoverUsingNextLabel(self):
+		label = self.getNextLabel()
+
+		if label == "RIGHT P1":
+			self.side = "RIGHT"
+			self.hover_text = "P1"
+			self.draw_tools.setHoverPointLabel("P0_P1")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+
+		if label == "RIGHT P2":
+			self.side = "RIGHT"
+			self.hover_text = "P2"
+			self.draw_tools.setHoverPointLabel("P0_P2")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+
+
+		if label == "RIGHT P3":
+			self.side = "RIGHT"
+			self.hover_text = "P3"
+			self.draw_tools.setHoverPointLabel("P0_P3")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)

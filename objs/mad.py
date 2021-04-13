@@ -321,6 +321,8 @@ class MAD():
 
 
 			if R_val in ['0','1','2','3','4','5','c','C']:
+				if R_val == "c":
+					R_val = "C"
 				# overwrite allowed here
 				self.dict["EXCEL"][self.op_type]["RIGHT"]["HASDATA"] = True
 				self.dict["EXCEL"][self.op_type]["RIGHT"]["MAD"]	 = R_val
@@ -330,6 +332,8 @@ class MAD():
 				return
 
 			if L_val in ['0','1','2','3','4','5','c','C']:
+				if L_val == "c":
+					L_val = "C"
 				# overwrite allowed here
 				self.dict["EXCEL"][self.op_type]["LEFT"]["HASDATA"] = True
 				self.dict["EXCEL"][self.op_type]["LEFT"]["MAD"]	 	= L_val

@@ -21,6 +21,8 @@ class FFLEX():
 		self.drag_side 	= None
 
 		self.point_size = None
+		self.draw_labels = True
+		self.draw_hover = True
 
 	def click(self, event):
 		# print("click from "+self.name)
@@ -29,7 +31,9 @@ class FFLEX():
 			print("please choose side")
 			self.controller.warningBox("Please select a Side")
 		else:
-			ret =  self.addDict(event)			
+			ret =  self.addDict(event)
+			# find if P0 hovers are required
+			self.mainHoverUsingNextLabel()
 			if ret:
 				self.controller.save_json()
 				# pass
@@ -43,17 +47,17 @@ class FFLEX():
 	def menu_btn_click(self, action):
 		print(action)
 		if action == "SET-LEFT":
-			self.side = "LEFT"
-			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+			self.side = "LEFT"			
 			self.draw()
 			self.regainHover(self.side)
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			return # avoid clear,draw,json_save
 
 		if action == "SET-RIGHT":
-			self.side = "RIGHT"
-			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+			self.side = "RIGHT"			
 			self.draw()
 			self.regainHover(self.side)
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			return # avoid clear,draw,json_save
 
 
@@ -97,7 +101,6 @@ class FFLEX():
 		
 		self.draw()		
 		self.regainHover(self.side)
-
 		self.controller.save_json()
 		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 
@@ -221,6 +224,21 @@ class FFLEX():
 
 	def hover(self, P_mouse, P_stored, hover_label):
 
+		# prevent auto curObject set bug
+		if self.side == None:
+			return
+
+		if self.draw_hover:
+			side_pre = self.side[0]+"_"
+			if(	hover_label == "P0_AXIS_FEM" or
+				hover_label == "P0_FEM_JOINT_LINE"
+				):
+				self.draw_tools.clear_by_tag("hover_line")
+				self.draw_tools.create_mypoint(P_mouse, "red", [self.tag, "hover_line"], hover_point=True, point_thickness=self.point_size)
+				if self.draw_labels:
+					self.draw_tools.create_mytext(P_mouse,x_offset=80, mytext=(side_pre+self.hover_text), mytag=[self.tag, "hover_line"])
+
+
 		if hover_label == "P1_top":
 			self.draw_tools.clear_by_tag("hover_line")
 			m = self.draw_tools.midpoint(P_stored, P_mouse)
@@ -269,6 +287,9 @@ class FFLEX():
 
 		fem_joint_p1 = self.dict["FFLEX"][self.op_type][side]["FEM_JOINT_LINE"]["P1"]
 		fem_joint_p2 = self.dict["FFLEX"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
+
+		# find if P0 hovers are required
+		self.mainHoverUsingNextLabel()
 
 		# if top p1 and not p2
 		if axis_fem_top_p1 != None and axis_fem_top_p2 == None:
@@ -598,5 +619,138 @@ class FFLEX():
 	def unset(self):
 		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)
+
+
+	def checkbox_click(self,action, val):
+		print('checkbox {} val{}'.format(action,val.get()))
+
+		if action == "TOGGLE_LABEL":
+			if val.get() == 0:
+				self.draw_labels = False
+			elif val.get() == 1:
+				self.draw_labels = True
+			self.draw()
+
+		if action == "TOGGLE_HOVER":
+			if val.get() == 0:
+				self.draw_hover = False
+			elif val.get() == 1:
+				self.draw_hover = True
+			self.draw()
+
+
+	def mainHoverUsingNextLabel(self):
+		label = self.getNextLabel()
+		
+		if label == "RIGHT AXIS_FEM P1":
+			self.side = "RIGHT"
+			self.hover_text = "AXIS_FEM"
+			self.draw_tools.setHoverPointLabel("P0_AXIS_FEM")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT AXIS_FEM P1":
+			self.side = "LEFT"
+			self.hover_text = "AXIS_FEM"
+			self.draw_tools.setHoverPointLabel("P0_AXIS_FEM")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+		elif label == "RIGHT FEM_JOINT_LINE P1":
+			self.side = "RIGHT"
+			self.hover_text = "FEM_JOINT_LINE"
+			self.draw_tools.setHoverPointLabel("P0_FEM_JOINT_LINE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT FEM_JOINT_LINE P1":
+			self.side = "LEFT"
+			self.hover_text = "FEM_JOINT_LINE"
+			self.draw_tools.setHoverPointLabel("P0_FEM_JOINT_LINE")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+
+
+	def obj_draw_pil(self):
+		print('draw PIL FFLEX')
+
+		# have to check if FFLEX / FFLEX-UKR
+
+		self.point_size = self.controller.getViewPointSize()
+
+		# loop left and right
+		for side in ["LEFT","RIGHT"]:
+
+			isFemTop 	= False
+			isFemBot 	= False
+			isFemJoint 	= False
+
+
+			axis_fem_top_m1 = self.dict["FFLEX"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
+			axis_fem_bot_m1 = self.dict["FFLEX"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
+
+
+			fem_joint_p1 = self.dict["FFLEX"][self.op_type][side]["FEM_JOINT_LINE"]["P1"]
+			fem_joint_p2 = self.dict["FFLEX"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
+
+
+		
+
+
+			# TIB AXIS
+			# TOP
+			if axis_fem_top_m1 != None:
+				isFemTop = True
+			# BOT
+			if axis_fem_bot_m1 != None:
+				isFemBot = True			
+
+			if fem_joint_p1 != None and fem_joint_p2 != None:
+				isFemJoint = True
+
+
+			
+
+			
+
+			# draw the axis
+			if isFemTop and isFemBot and isFemJoint:
+
+				U_m1, D_m1 	= self.draw_tools.retPointsUpDown(axis_fem_top_m1, axis_fem_bot_m1)
+				p_int 		= self.draw_tools.line_intersection((U_m1, D_m1), (fem_joint_p1, fem_joint_p2))
+				L_p, R_p 	= self.draw_tools.retPointsLeftRight(fem_joint_p1,fem_joint_p2)
+
+				fflex_angle = ""
+				multi_text = ""
+				p_draw = None
+				xoffset = 100
+				yoffset = 0
+
+
+				self.draw_tools.pil_create_mypoint(U_m1, "orange", point_thickness=self.point_size)
+				self.draw_tools.pil_create_myline(p_int, U_m1)
+
+
+				if side == "RIGHT":					
+					fflex_angle = self.draw_tools.pil_create_myAngle(U_m1, p_int, R_p)
+					multi_text = 'FFLEX: {0:.2f}'.format(fflex_angle)
+					self.draw_tools.pil_create_myline(p_int, R_p)
+					self.draw_tools.pil_create_mypoint(R_p, "orange", point_thickness=self.point_size)
+					p_draw = R_p
+
+				elif side == "LEFT":
+					fflex_angle = self.draw_tools.pil_create_myAngle(L_p, p_int, U_m1)
+					multi_text = 'FFLEX: {0:.2f}'.format(fflex_angle)
+					self.draw_tools.pil_create_myline(p_int, L_p)
+					self.draw_tools.pil_create_mypoint(L_p, "orange", point_thickness=self.point_size)
+					xoffset = -1*(xoffset + self.draw_tools.pil_get_multiline_text_size(multi_text))
+					p_draw = L_p
+
+				
+				# p_draw is assigned correctly, proceed
+				x1,y1,x2,y2 = self.draw_tools.pil_get_text_bbox(p_draw, multi_text, x_offset=xoffset, y_offset=yoffset)
+				self.draw_tools.pil_draw_rect([x1,y1,x2,y2], padding=20)
+				self.draw_tools.pil_create_multiline_text(p_draw, multi_text, x_offset=xoffset, y_offset=yoffset, color=(255,255,255,255))
+
+
 
 		

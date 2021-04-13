@@ -43,7 +43,10 @@ class MainWindow(ttk.Frame):
 	def __init__(self, mainframe):
 		""" Initialize the main Frame """
 		ttk.Frame.__init__(self, master=mainframe)
-		self.master.title('Knee Software v0.4')
+
+		self.app_version = "v0.5"
+
+		self.master.title('Knee Software ' + self.app_version)
 		# self.master.geometry('800x600')  # size of the main window
 		self.master.geometry('1000x730')  # size of the main window
 		
@@ -70,6 +73,7 @@ class MainWindow(ttk.Frame):
 		filemenu = Menu(menubar,tearoff=0)
 		filemenu.add_command(label="Rotate 90", command=self.rotateImage)
 		filemenu.add_command(label="Reset Image", command=self.resetImage)
+		filemenu.add_command(label="Export Images", command=self.app_draw_pil)		
 		filemenu.add_command(label="Export Excel", command=self.exportExcel)
 		menubar.add_cascade(label="File", menu=filemenu)
 		self.master.config(menu=menubar)
@@ -430,6 +434,7 @@ class MainWindow(ttk.Frame):
 
 			# check if image is set
 			img = self.views[self.cur_view].med_image
+			print(img)
 			if img != "":
 				img_rt_90 = self.rotate_img(img, 90)
 				img_rt_90.save(img)
@@ -673,9 +678,9 @@ class MainWindow(ttk.Frame):
 			afta.append(self.master_dict["EXCEL"]["PRE-OP"][side]["aFTA"])
 			mldfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["mLDFA"])
 			aldfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["aLDFA"])
-			eadfa.append(x)
-			eadfps.append(x)
-			eadfds.append(x)
+			eadfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["EADFA"])
+			eadfps.append(self.master_dict["EXCEL"]["PRE-OP"][side]["EADFPS"])
+			eadfds.append(self.master_dict["EXCEL"]["PRE-OP"][side]["EADFDS"])
 			jda.append(x)
 			tamd.append(self.master_dict["EXCEL"]["PRE-OP"][side]["TAMD"])
 			mpta.append(self.master_dict["EXCEL"]["PRE-OP"][side]["MPTA"])
@@ -702,9 +707,9 @@ class MainWindow(ttk.Frame):
 			post_afta.append(self.master_dict["EXCEL"]["POST-OP"][side]["aFTA"])
 			post_mldfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["mLDFA"])
 			post_aldfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["aLDFA"])
-			post_eadfa.append(x)
-			post_eadfps.append(x)
-			post_eadfds.append(x)
+			post_eadfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["EADFA"])
+			post_eadfps.append(self.master_dict["EXCEL"]["POST-OP"][side]["EADFPS"])
+			post_eadfds.append(self.master_dict["EXCEL"]["POST-OP"][side]["EADFDS"])
 			post_jda.append(x)
 			post_tamd.append(self.master_dict["EXCEL"]["POST-OP"][side]["TAMD"])
 			post_mpta.append(self.master_dict["EXCEL"]["POST-OP"][side]["MPTA"])
@@ -763,8 +768,34 @@ class MainWindow(ttk.Frame):
 
 		page_name = page_name.replace("-", "_")	+ "_View"			
 		view = self.views[page_name]
+		view.resizeRedraw()
+
+	# draw PIL images for presentations
+	def app_draw_pil(self):
+		try:
+			print('app.py draw_presentation_images')
+			# view = self.views["PRE_SCANNO_View"]
+			# view.view_draw_pil()
+
+			for key in ["PRE_SCANNO_View", "POST_SCANNO_View", "PRE_LAT_View", "POST_LAT_View", "PRE_SKY_View", "POST_SKY_View","POST_AP_View"]:
+				view = self.views[key]
+				view.view_draw_pil()
+							
+		except Exception as e:
+			raise e
+
+	# try ps, access view canvas
+	def app_tryPsFile(self):
+		print('test')
+		return
+		try:
+			print('app.py app_tryPsFile')
+			view = self.views["PRE_SCANNO_View"]
+			view.view_tryPsFile()			
+		except Exception as e:
+			raise e
 		
-		view.resizeRedraw()		
+
 
 
 app = MainWindow(tk.Tk())

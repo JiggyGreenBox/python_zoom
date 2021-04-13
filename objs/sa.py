@@ -21,6 +21,9 @@ class SA():
 		self.drag_side 	= None
 
 		self.point_size = None
+		self.draw_labels = True
+		self.draw_hover = True
+
 
 	def click(self, event):
 		# print("click from "+self.name)
@@ -30,6 +33,8 @@ class SA():
 			self.controller.warningBox("Please select a Side")
 		else:
 			ret =  self.addDict(event)
+			# find if P0 hovers are required
+			self.mainHoverUsingNextLabel()
 			if ret:				
 				self.controller.save_json()
 				# pass
@@ -43,14 +48,16 @@ class SA():
 		print(action)
 		if action == "SET-LEFT":
 			self.side = "LEFT"
-			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+			self.draw()
 			self.regainHover(self.side)
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			return
 
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"
-			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+			self.draw()			
 			self.regainHover(self.side)
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 			return
 
 
@@ -82,11 +89,12 @@ class SA():
 		# delete excel data from pat.json
 		self.dict["EXCEL"][self.op_type][self.side]["SA"] = None
 
-		self.controller.save_json()
 		self.draw()
 		self.regainHover(self.side)
+		self.controller.save_json()
 		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 	
+
 	def draw(self):
 
 		self.draw_tools.clear_by_tag(self.tag)
@@ -129,8 +137,6 @@ class SA():
 
 					# save after insert
 					self.controller.save_json()
-
-
 
 
 	def checkMasterDict(self):
@@ -185,8 +191,6 @@ class SA():
 			return (self.side + " Done")
 
 		return None	
-
-
 
 	'''
 	def addDict(self, event):
@@ -261,13 +265,28 @@ class SA():
 
 	def hover(self, P_mouse, P_stored, hover_label):
 
+		# prevent auto curObject set bug
+		if self.side == None:
+			return
+
+		if self.draw_hover:
+			side_pre = self.side[0]+"_"
+			if hover_label == "P0_P1":
+				self.draw_tools.clear_by_tag("hover_line")
+				self.draw_tools.create_mypoint(P_mouse, "red", [self.tag, "hover_line"], hover_point=True, point_thickness=self.point_size)
+				if self.draw_labels:
+					self.draw_tools.create_mytext(P_mouse,x_offset=80, mytext=(side_pre+self.hover_text), mytag=[self.tag, "hover_line"])
+
+
 		if hover_label == "P1":
 			self.draw_tools.clear_by_tag("hover_line")
 			self.draw_tools.create_myline(P_stored, P_mouse, "hover_line")
 
+
 		if hover_label == "P2":
 			self.draw_tools.clear_by_tag("hover_line")
 			self.draw_tools.create_myline(P_stored, P_mouse, "hover_line")
+
 
 		if hover_label == "P_middle" and self.side != None:
 			p1 = self.dict["SA"][self.op_type][self.side]["P1"]["P1"]			
@@ -276,11 +295,15 @@ class SA():
 			self.draw_tools.create_myline(p1, P_mouse, "hover_line")
 			self.draw_tools.create_myline(p3, P_mouse, "hover_line")
 
+
 	def regainHover(self, side):
 		
 		p1 = self.dict["SA"][self.op_type][side]["P1"]["P1"]
 		p2 = self.dict["SA"][self.op_type][side]["P2"]["P1"]
 		p3 = self.dict["SA"][self.op_type][side]["P3"]["P1"]
+
+		# find if P0 hovers are required
+		self.mainHoverUsingNextLabel()
 
 		count, p_hover = self.getPointCount(side)
 		
@@ -310,10 +333,11 @@ class SA():
 				self.draw_tools.setHoverBool(True)
 				self.draw_tools.setHoverPointLabel("P2")
 
-
-		if count == 3 or count == 0:
+		# if count == 3 or count == 0:
+		if count == 3:
 			self.draw_tools.setHoverBool(False)
 			self.draw_tools.setHoverPointLabel(None)
+
 
 	def getPointCount(self, side):
 		p1 = self.dict["SA"][self.op_type][side]["P1"]["P1"]
@@ -330,12 +354,28 @@ class SA():
 
 		return count, p_hover
 
+
 	def escapeObjFunc(self):
 		self.side = None
 		self.draw_tools.setHoverPointLabel(None)
 		self.draw_tools.setHoverBool(False)
 
 
+	def mainHoverUsingNextLabel(self):
+		label = self.getNextLabel()
+
+		if label == "RIGHT P1":
+			self.side = "RIGHT"
+			self.hover_text = "P1"
+			self.draw_tools.setHoverPointLabel("P0_P1")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT P1":
+			self.side = "LEFT"
+			self.hover_text = "P1"
+			self.draw_tools.setHoverPointLabel("P0_P1")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
 
 
 	def drag_start(self, tags):
@@ -416,7 +456,6 @@ class SA():
 				self.draw_tools.create_myline(p3, P_mouse, "drag_line")
 
 
-
 	def drag_stop(self, P_mouse):
 		self.draw_tools.clear_by_tag("drag_line")
 		if self.drag_label == "P1":
@@ -438,7 +477,6 @@ class SA():
 			self.draw()
 
 
-
 	def update_canvas(self, draw_tools):
 		self.draw_tools = draw_tools
 
@@ -450,3 +488,21 @@ class SA():
 	def unset(self):
 		# print("unset from "+self.name)
 		self.draw_tools.clear_by_tag(self.tag)
+
+
+	def checkbox_click(self,action, val):
+		print('checkbox {} val{}'.format(action,val.get()))
+
+		if action == "TOGGLE_LABEL":
+			if val.get() == 0:
+				self.draw_labels = False
+			elif val.get() == 1:
+				self.draw_labels = True
+			self.draw()
+
+		if action == "TOGGLE_HOVER":
+			if val.get() == 0:
+				self.draw_hover = False
+			elif val.get() == 1:
+				self.draw_hover = True
+			self.draw()

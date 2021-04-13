@@ -442,9 +442,11 @@ class ACOR():
 
 
 	def hover(self, P_mouse, P_stored, hover_label):
+		# prevent auto curObject set bug
+		if self.side == None:
+			return
 		
-		
-
+	
 		if hover_label == "GUIDE_P1":
 
 			p_top, p_bot = self.getFemGuideRayPoints(P_stored, P_mouse)

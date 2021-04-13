@@ -25,6 +25,9 @@ from tkinter import messagebox
 # get relpath
 import os
 
+# make export dir if not exist
+from pathlib import Path
+
 
 
 class POST_SKY_View(tk.Frame):
@@ -62,10 +65,10 @@ class POST_SKY_View(tk.Frame):
 
 		# create menus
 		self.menus = {}
-		for M in (
-					SA_Menu,
+		for M in (					
 					P_TILT_Menu,
-					PPBA_Menu
+					PPBA_Menu,
+					SA_Menu
 				):
 			page_name = M.__name__
 			menu = M(parent=self.navbar, controller=self)
@@ -78,10 +81,10 @@ class POST_SKY_View(tk.Frame):
 
 
 		self.objects = {}
-		for Obj in (
-					SA,
+		for Obj in (					
 					P_TILT,
-					PPBA
+					PPBA,
+					SA
 				):
 			obj_name = Obj.__name__
 			# print(obj_name)
@@ -135,6 +138,9 @@ class POST_SKY_View(tk.Frame):
 			for obj in self.objects:			
 				self.objects[obj].update_canvas(self.canvas)
 
+			# auto-set curObject to SA
+			self.canvas.setObject(self.objects["SA"])
+
 
 
 	def open_image_loc(self):
@@ -162,6 +168,9 @@ class POST_SKY_View(tk.Frame):
 			# update canvas object for children
 			for obj in self.objects:			
 				self.objects[obj].update_canvas(self.canvas)
+
+			# auto-set curObject to SA
+			self.canvas.setObject(self.objects["SA"])
 
 			# save to json for future sessions
 			# self.master_dict["IMAGES"]["PRE-SKY"] = image
@@ -229,6 +238,30 @@ class POST_SKY_View(tk.Frame):
 	# unique for MAD
 	def getMadVals(self):
 		return self.menus["MAD_Menu"].getMadEntryVals()
+
+	def view_draw_pil(self):
+
+		print('post_sky_view.py draw_pil')
+
+		if self.canvas == "":
+			print("no canvas")
+			return
+
+		# create the pil image
+		# self.draw_tools.createPIL()
+		self.canvas.createPIL(self.med_image)
+
+		# # draw from HKA
+		self.objects["P_TILT"].obj_draw_pil()
+
+		# check if export dir exists, create if not
+		Path(self.controller.working_dir +'/export').mkdir(parents=True, exist_ok=True)
+
+		# create platform independent file path
+		file = Path(self.controller.working_dir + '/export/export_post_sky.jpg')
+
+		# # save to path
+		self.canvas.savePIL(file)
 
 
 

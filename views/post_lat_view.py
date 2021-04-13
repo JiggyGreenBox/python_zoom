@@ -30,6 +30,9 @@ from tkinter import messagebox
 # get relpath
 import os
 
+# make export dir if not exist
+from pathlib import Path
+
 
 
 class POST_LAT_View(tk.Frame):
@@ -231,3 +234,34 @@ class POST_LAT_View(tk.Frame):
 		for obj in self.objects:
 			self.objects[obj].draw()
 			self.objects[obj].unset()
+
+
+	def view_draw_pil(self):
+
+		print('post_lat_view.py draw_pil')
+
+		if self.canvas == "":
+			print("no canvas")
+			return
+
+		# create the pil image
+		# self.draw_tools.createPIL()
+		self.canvas.createPIL(self.med_image)
+
+		# draw from TSLOPE
+		self.objects["TSLOPE"].obj_draw_pil()
+
+		# draw from HKA
+		self.objects["FFLEX"].obj_draw_pil()
+
+		# draw from HKA
+		self.objects["FFLEX_UKR"].obj_draw_pil()
+
+		# check if export dir exists, create if not
+		Path(self.controller.working_dir +'/export').mkdir(parents=True, exist_ok=True)
+
+		# create platform independent file path
+		file = Path(self.controller.working_dir + '/export/export_post_lat.jpg')
+		
+		# save to path
+		self.canvas.savePIL(file)

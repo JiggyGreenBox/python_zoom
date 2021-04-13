@@ -106,7 +106,8 @@ class DETAILS_View(tk.Frame):
 		tk.Label(self, text="POST-SKY").grid(sticky="W", column=0, row=15, padx=(10,0))
 		sp8 = Spinbox(self, textvariable=self.post_sky_var, from_= 1, to = 30, width=10).grid(column=1, row=15)
 
-		tk.Label(self, text="v0.4").grid(sticky="W", row=16, pady=(30,0), padx=(10,0))
+		# tk.Label(self, text="v0.4").grid(sticky="W", row=16, pady=(30,0), padx=(10,0))
+		tk.Label(self, text=self.controller.app_version).grid(sticky="W", row=16, pady=(30,0), padx=(10,0))
 
 
 
@@ -121,13 +122,27 @@ class DETAILS_View(tk.Frame):
 		btn_stitch.grid(sticky="W", column=5, row=3)
 
 
+		btn_rot_im1 = ttk.Button(self, text="ROT 1", width=10, command=lambda: self.rotateStichImage("im1"))
+		btn_rot_im1.grid(sticky="W", column=3, row=4, padx=(80,0))
+		btn_rot_im2 = ttk.Button(self, text="ROT 2", width=10, command=lambda: self.rotateStichImage("im2"))
+		btn_rot_im2.grid(sticky="W", column=4, row=4)
+
+		# btn_stitch 	= ttk.Button(self, text="GO", width=10, command=lambda: self.draw_presentation_images())
+		# btn_stitch.grid(sticky="W", column=5, row=3)
+
+		# btn_go2 = ttk.Button(self, text="GO 2", width=10, command=lambda: self.draw_presentation_images())
+		# btn_go2.grid(sticky="W", column=3, row=4, padx=(80,0))
+
+
 		self.label1 = tk.Label(self, text="Img Name:").grid(sticky="W", column=3, row=1, padx=(80,0))
 		self.img_stitch_name = tk.Entry(self)
 		self.img_stitch_name.grid(sticky="W", column=3, row=2, padx=(80,0), columnspan=3)
 
 		# self.label2 = tk.Label(self, text="No Image Selected").grid(sticky="W", column=3, row=3, padx=(10,0))
 
-				
+		
+
+		# tk.Label(self, text="IMAGE EXPORT", font=("TkDefaultFont", 12)).grid(sticky="W", column=3, row=4, pady=(60, 10), padx=(10,0), columnspan=3)
 
 
 		# self.pre_scanno_var.set(self.master_dict["POINT_SIZES"]["PRE-SCANNO"])
@@ -345,12 +360,47 @@ class DETAILS_View(tk.Frame):
 			self.warningBox("Success")
 
 
+	def rotateStichImage(self, btn_type):
+		im_path = ""
+		if btn_type == "im1":
+			if self.im1 == "":
+				self.warningBox("Image 1 Not Selected")
+				return
+			im_path = self.controller.working_dir + "/" + self.im1
+
+		elif btn_type == "im2":
+			if self.im2 == "":
+				self.warningBox("Image 2 Not Selected")
+				return
+			im_path = self.controller.working_dir + "/" + self.im2
+
+		if im_path != "":
+			img_rt_90 = self.rotate_img(im_path, 90)
+			img_rt_90.save(im_path)
+			self.warningBox("Rotated 90")
+
+
+	def rotate_img(self, img_path, rt_degr):
+		img = Image.open(img_path)
+		return img.rotate(rt_degr, expand=1)
 
 
 
 	def warningBox(self, message):
 		'''Display a warning box with message'''
 		messagebox.showwarning("Warning", message)
+
+
+	def draw_presentation_images(self):
+		print('draw_presentation_images')
+		# pass
+		self.controller.app_draw_pil()
+
+
+	def details_tryPsFile(self):
+		print('details_tryPsFile')
+		# get into the view to access canvas
+		self.controller.app_tryPsFile()
 
 				
 				

@@ -74,69 +74,69 @@ class MAIN_Menu(tk.Frame):
 
 
 
-		button = ttk.Button(self, text="FEM KNEE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-FEM-KNEE"))
+		button = ttk.Button(self, text="DIST FEM", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-DIST-FEM"))
 		button.grid(padx=[10,10], sticky="W", column=1, row=9)
-		button = ttk.Button(self, text="FEM KNEE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-FEM-KNEE"))
+		button = ttk.Button(self, text="DIST FEM", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-DIST-FEM"))
 		button.grid(padx=[10,10], sticky="W", column=2, row=9)
 
-		button = ttk.Button(self, text="TIB KNEE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-TIB-KNEE"))
+
+
+		button = ttk.Button(self, text="FEM KNEE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-FEM-KNEE"))
 		button.grid(padx=[10,10], sticky="W", column=1, row=10)
-		button = ttk.Button(self, text="TIB KNEE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-TIB-KNEE"))
+		button = ttk.Button(self, text="FEM KNEE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-FEM-KNEE"))
 		button.grid(padx=[10,10], sticky="W", column=2, row=10)
+
+		button = ttk.Button(self, text="TIB KNEE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-TIB-KNEE"))
+		button.grid(padx=[10,10], sticky="W", column=1, row=11)
+		button = ttk.Button(self, text="TIB KNEE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-TIB-KNEE"))
+		button.grid(padx=[10,10], sticky="W", column=2, row=11)
 
 
 		button = ttk.Button(self, text="FEM J LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-FEM-JOINT-LINE"))
-		button.grid(padx=[10,10], sticky="W", column=1, row=11)
+		button.grid(padx=[10,10], sticky="W", column=1, row=12)
 		button = ttk.Button(self, text="FEM J LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-FEM-JOINT-LINE"))
-		button.grid(padx=[10,10], sticky="W", column=2, row=11)
+		button.grid(padx=[10,10], sticky="W", column=2, row=12)
 
 		button = ttk.Button(self, text="TIB J LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-TIB-JOINT-LINE"))
-		button.grid(padx=[10,10], sticky="W", column=1, row=12)
+		button.grid(padx=[10,10], sticky="W", column=1, row=13)
 		button = ttk.Button(self, text="TIB J LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-TIB-JOINT-LINE"))
-		button.grid(padx=[10,10], sticky="W", column=2, row=12)
+		button.grid(padx=[10,10], sticky="W", column=2, row=13)
+
+
+
+		button = ttk.Button(self, text="KJLO LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-KJLO-LINE"))
+		button.grid(padx=[10,10], sticky="W", column=1, row=14)
+		button = ttk.Button(self, text="KJLO LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-KJLO-LINE"))
+		button.grid(padx=[10,10], sticky="W", column=2, row=14)
+
+
+		button = ttk.Button(self, text="MAD LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-MAD-LINE"))
+		button.grid(padx=[10,10], sticky="W", column=1, row=15)
+		button = ttk.Button(self, text="MAD LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-MAD-LINE"))
+		button.grid(padx=[10,10], sticky="W", column=2, row=15)
 		
 
 		
 
 		button = ttk.Button(self, text="TIB TOP", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-TIB-TOP"))
-		button.grid(padx=[10,10], sticky="W", column=1, row=13)
+		button.grid(padx=[10,10], sticky="W", column=1, row=16)
 		button = ttk.Button(self, text="TIB TOP", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-TIB-TOP"))
-		button.grid(padx=[10,10], sticky="W", column=2, row=13)
+		button.grid(padx=[10,10], sticky="W", column=2, row=16)
 		
 		button = ttk.Button(self, text="TIB BOT", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-TIB-BOT"))
-		button.grid(padx=[10,10], sticky="W", column=1, row=14)
+		button.grid(padx=[10,10], sticky="W", column=1, row=17)
 		button = ttk.Button(self, text="TIB BOT", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-TIB-BOT"))
-		button.grid(padx=[10,10], sticky="W", column=2, row=14)
+		button.grid(padx=[10,10], sticky="W", column=2, row=17)
 
 
 
 
 		button = ttk.Button(self, text="ANKLE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-ANKLE"))
-		button.grid(padx=[10,10], sticky="W", column=1, row=15)
-		button = ttk.Button(self, text="ANKLE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-ANKLE"))
-		button.grid(padx=[10,10], sticky="W", column=2, row=15)
-
-
-		button = ttk.Button(self, text="DIST FEM", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-DIST-FEM"))
-		button.grid(padx=[10,10], sticky="W", column=1, row=16)
-		button = ttk.Button(self, text="DIST FEM", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-DIST-FEM"))
-		button.grid(padx=[10,10], sticky="W", column=2, row=16)
-
-
-		button = ttk.Button(self, text="KJLO LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-KJLO-LINE"))
-		button.grid(padx=[10,10], sticky="W", column=1, row=17)
-		button = ttk.Button(self, text="KJLO LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-KJLO-LINE"))
-		button.grid(padx=[10,10], sticky="W", column=2, row=17)
-
-		button = ttk.Button(self, text="MAD LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-MAD-LINE"))
 		button.grid(padx=[10,10], sticky="W", column=1, row=18)
-		button = ttk.Button(self, text="MAD LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-MAD-LINE"))
+		button = ttk.Button(self, text="ANKLE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-ANKLE"))
 		button.grid(padx=[10,10], sticky="W", column=2, row=18)
 
 
-		
-
-		
 
 
 		

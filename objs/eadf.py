@@ -147,9 +147,17 @@ class EADF():
 			if isEADF and isKnee:
 				eadf_top, eadf_bot = self.draw_tools.retPointsUpDown(eadf_p1, eadf_p2)
 				if side == "LEFT":						
-					angle = self.draw_tools.create_myAngle(fem_knee, eadf_bot, eadf_top, self.tag)
+					angle = self.draw_tools.create_myAngle(fem_knee, eadf_bot, eadf_top, [self.tag,"EADF_LINE"])
 				else:					
-					angle = self.draw_tools.create_myAngle(eadf_top, eadf_bot, fem_knee, self.tag)
+					angle = self.draw_tools.create_myAngle(eadf_top, eadf_bot, fem_knee, [self.tag,"EADF_LINE"])
+
+				if self.draw_labels:
+					self.draw_tools.create_mytext(eadf_p1, '{0:.2f}'.format(angle), self.tag, x_offset=60, color="blue")
+
+				if self.dict["EXCEL"][self.op_type][side]["EADFA"] == None:
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["EADFA"]	 	= '{0:.2f}'.format(angle)
+					self.controller.save_json()
 
 
 			# draw neck hip ray intersecting eadf line
@@ -170,6 +178,8 @@ class EADF():
 					self.draw_tools.create_mypoint(p_int, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 
+
+
 				if side == "LEFT":
 					p_left = self.draw_tools.line_intersection(
 						(mnsa_m1, hip),
@@ -182,6 +192,19 @@ class EADF():
 							(eadf_p1, eadf_p2))
 					self.draw_tools.create_mypoint(p_int, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
+
+				d_fps = self.draw_tools.getDistance(p_int, eadf_p1)
+				d_fds = self.draw_tools.getDistance(eadf_p1, fem_knee)
+
+				if self.dict["EXCEL"][self.op_type][side]["EADFPS"] == None:
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["EADFPS"]	= '{0:.2f}'.format(d_fps)
+					self.controller.save_json()
+
+				if self.dict["EXCEL"][self.op_type][side]["EADFDS"] == None:
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["EADFDS"]	= '{0:.2f}'.format(d_fds)
+					self.controller.save_json()
 
 
 
@@ -258,38 +281,102 @@ class EADF():
 		if action == "DEL-LEFT-EADF-LINE":
 			self.dict["EADF"][self.op_type]["LEFT"]["EADF_LINE"]["P1"] = None
 			self.dict["EADF"][self.op_type]["LEFT"]["EADF_LINE"]["P2"] = None
-			# self.dict["EXCEL"][self.op_type]["LEFT"]["MAD"] = None 	# delete excel data from pat.json
 			self.side = "LEFT"
-			self.draw()
-			self.regainHover(self.side)
-			self.controller.save_json()
+			
 
 		if action == "DEL-RIGHT-EADF-LINE":
 			self.dict["EADF"][self.op_type]["RIGHT"]["EADF_LINE"]["P1"] = None
 			self.dict["EADF"][self.op_type]["RIGHT"]["EADF_LINE"]["P2"] = None
-			# self.dict["EXCEL"][self.op_type]["RIGHT"]["MAD"] = None 	# delete excel data from pat.json
 			self.side = "RIGHT"
-			self.draw()
-			self.regainHover(self.side)
-			self.controller.save_json()
+			
 
+		# delete excel data from pat.json
+		self.dict["EXCEL"][self.op_type][self.side]["EADFA"] = None
+		self.dict["EXCEL"][self.op_type][self.side]["EADFPS"] = None
+		self.dict["EXCEL"][self.op_type][self.side]["EADFDS"] = None
+
+		self.draw()
+		self.regainHover(self.side)
+		self.controller.save_json()
 		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 
 
 	def drag_start(self, tags):
-		pass		
+		tags.remove('token')
+		tags.remove('current')
+		tags.remove(self.tag)
+		print(tags)
+		
+		side = ""
+
+		# find side
+		if "LEFT" in tags:
+			side = "LEFT"
+		elif "RIGHT" in tags:
+			side = "RIGHT"
+
+
+		# find item type
+		if "EADF_P1" in tags:			
+			self.drag_point = None
+			self.drag_label = "EADF_P1"
+			self.drag_side 	= side	
+
+		if "EADF_P2" in tags:			
+			self.drag_point = None
+			self.drag_label = "EADF_P2"
+			self.drag_side 	= side	
+
 	def drag(self, P_mouse):
-		pass
+		if self.drag_label == "EADF_P1":
+			self.draw_tools.clear_by_tag("drag_line")
+			self.draw_tools.clear_by_tag("EADF_LINE")
+
+			fem_knee 	= self.dict["MAIN"][self.op_type][self.drag_side]["FEM_KNEE"]["P1"]
+			eadf_p2 	= self.dict["EADF"][self.op_type][self.drag_side]["EADF_LINE"]["P2"]
+			if fem_knee != None:
+				self.draw_tools.create_myline(P_mouse, fem_knee, "drag_line")
+
+			if eadf_p2 != None:
+				self.draw_tools.create_myline(P_mouse, eadf_p2, "drag_line")
+
+		if self.drag_label == "EADF_P2":
+			self.draw_tools.clear_by_tag("drag_line")
+			self.draw_tools.clear_by_tag("EADF_LINE")
+			eadf_p1 = self.dict["EADF"][self.op_type][self.drag_side]["EADF_LINE"]["P1"]
+
+			if eadf_p1 != None:
+				self.draw_tools.create_myline(P_mouse, eadf_p1, "drag_line")
+
 	def drag_stop(self, P_mouse):
-		self.draw()
+		self.draw_tools.clear_by_tag("drag_line")
+		if self.drag_label == "EADF_P1":
+			self.dict["EADF"][self.op_type][self.drag_side]["EADF_LINE"]["P1"] = P_mouse
+			
+			self.dict["EXCEL"][self.op_type][self.drag_side]["EADFA"] = None
+			self.dict["EXCEL"][self.op_type][self.drag_side]["EADFPS"] = None
+			self.dict["EXCEL"][self.op_type][self.drag_side]["EADFDS"] = None
+			self.controller.save_json()
+			self.draw()
+
+		if self.drag_label == "EADF_P2":
+			self.dict["EADF"][self.op_type][self.drag_side]["EADF_LINE"]["P2"] = P_mouse
+
+			self.dict["EXCEL"][self.op_type][self.drag_side]["EADFA"] = None
+			self.dict["EXCEL"][self.op_type][self.drag_side]["EADFPS"] = None
+			self.dict["EXCEL"][self.op_type][self.drag_side]["EADFDS"] = None
+			self.controller.save_json()
+			self.draw()
+		
 
 	def hover(self, P_mouse, P_stored, hover_label):
 
+		# prevent auto curObject set bug
+		if self.side == None:
+			return
 
 		if self.draw_hover:
-
 			side_pre = self.side[0]+"_"
-
 			if	hover_label == "P0_EADF_LINE":
 				self.draw_tools.clear_by_tag("hover_line")
 				self.draw_tools.create_mypoint(P_mouse, "red", [self.tag, "hover_line"], hover_point=True, point_thickness=self.point_size)
@@ -299,9 +386,9 @@ class EADF():
 				if fem_knee != None:
 					self.draw_tools.create_myline(P_mouse, fem_knee, "hover_line")
 
-
 				if self.draw_labels:
 					self.draw_tools.create_mytext(P_mouse,x_offset=80, mytext=(side_pre+self.hover_text), mytag=[self.tag, "hover_line"])
+
 
 		if hover_label == "P1_EADF":
 			self.draw_tools.clear_by_tag("hover_line")

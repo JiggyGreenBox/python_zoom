@@ -45,6 +45,9 @@ from tkinter import messagebox
 # get relpath
 import os
 
+# make export dir if not exist
+from pathlib import Path
+
 
 
 class POST_SCANNO_View(tk.Frame):
@@ -171,6 +174,9 @@ class POST_SCANNO_View(tk.Frame):
 			for obj in self.objects:			
 				self.objects[obj].update_canvas(self.canvas)
 
+			# auto-set curObject to MAIN
+			self.canvas.setObject(self.objects["MAIN"])
+
 		# update mad value
 		self.menus["MAD_Menu"].updateMadLabels(self.master_dict["EXCEL"]["POST-OP"]["RIGHT"]["MAD"],self.master_dict["EXCEL"]["POST-OP"]["LEFT"]["MAD"])
 
@@ -211,6 +217,9 @@ class POST_SCANNO_View(tk.Frame):
 			# update canvas object for children
 			for obj in self.objects:			
 				self.objects[obj].update_canvas(self.canvas)
+
+			# auto-set curObject to MAIN
+			self.canvas.setObject(self.objects["MAIN"])
 
 			# save to json for future sessions
 			# self.master_dict["IMAGES"]["PRE-SCANNO"] = image
@@ -288,3 +297,28 @@ class POST_SCANNO_View(tk.Frame):
 	# unique for MAD
 	def getMadVals(self):
 		return self.menus["MAD_Menu"].getMadEntryVals()
+
+
+	def view_draw_pil(self):
+
+		print('post_scanno_view.py draw_pil')
+
+		if self.canvas == "":
+			print("no canvas")
+			return
+
+		# create the pil image
+		# self.draw_tools.createPIL()
+		self.canvas.createPIL(self.med_image)
+
+		# draw from HKA
+		self.objects["HKA"].obj_draw_pil()
+
+		# check if export dir exists, create if not
+		Path(self.controller.working_dir +'/export').mkdir(parents=True, exist_ok=True)
+
+		# create platform independent file path
+		file = Path(self.controller.working_dir + '/export/export_post_scanno.jpg')
+
+		# save to path
+		self.canvas.savePIL(file)

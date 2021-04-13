@@ -97,7 +97,7 @@ class UNI_TIB_VAL():
 		self.draw()
 		self.regainHover(self.side)
 		self.controller.save_json()
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)	
 
 
 
@@ -448,12 +448,13 @@ class UNI_TIB_VAL():
 
 
 	def hover(self, P_mouse, P_stored, hover_label):
-		# print(hover_label)
+		
+		# prevent auto curObject set bug
+		if self.side == None:
+			return
 
 		if self.draw_hover:
-
 			side_pre = self.side[0]+"_"
-
 			if(	hover_label == "P0_AXIS_TIB" or
 				hover_label == "P0_TIB_JOINT_LINE"
 				):
