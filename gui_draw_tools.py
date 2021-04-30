@@ -50,6 +50,8 @@ class DrawTools(CanvasImage):
 		self.pil_draw = None
 		# self.pil_font = None
 		self.pil_font = ImageFont.truetype('Roboto-Medium.ttf', 30)
+		# self.pil_font = (self.resource_path('Roboto-Medium.ttf'), 30)
+		# ImageFont.load_default()
 
 
 	def setObject(self, myobject):
@@ -658,6 +660,10 @@ class DrawTools(CanvasImage):
 
 		self.pil_draw.rectangle(xy, fill=fill)
 
+	# required when images are of low resolution
+	def changePILfontsize(self, newfontsize):
+		self.pil_font = ImageFont.truetype('Roboto-Medium.ttf', newfontsize)
+
 
 
 	# ps file attempt
@@ -694,6 +700,14 @@ class DrawTools(CanvasImage):
 
 		return ydiff
 
+	# for fonts
+	def resource_path(relative_path):
+		try:
+			base_path = sys._MEIPASS
+		except Exception:
+			base_path = os.path.abspath(".")
+
+		return os.path.join(base_path, relative_path)
 
 
 

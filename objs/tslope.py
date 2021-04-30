@@ -194,18 +194,18 @@ class TSLOPE():
 				# find and draw angles
 				if side == "LEFT":
 					angle = self.draw_tools.create_myAngle(D_m1, p_int, L_p1, self.tag,radius=30)
-					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, y_offset=60)
+					self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, x_offset=-60, y_offset=60)
 
 				if side == "RIGHT":
 					angle = self.draw_tools.create_myAngle(R_p1, p_int, D_m1, self.tag,radius=30)
-					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60, y_offset=60)
+					self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, x_offset=60, y_offset=60)
 
 
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type][side]["TSLOPE"] == None:
 
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["TSLOPE"]	= '{0:.2f}'.format(angle)
+					self.dict["EXCEL"][self.op_type][side]["TSLOPE"]	= '{0:.1f}'.format(angle)
 
 					# save after insert
 					self.controller.save_json()
@@ -234,17 +234,17 @@ class TSLOPE():
 					# find and draw angles
 					if side == "LEFT":
 						angle = self.draw_tools.create_myAngle(D_m1, p_int, L_p1, [self.tag, "TSLOPE_angle"],radius=30)
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, color="blue", x_offset=-60, y_offset=60)
+						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, color="blue", x_offset=-60, y_offset=60)
 
 					if side == "RIGHT":
 						angle = self.draw_tools.create_myAngle(R_p1, p_int, D_m1, [self.tag, "TSLOPE_angle"],radius=30)
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, color="blue", x_offset=60, y_offset=60)
+						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, color="blue", x_offset=60, y_offset=60)
 
 
 					# check if value exists
 					if self.dict["EXCEL"][self.op_type][side]["TSLOPE"] == None:
 						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-						self.dict["EXCEL"][self.op_type][side]["TSLOPE"]	= '{0:.2f}'.format(angle)
+						self.dict["EXCEL"][self.op_type][side]["TSLOPE"]	= '{0:.1f}'.format(angle)
 						self.controller.save_json()
 
 					# check T-VAR-VAL
@@ -267,20 +267,20 @@ class TSLOPE():
 					if side == "RIGHT":
 						R_perpend_border = self.draw_tools.line_intersection((C, p_int), (ytop, ybot))
 						tflexext_angle = self.draw_tools.getSmallestAngle(R_perpend_border, p_int, R_p1)
-						print('RIGHT: {0:.2f}'.format(tflexext_angle))
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(tflexext_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
+						print('RIGHT: {0:.1f}'.format(tflexext_angle))
+						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(tflexext_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
 
 					if side == "LEFT":
 						L_perpend_border = self.draw_tools.line_intersection((C, p_int), (xtop, xbot))
 						tflexext_angle = self.draw_tools.getSmallestAngle(L_p1, p_int, L_perpend_border)
-						print('LEFT: {0:.2f}'.format(tflexext_angle))
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(tflexext_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
+						print('LEFT: {0:.1f}'.format(tflexext_angle))
+						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(tflexext_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
 
 					# save TFLE/EXT to excel
 					if tflexext_angle != -1:							
 						if self.dict["EXCEL"][self.op_type][side]["TFLE/EXT"] == None:
 							self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-							self.dict["EXCEL"][self.op_type][side]["TFLE/EXT"]	= '{0:.2f}'.format(tflexext_angle)
+							self.dict["EXCEL"][self.op_type][side]["TFLE/EXT"]	= '{0:.1f}'.format(tflexext_angle)
 							self.controller.save_json()						
 
 
@@ -903,9 +903,9 @@ class TSLOPE():
 					tslope_angle = self.draw_tools.pil_create_myAngle(D_m1, p_int, LL_p)
 
 					# overwrite if isr is available
-					multi_text = 'TSLOPE: {0:.2f}'.format(tslope_angle)
+					multi_text = 'TSLOPE: {0:.1f}'.format(tslope_angle)
 					if isr_val != None:
-						tslope_text = 'TSLOPE: {0:.2f}'.format(tslope_angle)
+						tslope_text = 'TSLOPE: {0:.1f}'.format(tslope_angle)
 						isr_text = 'ISR: {}'.format(isr_val)
 						nl = "\n"
 						multi_text = tslope_text + nl + isr_text
@@ -925,9 +925,9 @@ class TSLOPE():
 					tslope_angle = self.draw_tools.pil_create_myAngle(RR_p, p_int, D_m1)
 
 					# overwrite if isr is available
-					multi_text = 'TSLOPE: {0:.2f}'.format(tslope_angle)
+					multi_text = 'TSLOPE: {0:.1f}'.format(tslope_angle)
 					if isr_val != None:
-						tslope_text = 'TSLOPE: {0:.2f}'.format(tslope_angle)
+						tslope_text = 'TSLOPE: {0:.1f}'.format(tslope_angle)
 						isr_text = 'ISR: {}'.format(isr_val)
 						nl = "\n"
 						multi_text = tslope_text + nl + isr_text

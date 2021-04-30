@@ -127,13 +127,13 @@ class SA():
 			if p1!=None and p2!=None and p3!=None:
 
 				angle = self.draw_tools.create_myAngle(p1, p2, p3, [self.tag, "P1P2P3_angle"])
-				self.draw_tools.create_mytext(p2, '{0:.2f}'.format(angle), [self.tag, "P1P2P3_angle"], y_offset=-60, color="blue")
+				self.draw_tools.create_mytext(p2, '{0:.1f}'.format(angle), [self.tag, "P1P2P3_angle"], y_offset=-60, color="blue")
 				
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type][side]["SA"] == None:
 
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["SA"]	 	= '{0:.2f}'.format(angle)
+					self.dict["EXCEL"][self.op_type][side]["SA"]	 	= '{0:.1f}'.format(angle)
 
 					# save after insert
 					self.controller.save_json()

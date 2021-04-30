@@ -152,12 +152,12 @@ class BETA():
 					if side == "RIGHT":
 						angle = self.draw_tools.create_myAngle(R_tib, p_int, D_tib_m1, [self.tag,side,"BETA_ANGLE"])
 						if self.draw_labels:
-							self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"BETA_ANGLE"], x_offset=60, y_offset=60, color="blue")
+							self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), [self.tag,side,"BETA_ANGLE"], x_offset=60, y_offset=60, color="blue")
 
 					if side == "LEFT":
 						angle = self.draw_tools.create_myAngle(D_tib_m1, p_int, L_tib, [self.tag,side,"BETA_ANGLE"])
 						if self.draw_labels:
-							self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"BETA_ANGLE"], x_offset=-60, y_offset=60, color="blue")
+							self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), [self.tag,side,"BETA_ANGLE"], x_offset=-60, y_offset=60, color="blue")
 
 
 		
@@ -487,14 +487,14 @@ class BETA():
 
 				if side == "RIGHT":
 					beta_angle = self.draw_tools.pil_create_myAngle(R_tib, p_int, D_tib_m1)
-					multi_text = 'BETA: {0:.2f}'.format(beta_angle)
+					multi_text = 'BETA: {0:.1f}'.format(beta_angle)
 					self.draw_tools.pil_create_myline(p_int, R_tib)
 					self.draw_tools.pil_create_mypoint(R_tib, "orange", point_thickness=self.point_size)
 					p_draw = R_tib
 
 				if side == "LEFT":
 					beta_angle = self.draw_tools.pil_create_myAngle(D_tib_m1, p_int, L_tib)
-					multi_text = 'BETA: {0:.2f}'.format(beta_angle)
+					multi_text = 'BETA: {0:.1f}'.format(beta_angle)
 					xoffset = -1*(xoffset + self.draw_tools.pil_get_multiline_text_size(multi_text))
 					self.draw_tools.pil_create_myline(p_int, L_tib)
 					self.draw_tools.pil_create_mypoint(L_tib, "orange", point_thickness=self.point_size)

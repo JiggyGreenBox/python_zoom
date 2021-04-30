@@ -129,13 +129,13 @@ class EADT():
 					angle = self.draw_tools.create_myAngle(tib_knee, eadt_p1, ankle_m1, [self.tag,"EADT_LINE"])
 
 				if self.draw_labels:
-					self.draw_tools.create_mytext(eadt_p1, '{0:.2f}'.format(angle), self.tag, x_offset=60, color="blue")
+					self.draw_tools.create_mytext(eadt_p1, '{0:.1f}'.format(angle), self.tag, x_offset=60, color="blue")
 			
 
 
 				if self.dict["EXCEL"][self.op_type][side]["EADTA"] == None:
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["EADTA"]	 	= '{0:.2f}'.format(angle)
+					self.dict["EXCEL"][self.op_type][side]["EADTA"]	 	= '{0:.1f}'.format(angle)
 					self.controller.save_json()
 
 				d_tps = self.draw_tools.getDistance(eadt_p1, tib_knee)
@@ -143,12 +143,12 @@ class EADT():
 
 				if self.dict["EXCEL"][self.op_type][side]["EADTPS"] == None:
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["EADTPS"]	= '{0:.2f}'.format(d_tps)
+					self.dict["EXCEL"][self.op_type][side]["EADTPS"]	= '{0:.1f}'.format(d_tps)
 					self.controller.save_json()
 
 				if self.dict["EXCEL"][self.op_type][side]["EADTDS"] == None:
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["EADTDS"]	= '{0:.2f}'.format(d_tds)
+					self.dict["EXCEL"][self.op_type][side]["EADTDS"]	= '{0:.1f}'.format(d_tds)
 					self.controller.save_json()
 
 

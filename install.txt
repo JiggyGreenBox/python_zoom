@@ -23,3 +23,8 @@ pyinstaller .\app.py
 // to reduce exe size (110mb~60mb)
 pyinstaller .\app.py --upx-dir=<Dir of upx after extraction(upx.exe not required)>
 	eg: pyinstaller .\app.py --upx-dir=C:\Users\jiggy\Desktop\upx-3.96-win64\upx-3.96-win64
+
+
+// adding font to app.spec
+// https://stackoverflow.com/questions/63585632/how-to-add-a-truetype-font-file-to-a-pyinstaller-executable-for-use-with-pygame
+a.datas += [('ttf file','path\\to\\ttf\\file', "DATA")]

@@ -139,13 +139,13 @@ class ISR():
 				print('isr_val: {:.2f}'.format(isr_val))
 
 				if side == "RIGHT":
-					self.draw_tools.create_mytext(p2, x_offset=60, color="blue", mytext='{:.2f}'.format(isr_val), mytag=[self.tag, side, "ISR_LABEL"])
+					self.draw_tools.create_mytext(p2, x_offset=60, color="blue", mytext='{0:.1f}'.format(isr_val), mytag=[self.tag, side, "ISR_LABEL"])
 				elif side == "LEFT":
-					self.draw_tools.create_mytext(p2, x_offset=-60, color="blue", mytext='{:.2f}'.format(isr_val), mytag=[self.tag, side, "ISR_LABEL"])
+					self.draw_tools.create_mytext(p2, x_offset=-60, color="blue", mytext='{0:.1f}'.format(isr_val), mytag=[self.tag, side, "ISR_LABEL"])
 
 				if self.dict["EXCEL"][self.op_type][side]["ISR"] == None:
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["ISR"]	= '{0:.2f}'.format(isr_val)
+					self.dict["EXCEL"][self.op_type][side]["ISR"]	= '{0:.1f}'.format(isr_val)
 					# save after insert
 					self.controller.save_json()
 

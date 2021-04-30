@@ -194,8 +194,8 @@ class UNI_FEM_VAL():
 
 					a1 = self.draw_tools.getAnglePoints(U_fem_m1, p_int, U_fem_p1)
 					a2 = self.draw_tools.getAnglePoints(U_fem_p1, p_int, U_fem_m1)
-					print('{0:.2f} a1 RIGHT'.format(a1))
-					print('{0:.2f} a2 RIGHT'.format(a2))
+					print('{0:.1f} a1 RIGHT'.format(a1))
+					print('{0:.1f} a2 RIGHT'.format(a2))
 
 					if a1 > a2:					
 						angle = self.draw_tools.create_myAngle(U_fem_p1, p_int, U_fem_m1, self.tag)
@@ -216,12 +216,12 @@ class UNI_FEM_VAL():
 						print('{} point is below so -ve'.format(side))
 
 					if self.draw_labels:
-						self.draw_tools.create_mytext(U_fem_p1, '{0:.2f}'.format(angle), self.tag, y_offset=-60, color="blue")
+						self.draw_tools.create_mytext(U_fem_p1, '{0:.1f}'.format(angle), self.tag, y_offset=-60, color="blue")
 
 					# F-VAR-VAL
 					if self.dict["EXCEL"][self.op_type][side]["FVAR/VAL"] == None:
 						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-						self.dict["EXCEL"][self.op_type][side]["FVAR/VAL"]	= '{0:.2f}'.format(angle)
+						self.dict["EXCEL"][self.op_type][side]["FVAR/VAL"]	= '{0:.1f}'.format(angle)
 						self.controller.save_json()
 					
 

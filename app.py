@@ -25,7 +25,7 @@ from views.set_working_view import SET_WORKING_View
 
 
 # read json file
-from pathlib import Path
+from pathlib import Path, PurePath
 import json
 
 # choose file
@@ -140,6 +140,9 @@ class MainWindow(ttk.Frame):
 			self.topbar.grid(row=0, column=0, sticky="we")
 			self.show_view("DETAILS")
 
+			cur_folder = PurePath(self.working_dir)
+			self.master.title('Knee Software ' + self.app_version + ' ' + cur_folder.name)
+
 			try:
 				my_file = Path(self.working_dir + "/pat.json")
 				if my_file.is_file():
@@ -211,14 +214,14 @@ class MainWindow(ttk.Frame):
 				user_json = {}
 				if "POINT_SIZES" not in user_json.keys():
 					user_json["POINT_SIZES"] = 	{
-												"PRE-SCANNO":7,
-												"PRE-AP":7,
-												"PRE-LAT":7,
-												"PRE-SKY":7,
-												"POST-SCANNO":7,
-												"POST-AP":7,
-												"POST-LAT":7,
-												"POST-SKY":7
+												"PRE-SCANNO":1,
+												"PRE-AP":1,
+												"PRE-LAT":1,
+												"PRE-SKY":1,
+												"POST-SCANNO":1,
+												"POST-AP":1,
+												"POST-LAT":1,
+												"POST-SKY":1
 											}
 
 				with open(script_dir + '/user_prefs.json', 'w', encoding='utf-8') as f:
@@ -774,12 +777,12 @@ class MainWindow(ttk.Frame):
 	def app_draw_pil(self):
 		try:
 			print('app.py draw_presentation_images')
-			# view = self.views["PRE_SCANNO_View"]
-			# view.view_draw_pil()
+			view = self.views["PRE_SCANNO_View"]
+			view.view_draw_pil()
 
-			for key in ["PRE_SCANNO_View", "POST_SCANNO_View", "PRE_LAT_View", "POST_LAT_View", "PRE_SKY_View", "POST_SKY_View","POST_AP_View"]:
-				view = self.views[key]
-				view.view_draw_pil()
+			# for key in ["PRE_SCANNO_View", "POST_SCANNO_View", "PRE_LAT_View", "POST_LAT_View", "PRE_SKY_View", "POST_SKY_View","POST_AP_View"]:
+			# 	view = self.views[key]
+			# 	view.view_draw_pil()
 							
 		except Exception as e:
 			raise e

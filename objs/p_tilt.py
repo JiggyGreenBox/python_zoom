@@ -161,24 +161,24 @@ class P_TILT():
 
 					if angle > 8:
 						angle = self.draw_tools.create_myAngle(U_p, p_int, R_p, [self.tag,"PTILT_ANGLE"])
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
+						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
 					else:
-						self.draw_tools.create_mytext(L_p, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
+						self.draw_tools.create_mytext(L_p, '{0:.1f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
 				else:
 					angle = self.draw_tools.getSmallestAngle(L_p, p_int, U_p)
 					
 					if angle > 8:
 						angle = self.draw_tools.create_myAngle(L_p, p_int, U_p, [self.tag,"PTILT_ANGLE"])	
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
+						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
 					else:
-						self.draw_tools.create_mytext(R_p, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
+						self.draw_tools.create_mytext(R_p, '{0:.1f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
 
-				# self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
+				# self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
 
 				# check if value exists
 				if angle != "" and self.dict["EXCEL"][self.op_type][side]["PTILT"] == None:
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["PTILT"]	 	= '{0:.2f}'.format(angle)
+					self.dict["EXCEL"][self.op_type][side]["PTILT"]	 	= '{0:.1f}'.format(angle)
 					# save after insert
 					self.controller.save_json()
 
@@ -208,13 +208,13 @@ class P_TILT():
 			# 		else:
 			# 			angle = self.draw_tools.create_myAngle(R_p, p_int, R_sa, [self.tag])
 
-			# 		self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag], y_offset=60)
+			# 		self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), [self.tag], y_offset=60)
 
 			# 		# check if value exists
 			# 		if self.dict["EXCEL"][self.op_type][side]["PTILT"] == None:
 
 			# 			self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-			# 			self.dict["EXCEL"][self.op_type][side]["PTILT"]	 	= '{0:.2f}'.format(angle)
+			# 			self.dict["EXCEL"][self.op_type][side]["PTILT"]	 	= '{0:.1f}'.format(angle)
 
 			# 			# save after insert
 			# 			self.controller.save_json()
@@ -679,7 +679,7 @@ class P_TILT():
 
 				if side == "LEFT":
 					ptilt_angle = self.draw_tools.getSmallestAngle(U_p, p_int, R_p)
-					multi_text = 'PTILT: {0:.2f}'.format(ptilt_angle)
+					multi_text = 'PTILT: {0:.1f}'.format(ptilt_angle)
 					xoffset = -1*(xoffset + self.draw_tools.pil_get_multiline_text_size(multi_text))
 					p_draw = L_p
 
@@ -688,7 +688,7 @@ class P_TILT():
 
 				else:
 					ptilt_angle = self.draw_tools.getSmallestAngle(L_p, p_int, U_p)
-					multi_text = 'PTILT: {0:.2f}'.format(ptilt_angle)
+					multi_text = 'PTILT: {0:.1f}'.format(ptilt_angle)
 					p_draw = R_p
 					
 					if ptilt_angle > 8:

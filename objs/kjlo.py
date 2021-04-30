@@ -225,14 +225,14 @@ class KJLO():
 
 				# draw angles
 				L_angle = self.draw_tools.create_myAngle(LR_tib, p_int_L, L_ankle, [self.tag,"ANGLE_KJLO"])
-				self.draw_tools.create_mytext(p_int_L, '{0:.2f}'.format(L_angle), [self.tag,"ANGLE_KJLO"], x_offset=-60, y_offset=-60, color="blue")
+				self.draw_tools.create_mytext(p_int_L, '{0:.1f}'.format(L_angle), [self.tag,"ANGLE_KJLO"], x_offset=-60, y_offset=-60, color="blue")
 
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"] == None:
 					# print("enter left")
 
 					self.dict["EXCEL"][self.op_type]["LEFT"]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"]	 	= '{0:.2f}'.format(L_angle)
+					self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"]	 	= '{0:.1f}'.format(L_angle)
 
 					# save after insert
 					self.controller.save_json()	
@@ -250,14 +250,14 @@ class KJLO():
 				
 				# draw angles
 				R_angle = self.draw_tools.create_myAngle(R_ankle, p_int_R, RL_tib, [self.tag,"ANGLE_KJLO"])
-				self.draw_tools.create_mytext(p_int_R, '{0:.2f}'.format(R_angle), [self.tag,"ANGLE_KJLO"], x_offset=60, y_offset=-60, color="blue")
+				self.draw_tools.create_mytext(p_int_R, '{0:.1f}'.format(R_angle), [self.tag,"ANGLE_KJLO"], x_offset=60, y_offset=-60, color="blue")
 
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type]["RIGHT"]["KJLO"] == None:
 					# print("enter right")
 
 					self.dict["EXCEL"][self.op_type]["RIGHT"]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type]["RIGHT"]["KJLO"]	 	= '{0:.2f}'.format(R_angle)
+					self.dict["EXCEL"][self.op_type]["RIGHT"]["KJLO"]	 	= '{0:.1f}'.format(R_angle)
 
 					# save after insert
 					self.controller.save_json()	
@@ -512,7 +512,7 @@ class KJLO():
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"] == None:
 					self.dict["EXCEL"][self.op_type]["LEFT"]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"]	 	= '{0:.2f}'.format(L_angle)
+					self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"]	 	= '{0:.1f}'.format(L_angle)
 					# save after insert
 					self.controller.save_json()	
 
@@ -535,7 +535,7 @@ class KJLO():
 				if self.dict["EXCEL"][self.op_type]["RIGHT"]["KJLO"] == None:
 					# print("enter right")
 					self.dict["EXCEL"][self.op_type]["RIGHT"]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type]["RIGHT"]["KJLO"]	 	= '{0:.2f}'.format(R_angle)
+					self.dict["EXCEL"][self.op_type]["RIGHT"]["KJLO"]	 	= '{0:.1f}'.format(R_angle)
 					# save after insert
 					self.controller.save_json()
 

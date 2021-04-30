@@ -191,23 +191,23 @@ class VCA():
 
 				a1 = self.draw_tools.getAnglePoints(hip, knee, dist_fem_m1)
 				a2 = self.draw_tools.getAnglePoints(dist_fem_m1, knee, hip)
-				print('{0:.2f} a1 RIGHT'.format(a1))
-				print('{0:.2f} a2 RIGHT'.format(a2))
+				print('{0:.1f} a1 RIGHT'.format(a1))
+				print('{0:.1f} a2 RIGHT'.format(a2))
 
 				if a1 > a2:					
 					angle = self.draw_tools.create_myAngle(dist_fem_m1, knee, hip, self.tag)
 				else:					
 					angle = self.draw_tools.create_myAngle(hip, knee, dist_fem_m1, self.tag)
 
-				self.draw_tools.create_mytext(dist_fem_m1, '{0:.2f}'.format(angle), [self.tag,side,"VCA_ANGLE"], x_offset=0, y_offset=-60, color="blue")
+				self.draw_tools.create_mytext(dist_fem_m1, '{0:.1f}'.format(angle), [self.tag,side,"VCA_ANGLE"], x_offset=0, y_offset=-60, color="blue")
 
 
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type][side]["VCA"] == None:
 
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					# self.dict["EXCEL"][self.op_type][side]["VCA"]	 	= '{0:.2f}'.format(angle)
-					self.dict["EXCEL"][self.op_type][side]["VCA"]	 	= '{0:.2f}'.format(angle)
+					# self.dict["EXCEL"][self.op_type][side]["VCA"]	 	= '{0:.1f}'.format(angle)
+					self.dict["EXCEL"][self.op_type][side]["VCA"]	 	= '{0:.1f}'.format(angle)
 
 					# save after insert
 					self.controller.save_json()
@@ -385,8 +385,8 @@ class VCA():
 
 				a1 = self.draw_tools.getAnglePoints(hip, knee, dist_fem_m1)
 				a2 = self.draw_tools.getAnglePoints(dist_fem_m1, knee, hip)
-				print('{0:.2f} a1 RIGHT'.format(a1))
-				print('{0:.2f} a2 RIGHT'.format(a2))
+				print('{0:.1f} a1 RIGHT'.format(a1))
+				print('{0:.1f} a2 RIGHT'.format(a2))
 
 				if a1 > a2:					
 					# angle = self.draw_tools.create_myAngle(dist_fem_m1, knee, hip, self.tag)
@@ -401,8 +401,8 @@ class VCA():
 				if self.dict["EXCEL"][self.op_type][side]["VCA"] == None:
 
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					# self.dict["EXCEL"][self.op_type][side]["VCA"]	 	= '{0:.2f}'.format(angle)
-					self.dict["EXCEL"][self.op_type][side]["VCA"]	 	= '{0:.2f}'.format(angle)
+					# self.dict["EXCEL"][self.op_type][side]["VCA"]	 	= '{0:.1f}'.format(angle)
+					self.dict["EXCEL"][self.op_type][side]["VCA"]	 	= '{0:.1f}'.format(angle)
 
 					# save after insert
 					self.controller.save_json()

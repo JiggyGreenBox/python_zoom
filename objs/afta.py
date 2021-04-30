@@ -132,15 +132,15 @@ class AFTA():
 
 				a1 = self.draw_tools.getAnglePoints(p_tib, p_int, fem_top_m1)
 				a2 = self.draw_tools.getAnglePoints(fem_top_m1, p_int, p_tib)
-				print('{0:.2f} a1 RIGHT'.format(a1))
-				print('{0:.2f} a2 RIGHT'.format(a2))
+				print('{0:.1f} a1 RIGHT'.format(a1))
+				print('{0:.1f} a2 RIGHT'.format(a2))
 
 				if a1 < a2:					
 					angle = self.draw_tools.create_myAngle(p_tib, p_int, fem_top_m1, self.tag)
 				else:
 					angle = self.draw_tools.create_myAngle(fem_top_m1, p_int, p_tib, self.tag)
 
-				self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, color="blue")
+				self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, x_offset=-60, color="blue")
 
 				# p_int = self.draw_tools.line_intersection((tib_bot_m1, tib_top_m1),
 				# 	(fem_bot_m1, fem_top_m1))
@@ -150,22 +150,22 @@ class AFTA():
 
 				# a1 = self.draw_tools.getAnglePoints(tib_top_m1, p_int, fem_bot_m1)
 				# a2 = self.draw_tools.getAnglePoints(fem_bot_m1, p_int, tib_top_m1)
-				# print('{0:.2f} a1 RIGHT'.format(a1))
-				# print('{0:.2f} a2 RIGHT'.format(a2))
+				# print('{0:.1f} a1 RIGHT'.format(a1))
+				# print('{0:.1f} a2 RIGHT'.format(a2))
 
 				# if a1 < a2:					
 				# 	angle = self.draw_tools.create_myAngle(tib_top_m1, p_int, fem_bot_m1, self.tag)
 				# else:
 				# 	angle = self.draw_tools.create_myAngle(fem_bot_m1, p_int, tib_top_m1, self.tag)
 
-				# self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60)
+				# self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, x_offset=-60)
 
 
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type][side]["aFTA"] == None:
 
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["aFTA"]	 	= '{0:.2f}'.format(angle)
+					self.dict["EXCEL"][self.op_type][side]["aFTA"]	 	= '{0:.1f}'.format(angle)
 
 					# save after insert
 					self.controller.save_json()
@@ -281,8 +281,8 @@ class AFTA():
 
 				a1 = self.draw_tools.getAnglePoints(p_tib, p_int, fem_top_m1)
 				a2 = self.draw_tools.getAnglePoints(fem_top_m1, p_int, p_tib)
-				print('{0:.2f} a1 RIGHT'.format(a1))
-				print('{0:.2f} a2 RIGHT'.format(a2))
+				print('{0:.1f} a1 RIGHT'.format(a1))
+				print('{0:.1f} a2 RIGHT'.format(a2))
 
 				if a1 < a2:					
 					# angle = self.draw_tools.create_myAngle(p_tib, p_int, fem_top_m1, self.tag)
@@ -296,6 +296,6 @@ class AFTA():
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type][side]["aFTA"] == None:
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["aFTA"]	 	= '{0:.2f}'.format(angle)
+					self.dict["EXCEL"][self.op_type][side]["aFTA"]	 	= '{0:.1f}'.format(angle)
 					# save after insert
 					self.controller.save_json()

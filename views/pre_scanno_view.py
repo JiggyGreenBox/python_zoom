@@ -322,7 +322,8 @@ class PRE_SCANNO_View(tk.Frame):
 		Path(self.controller.working_dir +'/export').mkdir(parents=True, exist_ok=True)
 
 		# create platform independent file path
-		file = Path(self.controller.working_dir + '/export/export_pre_scanno.jpg')
+		# file = Path(self.controller.working_dir + '/export/export_pre_scanno.jpg')
+		file = Path(self.controller.working_dir + '/export/resize.jpg')
 
 		# save to path
 		self.canvas.savePIL(file)

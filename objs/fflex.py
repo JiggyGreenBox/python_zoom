@@ -205,18 +205,18 @@ class FFLEX():
 					# find and draw angles
 					if side == "LEFT":
 						angle = self.draw_tools.create_myAngle(L_p1, p_int, D_m1, [self.tag, "FFLEX_angle"], radius=30)
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-30, y_offset=60, color="blue")
+						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, x_offset=-30, y_offset=60, color="blue")
 
 					if side == "RIGHT":
 						angle = self.draw_tools.create_myAngle(D_m1, p_int, R_p1, [self.tag, "FFLEX_angle"],radius=30)
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=30, y_offset=60, color="blue")
+						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, x_offset=30, y_offset=60, color="blue")
 
 
 					# check if value exists
 					if angle != "" and self.dict["EXCEL"][self.op_type][side]["FFLEX"] == None:
 					# if self.dict["EXCEL"][self.op_type][side]["TSLOPE"] == None:
 						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-						self.dict["EXCEL"][self.op_type][side]["FFLEX"]	= '{0:.2f}'.format(angle)
+						self.dict["EXCEL"][self.op_type][side]["FFLEX"]	= '{0:.1f}'.format(angle)
 						# save after insert
 						self.controller.save_json()
 						
@@ -732,14 +732,14 @@ class FFLEX():
 
 				if side == "RIGHT":					
 					fflex_angle = self.draw_tools.pil_create_myAngle(U_m1, p_int, R_p)
-					multi_text = 'FFLEX: {0:.2f}'.format(fflex_angle)
+					multi_text = 'FFLEX: {0:.1f}'.format(fflex_angle)
 					self.draw_tools.pil_create_myline(p_int, R_p)
 					self.draw_tools.pil_create_mypoint(R_p, "orange", point_thickness=self.point_size)
 					p_draw = R_p
 
 				elif side == "LEFT":
 					fflex_angle = self.draw_tools.pil_create_myAngle(L_p, p_int, U_m1)
-					multi_text = 'FFLEX: {0:.2f}'.format(fflex_angle)
+					multi_text = 'FFLEX: {0:.1f}'.format(fflex_angle)
 					self.draw_tools.pil_create_myline(p_int, L_p)
 					self.draw_tools.pil_create_mypoint(L_p, "orange", point_thickness=self.point_size)
 					xoffset = -1*(xoffset + self.draw_tools.pil_get_multiline_text_size(multi_text))

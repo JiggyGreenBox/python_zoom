@@ -128,18 +128,18 @@ class MPTA():
 
 					if side == "RIGHT":
 						angle = self.draw_tools.create_myAngle(R_tib, p_int, ankle_m1, [self.tag,side,"MPTA_ANGLE"])
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"MPTA_ANGLE"], x_offset=60, y_offset=60, color="blue")
+						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), [self.tag,side,"MPTA_ANGLE"], x_offset=60, y_offset=60, color="blue")
 
 					if side == "LEFT":
 						angle = self.draw_tools.create_myAngle(ankle_m1, p_int, L_tib, [self.tag,side,"MPTA_ANGLE"])
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"MPTA_ANGLE"], x_offset=-60, y_offset=60, color="blue")
+						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), [self.tag,side,"MPTA_ANGLE"], x_offset=-60, y_offset=60, color="blue")
 
 
 					# check if value exists
 					if self.dict["EXCEL"][self.op_type][side]["MPTA"] == None:
 
 						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-						self.dict["EXCEL"][self.op_type][side]["MPTA"]	 	= '{0:.2f}'.format(angle)
+						self.dict["EXCEL"][self.op_type][side]["MPTA"]	 	= '{0:.1f}'.format(angle)
 
 						# save after insert
 						self.controller.save_json()
@@ -379,7 +379,7 @@ class MPTA():
 					# check if value exists
 					if self.dict["EXCEL"][self.op_type][side]["MPTA"] == None:
 						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-						self.dict["EXCEL"][self.op_type][side]["MPTA"]	 	= '{0:.2f}'.format(angle)
+						self.dict["EXCEL"][self.op_type][side]["MPTA"]	 	= '{0:.1f}'.format(angle)
 						# save after insert
 						self.controller.save_json()
 		

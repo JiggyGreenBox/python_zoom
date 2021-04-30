@@ -169,17 +169,17 @@ class TAMD():
 				angle = self.draw_tools.getSmallestAngle(top_m1, p_int, tib_knee)
 				angle2 = self.draw_tools.getAnglePoints(top_m1, p_int, tib_knee)
 				angle3 = self.draw_tools.getAnglePointsNeg(top_m1, p_int, tib_knee)
-				print('angle1: {0:.2f}'.format(angle))
-				print('angle2: {0:.2f}'.format(angle2))
-				print('angle3: {0:.2f}'.format(angle3))
-				self.draw_tools.create_mytext(ankle_m1, '{0:.2f}'.format(angle), [self.tag,side,"TAMD_ANGLE"], x_offset=60, y_offset=60, color="blue")
+				print('angle1: {0:.1f}'.format(angle))
+				print('angle2: {0:.1f}'.format(angle2))
+				print('angle3: {0:.1f}'.format(angle3))
+				self.draw_tools.create_mytext(ankle_m1, '{0:.1f}'.format(angle), [self.tag,side,"TAMD_ANGLE"], x_offset=60, y_offset=60, color="blue")
 
 
 
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type][side]["TAMD"] == None:
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["TAMD"]	 	= '{0:.2f}'.format(angle)
+					self.dict["EXCEL"][self.op_type][side]["TAMD"]	 	= '{0:.1f}'.format(angle)
 					# save after insert
 					self.controller.save_json()
 
@@ -193,18 +193,18 @@ class TAMD():
 
 			# 	if side == "RIGHT":
 			# 		angle = self.draw_tools.create_myAngle(R_tib, p_int, bot_m1, [self.tag,side,"TAMD_ANGLE"])
-			# 		self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"TAMD_ANGLE"], x_offset=60, y_offset=60)
+			# 		self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), [self.tag,side,"TAMD_ANGLE"], x_offset=60, y_offset=60)
 
 			# 	if side == "LEFT":
 			# 		angle = self.draw_tools.create_myAngle(bot_m1, p_int, L_tib, [self.tag,side,"TAMD_ANGLE"])
-			# 		self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"TAMD_ANGLE"], x_offset=-60, y_offset=60)		
+			# 		self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), [self.tag,side,"TAMD_ANGLE"], x_offset=-60, y_offset=60)		
 
 
 			# 	# check if value exists
 			# 	if self.dict["EXCEL"][self.op_type][side]["TAMD"] == None:
 
 			# 		self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-			# 		self.dict["EXCEL"][self.op_type][side]["TAMD"]	 	= '{0:.2f}'.format(angle)
+			# 		self.dict["EXCEL"][self.op_type][side]["TAMD"]	 	= '{0:.1f}'.format(angle)
 
 			# 		# save after insert
 			# 		self.controller.save_json()
@@ -305,16 +305,16 @@ class TAMD():
 				angle = self.draw_tools.getSmallestAngle(top_m1, p_int, tib_knee)
 				# angle2 = self.draw_tools.getAnglePoints(top_m1, p_int, tib_knee)
 				# angle3 = self.draw_tools.getAnglePointsNeg(top_m1, p_int, tib_knee)
-				# print('angle1: {0:.2f}'.format(angle))
-				# print('angle2: {0:.2f}'.format(angle2))
-				# print('angle3: {0:.2f}'.format(angle3))
+				# print('angle1: {0:.1f}'.format(angle))
+				# print('angle2: {0:.1f}'.format(angle2))
+				# print('angle3: {0:.1f}'.format(angle3))
 
 
 
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type][side]["TAMD"] == None:
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["TAMD"]	 	= '{0:.2f}'.format(angle)
+					self.dict["EXCEL"][self.op_type][side]["TAMD"]	 	= '{0:.1f}'.format(angle)
 					# save after insert
 					self.controller.save_json()
 

@@ -251,8 +251,8 @@ class FFLEX_UKR():
 						fflex_ext 	= angle
 						fflex 		= 90-angle
 						
-						self.draw_tools.create_mytext(axis_peg_bot_p2, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
-						self.draw_tools.create_mytext(axis_peg_bot_p2, '{0:.2f}'.format(90-angle), [self.tag,"PTILT_ANGLE"], y_offset=120, color="blue")
+						self.draw_tools.create_mytext(axis_peg_bot_p2, '{0:.1f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
+						self.draw_tools.create_mytext(axis_peg_bot_p2, '{0:.1f}'.format(90-angle), [self.tag,"PTILT_ANGLE"], y_offset=120, color="blue")
 					# intersection point is below
 					# EXTENTION
 					# negative value
@@ -267,20 +267,20 @@ class FFLEX_UKR():
 						fflex_ext 	= angle
 						fflex 		= 90-angle
 
-						self.draw_tools.create_mytext(axis_peg_bot_p2, '{0:.2f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
-						self.draw_tools.create_mytext(axis_peg_bot_p2, '{0:.2f}'.format(90-angle), [self.tag,"PTILT_ANGLE"], y_offset=120, color="blue")
+						self.draw_tools.create_mytext(axis_peg_bot_p2, '{0:.1f}'.format(angle), [self.tag,"PTILT_ANGLE"], y_offset=60, color="blue")
+						self.draw_tools.create_mytext(axis_peg_bot_p2, '{0:.1f}'.format(90-angle), [self.tag,"PTILT_ANGLE"], y_offset=120, color="blue")
 						
 					# save to excel
 					if fflex != 0 and fflex_ext != 0:
 						if self.dict["EXCEL"][self.op_type][side]["FFLEX"] == None:
 							self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-							self.dict["EXCEL"][self.op_type][side]["FFLEX"]	= '{0:.2f}'.format(fflex)								
+							self.dict["EXCEL"][self.op_type][side]["FFLEX"]	= '{0:.1f}'.format(fflex)								
 							self.controller.save_json() 
 
 
 						if self.dict["EXCEL"][self.op_type][side]["FFLE/EXT"] == None:
 							self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-							self.dict["EXCEL"][self.op_type][side]["FFLE/EXT"]	= '{0:.2f}'.format(fflex_ext)								
+							self.dict["EXCEL"][self.op_type][side]["FFLE/EXT"]	= '{0:.1f}'.format(fflex_ext)								
 							self.controller.save_json()
 
 
@@ -300,18 +300,18 @@ class FFLEX_UKR():
 				# 	# find and draw angles
 				# 	if side == "LEFT":
 				# 		angle = self.draw_tools.create_myAngle(L_p1, p_int, D_m1, [self.tag, "FFLEX_angle"], radius=30)
-				# 		self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-30, y_offset=60, color="blue")
+				# 		self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, x_offset=-30, y_offset=60, color="blue")
 
 				# 	if side == "RIGHT":
 				# 		angle = self.draw_tools.create_myAngle(D_m1, p_int, R_p1, [self.tag, "FFLEX_angle"],radius=30)
-				# 		self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=30, y_offset=60, color="blue")
+				# 		self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, x_offset=30, y_offset=60, color="blue")
 
 
 					# # check if value exists
 					# if self.dict["EXCEL"][self.op_type][side]["TSLOPE"] == None:
 
 					# 	self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					# 	self.dict["EXCEL"][self.op_type][side]["TSLOPE"]	= '{0:.2f}'.format(angle)
+					# 	self.dict["EXCEL"][self.op_type][side]["TSLOPE"]	= '{0:.1f}'.format(angle)
 
 					# 	# save after insert
 					# 	self.controller.save_json()
@@ -991,13 +991,13 @@ class FFLEX_UKR():
 
 						if side == "LEFT":
 							fflex_ukr_angle = self.draw_tools.pil_create_myAngle(D_m1, p_int, D_peg_m1)
-							multi_text = 'FFLEX: {0:.2f}'.format(fflex_ukr_angle)
+							multi_text = 'FFLEX: {0:.1f}'.format(fflex_ukr_angle)
 							xoffset = -1*(xoffset + self.draw_tools.pil_get_multiline_text_size(multi_text))
 
 
 						elif side == "RIGHT":
 							fflex_ukr_angle = self.draw_tools.pil_create_myAngle(D_peg_m1, p_int, D_m1)
-							multi_text = 'FFLEX: {0:.2f}'.format(fflex_ukr_angle)
+							multi_text = 'FFLEX: {0:.1f}'.format(fflex_ukr_angle)
 
 					else:
 						self.draw_tools.pil_create_mypoint(D_m1, "orange", point_thickness=self.point_size)

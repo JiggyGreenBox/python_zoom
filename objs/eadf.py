@@ -152,11 +152,11 @@ class EADF():
 					angle = self.draw_tools.create_myAngle(eadf_top, eadf_bot, fem_knee, [self.tag,"EADF_LINE"])
 
 				if self.draw_labels:
-					self.draw_tools.create_mytext(eadf_p1, '{0:.2f}'.format(angle), self.tag, x_offset=60, color="blue")
+					self.draw_tools.create_mytext(eadf_p1, '{0:.1f}'.format(angle), self.tag, x_offset=60, color="blue")
 
 				if self.dict["EXCEL"][self.op_type][side]["EADFA"] == None:
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["EADFA"]	 	= '{0:.2f}'.format(angle)
+					self.dict["EXCEL"][self.op_type][side]["EADFA"]	 	= '{0:.1f}'.format(angle)
 					self.controller.save_json()
 
 
@@ -198,12 +198,12 @@ class EADF():
 
 				if self.dict["EXCEL"][self.op_type][side]["EADFPS"] == None:
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["EADFPS"]	= '{0:.2f}'.format(d_fps)
+					self.dict["EXCEL"][self.op_type][side]["EADFPS"]	= '{0:.1f}'.format(d_fps)
 					self.controller.save_json()
 
 				if self.dict["EXCEL"][self.op_type][side]["EADFDS"] == None:
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["EADFDS"]	= '{0:.2f}'.format(d_fds)
+					self.dict["EXCEL"][self.op_type][side]["EADFDS"]	= '{0:.1f}'.format(d_fds)
 					self.controller.save_json()
 
 

@@ -204,7 +204,7 @@ class MNSA():
 								(fem_bot_m1, p_top))
 
 						angle = self.draw_tools.create_myAngle(hip, p_int, fem_bot_m1, [self.tag,side,"MNSA_ANGLE"])
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"MNSA_ANGLE"], x_offset=60, color="blue")
+						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), [self.tag,side,"MNSA_ANGLE"], x_offset=60, color="blue")
 
 
 
@@ -221,7 +221,7 @@ class MNSA():
 								(fem_bot_m1, p_top))
 
 						angle = self.draw_tools.create_myAngle(fem_bot_m1, p_int, hip, [self.tag,side,"MNSA_ANGLE"])
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"MNSA_ANGLE"], x_offset=60, color="blue")
+						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), [self.tag,side,"MNSA_ANGLE"], x_offset=60, color="blue")
 
 
 
@@ -229,7 +229,7 @@ class MNSA():
 					if self.dict["EXCEL"][self.op_type][side]["MNSA"] == None:
 
 						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-						self.dict["EXCEL"][self.op_type][side]["MNSA"]	 	= '{0:.2f}'.format(angle)
+						self.dict["EXCEL"][self.op_type][side]["MNSA"]	 	= '{0:.1f}'.format(angle)
 
 						# save after insert
 						self.controller.save_json()
@@ -265,7 +265,7 @@ class MNSA():
 							(fem_bot_m1, fem_top_m1))
 
 					angle = self.draw_tools.create_myAngle(hip, p_int, fem_bot_m1, "hover_line")
-					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), "hover_line", x_offset=60)
+					self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), "hover_line", x_offset=60)
 
 
 
@@ -282,7 +282,7 @@ class MNSA():
 							(fem_bot_m1, fem_top_m1))
 
 					angle = self.draw_tools.create_myAngle(fem_bot_m1, p_int, hip, "hover_line")
-					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), "hover_line", x_offset=60)		
+					self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), "hover_line", x_offset=60)		
 	'''
 
 	'''
@@ -360,7 +360,7 @@ class MNSA():
 							(hip, m),
 							(fem_bot_m1, fem_top_m1))
 					angle = self.draw_tools.create_myAngle(hip, p_int, fem_bot_m1, "drag_line")
-					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), "drag_line", x_offset=60)
+					self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), "drag_line", x_offset=60)
 
 
 				if self.drag_side == "LEFT":
@@ -373,7 +373,7 @@ class MNSA():
 							(hip, p_left),
 							(fem_bot_m1, fem_top_m1))
 					angle = self.draw_tools.create_myAngle(fem_bot_m1, p_int, hip, "drag_line")
-					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), "drag_line", x_offset=60)
+					self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), "drag_line", x_offset=60)
 
 
 	def drag_stop(self, P_mouse):
@@ -550,6 +550,6 @@ class MNSA():
 					# check if value exists
 					if self.dict["EXCEL"][self.op_type][side]["MNSA"] == None:
 						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-						self.dict["EXCEL"][self.op_type][side]["MNSA"]	 	= '{0:.2f}'.format(angle)
+						self.dict["EXCEL"][self.op_type][side]["MNSA"]	 	= '{0:.1f}'.format(angle)
 						# save after insert
 						self.controller.save_json()

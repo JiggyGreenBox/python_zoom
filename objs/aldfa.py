@@ -108,17 +108,17 @@ class ALDFA():
 
 				if side == "LEFT":
 					angle = self.draw_tools.create_myAngle(top_m1, p_int, R_fem, self.tag)
-					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60, y_offset=-60, color="blue")
+					self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, x_offset=60, y_offset=-60, color="blue")
 
 				if side == "RIGHT":
 					angle = self.draw_tools.create_myAngle(L_fem, p_int, top_m1, self.tag)
-					self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, y_offset=-60, color="blue")	
+					self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, x_offset=-60, y_offset=-60, color="blue")	
 
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type][side]["aLDFA"] == None:
 
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["aLDFA"]	 	= '{0:.2f}'.format(angle)
+					self.dict["EXCEL"][self.op_type][side]["aLDFA"]	 	= '{0:.1f}'.format(angle)
 
 					# save after insert
 					self.controller.save_json()
@@ -224,6 +224,6 @@ class ALDFA():
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type][side]["aLDFA"] == None:
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["aLDFA"]	 	= '{0:.2f}'.format(angle)
+					self.dict["EXCEL"][self.op_type][side]["aLDFA"]	 	= '{0:.1f}'.format(angle)
 					# save after insert
 					self.controller.save_json()	

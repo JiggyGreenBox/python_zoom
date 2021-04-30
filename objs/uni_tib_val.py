@@ -198,7 +198,7 @@ class UNI_TIB_VAL():
 					else:
 						tib_line_axis_angle = self.draw_tools.getSmallestAngle(TibP_R, p_int, D_m1)
 
-					# print('{0:.2f} tib_line_axis_angle'.format(tib_line_axis_angle))
+					# print('{0:.1f} tib_line_axis_angle'.format(tib_line_axis_angle))
 					tflexext = (tib_line_axis_angle-90)*-1
 					# tflexext = tib_line_axis_angle-90
 					# if tib_line_axis_angle > 90:
@@ -211,18 +211,18 @@ class UNI_TIB_VAL():
 					# print info
 					
 					if side == "LEFT":
-						self.draw_tools.create_mytext(TibP_L, '{0:.2f}'.format(tflexext), self.tag, y_offset=-80, color="blue")
-						self.draw_tools.create_mytext(TibP_L, '{0:.2f}'.format(tib_line_axis_angle), self.tag, y_offset=80, color="blue")
+						self.draw_tools.create_mytext(TibP_L, '{0:.1f}'.format(tflexext), self.tag, y_offset=-80, color="blue")
+						self.draw_tools.create_mytext(TibP_L, '{0:.1f}'.format(tib_line_axis_angle), self.tag, y_offset=80, color="blue")
 					else:
-						self.draw_tools.create_mytext(TibP_R, '{0:.2f}'.format(tflexext), self.tag, y_offset=-80, color="blue")
-						self.draw_tools.create_mytext(TibP_R, '{0:.2f}'.format(tib_line_axis_angle), self.tag, y_offset=80, color="blue")
+						self.draw_tools.create_mytext(TibP_R, '{0:.1f}'.format(tflexext), self.tag, y_offset=-80, color="blue")
+						self.draw_tools.create_mytext(TibP_R, '{0:.1f}'.format(tib_line_axis_angle), self.tag, y_offset=80, color="blue")
 
 
 					# save to excel
 					# T-VAR-VAL
 					if self.dict["EXCEL"][self.op_type][side]["TVAR/VAL"] == None:
 						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-						self.dict["EXCEL"][self.op_type][side]["TVAR/VAL"]	= '{0:.2f}'.format(tflexext)
+						self.dict["EXCEL"][self.op_type][side]["TVAR/VAL"]	= '{0:.1f}'.format(tflexext)
 						self.controller.save_json()					
 
 
@@ -253,14 +253,14 @@ class UNI_TIB_VAL():
 
 						a1 = self.draw_tools.getAnglePoints(L_p_border, p_int, R_fem)
 						a2 = self.draw_tools.getAnglePoints(R_fem, p_int, L_p_border)
-						print('{0:.2f} a1 left'.format(a1))
-						print('{0:.2f} a2 left'.format(a2))
+						print('{0:.1f} a1 left'.format(a1))
+						print('{0:.1f} a2 left'.format(a2))
 
 						if a1 > a2:						
 							angle = self.draw_tools.create_myAngle(R_fem, p_int, L_p_border, self.tag)
 						else:
 							angle = self.draw_tools.create_myAngle(L_p_border, p_int, R_fem, self.tag)
-						self.draw_tools.create_mytext(R_fem, '{0:.2f}'.format(angle), self.tag, x_offset=60)
+						self.draw_tools.create_mytext(R_fem, '{0:.1f}'.format(angle), self.tag, x_offset=60)
 
 
 
@@ -271,15 +271,15 @@ class UNI_TIB_VAL():
 
 						a1 = self.draw_tools.getAnglePoints(R_p_border, p_int, L_fem)
 						a2 = self.draw_tools.getAnglePoints(L_fem, p_int, R_p_border)
-						print('{0:.2f} a1 RIGHT'.format(a1))
-						print('{0:.2f} a2 RIGHT'.format(a2))
+						print('{0:.1f} a1 RIGHT'.format(a1))
+						print('{0:.1f} a2 RIGHT'.format(a2))
 
 						if a1 > a2:						
 							angle = self.draw_tools.create_myAngle(L_fem, p_int, R_p_border, self.tag)
 						else:
 							angle = self.draw_tools.create_myAngle(R_p_border, p_int, L_fem, self.tag)
 							
-						self.draw_tools.create_mytext(L_fem, '{0:.2f}'.format(angle), self.tag, x_offset=-60)
+						self.draw_tools.create_mytext(L_fem, '{0:.1f}'.format(angle), self.tag, x_offset=-60)
 					'''
 
 

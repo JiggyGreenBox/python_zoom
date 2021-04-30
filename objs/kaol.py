@@ -124,7 +124,7 @@ class KAOL():
 						R_p_safe = self.draw_tools.line_intersection((L_tib, R_tib),(xtop, xbot))
 
 						angle = self.draw_tools.create_myAngle(ankle_m1, p_int, R_p_safe, self.tag)
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=60, y_offset=-60, color="blue")
+						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, x_offset=60, y_offset=-60, color="blue")
 
 					if side == "RIGHT":
 
@@ -134,14 +134,14 @@ class KAOL():
 						R_p_safe = self.draw_tools.line_intersection((L_tib, R_tib),(ytop, ybot))
 
 						angle = self.draw_tools.create_myAngle(R_p_safe, p_int, ankle_m1, self.tag)
-						self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), self.tag, x_offset=-60, y_offset=-60, color="blue")
+						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, x_offset=-60, y_offset=-60, color="blue")
 
 
 					# check if value exists
 					if self.dict["EXCEL"][self.op_type][side]["KAOL"] == None:
 
 						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-						self.dict["EXCEL"][self.op_type][side]["KAOL"]	 	= '{0:.2f}'.format(angle)
+						self.dict["EXCEL"][self.op_type][side]["KAOL"]	 	= '{0:.1f}'.format(angle)
 
 						# save after insert
 						self.controller.save_json()
@@ -251,6 +251,6 @@ class KAOL():
 					# check if value exists
 					if self.dict["EXCEL"][self.op_type][side]["KAOL"] == None:
 						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-						self.dict["EXCEL"][self.op_type][side]["KAOL"]	 	= '{0:.2f}'.format(angle)
+						self.dict["EXCEL"][self.op_type][side]["KAOL"]	 	= '{0:.1f}'.format(angle)
 						# save after insert
 						self.controller.save_json()

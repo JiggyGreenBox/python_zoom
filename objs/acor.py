@@ -198,12 +198,12 @@ class ACOR():
 							# check if value exists
 							if self.dict["EXCEL"][self.op_type][side]["ACOR"] == None:
 								self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-								self.dict["EXCEL"][self.op_type][side]["ACOR"]	= '{0:.2f}'.format(acor_val)								
+								self.dict["EXCEL"][self.op_type][side]["ACOR"]	= '{0:.1f}'.format(acor_val)								
 								self.controller.save_json()
 
 							if self.dict["EXCEL"][self.op_type][side]["PCOR"] == None:
 								self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-								self.dict["EXCEL"][self.op_type][side]["PCOR"]	= '{0:.2f}'.format(pcor_val)								
+								self.dict["EXCEL"][self.op_type][side]["PCOR"]	= '{0:.1f}'.format(pcor_val)								
 								self.controller.save_json()
 
 

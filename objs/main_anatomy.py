@@ -225,23 +225,23 @@ class MAIN:
 
 			
 
-		if action == "DEL-LEFT-FEM-KNEE":
+		if action == "DEL-LEFT-FEM-CENTRE":
 			self.dict["MAIN"][self.op_type]["LEFT"]["FEM_KNEE"]["P1"] = None
 			self.side = "LEFT"
 			self.deleteExcelValues(["HKA", "VCA", "mLDFA"], self.side)
 
-		if action == "DEL-RIGHT-FEM-KNEE":
+		if action == "DEL-RIGHT-FEM-CENTRE":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["FEM_KNEE"]["P1"] = None
 			self.side = "RIGHT"
 			self.deleteExcelValues(["HKA", "VCA", "mLDFA"], self.side)
 
 
-		if action == "DEL-LEFT-TIB-KNEE":
+		if action == "DEL-LEFT-TIB-CENTRE":
 			self.dict["MAIN"][self.op_type]["LEFT"]["TIB_KNEE"]["P1"] = None
 			self.side = "LEFT"
 			self.deleteExcelValues(["HKA", "TAMD", "MPTA"], self.side)
 
-		if action == "DEL-RIGHT-TIB-KNEE":
+		if action == "DEL-RIGHT-TIB-CENTRE":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["TIB_KNEE"]["P1"] = None
 			self.side = "RIGHT"
 			self.deleteExcelValues(["HKA", "TAMD", "MPTA"], self.side)

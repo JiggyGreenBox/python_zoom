@@ -155,12 +155,12 @@ class ALPHA():
 					if side == "RIGHT":
 						angle = self.draw_tools.create_myAngle(U_fem_m1, p_int, R_fem, [self.tag,side,"ALPHA_ANGLE"])
 						if self.draw_labels:
-							self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"ALPHA_ANGLE"], x_offset=60, y_offset=-60, color="blue")
+							self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), [self.tag,side,"ALPHA_ANGLE"], x_offset=60, y_offset=-60, color="blue")
 
 					if side == "LEFT":
 						angle = self.draw_tools.create_myAngle(L_fem, p_int, U_fem_m1, [self.tag,side,"ALPHA_ANGLE"])
 						if self.draw_labels:
-							self.draw_tools.create_mytext(p_int, '{0:.2f}'.format(angle), [self.tag,side,"ALPHA_ANGLE"], x_offset=-60, y_offset=-60, color="blue")
+							self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), [self.tag,side,"ALPHA_ANGLE"], x_offset=-60, y_offset=-60, color="blue")
 
 
 	def addDict(self, event):
@@ -441,14 +441,14 @@ class ALPHA():
 
 				if side == "RIGHT":
 					alpha_angle = self.draw_tools.pil_create_myAngle(U_fem_m1, p_int, R_fem)
-					multi_text = 'ALPHA: {0:.2f}'.format(alpha_angle)
+					multi_text = 'ALPHA: {0:.1f}'.format(alpha_angle)
 					self.draw_tools.pil_create_myline(p_int, R_fem)
 					self.draw_tools.pil_create_mypoint(R_fem, "orange", point_thickness=self.point_size)
 					p_draw = R_fem
 
 				if side == "LEFT":
 					alpha_angle = self.draw_tools.pil_create_myAngle(L_fem, p_int, U_fem_m1)
-					multi_text = 'ALPHA: {0:.2f}'.format(alpha_angle)
+					multi_text = 'ALPHA: {0:.1f}'.format(alpha_angle)
 					xoffset = -1*(xoffset + self.draw_tools.pil_get_multiline_text_size(multi_text))
 					self.draw_tools.pil_create_myline(p_int, L_fem)
 					self.draw_tools.pil_create_mypoint(L_fem, "orange", point_thickness=self.point_size)

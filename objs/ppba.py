@@ -132,13 +132,13 @@ class PPBA():
 				p_int = self.draw_tools.line_intersection((knee_cap_line_p1, knee_cap_line_p2),(p1, p2))
 
 				angle = self.draw_tools.getSmallestAngle(p1, p_int, knee_cap_line_p1)
-				self.draw_tools.create_mytext(p2, '{0:.2f}'.format(angle), [self.tag,"PPBA_ANGLE"], y_offset=-40, color="blue")
+				self.draw_tools.create_mytext(p2, '{0:.1f}'.format(angle), [self.tag,"PPBA_ANGLE"], y_offset=-40, color="blue")
 
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type][side]["PPBA"] == None:
 				# if self.dict["EXCEL"][self.op_type][side]["TSLOPE"] == None:
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["PPBA"]	= '{0:.2f}'.format(angle)
+					self.dict["EXCEL"][self.op_type][side]["PPBA"]	= '{0:.1f}'.format(angle)
 					# save after insert
 					self.controller.save_json()
 			
