@@ -108,7 +108,12 @@ class HKA():
 						angle = self.draw_tools.create_myAngle(ankle_m1, hka_point, hip, self.tag)
 					else:
 						angle = self.draw_tools.create_myAngle(hip, hka_point, ankle_m1, self.tag)
-						
+					
+
+					# hka bugfix, impossible to recreate
+					if angle < 20:
+						angle = 180.0 - angle
+
 					# , radius = 50, width = 3):
 					# self.canvas.create_text(x-r,y+r,fill="orange", text='{0:.1f}'.format(t1), tags="tag")
 					
@@ -186,6 +191,9 @@ class HKA():
 					# angle = self.draw_tools.create_myAngle(hip, hka_point, ankle_m1, self.tag)
 					angle = self.draw_tools.getAnglePoints(hip, hka_point, ankle_m1)
 				
+				# hka bugfix, impossible to recreate
+				if angle < 20:
+					angle = 180.0 - angle
 
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type][side]["HKA"] == None:

@@ -172,7 +172,9 @@ class TAMD():
 				print('angle1: {0:.1f}'.format(angle))
 				print('angle2: {0:.1f}'.format(angle2))
 				print('angle3: {0:.1f}'.format(angle3))
-				self.draw_tools.create_mytext(ankle_m1, '{0:.1f}'.format(angle), [self.tag,side,"TAMD_ANGLE"], x_offset=60, y_offset=60, color="blue")
+				# self.draw_tools.create_mytext(ankle_m1, '{0:.1f}'.format(angle), [self.tag,side,"TAMD_ANGLE"], x_offset=60, y_offset=60, color="blue")
+				self.draw_tools.create_mytext(tib_knee, '{0:.1f}'.format(angle), [self.tag,side,"TAMD_ANGLE"], x_offset=60, y_offset=60, color="blue")
+				
 
 
 
