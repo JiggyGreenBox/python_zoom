@@ -24,6 +24,9 @@ class ACOR():
 
 		self.point_size = None
 
+		self.draw_labels = True
+		self.draw_hover = True
+
 	def click(self, event):
 		# print("click from "+self.name)
 		# self.draw()
@@ -34,12 +37,33 @@ class ACOR():
 			# print(self.dict)
 		else:
 			ret =  self.addDict(event)
+			# find if P0 hovers are required
+			self.mainHoverUsingNextLabel()
 			if ret:
 				self.controller.save_json()
 				# pass
 
-		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 		self.draw()
+
+
+	def right_click(self, event):
+		pass
+
+
+	def keyRightObjFunc(self):
+		print('set right')
+		self.side = "RIGHT"
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		self.draw()
+		self.regainHover(self.side)
+
+	def keyLeftObjFunc(self):
+		print('set left')
+		self.side = "LEFT"
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		self.draw()
+		self.regainHover(self.side)
 
 
 	def checkMasterDict(self):
@@ -430,6 +454,7 @@ class ACOR():
 		# delete from excel pat.json
 		self.dict["EXCEL"][self.op_type][self.side]["ACOR"] = None
 		self.dict["EXCEL"][self.op_type][self.side]["PCOR"] = None
+		self.dict["EXCEL"][self.op_type][self.side]["HASDATA"] 	= False
 
 		# print(self.name)
 		# print(self.op_type)
@@ -445,6 +470,15 @@ class ACOR():
 		# prevent auto curObject set bug
 		if self.side == None:
 			return
+
+
+		if self.draw_hover:
+			side_pre = self.side[0]+"_"
+			if hover_label == "P0_GUIDE_FEM":				
+				self.draw_tools.clear_by_tag("hover_line")
+				self.draw_tools.create_mypoint(P_mouse, "red", [self.tag, "hover_line"], hover_point=True, point_thickness=self.point_size)
+				if self.draw_labels:
+					self.draw_tools.create_mytext(P_mouse,x_offset=80, mytext=(side_pre+self.hover_text), mytag=[self.tag, "hover_line"])
 		
 	
 		if hover_label == "GUIDE_P1":
@@ -535,8 +569,10 @@ class ACOR():
 		elif count == 2:
 			self.draw_tools.setHoverPointLabel("P2")
 			self.draw_tools.setHoverBool(True)
-			
+		
 
+		# find if P0 hovers are required
+		self.mainHoverUsingNextLabel()
 
 
 	# when drag event occurs, we need a ref to the other point(s) 
@@ -620,7 +656,21 @@ class ACOR():
 
 
 
+	def mainHoverUsingNextLabel(self):
+		label = self.getNextLabel()
 
+		if label == "RIGHT GUIDE_FEM P1":
+			self.side = "RIGHT"
+			self.hover_text = "GUIDE_FEM P1"
+			self.draw_tools.setHoverPointLabel("P0_GUIDE_FEM")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT GUIDE_FEM P1":
+			self.side = "LEFT"
+			self.hover_text = "GUIDE_FEM P1"
+			self.draw_tools.setHoverPointLabel("P0_GUIDE_FEM")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
 
 
 
@@ -738,6 +788,7 @@ class ACOR():
 		self.side = None
 		self.draw_tools.setHoverPointLabel(None)
 		self.draw_tools.setHoverBool(False)
+		self.controller.updateMenuLabel("CHOOSE SIDE", self.menu_label)
 
 
 	def drag_start(self, tags):
@@ -746,3 +797,4 @@ class ACOR():
 		pass
 	def drag_stop(self, P_mouse):
 		self.draw()
+

@@ -60,6 +60,15 @@ class MNSA():
 		self.draw()		
 
 
+	def right_click(self, event):
+		pass
+
+	def keyRightObjFunc(self):
+		pass
+
+	def keyLeftObjFunc(self):
+		pass
+
 
 
 
@@ -117,18 +126,18 @@ class MNSA():
 			isFemBot 	= False
 
 
-			neck_p1 	= self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["P1"]
-			neck_p2 	= self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["P2"]
-			neck_m1 	= self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["M1"]
+			neck_p1 	= self.dict["MAIN"][self.op_type][side]["FEM_NECK"]["P1"]
+			neck_p2 	= self.dict["MAIN"][self.op_type][side]["FEM_NECK"]["P2"]
+			neck_m1 	= self.dict["MAIN"][self.op_type][side]["FEM_NECK"]["M1"]
 
 			hip 		= self.dict["MAIN"][self.op_type][side]["HIP"]["P1"]
-			fem_top_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
-			fem_top_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
-			fem_top_m1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
+			fem_U3_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["U3"]["P1"]
+			fem_U3_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["U3"]["P2"]
+			fem_U3_m1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["U3"]["M1"]
 
-			fem_bot_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
-			fem_bot_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
-			fem_bot_m1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
+			fem_L3_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["P1"]
+			fem_L3_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["P2"]
+			fem_L3_m1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["M1"]
 
 
 
@@ -157,26 +166,26 @@ class MNSA():
 
 			# FEM AXIS
 			# TOP
-			if fem_top_p1 != None:
-				self.draw_tools.create_mypoint(fem_top_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
+			if fem_U3_p1 != None:
+				self.draw_tools.create_mypoint(fem_U3_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
-			if fem_top_p2 != None:
-				self.draw_tools.create_mypoint(fem_top_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
+			if fem_U3_p2 != None:
+				self.draw_tools.create_mypoint(fem_U3_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
-			if fem_top_p1 != None and fem_top_p2 != None:				
-				self.draw_tools.create_midpoint_line(fem_top_p1, fem_top_p2, fem_top_m1, self.tag, point_thickness=self.point_size)
+			if fem_U3_p1 != None and fem_U3_p2 != None:				
+				self.draw_tools.create_midpoint_line(fem_U3_p1, fem_U3_p2, fem_U3_m1, self.tag, point_thickness=self.point_size)
 				isFemTop = True
 
 
 			# BOT
-			if fem_bot_p1 != None:
-				self.draw_tools.create_mypoint(fem_bot_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
+			if fem_L3_p1 != None:
+				self.draw_tools.create_mypoint(fem_L3_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
-			if fem_bot_p2 != None:
-				self.draw_tools.create_mypoint(fem_bot_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
+			if fem_L3_p2 != None:
+				self.draw_tools.create_mypoint(fem_L3_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
-			if fem_bot_p1 != None and fem_bot_p2 != None:				
-				self.draw_tools.create_midpoint_line(fem_bot_p1, fem_bot_p2, fem_bot_m1, self.tag, point_thickness=self.point_size)
+			if fem_L3_p1 != None and fem_L3_p2 != None:				
+				self.draw_tools.create_midpoint_line(fem_L3_p1, fem_L3_p2, fem_L3_m1, self.tag, point_thickness=self.point_size)
 				isFemBot = True
 
 			
@@ -186,9 +195,9 @@ class MNSA():
 			
 				# FEM-AXIS ray
 				p_top = self.draw_tools.line_intersection(
-					(fem_bot_m1, fem_top_m1),
+					(fem_L3_m1, fem_U3_m1),
 					(xtop, ytop))
-				self.draw_tools.create_myline(fem_bot_m1, p_top, self.tag)
+				self.draw_tools.create_myline(fem_L3_m1, p_top, self.tag)
 
 				if isNeck:
 					# NECK-SHAFT ray
@@ -201,9 +210,9 @@ class MNSA():
 						# find angle ray intersection point
 						p_int = self.draw_tools.line_intersection(
 								(hip, p_right),
-								(fem_bot_m1, p_top))
+								(fem_L3_m1, p_top))
 
-						angle = self.draw_tools.create_myAngle(hip, p_int, fem_bot_m1, [self.tag,side,"MNSA_ANGLE"])
+						angle = self.draw_tools.create_myAngle(hip, p_int, fem_L3_m1, [self.tag,side,"MNSA_ANGLE"])
 						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), [self.tag,side,"MNSA_ANGLE"], x_offset=60, color="blue")
 
 
@@ -218,9 +227,9 @@ class MNSA():
 						# find angle ray intersection point
 						p_int = self.draw_tools.line_intersection(
 								(hip, p_left),
-								(fem_bot_m1, p_top))
+								(fem_L3_m1, p_top))
 
-						angle = self.draw_tools.create_myAngle(fem_bot_m1, p_int, hip, [self.tag,side,"MNSA_ANGLE"])
+						angle = self.draw_tools.create_myAngle(fem_L3_m1, p_int, hip, [self.tag,side,"MNSA_ANGLE"])
 						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), [self.tag,side,"MNSA_ANGLE"], x_offset=60, color="blue")
 
 
@@ -244,13 +253,13 @@ class MNSA():
 			if self.side != None and self.dict["MAIN"][self.op_type][self.side]["HIP"]["P1"] != None:
 
 				hip = self.dict["MAIN"][self.op_type][self.side]["HIP"]["P1"]
-				fem_bot_m1 	= self.dict["MAIN"][self.op_type][self.side]["AXIS_FEM"]["BOT"]["M1"]
-				fem_top_m1 	= self.dict["MAIN"][self.op_type][self.side]["AXIS_FEM"]["TOP"]["M1"]
+				fem_L3_m1 	= self.dict["MAIN"][self.op_type][self.side]["AXIS_FEM"]["L3"]["M1"]
+				fem_U3_m1 	= self.dict["MAIN"][self.op_type][self.side]["AXIS_FEM"]["L3"]["M1"]
 
 				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
 
 				# neck_m1
-				# fem_bot_m1
+				# fem_L3_m1
 				# p_top
 
 				if self.side == "RIGHT":
@@ -262,9 +271,9 @@ class MNSA():
 					# find angle ray intersection point
 					p_int = self.draw_tools.line_intersection(
 							(hip, m),
-							(fem_bot_m1, fem_top_m1))
+							(fem_L3_m1, fem_U3_m1))
 
-					angle = self.draw_tools.create_myAngle(hip, p_int, fem_bot_m1, "hover_line")
+					angle = self.draw_tools.create_myAngle(hip, p_int, fem_L3_m1, "hover_line")
 					self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), "hover_line", x_offset=60)
 
 
@@ -279,9 +288,9 @@ class MNSA():
 					# find angle ray intersection point
 					p_int = self.draw_tools.line_intersection(
 							(hip, p_left),
-							(fem_bot_m1, fem_top_m1))
+							(fem_L3_m1, fem_U3_m1))
 
-					angle = self.draw_tools.create_myAngle(fem_bot_m1, p_int, hip, "hover_line")
+					angle = self.draw_tools.create_myAngle(fem_L3_m1, p_int, hip, "hover_line")
 					self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), "hover_line", x_offset=60)		
 	'''
 
@@ -291,9 +300,11 @@ class MNSA():
 	'''
 
 	def escapeObjFunc(self):
-		self.side = None
-		self.draw_tools.setHoverPointLabel(None)
-		self.draw_tools.setHoverBool(False)	
+		pass
+		# self.side = None
+		# self.draw_tools.setHoverPointLabel(None)
+		# self.draw_tools.setHoverBool(False)	
+		# self.controller.updateMenuLabel("CHOOSE SIDE", self.menu_label)
 
 	'''
 	def drag_start(self, tags):
@@ -341,13 +352,13 @@ class MNSA():
 			if self.drag_side != None and self.dict["MAIN"][self.op_type][self.drag_side]["HIP"]["P1"] != None:
 
 				hip = self.dict["MAIN"][self.op_type][self.drag_side]["HIP"]["P1"]
-				fem_bot_m1 	= self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["BOT"]["M1"]
-				fem_top_m1 	= self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["TOP"]["M1"]
+				fem_L3_m1 	= self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["L3"]["M1"]
+				fem_U3_m1 	= self.dict["MAIN"][self.op_type][self.drag_side]["AXIS_FEM"]["L3"]["M1"]
 
 				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
 
 				# neck_m1
-				# fem_bot_m1
+				# fem_L3_m1
 				# p_top
 
 				if self.drag_side == "RIGHT":
@@ -358,8 +369,8 @@ class MNSA():
 					# find angle ray intersection point
 					p_int = self.draw_tools.line_intersection(
 							(hip, m),
-							(fem_bot_m1, fem_top_m1))
-					angle = self.draw_tools.create_myAngle(hip, p_int, fem_bot_m1, "drag_line")
+							(fem_L3_m1, fem_U3_m1))
+					angle = self.draw_tools.create_myAngle(hip, p_int, fem_L3_m1, "drag_line")
 					self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), "drag_line", x_offset=60)
 
 
@@ -371,8 +382,8 @@ class MNSA():
 					# find angle ray intersection point
 					p_int = self.draw_tools.line_intersection(
 							(hip, p_left),
-							(fem_bot_m1, fem_top_m1))
-					angle = self.draw_tools.create_myAngle(fem_bot_m1, p_int, hip, "drag_line")
+							(fem_L3_m1, fem_U3_m1))
+					angle = self.draw_tools.create_myAngle(fem_L3_m1, p_int, hip, "drag_line")
 					self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), "drag_line", x_offset=60)
 
 
@@ -490,18 +501,18 @@ class MNSA():
 			isFemBot 	= False
 
 
-			neck_p1 	= self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["P1"]
-			neck_p2 	= self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["P2"]
-			neck_m1 	= self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["M1"]
+			neck_p1 	= self.dict["MAIN"][self.op_type][side]["FEM_NECK"]["P1"]
+			neck_p2 	= self.dict["MAIN"][self.op_type][side]["FEM_NECK"]["P2"]
+			neck_m1 	= self.dict["MAIN"][self.op_type][side]["FEM_NECK"]["M1"]
 
 			hip 		= self.dict["MAIN"][self.op_type][side]["HIP"]["P1"]
-			fem_top_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
-			fem_top_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
-			fem_top_m1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
+			fem_U3_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["U3"]["P1"]
+			fem_U3_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["U3"]["P2"]
+			fem_U3_m1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["U3"]["M1"]
 
-			fem_bot_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
-			fem_bot_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
-			fem_bot_m1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
+			fem_L3_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["P1"]
+			fem_L3_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["P2"]
+			fem_L3_m1 	= self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["M1"]
 
 
 
@@ -510,12 +521,12 @@ class MNSA():
 			if neck_p1 != None and neck_p2 != None:				
 				isNeck = True
 
-			if fem_top_p1 != None and fem_top_p2 != None:								
+			if fem_U3_p1 != None and fem_U3_p2 != None:								
 				isFemTop = True
 
 
 
-			if fem_bot_p1 != None and fem_bot_p2 != None:				
+			if fem_L3_p1 != None and fem_L3_p2 != None:				
 				isFemBot = True
 
 			
@@ -524,7 +535,7 @@ class MNSA():
 			
 				# FEM-AXIS ray
 				p_top = self.draw_tools.line_intersection(
-					(fem_bot_m1, fem_top_m1),
+					(fem_L3_m1, fem_U3_m1),
 					(xtop, ytop))
 
 				if isNeck:
@@ -533,18 +544,18 @@ class MNSA():
 						# find angle ray intersection point
 						p_int = self.draw_tools.line_intersection(
 								(hip, neck_m1),
-								(fem_bot_m1, p_top))
-						# angle = self.draw_tools.create_myAngle(hip, p_int, fem_bot_m1, [self.tag,side,"MNSA_ANGLE"])
-						angle = self.draw_tools.getAnglePoints(hip, p_int, fem_bot_m1)
+								(fem_L3_m1, p_top))
+						# angle = self.draw_tools.create_myAngle(hip, p_int, fem_L3_m1, [self.tag,side,"MNSA_ANGLE"])
+						angle = self.draw_tools.getAnglePoints(hip, p_int, fem_L3_m1)
 
 
 					if side == "LEFT":
 						# find angle ray intersection point
 						p_int = self.draw_tools.line_intersection(
 								(hip, neck_m1),
-								(fem_bot_m1, p_top))
-						# angle = self.draw_tools.create_myAngle(fem_bot_m1, p_int, hip, [self.tag,side,"MNSA_ANGLE"])
-						angle = self.draw_tools.getAnglePoints(fem_bot_m1, p_int, hip)
+								(fem_L3_m1, p_top))
+						# angle = self.draw_tools.create_myAngle(fem_L3_m1, p_int, hip, [self.tag,side,"MNSA_ANGLE"])
+						angle = self.draw_tools.getAnglePoints(fem_L3_m1, p_int, hip)
 
 
 					# check if value exists

@@ -44,6 +44,31 @@ class FFLEX_UKR():
 		self.draw()
 		# print(self.dict)
 
+	def right_click(self, event):
+		pass
+
+
+
+	def keyRightObjFunc(self):
+		print('set right')
+		self.side = "RIGHT"
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		self.draw()
+		self.regainHover(self.side)
+
+	def keyLeftObjFunc(self):
+		print('set left')
+		self.side = "LEFT"
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		self.draw()
+		self.regainHover(self.side)
+
+	def escapeObjFunc(self):
+		self.side = None
+		self.draw_tools.setHoverPointLabel(None)
+		self.draw_tools.setHoverBool(False)
+		self.controller.updateMenuLabel("CHOOSE SIDE", self.menu_label)
+
 
 	# menu button clicks are routed here
 	def menu_btn_click(self, action):
@@ -112,6 +137,7 @@ class FFLEX_UKR():
 		# delete excel data from pat.json
 		self.dict["EXCEL"][self.op_type][self.side]["FFLEX"] = None
 		self.dict["EXCEL"][self.op_type][self.side]["FFLE/EXT"] = None
+		self.dict["EXCEL"][self.op_type][self.side]["HASDATA"] 	= False
 
 		self.draw()		
 		self.regainHover(self.side)

@@ -33,7 +33,16 @@ class HKA():
 		
 	def click(self, event):
 		print("click from "+self.name)		
-		self.draw() 
+		self.draw()
+
+	def right_click(self, event):
+		pass 
+
+	def keyRightObjFunc(self):
+		pass
+
+	def keyLeftObjFunc(self):
+		pass
 
 
 	def draw(self):
@@ -428,9 +437,13 @@ class HKA():
 			ankle_p2 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]
 			ankle_m1 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["M1"]
 
-			dist_fem_p1 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["P1"]
-			dist_fem_p2 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["P2"]
-			dist_fem_m1 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["M1"]
+			# dist_fem_p1 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["P1"]
+			# dist_fem_p2 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["P2"]
+			# dist_fem_m1 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["M1"]
+
+			dist_fem_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["P1"]
+			dist_fem_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["P2"]
+			dist_fem_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["M1"]
 
 			mad_val 	= self.dict["EXCEL"][self.op_type][side]["MAD"]
 			

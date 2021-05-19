@@ -39,6 +39,25 @@ class P_TILT():
 		self.draw()
 
 
+	def right_click(self, event):
+		pass
+
+
+	def keyRightObjFunc(self):
+		print('set right')
+		self.side = "RIGHT"
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		self.draw()
+		self.regainHover(self.side)
+
+	def keyLeftObjFunc(self):
+		print('set left')
+		self.side = "LEFT"
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		self.draw()
+		self.regainHover(self.side)
+
+
 	# menu button clicks are routed here
 	def menu_btn_click(self, action):
 		print(action)
@@ -73,7 +92,7 @@ class P_TILT():
 			self.dict["P_TILT"][self.op_type]["RIGHT"]["P1P2_LINE"]["P2"] = None
 			self.side = "RIGHT"
 
-
+		# PPBA is derived from these measurements here
 		if action == "DEL-LEFT-PAT-P1":			
 			self.dict["P_TILT"][self.op_type]["LEFT"]["PAT_CROSS_SECTION"]["P1"] = None
 			self.side = "LEFT"
@@ -96,6 +115,7 @@ class P_TILT():
 
 		# delete excel data from pat.json
 		self.dict["EXCEL"][self.op_type][self.side]["PTILT"] = None
+		self.dict["EXCEL"][self.op_type][self.side]["HASDATA"] 	= False
 
 		
 		self.draw()
@@ -452,6 +472,7 @@ class P_TILT():
 		self.side = None
 		self.draw_tools.setHoverPointLabel(None)
 		self.draw_tools.setHoverBool(False)
+		self.controller.updateMenuLabel("CHOOSE SIDE", self.menu_label)
 
 
 	def drag_start(self, tags):

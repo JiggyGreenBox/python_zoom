@@ -62,6 +62,23 @@ class EADF():
 		self.draw()
 
 
+	def right_click(self, event):
+		pass
+
+	def keyRightObjFunc(self):
+		print('set right')
+		self.side = "RIGHT"
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		self.draw()
+		self.regainHover(self.side)
+
+	def keyLeftObjFunc(self):
+		print('set left')
+		self.side = "LEFT"
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		self.draw()
+		self.regainHover(self.side)
+
 
 	def getNextLabel(self):	
 		if self.side != None:
@@ -102,9 +119,9 @@ class EADF():
 			hip 		= self.dict["MAIN"][self.op_type][side]["HIP"]["P1"]
 			fem_knee 	= self.dict["MAIN"][self.op_type][side]["FEM_KNEE"]["P1"]
 
-			mnsa_p1		= self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["P1"]
-			mnsa_p2		= self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["P2"]
-			mnsa_m1		= self.dict["MAIN"][self.op_type][side]["NECK_AXIS"]["M1"]
+			mnsa_p1		= self.dict["MAIN"][self.op_type][side]["FEM_NECK"]["P1"]
+			mnsa_p2		= self.dict["MAIN"][self.op_type][side]["FEM_NECK"]["P2"]
+			mnsa_m1		= self.dict["MAIN"][self.op_type][side]["FEM_NECK"]["M1"]
 
 			eadf_p1 = self.dict["EADF"][self.op_type][side]["EADF_LINE"]["P1"]
 			eadf_p2 = self.dict["EADF"][self.op_type][side]["EADF_LINE"]["P2"]
@@ -193,7 +210,7 @@ class EADF():
 					self.draw_tools.create_mypoint(p_int, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 
 
-				d_fps = self.draw_tools.getDistance(p_int, eadf_p1)
+				d_fps = self.draw_tools.getDistance(p_int, eadf_p1)				
 				d_fds = self.draw_tools.getDistance(eadf_p1, fem_knee)
 
 				if self.dict["EXCEL"][self.op_type][side]["EADFPS"] == None:
@@ -294,6 +311,7 @@ class EADF():
 		self.dict["EXCEL"][self.op_type][self.side]["EADFA"] = None
 		self.dict["EXCEL"][self.op_type][self.side]["EADFPS"] = None
 		self.dict["EXCEL"][self.op_type][self.side]["EADFDS"] = None
+		self.dict["EXCEL"][self.op_type][self.side]["HASDATA"] 	= False
 
 		self.draw()
 		self.regainHover(self.side)
@@ -410,6 +428,9 @@ class EADF():
 		self.side = None
 		self.draw_tools.setHoverPointLabel(None)
 		self.draw_tools.setHoverBool(False)
+		self.controller.updateMenuLabel("CHOOSE SIDE", self.menu_label)
+
+
 
 
 	def checkbox_click(self,action, val):
@@ -444,5 +465,99 @@ class EADF():
 
 	# similiar to draw but nothing is drawn on the canvas
 	def updateExcelValues(self):
-		pass
+		print('update EADF')
+
+
+
+		# loop left and right
+		for side in ["LEFT","RIGHT"]:
+
+			isHip 	= False
+			isKnee 	= False
+			isMNSA 	= False
+			isEADF 	= False
+
+			hip 		= self.dict["MAIN"][self.op_type][side]["HIP"]["P1"]
+			fem_knee 	= self.dict["MAIN"][self.op_type][side]["FEM_KNEE"]["P1"]
+
+			mnsa_p1		= self.dict["MAIN"][self.op_type][side]["FEM_NECK"]["P1"]
+			mnsa_p2		= self.dict["MAIN"][self.op_type][side]["FEM_NECK"]["P2"]
+			mnsa_m1		= self.dict["MAIN"][self.op_type][side]["FEM_NECK"]["M1"]
+
+			eadf_p1 = self.dict["EADF"][self.op_type][side]["EADF_LINE"]["P1"]
+			eadf_p2 = self.dict["EADF"][self.op_type][side]["EADF_LINE"]["P2"]
+
+
+			# hip knee line
+			if hip != None:
+				isHip = True
+			if fem_knee != None:
+				isKnee = True
+			# MNSA
+			if mnsa_p1 != None and mnsa_p2 != None:
+				isMNSA = True
+			# EADF LINE
+			if eadf_p1 != None and eadf_p2 != None:
+				isEADF = True			
+
+
+			# draw EADFA angle
+			if isEADF and isKnee:
+				eadf_top, eadf_bot = self.draw_tools.retPointsUpDown(eadf_p1, eadf_p2)
+				if side == "LEFT":						
+					# angle = self.draw_tools.create_myAngle(fem_knee, eadf_bot, eadf_top, [self.tag,"EADF_LINE"])
+					angle = self.draw_tools.getAnglePoints(fem_knee, eadf_bot, eadf_top)
+				else:					
+					# angle = self.draw_tools.create_myAngle(eadf_top, eadf_bot, fem_knee, [self.tag,"EADF_LINE"])
+					angle = self.draw_tools.getAnglePoints(eadf_top, eadf_bot, fem_knee)
+				
+				print(angle)
+				if self.dict["EXCEL"][self.op_type][side]["EADFA"] == None:
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["EADFA"]	 	= '{0:.1f}'.format(angle)
+					self.controller.save_json()
+
+
+			# draw neck hip ray intersecting eadf line
+			if isEADF and isMNSA and isHip:
+
+				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
+
+				if side == "RIGHT":
+					p_right = self.draw_tools.line_intersection(
+						(mnsa_m1, hip),
+						(xtop, xbot))
+
+					# find angle ray intersection point
+					p_int = self.draw_tools.line_intersection(
+							(hip, p_right),
+							(eadf_p1, eadf_p2))
+
+
+
+
+				if side == "LEFT":
+					p_left = self.draw_tools.line_intersection(
+						(mnsa_m1, hip),
+						(ytop, ybot))
+					# self.draw_tools.create_myline(hip, p_left, [self.tag,side,"MNSA_ANGLE"])
+
+					# find angle ray intersection point
+					p_int = self.draw_tools.line_intersection(
+							(hip, p_left),
+							(eadf_p1, eadf_p2))
+
+
+				d_fps = self.draw_tools.getDistance(p_int, eadf_p1)
+				d_fds = self.draw_tools.getDistance(eadf_p1, fem_knee)
+
+				if self.dict["EXCEL"][self.op_type][side]["EADFPS"] == None:
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["EADFPS"]	= '{0:.1f}'.format(d_fps)
+					self.controller.save_json()
+
+				if self.dict["EXCEL"][self.op_type][side]["EADFDS"] == None:
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["EADFDS"]	= '{0:.1f}'.format(d_fds)
+					self.controller.save_json()
 						

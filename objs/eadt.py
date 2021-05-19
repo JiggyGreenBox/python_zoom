@@ -65,6 +65,23 @@ class EADT():
 		self.draw()
 
 
+	def right_click(self, event):
+		pass
+
+	def keyRightObjFunc(self):
+		print('set right')
+		self.side = "RIGHT"
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		self.draw()
+		self.regainHover(self.side)
+
+	def keyLeftObjFunc(self):
+		print('set left')
+		self.side = "LEFT"
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		self.draw()
+		self.regainHover(self.side)
+
 
 	def getNextLabel(self):	
 		if self.side != None:
@@ -226,6 +243,7 @@ class EADT():
 		self.dict["EXCEL"][self.op_type][self.side]["EADTA"]	= None
 		self.dict["EXCEL"][self.op_type][self.side]["EADTPS"]	= None
 		self.dict["EXCEL"][self.op_type][self.side]["EADTDS"]	= None
+		self.dict["EXCEL"][self.op_type][self.side]["HASDATA"] 	= False
 
 		self.draw()
 		self.regainHover(self.side)
@@ -320,6 +338,7 @@ class EADT():
 		self.side = None
 		self.draw_tools.setHoverPointLabel(None)
 		self.draw_tools.setHoverBool(False)
+		self.controller.updateMenuLabel("CHOOSE SIDE", self.menu_label)
 
 
 	def checkbox_click(self,action, val):
@@ -352,7 +371,62 @@ class EADT():
 		self.draw_tools.clear_by_tag(self.tag)
 		self.side = None
 
+
+
 	# similiar to draw but nothing is drawn on the canvas
 	def updateExcelValues(self):
-		pass
+		print('update EADT')
+
+
+		# loop left and right
+		for side in ["LEFT","RIGHT"]:
+
+			isKnee 	= False
+			isAnkle = False
+			isEADT 	= False
+
+			tib_knee 	= self.dict["MAIN"][self.op_type][side]["TIB_KNEE"]["P1"]
+			ankle_m1 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["M1"]
+			eadt_p1 	= self.dict["EADT"][self.op_type][side]["EADT_P1"]["P1"]
+
+
+			
+			if tib_knee != None:
+				isKnee = True
+
+			if ankle_m1 != None:
+				isAnkle = True
+		
+			# EADT POINT
+			if eadt_p1 != None:
+				isEADT = True
+
+
+			if isEADT and isAnkle and isKnee:
+
+				if side == "LEFT":						
+					# angle = self.draw_tools.create_myAngle(ankle_m1, eadt_p1, tib_knee, [self.tag,"EADT_LINE"])
+					angle = self.draw_tools.getAnglePoints(ankle_m1, eadt_p1, tib_knee)
+				else:
+					# angle = self.draw_tools.create_myAngle(tib_knee, eadt_p1, ankle_m1, [self.tag,"EADT_LINE"])
+					angle = self.draw_tools.getAnglePoints(tib_knee, eadt_p1, ankle_m1)
+
+				
+				if self.dict["EXCEL"][self.op_type][side]["EADTA"] == None:
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["EADTA"]	 	= '{0:.1f}'.format(angle)
+					self.controller.save_json()
+
+				d_tps = self.draw_tools.getDistance(eadt_p1, tib_knee)
+				d_tds = self.draw_tools.getDistance(eadt_p1, ankle_m1)
+
+				if self.dict["EXCEL"][self.op_type][side]["EADTPS"] == None:
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["EADTPS"]	= '{0:.1f}'.format(d_tps)
+					self.controller.save_json()
+
+				if self.dict["EXCEL"][self.op_type][side]["EADTDS"] == None:
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["EADTDS"]	= '{0:.1f}'.format(d_tds)
+					self.controller.save_json()
 						

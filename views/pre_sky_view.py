@@ -109,6 +109,23 @@ class PRE_SKY_View(tk.Frame):
 				raise e	
 
 
+	def keySetRight(self):
+		# num 1 keypress from app.py
+		if self.canvas != "":
+			try:
+				self.canvas.cur_obj.keyRightObjFunc()
+			except Exception as e:
+				raise e
+
+	def keySetLeft(self):
+		# num 2 keypress from app.py
+		if self.canvas != "":
+			try:
+				self.canvas.cur_obj.keyLeftObjFunc()
+			except Exception as e:
+				raise e
+
+
 	def is_set_med_image(self):
 		if self.med_image != "":
 			return True

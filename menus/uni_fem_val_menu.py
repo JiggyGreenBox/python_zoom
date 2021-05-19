@@ -47,9 +47,9 @@ class UNI_FEM_VAL_Menu(tk.Frame):
 		button.grid(column=2, row=6)
 
 		
-		button = ttk.Button(self, text="FEM LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-FEM-LINE"))
+		button = ttk.Button(self, text="IMP LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-FEM-LINE"))
 		button.grid(column=1, row=7)
-		button = ttk.Button(self, text="FEM LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-FEM-LINE"))
+		button = ttk.Button(self, text="IMP LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-FEM-LINE"))
 		button.grid(column=2, row=7)
 
 		label_cb = Checkbutton(self, text="LABELS", variable=self.label_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_LABEL", self.label_var))

@@ -61,6 +61,16 @@ class VCA():
 		self.draw()
 
 
+	def right_click(self, event):
+		pass
+
+	def keyRightObjFunc(self):
+		pass
+
+	def keyLeftObjFunc(self):
+		pass
+
+
 	def addDict(self, event):
 		for item in self.dict["VCA"][self.op_type][self.side]:
 			
@@ -143,9 +153,13 @@ class VCA():
 			# FROM VCA
 			# ------------------------
 
-			dist_fem_p1 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["P1"]
-			dist_fem_p2 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["P2"]
-			dist_fem_m1 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["M1"]
+			# dist_fem_p1 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["P1"]
+			# dist_fem_p2 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["P2"]
+			# dist_fem_m1 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["M1"]
+
+			dist_fem_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["P1"]
+			dist_fem_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["P2"]
+			dist_fem_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["M1"]
 
 			isDist = False
 
@@ -189,15 +203,18 @@ class VCA():
 				self.draw_tools.create_myline(dist_fem_m1, knee, [self.tag,side,"VCA_ANGLE"])
 
 
-				a1 = self.draw_tools.getAnglePoints(hip, knee, dist_fem_m1)
-				a2 = self.draw_tools.getAnglePoints(dist_fem_m1, knee, hip)
-				print('{0:.1f} a1 RIGHT'.format(a1))
-				print('{0:.1f} a2 RIGHT'.format(a2))
+				# a1 = self.draw_tools.getAnglePoints(hip, knee, dist_fem_m1)
+				# a2 = self.draw_tools.getAnglePoints(dist_fem_m1, knee, hip)
+				# print('{0:.1f} a1 RIGHT'.format(a1))
+				# print('{0:.1f} a2 RIGHT'.format(a2))
 
-				if a1 > a2:					
-					angle = self.draw_tools.create_myAngle(dist_fem_m1, knee, hip, self.tag)
-				else:					
-					angle = self.draw_tools.create_myAngle(hip, knee, dist_fem_m1, self.tag)
+				# if a1 > a2:					
+				# 	angle = self.draw_tools.create_myAngle(dist_fem_m1, knee, hip, self.tag)
+				# else:					
+				# 	angle = self.draw_tools.create_myAngle(hip, knee, dist_fem_m1, self.tag)
+
+
+				angle = self.draw_tools.getSmallestAngle(hip, knee, dist_fem_m1)
 
 				self.draw_tools.create_mytext(dist_fem_m1, '{0:.1f}'.format(angle), [self.tag,side,"VCA_ANGLE"], x_offset=0, y_offset=-60, color="blue")
 
@@ -222,9 +239,11 @@ class VCA():
 	# 	pass
 
 	def escapeObjFunc(self):
-		self.side = None
-		self.draw_tools.setHoverPointLabel(None)
-		self.draw_tools.setHoverBool(False)
+		pass
+		# self.side = None
+		# self.draw_tools.setHoverPointLabel(None)
+		# self.draw_tools.setHoverBool(False)
+		# self.controller.updateMenuLabel("CHOOSE SIDE", self.menu_label)
 
 
 
@@ -350,9 +369,15 @@ class VCA():
 			# FROM VCA
 			# ------------------------
 
-			dist_fem_p1 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["P1"]
-			dist_fem_p2 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["P2"]
-			dist_fem_m1 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["M1"]
+			# dist_fem_p1 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["P1"]
+			# dist_fem_p2 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["P2"]
+			# dist_fem_m1 = self.dict["MAIN"][self.op_type][side]["DIST_FEM"]["M1"]
+
+
+			dist_fem_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["P1"]
+			dist_fem_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["P2"]
+			dist_fem_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["M1"]
+			
 
 			isDist = False
 

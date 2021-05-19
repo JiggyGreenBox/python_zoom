@@ -58,6 +58,15 @@ class MAD():
 		# self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
 		self.draw()
 
+	def right_click(self, event):
+		pass
+
+	def keyRightObjFunc(self):
+		pass
+
+	def keyLeftObjFunc(self):
+		pass
+
 
 
 	# def getNextLabel(self):
@@ -91,6 +100,10 @@ class MAD():
 		# loop left and right
 		for side in ["LEFT","RIGHT"]:
 
+			isHip 	= False
+			isAnkle = False
+			isMad 	= False
+
 			hip 		= self.dict["MAIN"][self.op_type][side]["HIP"]["P1"]
 			
 			ankle_p1 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["P1"]
@@ -106,13 +119,14 @@ class MAD():
 
 			# ANKLE
 			if ankle_p1 != None and ankle_p2 != None:
+				isAnkle = True
 				self.draw_tools.create_mypoint(ankle_p1, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 				self.draw_tools.create_mypoint(ankle_p2, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
 				self.draw_tools.create_midpoint_line(ankle_p1, ankle_p2, ankle_m1, self.tag, point_thickness=self.point_size)
 
 
-
-			if hip != None and ankle_p1 != None and ankle_p2 != None:
+			if isHip and isAnkle:
+			# if hip != None and ankle_p1 != None and ankle_p2 != None:
 				self.draw_tools.create_myline(ankle_m1, hip, self.tag)
 
 			# ------------------------
@@ -125,6 +139,7 @@ class MAD():
 				self.draw_tools.create_mypoint(mad_p2, "orange", [self.tag, side, "P2_MAD_LINE"], point_thickness=self.point_size)
 
 			if mad_p1 != None and mad_p2 != None:
+				isMad = True
 				self.draw_tools.create_myline(mad_p1, mad_p2, [self.tag,side,"MAD_LINE"])
 				# isTamd = True
 
@@ -147,6 +162,129 @@ class MAD():
 				self.draw_tools.create_mytext(self.draw_tools.getLineSegmentByPercentage(0.5, L_mad, R_mad), y_offset=-10, mytext="C", mytag=[self.tag, side, "MAD_LINE"], color="blue")
 				self.draw_tools.create_mytext(self.draw_tools.getLineSegmentByPercentage(0.7, L_mad, R_mad), y_offset=-10, mytext="2", mytag=[self.tag, side, "MAD_LINE"], color="blue")
 				self.draw_tools.create_mytext(self.draw_tools.getLineSegmentByPercentage(0.9, L_mad, R_mad), y_offset=-10, mytext="1", mytag=[self.tag, side, "MAD_LINE"], color="blue")
+
+			if isMad and isHip and isAnkle:
+				p_int = self.draw_tools.line_intersection((ankle_m1, hip), (mad_p1, mad_p2))
+
+				L_mad, R_mad = self.draw_tools.retPointsLeftRight(mad_p1, mad_p2)
+				mad_val = None
+
+				if side == "RIGHT":
+					# no intersection 0 condition
+					if self.draw_tools.retIsPointRight(p_int, R_mad):
+						print('MAD value: 0')
+						mad_val = '0'
+
+						percentMA = (self.draw_tools.getDistance(p_int, R_mad) / self.draw_tools.getDistance(L_mad, R_mad)) * -100
+						print('percentMA: {}'.format(percentMA))
+						self.draw_tools.create_mytext(R_mad, y_offset=10, mytext='MA: {0:.1f}%'.format(percentMA), mytag=[self.tag], color="blue")
+
+					# no intersection 5 condition
+					elif self.draw_tools.retIsPointLeft(p_int, L_mad):
+						print('MAD value: 5')
+						mad_val = '5'
+
+						percentMA = (self.draw_tools.getDistance(p_int, R_mad) / self.draw_tools.getDistance(L_mad, R_mad)) * 100
+						print('percentMA: {}'.format(percentMA))
+						self.draw_tools.create_mytext(R_mad, y_offset=10, mytext='MA: {0:.1f}%'.format(percentMA), mytag=[self.tag], color="blue")
+
+
+					# intersection, but confirm
+					elif self.draw_tools.retIsPointLeft(p_int, R_mad) and self.draw_tools.retIsPointRight(p_int, L_mad):
+						print('in between')
+
+						# draw intersection point
+						# self.draw_tools.create_mypoint(p_int, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
+
+						percentMA = (self.draw_tools.getDistance(p_int, R_mad) / self.draw_tools.getDistance(L_mad, R_mad)) * 100
+						print('percentMA: {}'.format(percentMA))
+						self.draw_tools.create_mytext(R_mad, y_offset=10, mytext='MA: {0:.1f}%'.format(percentMA), mytag=[self.tag], color="blue")
+
+
+						if 0 <= percentMA < 20:
+							mad_val = '1'
+
+						elif 20 <= percentMA < 40:
+							mad_val = '2'
+
+						elif 40 <= percentMA < 60:
+							mad_val = 'C'
+
+						elif 60 <= percentMA < 80:
+							mad_val = '3'
+
+						elif 80 <= percentMA <= 100:
+							mad_val = '4'
+
+					# safety catch mostly error
+					else:
+						print('error?')
+						mad_val = '-1'
+
+					if self.dict["EXCEL"][self.op_type][side]["MAD"] == None:
+						self.dict["EXCEL"][self.op_type]["RIGHT"]["HASDATA"] = True
+						self.dict["EXCEL"][self.op_type]["RIGHT"]["MAD"]	 = mad_val
+						self.controller.save_json()
+
+
+				elif side == "LEFT":
+					# no intersection 0 condition
+					if self.draw_tools.retIsPointRight(p_int, R_mad):
+						print('MAD value: 5')
+						mad_val = '5'
+
+						percentMA = (self.draw_tools.getDistance(p_int, L_mad) / self.draw_tools.getDistance(L_mad, R_mad)) * 100
+						print('percentMA: {}'.format(percentMA))
+						self.draw_tools.create_mytext(L_mad, y_offset=10, mytext='MA: {0:.1f}%'.format(percentMA), mytag=[self.tag], color="blue")
+
+					# no intersection 5 condition
+					elif self.draw_tools.retIsPointLeft(p_int, L_mad):
+						print('MAD value: 0')
+						mad_val = '0'
+
+						percentMA = (self.draw_tools.getDistance(p_int, L_mad) / self.draw_tools.getDistance(L_mad, R_mad)) * -100
+						print('percentMA: {}'.format(percentMA))
+						self.draw_tools.create_mytext(L_mad, y_offset=10, mytext='MA: {0:.1f}%'.format(percentMA), mytag=[self.tag], color="blue")
+
+					# intersection, but confirm
+					elif self.draw_tools.retIsPointLeft(p_int, R_mad) and self.draw_tools.retIsPointRight(p_int, L_mad):
+						print('in between')
+
+						# draw intersection point
+						# self.draw_tools.create_mypoint(p_int, "orange", [self.tag, side, "NO-DRAG"], point_thickness=self.point_size)
+
+						percentMA = (self.draw_tools.getDistance(p_int, L_mad) / self.draw_tools.getDistance(L_mad, R_mad)) * 100
+						print('percentMA: {}'.format(percentMA))
+						self.draw_tools.create_mytext(L_mad, y_offset=10, mytext='MA: {0:.1f}%'.format(percentMA), mytag=[self.tag], color="blue")
+
+
+						if 0 <= percentMA < 20:
+							mad_val = '1'
+
+						elif 20 <= percentMA < 40:
+							mad_val = '2'
+
+						elif 40 <= percentMA < 60:
+							mad_val = 'C'
+
+						elif 60 <= percentMA < 80:
+							mad_val = '3'
+
+						elif 80 <= percentMA <= 100:
+							mad_val = '4'
+
+
+
+					# safety catch mostly error
+					else:
+						print('error?')
+						mad_val = '-1'
+
+					if self.dict["EXCEL"][self.op_type][side]["MAD"] == None:
+						self.dict["EXCEL"][self.op_type]["LEFT"]["HASDATA"] = True
+						self.dict["EXCEL"][self.op_type]["LEFT"]["MAD"]	 = mad_val
+						self.controller.save_json()
+
 
 
 
@@ -274,9 +412,11 @@ class MAD():
 	# 	pass
 
 	def escapeObjFunc(self):
-		self.side = None
-		self.draw_tools.setHoverPointLabel(None)
-		self.draw_tools.setHoverBool(False)
+		pass
+		# self.side = None
+		# self.draw_tools.setHoverPointLabel(None)
+		# self.draw_tools.setHoverBool(False)
+		# self.controller.updateMenuLabel("CHOOSE SIDE", self.menu_label)
 
 
 	def update_canvas(self, draw_tools):
@@ -314,33 +454,36 @@ class MAD():
 	def drag_stop(self, P_mouse):
 		pass
 
+	# def menu_btn_click(self, action):
+	# 	if action == "SAVE-MAD":
+	# 		R_val, L_val = self.controller.getMadVals()
+	# 		print('{} {}'.format(R_val,L_val))
+
+
+	# 		if R_val in ['0','1','2','3','4','5','c','C']:
+	# 			if R_val == "c":
+	# 				R_val = "C"
+	# 			# overwrite allowed here
+	# 			self.dict["EXCEL"][self.op_type]["RIGHT"]["HASDATA"] = True
+	# 			self.dict["EXCEL"][self.op_type]["RIGHT"]["MAD"]	 = R_val
+	# 			self.controller.save_json()
+	# 		else:
+	# 			self.controller.warningBox('Values allowed: 0,1,2,C,3,4,5')
+	# 			return
+
+	# 		if L_val in ['0','1','2','3','4','5','c','C']:
+	# 			if L_val == "c":
+	# 				L_val = "C"
+	# 			# overwrite allowed here
+	# 			self.dict["EXCEL"][self.op_type]["LEFT"]["HASDATA"] = True
+	# 			self.dict["EXCEL"][self.op_type]["LEFT"]["MAD"]	 	= L_val
+	# 			self.controller.save_json()
+	# 		else:
+	# 			self.controller.warningBox('Values allowed: 0,1,2,C,3,4,5')
+	# 			return
+
 	def menu_btn_click(self, action):
-		if action == "SAVE-MAD":
-			R_val, L_val = self.controller.getMadVals()
-			print('{} {}'.format(R_val,L_val))
-
-
-			if R_val in ['0','1','2','3','4','5','c','C']:
-				if R_val == "c":
-					R_val = "C"
-				# overwrite allowed here
-				self.dict["EXCEL"][self.op_type]["RIGHT"]["HASDATA"] = True
-				self.dict["EXCEL"][self.op_type]["RIGHT"]["MAD"]	 = R_val
-				self.controller.save_json()
-			else:
-				self.controller.warningBox('Values allowed: 0,1,2,C,3,4,5')
-				return
-
-			if L_val in ['0','1','2','3','4','5','c','C']:
-				if L_val == "c":
-					L_val = "C"
-				# overwrite allowed here
-				self.dict["EXCEL"][self.op_type]["LEFT"]["HASDATA"] = True
-				self.dict["EXCEL"][self.op_type]["LEFT"]["MAD"]	 	= L_val
-				self.controller.save_json()
-			else:
-				self.controller.warningBox('Values allowed: 0,1,2,C,3,4,5')
-				return
+		pass
 
 
 	def getNextLabel(self):
@@ -352,4 +495,142 @@ class MAD():
 
 	# similiar to draw but nothing is drawn on the canvas
 	def updateExcelValues(self):
-		pass						
+		# loop left and right
+		for side in ["LEFT","RIGHT"]:
+
+			isHip 	= False
+			isAnkle = False
+			isMad 	= False
+
+			hip 		= self.dict["MAIN"][self.op_type][side]["HIP"]["P1"]
+			
+			ankle_p1 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["P1"]
+			ankle_p2 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]
+			ankle_m1 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["M1"]
+
+			mad_p1 		= self.dict["MAIN"][self.op_type][side]["MAD_LINE"]["P1"]
+			mad_p2 		= self.dict["MAIN"][self.op_type][side]["MAD_LINE"]["P2"]
+
+
+			if hip != None:
+				isHip = True
+			
+			if ankle_p1 != None and ankle_p2 != None:
+				isAnkle = True
+
+			if mad_p1 != None and mad_p2 != None:
+				isMad = True
+
+
+
+			if isMad and isHip and isAnkle:
+				p_int = self.draw_tools.line_intersection((ankle_m1, hip), (mad_p1, mad_p2))
+
+				L_mad, R_mad = self.draw_tools.retPointsLeftRight(mad_p1, mad_p2)
+				mad_val = None
+
+				if side == "RIGHT":
+					# no intersection 0 condition
+					if self.draw_tools.retIsPointRight(p_int, R_mad):
+						print('MAD value: 0')
+						mad_val = '0'
+
+					# no intersection 5 condition
+					elif self.draw_tools.retIsPointLeft(p_int, L_mad):
+						print('MAD value: 5')
+						mad_val = '5'
+
+					# intersection, but confirm
+					elif self.draw_tools.retIsPointLeft(p_int, R_mad) and self.draw_tools.retIsPointRight(p_int, L_mad):
+						print('in between')
+
+						# draw intersection point
+
+						percentMA = (self.draw_tools.getDistance(p_int, R_mad) / self.draw_tools.getDistance(L_mad, R_mad)) * 100
+						print('percentMA: {}'.format(percentMA))
+
+
+						if 0 <= percentMA < 20:
+							mad_val = '1'
+
+						elif 20 <= percentMA < 40:
+							mad_val = '2'
+
+						elif 40 <= percentMA < 60:
+							mad_val = 'C'
+
+						elif 60 <= percentMA < 80:
+							mad_val = '3'
+
+						elif 80 <= percentMA <= 100:
+							mad_val = '4'
+
+					# safety catch mostly error
+					else:
+						print('error?')
+						mad_val = '-1'
+
+					if self.dict["EXCEL"][self.op_type][side]["MAD"] == None:
+						self.dict["EXCEL"][self.op_type]["RIGHT"]["HASDATA"] = True
+						self.dict["EXCEL"][self.op_type]["RIGHT"]["MAD"]	 = mad_val
+						self.controller.save_json()
+
+
+				elif side == "LEFT":
+					# no intersection 0 condition
+					if self.draw_tools.retIsPointRight(p_int, R_mad):
+						print('MAD value: 5')
+						mad_val = '5'
+
+					# no intersection 5 condition
+					elif self.draw_tools.retIsPointLeft(p_int, L_mad):
+						print('MAD value: 0')
+						mad_val = '0'
+
+					# intersection, but confirm
+					elif self.draw_tools.retIsPointLeft(p_int, R_mad) and self.draw_tools.retIsPointRight(p_int, L_mad):
+						print('in between')
+
+
+						percentMA = (self.draw_tools.getDistance(p_int, L_mad) / self.draw_tools.getDistance(L_mad, R_mad)) * 100
+						print('percentMA: {}'.format(percentMA))
+
+
+						if 0 <= percentMA < 20:
+							mad_val = '1'
+
+						elif 20 <= percentMA < 40:
+							mad_val = '2'
+
+						elif 40 <= percentMA < 60:
+							mad_val = 'C'
+
+						elif 60 <= percentMA < 80:
+							mad_val = '3'
+
+						elif 80 <= percentMA <= 100:
+							mad_val = '4'
+
+
+
+					# safety catch mostly error
+					else:
+						print('error?')
+						mad_val = '-1'
+
+					if self.dict["EXCEL"][self.op_type][side]["MAD"] == None:
+						self.dict["EXCEL"][self.op_type]["LEFT"]["HASDATA"] = True
+						self.dict["EXCEL"][self.op_type]["LEFT"]["MAD"]	 = mad_val
+						self.controller.save_json()
+
+
+
+
+
+						
+				
+				
+
+			
+
+			

@@ -71,12 +71,12 @@ class POST_LAT_View(tk.Frame):
 
 		# create menus
 		self.menus = {}
-		for M in (
-					ACOR_Menu,
+		for M in (					
 					ISR_Menu,
 					TSLOPE_Menu,
 					FFLEX_Menu,
-					FFLEX_UKR_Menu
+					FFLEX_UKR_Menu,
+					ACOR_Menu
 				):
 			page_name = M.__name__
 			menu = M(parent=self.navbar, controller=self)
@@ -89,12 +89,12 @@ class POST_LAT_View(tk.Frame):
 
 
 		self.objects = {}
-		for Obj in (
-					ACOR,
+		for Obj in (					
 					ISR,
 					TSLOPE,
 					FFLEX,
-					FFLEX_UKR
+					FFLEX_UKR,
+					ACOR
 				):
 			obj_name = Obj.__name__
 			# print(obj_name)
@@ -122,6 +122,23 @@ class POST_LAT_View(tk.Frame):
 				raise e
 
 
+	def keySetRight(self):
+		# num 1 keypress from app.py
+		if self.canvas != "":
+			try:
+				self.canvas.cur_obj.keyRightObjFunc()
+			except Exception as e:
+				raise e
+
+	def keySetLeft(self):
+		# num 2 keypress from app.py
+		if self.canvas != "":
+			try:
+				self.canvas.cur_obj.keyLeftObjFunc()
+			except Exception as e:
+				raise e
+
+
 	def update_dict(self, master_dict):
 		
 		# update dictionaries
@@ -140,6 +157,9 @@ class POST_LAT_View(tk.Frame):
 			# update canvas object for children
 			for obj in self.objects:			
 				self.objects[obj].update_canvas(self.canvas)
+
+			# auto-set curObject to ACOR
+			self.canvas.setObject(self.objects["ACOR"])
 
 
 
@@ -172,6 +192,8 @@ class POST_LAT_View(tk.Frame):
 			for obj in self.objects:			
 				self.objects[obj].update_canvas(self.canvas)
 
+			# auto-set curObject to ACOR
+			self.canvas.setObject(self.objects["ACOR"])
 
 			# save to json for future sessions
 			# self.master_dict["IMAGES"]["PRE-LAT"] = image

@@ -11,12 +11,14 @@ from menus.mldfa_menu import MLDFA_Menu
 from menus.mnsa_menu import MNSA_Menu
 from menus.tamd_menu import TAMD_Menu
 from menus.mpta_menu import MPTA_Menu
+from menus.jca_menu import JCA_Menu
 from menus.vca_menu import VCA_Menu
 from menus.kjlo_menu import KJLO_Menu
 from menus.kaol_menu import KAOL_Menu
 from menus.mad_menu import MAD_Menu
 from menus.eadf_menu import EADF_Menu
 from menus.eadt_menu import EADT_Menu
+from menus.lpfa_menu import LPFA_Menu
 from menus.main_menu import MAIN_Menu
 
 # objs
@@ -27,12 +29,14 @@ from objs.aldfa import ALDFA
 from objs.mldfa import MLDFA
 from objs.tamd import TAMD
 from objs.mpta import MPTA
+from objs.jca import JCA
 from objs.vca import VCA
 from objs.kjlo import KJLO
 from objs.kaol import KAOL
 from objs.mad import MAD
 from objs.eadf import EADF
 from objs.eadt import EADT
+from objs.lpfa import LPFA
 from objs.main_anatomy import MAIN
 
 # choose file
@@ -69,7 +73,7 @@ class PRE_SCANNO_View(tk.Frame):
 		self.topbar.pack(anchor=E, fill=X, expand=False, side=TOP)
 
 		# make buttons in the topbar
-		for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","KJLO","KAOL","MAD","EADF","EADT"]):
+		for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","JCA","KJLO","KAOL","MAD","EADF","EADT","LPFA"]):
 		# for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","ALDFA","MLDFA","TAMD","MPTA","KJLO", "KAOL"]):
 			# print(text)
 			button = ttk.Button(self.topbar, text=text, command=lambda text=text: self.show_menu(text))
@@ -96,6 +100,7 @@ class PRE_SCANNO_View(tk.Frame):
 					MLDFA_Menu,
 					MNSA_Menu,
 					MPTA_Menu,
+					JCA_Menu,
 					TAMD_Menu,
 					VCA_Menu,
 					KJLO_Menu,
@@ -103,6 +108,7 @@ class PRE_SCANNO_View(tk.Frame):
 					MAD_Menu,
 					EADF_Menu,
 					EADT_Menu,
+					LPFA_Menu,
 					MAIN_Menu
 				):
 			page_name = M.__name__
@@ -123,6 +129,7 @@ class PRE_SCANNO_View(tk.Frame):
 					ALDFA,
 					MLDFA,
 					MPTA,
+					JCA,
 					TAMD,
 					VCA,
 					KJLO,
@@ -130,6 +137,7 @@ class PRE_SCANNO_View(tk.Frame):
 					MAD,
 					EADF,
 					EADT,
+					LPFA,
 					MAIN
 				):
 			obj_name = Obj.__name__
@@ -152,9 +160,26 @@ class PRE_SCANNO_View(tk.Frame):
 		self.controller.save_json()
 
 	def escapeFunc(self):
+		# escape keypress from app.py
 		if self.canvas != "":
 			try:
 				self.canvas.cur_obj.escapeObjFunc()
+			except Exception as e:
+				raise e
+
+	def keySetRight(self):
+		# num 1 keypress from app.py
+		if self.canvas != "":
+			try:
+				self.canvas.cur_obj.keyRightObjFunc()
+			except Exception as e:
+				raise e
+
+	def keySetLeft(self):
+		# num 2 keypress from app.py
+		if self.canvas != "":
+			try:
+				self.canvas.cur_obj.keyLeftObjFunc()
 			except Exception as e:
 				raise e
 			
@@ -182,8 +207,9 @@ class PRE_SCANNO_View(tk.Frame):
 			# auto-set curObject to MAIN
 			self.canvas.setObject(self.objects["MAIN"])
 
+		# deprecated, MAD is auto calculated now
 		# update mad value
-		self.menus["MAD_Menu"].updateMadLabels(self.master_dict["EXCEL"]["PRE-OP"]["RIGHT"]["MAD"],self.master_dict["EXCEL"]["PRE-OP"]["LEFT"]["MAD"])
+		# self.menus["MAD_Menu"].updateMadLabels(self.master_dict["EXCEL"]["PRE-OP"]["RIGHT"]["MAD"],self.master_dict["EXCEL"]["PRE-OP"]["LEFT"]["MAD"])
 
 
 	def is_set_med_image(self):
@@ -288,19 +314,33 @@ class PRE_SCANNO_View(tk.Frame):
 			self.objects[obj].unset()
 
 	# calls the draw function without drawing the points on the canvas
-	def calculateExcel(self):
-		for obj in self.objects:
-			# if obj == "HKA":
+	def calculateExcel(self, excel_list=None):
 
-			if obj in ["HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","KJLO","KAOL","MAD","EADF"]:
-				print("{} draw".format(obj))
+		# called when Left Done or Right Done
+		if excel_list == None:
+			print('normal excel')
+			for obj in self.objects:
+				if obj in ["HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","KJLO","KAOL","MAD","EADF","JCA"]:
+					print("{} draw".format(obj))
+					self.objects[obj].updateExcelValues()
+
+		# called when drag stop is called
+		else:
+			print('drag excel')
+			for obj in excel_list:
+				print(obj)
 				self.objects[obj].updateExcelValues()
-			# self.objects[obj].updateExcelValues()
+
 
 
 	# unique for MAD
 	def getMadVals(self):
 		return self.menus["MAD_Menu"].getMadEntryVals()
+
+	# unique for MAIN
+	def toggleDissapearMode(self):
+		self.menus["MAIN_Menu"].toggleDissapearCheckbox()
+
 
 
 	def view_draw_pil(self):
@@ -322,8 +362,8 @@ class PRE_SCANNO_View(tk.Frame):
 		Path(self.controller.working_dir +'/export').mkdir(parents=True, exist_ok=True)
 
 		# create platform independent file path
-		# file = Path(self.controller.working_dir + '/export/export_pre_scanno.jpg')
-		file = Path(self.controller.working_dir + '/export/resize.jpg')
+		file = Path(self.controller.working_dir + '/export/export_pre_scanno.jpg')
+		# file = Path(self.controller.working_dir + '/export/resize.jpg')
 
 		# save to path
 		self.canvas.savePIL(file)

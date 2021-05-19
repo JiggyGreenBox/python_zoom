@@ -18,6 +18,16 @@ class ALDFA():
 		self.draw()
 
 
+	def right_click(self, event):
+		pass
+
+	def keyRightObjFunc(self):
+		pass
+
+	def keyLeftObjFunc(self):
+		pass
+
+
 	def draw(self):
 
 		self.draw_tools.clear_by_tag(self.tag)
@@ -34,15 +44,15 @@ class ALDFA():
 			fem_joint_p1 = self.dict["MAIN"][self.op_type][side]["FEM_JOINT_LINE"]["P1"]
 			fem_joint_p2 = self.dict["MAIN"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
 
-			fem_top_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
-			fem_top_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
+			fem_top_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["U3"]["P1"]
+			fem_top_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["U3"]["P2"]
 
-			fem_bot_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
-			fem_bot_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
+			fem_bot_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["P1"]
+			fem_bot_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["P2"]
 
 
-			bot_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
-			top_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
+			bot_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["M1"]
+			top_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["U3"]["M1"]
 
 
 			# ------------------------
@@ -138,6 +148,7 @@ class ALDFA():
 		pass
 
 
+
 	def update_canvas(self, draw_tools):
 		self.draw_tools = draw_tools
 
@@ -162,15 +173,15 @@ class ALDFA():
 			fem_joint_p1 = self.dict["MAIN"][self.op_type][side]["FEM_JOINT_LINE"]["P1"]
 			fem_joint_p2 = self.dict["MAIN"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
 
-			fem_top_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
-			fem_top_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
+			fem_top_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["U3"]["P1"]
+			fem_top_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["U3"]["P2"]
 
-			fem_bot_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
-			fem_bot_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
+			fem_bot_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["P1"]
+			fem_bot_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["P2"]
 
 
-			bot_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
-			top_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
+			bot_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["L3"]["M1"]
+			top_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_FEM"]["U3"]["M1"]
 
 
 			# ------------------------

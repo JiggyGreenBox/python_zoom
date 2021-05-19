@@ -26,21 +26,40 @@ class BETA():
 			self.dict["BETA"] = 	{
 									"PRE-OP":{
 											"LEFT":	{
+														"AXIS_TIB":	{
+																		"type":	"axis",
+																		"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
+																		"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																	},
 														"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None}
 													},
-											"RIGHT":{
+											"RIGHT":	{
+														"AXIS_TIB":	{
+																		"type":	"axis",
+																		"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
+																		"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																	},
 														"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None}
 													}
-											},
-
-									"POST-OP":{
+										},
+										"POST-OP":{
 											"LEFT":	{
+														"AXIS_TIB":	{
+																		"type":	"axis",
+																		"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
+																		"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																	},
 														"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None}
 													},
-											"RIGHT":{
+											"RIGHT":	{
+														"AXIS_TIB":	{
+																		"type":	"axis",
+																		"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
+																		"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																	},
 														"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None}
 													}
-											}
+										}
 									}
 
 
@@ -62,6 +81,25 @@ class BETA():
 
 		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
 		self.draw()
+
+	def right_click(self, event):
+		pass
+
+
+	def keyRightObjFunc(self):
+		print('set right')
+		self.side = "RIGHT"
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		self.draw()
+		self.regainHover(self.side)
+
+	def keyLeftObjFunc(self):
+		print('set left')
+		self.side = "LEFT"
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		self.draw()
+		self.regainHover(self.side)
+
 
 	def draw(self):
 
@@ -94,13 +132,13 @@ class BETA():
 
 			# TIB AXIS
 			# TOP
-			top_axis_tib_p1 = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["TOP"]["P1"]
-			top_axis_tib_p2 = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["TOP"]["P2"]
-			top_axis_tib_m1 = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["TOP"]["M1"]
+			top_axis_tib_p1 = self.dict[self.name][self.op_type][side]["AXIS_TIB"]["TOP"]["P1"]
+			top_axis_tib_p2 = self.dict[self.name][self.op_type][side]["AXIS_TIB"]["TOP"]["P2"]
+			top_axis_tib_m1 = self.dict[self.name][self.op_type][side]["AXIS_TIB"]["TOP"]["M1"]
 			# BOT
-			bot_axis_tib_p1 = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["BOT"]["P1"]
-			bot_axis_tib_p2 = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["BOT"]["P2"]			
-			bot_axis_tib_m1 = self.dict["UNI_TIB_VAL"][self.op_type][side]["AXIS_TIB"]["BOT"]["M1"]
+			bot_axis_tib_p1 = self.dict[self.name][self.op_type][side]["AXIS_TIB"]["BOT"]["P1"]
+			bot_axis_tib_p2 = self.dict[self.name][self.op_type][side]["AXIS_TIB"]["BOT"]["P2"]			
+			bot_axis_tib_m1 = self.dict[self.name][self.op_type][side]["AXIS_TIB"]["BOT"]["M1"]
 
 
 			if top_axis_tib_p1 != None:
@@ -171,6 +209,46 @@ class BETA():
 			
 			# get item type 
 			item_type = self.dict["BETA"][self.op_type][self.side][item]["type"]
+
+			# axis has two midpoints
+			if item_type == "axis":
+				print("axis" + item)
+				# axis has a top and a bottom
+
+				# check if P1 is None
+				if self.dict["BETA"][self.op_type][self.side][item]["TOP"]["P1"] == None:					
+					self.dict["BETA"][self.op_type][self.side][item]["TOP"]["P1"] = P
+					self.draw_tools.setHoverPointLabel("P1_"+item+"_TOP")
+					self.draw_tools.setHoverPoint(P)
+					self.draw_tools.setHoverBool(True)
+					return True
+
+				# check if P2 is None				
+				if self.dict["BETA"][self.op_type][self.side][item]["TOP"]["P2"] == None:					
+					self.dict["BETA"][self.op_type][self.side][item]["TOP"]["P2"] = P
+					M = self.draw_tools.midpoint(self.dict["BETA"][self.op_type][self.side][item]["TOP"]["P1"], P)
+					self.dict["BETA"][self.op_type][self.side][item]["TOP"]["M1"] = M
+					self.draw_tools.setHoverBool(False)
+					self.draw_tools.setHoverPointLabel(None)
+					return True
+
+
+				# check if P1 is None
+				if self.dict["BETA"][self.op_type][self.side][item]["BOT"]["P1"] == None:					
+					self.dict["BETA"][self.op_type][self.side][item]["BOT"]["P1"] = P
+					self.draw_tools.setHoverPointLabel("P1_"+item+"_BOT")
+					self.draw_tools.setHoverPoint(P)
+					self.draw_tools.setHoverBool(True)
+					return True
+
+				# check if P2 is None				
+				if self.dict["BETA"][self.op_type][self.side][item]["BOT"]["P2"] == None:					
+					self.dict["BETA"][self.op_type][self.side][item]["BOT"]["P2"] = P
+					M = self.draw_tools.midpoint(self.dict["BETA"][self.op_type][self.side][item]["BOT"]["P1"], P)
+					self.dict["BETA"][self.op_type][self.side][item]["BOT"]["M1"] = M
+					self.draw_tools.setHoverBool(False)
+					self.draw_tools.setHoverPointLabel(None)
+					return True	
 
 			# line has P1 and P2
 			if item_type == "line":
@@ -253,7 +331,9 @@ class BETA():
 
 		if self.draw_hover:
 			side_pre = self.side[0]+"_"
-			if hover_label == "P0_TIB_JOINT_LINE":
+			if(	hover_label == "P0_AXIS_TIB" or
+				hover_label == "P0_TIB_JOINT_LINE"
+				):
 				self.draw_tools.clear_by_tag("hover_line")
 				self.draw_tools.create_mypoint(P_mouse, "red", [self.tag, "hover_line"], hover_point=True, point_thickness=self.point_size)
 				if self.draw_labels:
@@ -262,11 +342,42 @@ class BETA():
 		if hover_label == "P1_BETA":
 			self.draw_tools.clear_by_tag("hover_line")
 			self.draw_tools.create_myline(P_mouse, P_stored, "hover_line")
+
+
+		if hover_label == "P1_AXIS_TIB_TOP":
+			self.draw_tools.clear_by_tag("hover_line")
+			m = self.draw_tools.midpoint(P_stored, P_mouse)
+			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
+
+			bot_axis_tib_m1 = self.dict[self.name][self.op_type][self.side]["AXIS_TIB"]["BOT"]["M1"]
+
+			if bot_axis_tib_m1 != None:
+				# join center points of axes
+				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
+				U_m1, D_m1 = self.draw_tools.retPointsUpDown(m, bot_axis_tib_m1)
+				p_top = self.draw_tools.line_intersection((D_m1, U_m1), (xtop, ytop))
+				self.draw_tools.create_myline(D_m1, p_top, "hover_line")
+
+
+		if hover_label == "P1_AXIS_TIB_BOT":
+			self.draw_tools.clear_by_tag("hover_line")
+			m = self.draw_tools.midpoint(P_stored, P_mouse)
+			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
+
+			top_axis_tib_m1 = self.dict[self.name][self.op_type][self.side]["AXIS_TIB"]["TOP"]["M1"]
+
+			if top_axis_tib_m1 != None:				
+				# join center points of axes
+				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
+				U_m1, D_m1 = self.draw_tools.retPointsUpDown(top_axis_tib_m1, m)
+				p_top = self.draw_tools.line_intersection((D_m1, U_m1), (xtop, ytop))
+				self.draw_tools.create_myline(D_m1, p_top, "hover_line")
 	
 	def escapeObjFunc(self):
 		self.side = None
 		self.draw_tools.setHoverPointLabel(None)
 		self.draw_tools.setHoverBool(False)
+		self.controller.updateMenuLabel("CHOOSE SIDE", self.menu_label)
 
 
 	def getNextLabel(self):
@@ -275,6 +386,28 @@ class BETA():
 				
 				# get item type 
 				item_type = self.dict["BETA"][self.op_type][self.side][item]["type"]
+
+				# axis has two midpoints
+				if item_type == "axis":
+					print("axis" + item)
+					# axis has a top and a bottom
+
+					# check if P1 is None
+					if self.dict["BETA"][self.op_type][self.side][item]["TOP"]["P1"] == None:						
+						return (self.side + " " + item + " P1")
+
+					# check if P2 is None				
+					if self.dict["BETA"][self.op_type][self.side][item]["TOP"]["P2"] == None:						
+						return (self.side + " " + item + " P2")
+
+
+					# check if P1 is None
+					if self.dict["BETA"][self.op_type][self.side][item]["BOT"]["P1"] == None:						
+						return (self.side + " " + item + " P1")
+
+					# check if P2 is None				
+					if self.dict["BETA"][self.op_type][self.side][item]["BOT"]["P2"] == None:						
+						return (self.side + " " + item + " P2")
 
 				# line has P1 and P2
 				if item_type == "line":
@@ -288,7 +421,7 @@ class BETA():
 					if self.dict["BETA"][self.op_type][self.side][item]["P2"] == None:
 						return (self.side + " " + item + " P2")
 
-				return (self.side + " Done")
+			return (self.side + " Done")
 		return None
 
 
@@ -297,24 +430,54 @@ class BETA():
 		print(action)
 		if action == "SET-LEFT":
 			self.side = "LEFT"
+			self.draw()
+			self.regainHover(self.side)
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+			return # avoid json_save
 
 		if action == "SET-RIGHT":
 			self.side = "RIGHT"
+			self.draw()
+			self.regainHover(self.side)
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+			return # avoid json_save
 
 		if action == "DEL-LEFT-TIB-LINE":
 			self.side = "LEFT"
 			self.dict["BETA"][self.op_type]["LEFT"]["TIB_JOINT_LINE"]["P1"] = None
-			self.dict["BETA"][self.op_type]["LEFT"]["TIB_JOINT_LINE"]["P2"] = None
-			self.controller.save_json()
-
+			self.dict["BETA"][self.op_type]["LEFT"]["TIB_JOINT_LINE"]["P2"] = None			
 		if action == "DEL-RIGHT-TIB-LINE":
 			self.side = "RIGHT"
 			self.dict["BETA"][self.op_type]["RIGHT"]["TIB_JOINT_LINE"]["P1"] = None
-			self.dict["BETA"][self.op_type]["RIGHT"]["TIB_JOINT_LINE"]["P2"] = None			
-			self.controller.save_json()
+			self.dict["BETA"][self.op_type]["RIGHT"]["TIB_JOINT_LINE"]["P2"] = None						
+
+
+		if action == "DEL-LEFT-TIB-TOP":			
+			self.dict["BETA"][self.op_type]["LEFT"]["AXIS_TIB"]["TOP"]["P1"] = None
+			self.dict["BETA"][self.op_type]["LEFT"]["AXIS_TIB"]["TOP"]["P2"] = None
+			self.dict["BETA"][self.op_type]["LEFT"]["AXIS_TIB"]["TOP"]["M1"] = None
+			self.side = "LEFT"
+		if action == "DEL-RIGHT-TIB-TOP":
+			self.dict["BETA"][self.op_type]["RIGHT"]["AXIS_TIB"]["TOP"]["P1"] = None
+			self.dict["BETA"][self.op_type]["RIGHT"]["AXIS_TIB"]["TOP"]["P2"] = None
+			self.dict["BETA"][self.op_type]["RIGHT"]["AXIS_TIB"]["TOP"]["M1"] = None
+			self.side = "RIGHT"
+
+
+		if action == "DEL-LEFT-TIB-BOT":
+			self.dict["BETA"][self.op_type]["LEFT"]["AXIS_TIB"]["BOT"]["P1"] = None
+			self.dict["BETA"][self.op_type]["LEFT"]["AXIS_TIB"]["BOT"]["P2"] = None
+			self.dict["BETA"][self.op_type]["LEFT"]["AXIS_TIB"]["BOT"]["M1"] = None
+			self.side = "LEFT"
+		if action == "DEL-RIGHT-TIB-BOT":
+			self.dict["BETA"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["P1"] = None
+			self.dict["BETA"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["P2"] = None
+			self.dict["BETA"][self.op_type]["RIGHT"]["AXIS_TIB"]["BOT"]["M1"] = None
+			self.side = "RIGHT"
 
 		self.draw()
 		self.regainHover(self.side)
+		self.controller.save_json()
 		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 
 
@@ -383,11 +546,27 @@ class BETA():
 		self.draw()
 
 	def regainHover(self, side):
+
+		p1_axis_tib_top = self.dict["BETA"][self.op_type][side]["AXIS_TIB"]["TOP"]["P1"]
+		p2_axis_tib_top = self.dict["BETA"][self.op_type][side]["AXIS_TIB"]["TOP"]["P2"]
+		p1_axis_tib_bot = self.dict["BETA"][self.op_type][side]["AXIS_TIB"]["BOT"]["P1"]
+		p2_axis_tib_bot = self.dict["BETA"][self.op_type][side]["AXIS_TIB"]["BOT"]["P2"]
+
 		p1_tib_joint_line = self.dict["BETA"][self.op_type][side]["TIB_JOINT_LINE"]["P1"]
 		p2_tib_joint_line = self.dict["BETA"][self.op_type][side]["TIB_JOINT_LINE"]["P2"]
 
 		# find if P0 hovers are required
 		self.mainHoverUsingNextLabel()
+
+		if p1_axis_tib_top != None and p2_axis_tib_top == None:
+			self.draw_tools.setHoverPointLabel("P1_AXIS_TIB_TOP")
+			self.draw_tools.setHoverPoint(p1_axis_tib_top)
+			self.draw_tools.setHoverBool(True)
+
+		if p1_axis_tib_bot != None and p2_axis_tib_bot == None:
+			self.draw_tools.setHoverPointLabel("P1_AXIS_TIB_BOT")
+			self.draw_tools.setHoverPoint(p1_axis_tib_bot)
+			self.draw_tools.setHoverBool(True)
 
 		if p1_tib_joint_line != None and p2_tib_joint_line == None:
 			self.draw_tools.setHoverPointLabel("P1_BETA")
@@ -397,6 +576,7 @@ class BETA():
 	# similiar to draw but nothing is drawn on the canvas
 	def updateExcelValues(self):
 		pass
+
 
 
 	def checkbox_click(self,action, val):
@@ -420,7 +600,20 @@ class BETA():
 	def mainHoverUsingNextLabel(self):
 		label = self.getNextLabel()
 
-		if label == "RIGHT TIB_JOINT_LINE P1":
+		if label == "RIGHT AXIS_TIB P1":
+			self.side = "RIGHT"
+			self.hover_text = "AXIS_TIB"
+			self.draw_tools.setHoverPointLabel("P0_AXIS_TIB")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT AXIS_TIB P1":
+			self.side = "LEFT"
+			self.hover_text = "AXIS_TIB"
+			self.draw_tools.setHoverPointLabel("P0_AXIS_TIB")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+		elif label == "RIGHT TIB_JOINT_LINE P1":
 			self.side = "RIGHT"
 			self.hover_text = "TIB_JOINT_LINE"
 			self.draw_tools.setHoverPointLabel("P0_TIB_JOINT_LINE")

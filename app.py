@@ -44,7 +44,7 @@ class MainWindow(ttk.Frame):
 		""" Initialize the main Frame """
 		ttk.Frame.__init__(self, master=mainframe)
 
-		self.app_version = "v0.5"
+		self.app_version = "v0.6"
 
 		self.master.title('Knee Software ' + self.app_version)
 		# self.master.geometry('800x600')  # size of the main window
@@ -53,7 +53,8 @@ class MainWindow(ttk.Frame):
 		self.master.grid_rowconfigure(1, weight=1) # this needed to be added
 		self.master.grid_columnconfigure(0, weight=1) # as did this
 
-		self.master.bind('<Escape>', lambda event: self.master.after_idle(self.key_funct, event))
+		# self.master.bind('<Escape>', lambda event: self.master.after_idle(self.key_funct, event))
+		self.master.bind('<Key>', lambda event: self.master.after_idle(self.key_funct, event))
 
 		# check for user prefs, if not found create user_prefs.json
 		self.point_size_obj = "" 	# store json data view-wise of point sizes
@@ -126,14 +127,30 @@ class MainWindow(ttk.Frame):
 
 	# only escape key for now
 	def key_funct(self, event):
-		print("key press {}".format(event.keycode))
-		if self.cur_view != "":
-			self.views[self.cur_view].escapeFunc()
+		# print("key keycode {}".format(event.keycode))
+		# print("key keysym {}".format(event.keysym))
+
+		# Escape
+		# 1
+		# 2
+		# Delete
+		if event.keysym == "Escape":
+			if self.cur_view != "":
+				self.views[self.cur_view].escapeFunc()
+
+		elif event.keysym == "1":
+			if self.cur_view != "":
+				self.views[self.cur_view].keySetRight()
+
+		elif event.keysym == "2":
+			if self.cur_view != "":
+				self.views[self.cur_view].keySetLeft()
+
 		
 
 	def set_working_dir(self):
 		self.working_dir = filedialog.askdirectory()
-		print(type(self.working_dir))
+		# print(type(self.working_dir))
 
 		if isinstance(self.working_dir, str) and self.working_dir != "":
 
@@ -269,7 +286,7 @@ class MainWindow(ttk.Frame):
 														"EADFA"			:None,
 														"EADFPS"		:None,
 														"EADFDS"		:None,
-														"JDA"			:None,
+														"JCA"			:None,
 														"TAMD"			:None,
 														"MPTA"			:None,
 														"KJLO"			:None,
@@ -289,7 +306,10 @@ class MainWindow(ttk.Frame):
 														"FVAR/VAL"		:None,
 														"TVAR/VAL"		:None,
 														"FFLE/EXT"		:None,
-														"TFLE/EXT"		:None
+														"TFLE/EXT"		:None,
+														"LPFA"			:None,
+														"MPFA"			:None,
+														"LDTA"			:None
 													},
 													"LEFT":{
 														"HASDATA"		:False,
@@ -303,7 +323,7 @@ class MainWindow(ttk.Frame):
 														"EADFA"			:None,
 														"EADFPS"		:None,
 														"EADFDS"		:None,
-														"JDA"			:None,
+														"JCA"			:None,
 														"TAMD"			:None,
 														"MPTA"			:None,
 														"KJLO"			:None,
@@ -323,7 +343,10 @@ class MainWindow(ttk.Frame):
 														"FVAR/VAL"		:None,
 														"TVAR/VAL"		:None,
 														"FFLE/EXT"		:None,
-														"TFLE/EXT"		:None
+														"TFLE/EXT"		:None,
+														"LPFA"			:None,
+														"MPFA"			:None,
+														"LDTA"			:None
 													}
 												},
 												"POST-OP":{
@@ -339,7 +362,7 @@ class MainWindow(ttk.Frame):
 														"EADFA"			:None,
 														"EADFPS"		:None,
 														"EADFDS"		:None,
-														"JDA"			:None,
+														"JCA"			:None,
 														"TAMD"			:None,
 														"MPTA"			:None,
 														"KJLO"			:None,
@@ -359,7 +382,10 @@ class MainWindow(ttk.Frame):
 														"FVAR/VAL"		:None,
 														"TVAR/VAL"		:None,
 														"FFLE/EXT"		:None,
-														"TFLE/EXT"		:None
+														"TFLE/EXT"		:None,
+														"LPFA"			:None,
+														"MPFA"			:None,
+														"LDTA"			:None
 													},
 													"LEFT":{
 														"HASDATA"		:False,
@@ -373,7 +399,7 @@ class MainWindow(ttk.Frame):
 														"EADFA"			:None,
 														"EADFPS"		:None,
 														"EADFDS"		:None,
-														"JDA"			:None,
+														"JCA"			:None,
 														"TAMD"			:None,
 														"MPTA"			:None,
 														"KJLO"			:None,
@@ -393,7 +419,10 @@ class MainWindow(ttk.Frame):
 														"FVAR/VAL"		:None,
 														"TVAR/VAL"		:None,
 														"FFLE/EXT"		:None,
-														"TFLE/EXT"		:None
+														"TFLE/EXT"		:None,
+														"LPFA"			:None,
+														"MPFA"			:None,
+														"LDTA"			:None
 													}
 												}
 											}
@@ -538,7 +567,7 @@ class MainWindow(ttk.Frame):
 		eadfa 		= []
 		eadfps 		= []
 		eadfds 		= []
-		jda 		= []
+		jca 		= []
 		tamd 		= []
 		mpta 		= []
 		kjlo 		= []
@@ -565,7 +594,7 @@ class MainWindow(ttk.Frame):
 		post_eadfa 	= []
 		post_eadfps = []
 		post_eadfds = []
-		post_jda 	= []
+		post_jca 	= []
 		post_tamd 	= []
 		post_mpta 	= []
 		post_kjlo 	= []
@@ -587,6 +616,15 @@ class MainWindow(ttk.Frame):
 		ffleext 	= []
 		tfleext 	= []
 
+		lpfa		= []
+		mpfa		= []
+		ldta		= []
+		post_lpfa	= []
+		post_mpfa	= []
+		post_ldta	= []
+		
+
+
 		mdict = {
 					"NAME"			:	name,
 					"AGE"			:	age,
@@ -605,7 +643,7 @@ class MainWindow(ttk.Frame):
 					"EADFA"			:	eadfa,
 					"EADFPS"		:	eadfps,
 					"EADFDS"		:	eadfds,
-					"JDA"			:	jda,
+					"JCA"			:	jca,
 					"TAMD"			:	tamd,
 					"MPTA"			:	mpta,
 					"KJLO"			:	kjlo,
@@ -632,7 +670,7 @@ class MainWindow(ttk.Frame):
 					"Post-EADFA"	:	post_eadfa,
 					"Post-EADFPS"	:	post_eadfps,
 					"Post-EADFDS"	:	post_eadfds,
-					"Post-JDA"		:	post_jda,
+					"Post-JCA"		:	post_jca,
 					"Post-TAMD"		:	post_tamd,
 					"Post-MPTA"		:	post_mpta,
 					"Post-KJLO"		:	post_kjlo,
@@ -652,7 +690,13 @@ class MainWindow(ttk.Frame):
 					"Post-F FLE/EXT"	:	ffleext,
 					"Post-F VAR/VAL"	:	fvarval,
 					"Post-T FLE/EXT"	:	tfleext,
-					"Post-T VAR/VAL"	:	tvarval
+					"Post-T VAR/VAL"	:	tvarval,
+					"LPFA"			:	lpfa,
+					"MPFA"			:	mpfa,
+					"LDTA"			:	ldta,
+					"Post-LPFA"		:	post_lpfa,
+					"Post-MPFA"		:	post_mpfa,
+					"Post-LDTA"		:	post_ldta
 				}
 
 
@@ -661,80 +705,86 @@ class MainWindow(ttk.Frame):
 		# for op_type in ["PRE-OP", "POST-OP"]:
 		for side in ["RIGHT", "LEFT"]:
 
+
+			x = ""
+
 			# master list				
-			# if self.master_dict["EXCEL"][op_type][side]["HASDATA"] == True:
+			if self.master_dict["EXCEL"]["PRE-OP"][side]["HASDATA"] == True:
+				name.append(disp_name)
+				age.append(disp_age)
+				gender.append(disp_sex)
+				leg_side.append(side[0])
+				k_l_grade.append(x)
+				mdate.append(x)
+				prosthesis.append(x)
+				hka.append(self.master_dict["EXCEL"]["PRE-OP"][side]["HKA"])
+				mad.append(self.master_dict["EXCEL"]["PRE-OP"][side]["MAD"])
+				mnsa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["MNSA"])
+				vca.append(self.master_dict["EXCEL"]["PRE-OP"][side]["VCA"])
+				afta.append(self.master_dict["EXCEL"]["PRE-OP"][side]["aFTA"])
+				mldfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["mLDFA"])
+				aldfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["aLDFA"])
+				eadfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["EADFA"])
+				eadfps.append(self.master_dict["EXCEL"]["PRE-OP"][side]["EADFPS"])
+				eadfds.append(self.master_dict["EXCEL"]["PRE-OP"][side]["EADFDS"])
+				jca.append(self.master_dict["EXCEL"]["PRE-OP"][side]["JCA"])
+				tamd.append(self.master_dict["EXCEL"]["PRE-OP"][side]["TAMD"])
+				mpta.append(self.master_dict["EXCEL"]["PRE-OP"][side]["MPTA"])
+				kjlo.append(self.master_dict["EXCEL"]["PRE-OP"][side]["KJLO"])
+				kaol.append(self.master_dict["EXCEL"]["PRE-OP"][side]["KAOL"])
+				eadta.append(self.master_dict["EXCEL"]["PRE-OP"][side]["EADTA"])
+				eadtps.append(self.master_dict["EXCEL"]["PRE-OP"][side]["EADTPS"])
+				eadtds.append(self.master_dict["EXCEL"]["PRE-OP"][side]["EADTDS"])
+				fflex.append(self.master_dict["EXCEL"]["PRE-OP"][side]["FFLEX"])
+				pcor.append(self.master_dict["EXCEL"]["PRE-OP"][side]["PCOR"])
+				acor.append(self.master_dict["EXCEL"]["PRE-OP"][side]["ACOR"])
+				tslope.append(self.master_dict["EXCEL"]["PRE-OP"][side]["TSLOPE"])
+				isr.append(self.master_dict["EXCEL"]["PRE-OP"][side]["ISR"])
+				sa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["SA"])
+				ptilt.append(self.master_dict["EXCEL"]["PRE-OP"][side]["PTILT"])
+				ppba.append(self.master_dict["EXCEL"]["PRE-OP"][side]["PPBA"])
+				miscell.append(x)
 
+						
+				post_hka.append(self.master_dict["EXCEL"]["POST-OP"][side]["HKA"])
+				post_mad.append(self.master_dict["EXCEL"]["POST-OP"][side]["MAD"])
+				post_mnsa.append(self.master_dict["EXCEL"]["POST-OP"][side]["MNSA"])
+				post_vca.append(self.master_dict["EXCEL"]["POST-OP"][side]["VCA"])
+				post_afta.append(self.master_dict["EXCEL"]["POST-OP"][side]["aFTA"])
+				post_mldfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["mLDFA"])
+				post_aldfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["aLDFA"])
+				post_eadfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["EADFA"])
+				post_eadfps.append(self.master_dict["EXCEL"]["POST-OP"][side]["EADFPS"])
+				post_eadfds.append(self.master_dict["EXCEL"]["POST-OP"][side]["EADFDS"])
+				post_jca.append(self.master_dict["EXCEL"]["POST-OP"][side]["JCA"])
+				post_tamd.append(self.master_dict["EXCEL"]["POST-OP"][side]["TAMD"])
+				post_mpta.append(self.master_dict["EXCEL"]["POST-OP"][side]["MPTA"])
+				post_kjlo.append(self.master_dict["EXCEL"]["POST-OP"][side]["KJLO"])
+				post_kaol.append(self.master_dict["EXCEL"]["POST-OP"][side]["KAOL"])
+				post_eadta.append(self.master_dict["EXCEL"]["POST-OP"][side]["EADTA"])
+				post_eadtps.append(self.master_dict["EXCEL"]["POST-OP"][side]["EADTPS"])
+				post_eadtds.append(self.master_dict["EXCEL"]["POST-OP"][side]["EADTDS"])
+				post_fflex.append(self.master_dict["EXCEL"]["POST-OP"][side]["FFLEX"])
+				post_pcor.append(self.master_dict["EXCEL"]["POST-OP"][side]["PCOR"])
+				post_acor.append(self.master_dict["EXCEL"]["POST-OP"][side]["ACOR"])
+				post_tslope.append(self.master_dict["EXCEL"]["POST-OP"][side]["TSLOPE"])
+				post_isr.append(self.master_dict["EXCEL"]["POST-OP"][side]["ISR"])
+				post_sa.append(self.master_dict["EXCEL"]["POST-OP"][side]["SA"])
+				post_ptilt.append(self.master_dict["EXCEL"]["POST-OP"][side]["PTILT"])
+				post_ppba.append(self.master_dict["EXCEL"]["POST-OP"][side]["PPBA"])
+				post_miscel.append(x)
 
-			x = ""					
+				fvarval.append(self.master_dict["EXCEL"]["POST-OP"][side]["FVAR/VAL"])
+				tvarval.append(self.master_dict["EXCEL"]["POST-OP"][side]["TVAR/VAL"])
+				ffleext.append(self.master_dict["EXCEL"]["POST-OP"][side]["FFLE/EXT"])
+				tfleext.append(self.master_dict["EXCEL"]["POST-OP"][side]["TFLE/EXT"])
 
-			name.append(disp_name)
-			age.append(disp_age)
-			gender.append(disp_sex)
-			leg_side.append(side[0])
-			k_l_grade.append(x)
-			mdate.append(x)
-			prosthesis.append(x)
-			hka.append(self.master_dict["EXCEL"]["PRE-OP"][side]["HKA"])
-			mad.append(self.master_dict["EXCEL"]["PRE-OP"][side]["MAD"])
-			mnsa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["MNSA"])
-			vca.append(self.master_dict["EXCEL"]["PRE-OP"][side]["VCA"])
-			afta.append(self.master_dict["EXCEL"]["PRE-OP"][side]["aFTA"])
-			mldfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["mLDFA"])
-			aldfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["aLDFA"])
-			eadfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["EADFA"])
-			eadfps.append(self.master_dict["EXCEL"]["PRE-OP"][side]["EADFPS"])
-			eadfds.append(self.master_dict["EXCEL"]["PRE-OP"][side]["EADFDS"])
-			jda.append(x)
-			tamd.append(self.master_dict["EXCEL"]["PRE-OP"][side]["TAMD"])
-			mpta.append(self.master_dict["EXCEL"]["PRE-OP"][side]["MPTA"])
-			kjlo.append(self.master_dict["EXCEL"]["PRE-OP"][side]["KJLO"])
-			kaol.append(self.master_dict["EXCEL"]["PRE-OP"][side]["KAOL"])
-			eadta.append(x)
-			eadtps.append(x)
-			eadtds.append(x)
-			fflex.append(self.master_dict["EXCEL"]["PRE-OP"][side]["FFLEX"])
-			pcor.append(self.master_dict["EXCEL"]["PRE-OP"][side]["PCOR"])
-			acor.append(self.master_dict["EXCEL"]["PRE-OP"][side]["ACOR"])
-			tslope.append(self.master_dict["EXCEL"]["PRE-OP"][side]["TSLOPE"])
-			isr.append(self.master_dict["EXCEL"]["PRE-OP"][side]["ISR"])
-			sa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["SA"])
-			ptilt.append(self.master_dict["EXCEL"]["PRE-OP"][side]["PTILT"])
-			ppba.append(self.master_dict["EXCEL"]["PRE-OP"][side]["PPBA"])
-			miscell.append(x)
-
-			
-			post_hka.append(self.master_dict["EXCEL"]["POST-OP"][side]["HKA"])
-			post_mad.append(self.master_dict["EXCEL"]["POST-OP"][side]["MAD"])
-			post_mnsa.append(self.master_dict["EXCEL"]["POST-OP"][side]["MNSA"])
-			post_vca.append(self.master_dict["EXCEL"]["POST-OP"][side]["VCA"])
-			post_afta.append(self.master_dict["EXCEL"]["POST-OP"][side]["aFTA"])
-			post_mldfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["mLDFA"])
-			post_aldfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["aLDFA"])
-			post_eadfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["EADFA"])
-			post_eadfps.append(self.master_dict["EXCEL"]["POST-OP"][side]["EADFPS"])
-			post_eadfds.append(self.master_dict["EXCEL"]["POST-OP"][side]["EADFDS"])
-			post_jda.append(x)
-			post_tamd.append(self.master_dict["EXCEL"]["POST-OP"][side]["TAMD"])
-			post_mpta.append(self.master_dict["EXCEL"]["POST-OP"][side]["MPTA"])
-			post_kjlo.append(self.master_dict["EXCEL"]["POST-OP"][side]["KJLO"])
-			post_kaol.append(self.master_dict["EXCEL"]["POST-OP"][side]["KAOL"])
-			post_eadta.append(x)
-			post_eadtps.append(x)
-			post_eadtds.append(x)
-			post_fflex.append(self.master_dict["EXCEL"]["POST-OP"][side]["FFLEX"])
-			post_pcor.append(self.master_dict["EXCEL"]["POST-OP"][side]["PCOR"])
-			post_acor.append(self.master_dict["EXCEL"]["POST-OP"][side]["ACOR"])
-			post_tslope.append(self.master_dict["EXCEL"]["POST-OP"][side]["TSLOPE"])
-			post_isr.append(self.master_dict["EXCEL"]["POST-OP"][side]["ISR"])
-			post_sa.append(self.master_dict["EXCEL"]["POST-OP"][side]["SA"])
-			post_ptilt.append(self.master_dict["EXCEL"]["POST-OP"][side]["PTILT"])
-			post_ppba.append(self.master_dict["EXCEL"]["POST-OP"][side]["PPBA"])
-			post_miscel.append(x)
-
-			fvarval.append(self.master_dict["EXCEL"]["POST-OP"][side]["FVAR/VAL"])
-			tvarval.append(self.master_dict["EXCEL"]["POST-OP"][side]["TVAR/VAL"])
-			ffleext.append(self.master_dict["EXCEL"]["POST-OP"][side]["FFLE/EXT"])
-			tfleext.append(self.master_dict["EXCEL"]["POST-OP"][side]["TFLE/EXT"])
+				lpfa.append(x)
+				mpfa.append(x)
+				ldta.append(x)
+				post_lpfa.append(x)
+				post_mpfa.append(x)
+				post_ldta.append(x)
 
 			
 
@@ -777,12 +827,12 @@ class MainWindow(ttk.Frame):
 	def app_draw_pil(self):
 		try:
 			print('app.py draw_presentation_images')
-			view = self.views["PRE_SCANNO_View"]
-			view.view_draw_pil()
+			# view = self.views["PRE_SCANNO_View"]
+			# view.view_draw_pil()
 
-			# for key in ["PRE_SCANNO_View", "POST_SCANNO_View", "PRE_LAT_View", "POST_LAT_View", "PRE_SKY_View", "POST_SKY_View","POST_AP_View"]:
-			# 	view = self.views[key]
-			# 	view.view_draw_pil()
+			for key in ["PRE_SCANNO_View", "POST_SCANNO_View", "PRE_LAT_View", "POST_LAT_View", "PRE_SKY_View", "POST_SKY_View","POST_AP_View"]:
+				view = self.views[key]
+				view.view_draw_pil()
 							
 		except Exception as e:
 			raise e

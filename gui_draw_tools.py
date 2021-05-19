@@ -32,6 +32,7 @@ class DrawTools(CanvasImage):
 
 
 		self.canvas.bind('<ButtonPress-1>', self.clickfunc)  # set new edge
+		# self.canvas.bind('<ButtonPress-3>', self.righclickfunc)  # set new edge
 		# self.canvas.bind('<ButtonPress-1>', print("clidked"))  # set new edge
 		# self.canvas.bind('<Key>', self.clickfunc)  # set new edge
 		self.canvas.tag_bind("token", "<ButtonPress-1>", self.drag_start)
@@ -40,7 +41,7 @@ class DrawTools(CanvasImage):
 
 
 		self.canvas.bind('<Motion>', self.hover)  # remember canvas position
-		self.canvas.bind('<ButtonPress-3>', self.logme)
+		self.canvas.bind('<ButtonPress-3>', self.righclickfunc)
 
 		self.isHover = False
 		self.hover_label = ""
@@ -59,19 +60,6 @@ class DrawTools(CanvasImage):
 		self.cur_obj = myobject
 
 
-	def logme(self, event):
-		# print("set" + str(myobject))
-		# xtop, ytop, xbot, ybot = self.getImageCorners()
-		print(self.imwidth, self.imheight)
-
-		# self.create_midpoint(xtop, "red")
-		# self.create_midpoint(ytop, "red")
-		# self.create_midpoint(xbot, "red")
-		# self.create_midpoint(ybot, "red")
-
-		# obj = self.canvas.find_withtag("token")
-		# for o in obj:
-		# 	print(self.canvas.coords(o))
 
 	def clickfunc(self, event):
 		
@@ -94,6 +82,11 @@ class DrawTools(CanvasImage):
 			else:
 				print("no click")
 				# self.drag_start(event)
+
+	def righclickfunc(self, event):
+		if self.cur_obj != None:
+			self.cur_obj.right_click(event)
+
 
 
 	def clear_by_tag(self, tag):
@@ -283,6 +276,25 @@ class DrawTools(CanvasImage):
 
 	def retIsPointUp(self, p1, p2):
 		if p1[1] < p2[1]:
+			return True
+		else:
+			return False
+
+
+	def retIsPointDown(self, p1, p2):
+		if p1[1] > p2[1]:
+			return True
+		else:
+			return False
+
+	def retIsPointLeft(self, p1, p2):
+		if p1[0] < p2[0]:
+			return True
+		else:
+			return False
+
+	def retIsPointRight(self, p1, p2):
+		if p1[0] > p2[0]:
 			return True
 		else:
 			return False

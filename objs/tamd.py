@@ -19,8 +19,14 @@ class TAMD():
 		print("click from "+self.name)		
 		self.draw()
 
-		
+	def right_click(self, event):
+		pass
 
+	def keyRightObjFunc(self):
+		pass
+
+	def keyLeftObjFunc(self):
+		pass
 
 	def hover(self, P_mouse, P_stored, hover_label):		
 		pass
@@ -73,13 +79,13 @@ class TAMD():
 			isAnkle = False
 			
 
-			tib_top_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["P1"]
-			tib_top_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["P2"]
-			top_m1 		= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["M1"]
+			tib_top_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["U3"]["P1"]
+			tib_top_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["U3"]["P2"]
+			top_m1 		= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["U3"]["M1"]
 
-			tib_bot_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["P1"]
-			tib_bot_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["P2"]
-			bot_m1 		= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["M1"]
+			tib_bot_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["L3"]["P1"]
+			tib_bot_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["L3"]["P2"]
+			bot_m1 		= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["L3"]["M1"]
 			
 
 
@@ -176,12 +182,33 @@ class TAMD():
 				self.draw_tools.create_mytext(tib_knee, '{0:.1f}'.format(angle), [self.tag,side,"TAMD_ANGLE"], x_offset=60, y_offset=60, color="blue")
 				
 
+				# LDTA angle
+				L_ankle, R_ankle = self.draw_tools.retPointsLeftRight(ankle_p1, ankle_p2)
+				ldta_angle = None
+				if side == "RIGHT":
+					ldta_angle = self.draw_tools.getAnglePoints(L_ankle, ankle_m1, tib_knee)
+					self.draw_tools.create_mytext(L_ankle, 'LDTA: {0:.1f}'.format(ldta_angle), [self.tag,side,"TAMD_ANGLE"], y_offset=60, color="blue")
+
+				elif side == "LEFT":
+					ldta_angle = self.draw_tools.getAnglePoints(tib_knee, ankle_m1, R_ankle)
+					self.draw_tools.create_mytext(R_ankle, 'LDTA: {0:.1f}'.format(ldta_angle), [self.tag,side,"TAMD_ANGLE"], y_offset=60, color="blue")
+
+
+
 
 
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type][side]["TAMD"] == None:
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
 					self.dict["EXCEL"][self.op_type][side]["TAMD"]	 	= '{0:.1f}'.format(angle)
+					# save after insert
+					self.controller.save_json()
+
+
+				# check if value exists
+				if self.dict["EXCEL"][self.op_type][side]["LDTA"] == None:
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["LDTA"]	 	= '{0:.1f}'.format(ldta_angle)
 					# save after insert
 					self.controller.save_json()
 
@@ -252,13 +279,13 @@ class TAMD():
 			isAnkle = False
 			
 
-			tib_top_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["P1"]
-			tib_top_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["P2"]
-			top_m1 		= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["TOP"]["M1"]
+			tib_top_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["U3"]["P1"]
+			tib_top_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["U3"]["P2"]
+			top_m1 		= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["U3"]["M1"]
 
-			tib_bot_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["P1"]
-			tib_bot_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["P2"]
-			bot_m1 		= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["BOT"]["M1"]
+			tib_bot_p1 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["L3"]["P1"]
+			tib_bot_p2 	= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["L3"]["P2"]
+			bot_m1 		= self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["L3"]["M1"]
 			
 
 
@@ -310,13 +337,28 @@ class TAMD():
 				# print('angle1: {0:.1f}'.format(angle))
 				# print('angle2: {0:.1f}'.format(angle2))
 				# print('angle3: {0:.1f}'.format(angle3))
+				# LDTA angle
+				L_ankle, R_ankle = self.draw_tools.retPointsLeftRight(ankle_p1, ankle_p2)
+				ldta_angle = None
+				if side == "RIGHT":
+					ldta_angle = self.draw_tools.getAnglePoints(L_ankle, ankle_m1, tib_knee)
 
+				elif side == "LEFT":
+					ldta_angle = self.draw_tools.getAnglePoints(tib_knee, ankle_m1, R_ankle)
 
 
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type][side]["TAMD"] == None:
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
 					self.dict["EXCEL"][self.op_type][side]["TAMD"]	 	= '{0:.1f}'.format(angle)
+					# save after insert
+					self.controller.save_json()
+
+
+				# check if value exists
+				if self.dict["EXCEL"][self.op_type][side]["LDTA"] == None:
+					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+					self.dict["EXCEL"][self.op_type][side]["LDTA"]	 	= '{0:.1f}'.format(ldta_angle)
 					# save after insert
 					self.controller.save_json()
 

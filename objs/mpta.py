@@ -59,6 +59,17 @@ class MPTA():
 		# self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
 		self.draw()
 
+
+	def right_click(self, event):
+		pass
+
+	def keyRightObjFunc(self):
+		pass
+
+	def keyLeftObjFunc(self):
+		pass
+
+
 	def draw(self):
 
 		self.draw_tools.clear_by_tag(self.tag)
@@ -234,9 +245,11 @@ class MPTA():
 	# def regainHover(self, side):
 	# 	pass
 	def escapeObjFunc(self):
-		self.side = None
-		self.draw_tools.setHoverPointLabel(None)
-		self.draw_tools.setHoverBool(False)
+		pass
+		# self.side = None
+		# self.draw_tools.setHoverPointLabel(None)
+		# self.draw_tools.setHoverBool(False)
+		# self.controller.updateMenuLabel("CHOOSE SIDE", self.menu_label)
 
 
 	# def getNextLabel(self):

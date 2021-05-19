@@ -39,3 +39,11 @@ class SET_WORKING_View(tk.Frame):
 
 	def checkbox_click(self, obj_name, action, val):
 		pass
+
+	def escapeFunc(self):
+		pass
+	def keySetRight(self):
+		pass
+	def keySetLeft(self):
+		pass
+

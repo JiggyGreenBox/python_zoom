@@ -39,6 +39,26 @@ class UNI_FEM_VAL():
 		self.draw()
 
 
+	def right_click(self, event):
+		pass
+
+
+
+	def keyRightObjFunc(self):
+		print('set right')
+		self.side = "RIGHT"
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		self.draw()
+		self.regainHover(self.side)
+
+	def keyLeftObjFunc(self):
+		print('set left')
+		self.side = "LEFT"
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		self.draw()
+		self.regainHover(self.side)
+
+
 	# menu button clicks are routed here
 	def menu_btn_click(self, action):
 		print(action)
@@ -93,6 +113,7 @@ class UNI_FEM_VAL():
 
 		# delete excel data from pat.json
 		self.dict["EXCEL"][self.op_type][self.side]["FVAR/VAL"] = None
+		self.dict["EXCEL"][self.op_type][self.side]["HASDATA"] 	= False
 		
 		self.draw()
 		self.regainHover(self.side)
@@ -376,11 +397,11 @@ class UNI_FEM_VAL():
 
 					# check if P1 is None				
 					if self.dict["UNI_FEM_VAL"][self.op_type][self.side][item]["P1"] == None:						
-						return (self.side + " " + item + " P1")
+						return (self.side + " " + "FEM_IMP_LINE" + " P1")
 
 					# check if P2 is None				
 					if self.dict["UNI_FEM_VAL"][self.op_type][self.side][item]["P2"] == None:						
-						return (self.side + " " + item + " P2")
+						return (self.side + " " + "FEM_IMP_LINE" + " P2")
 
 			return (self.side + " Done")
 
@@ -468,6 +489,7 @@ class UNI_FEM_VAL():
 		self.side = None
 		self.draw_tools.setHoverPointLabel(None)
 		self.draw_tools.setHoverBool(False)
+		self.controller.updateMenuLabel("CHOOSE SIDE", self.menu_label)
 
 
 	def drag_start(self, tags):
@@ -667,15 +689,15 @@ class UNI_FEM_VAL():
 			self.draw_tools.setHoverPoint(None)
 			self.draw_tools.setHoverBool(True)
 
-		elif label == "RIGHT FEM_JOINT_LINE P1":
+		elif label == "RIGHT FEM_IMP_LINE P1":
 			self.side = "RIGHT"
-			self.hover_text = "FEM_JOINT_LINE"
+			self.hover_text = "FEM_IMP_LINE"
 			self.draw_tools.setHoverPointLabel("P0_FEM_JOINT_LINE")
 			self.draw_tools.setHoverPoint(None)
 			self.draw_tools.setHoverBool(True)
-		elif label == "LEFT FEM_JOINT_LINE P1":
+		elif label == "LEFT FEM_IMP_LINE P1":
 			self.side = "LEFT"
-			self.hover_text = "FEM_JOINT_LINE"
+			self.hover_text = "FEM_IMP_LINE"
 			self.draw_tools.setHoverPointLabel("P0_FEM_JOINT_LINE")
 			self.draw_tools.setHoverPoint(None)
 			self.draw_tools.setHoverBool(True)

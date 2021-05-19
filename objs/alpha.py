@@ -1,4 +1,4 @@
-
+import json
 
 class ALPHA():
 	"""docstring for ClassName"""
@@ -27,18 +27,38 @@ class ALPHA():
 			self.dict["ALPHA"] = 	{
 									"PRE-OP":{
 											"LEFT":	{
+														"AXIS_FEM":			{
+																				"type":	"axis",
+																				"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
+																				"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																			},
 														"FEM_JOINT_LINE":	{"type":"line","P1":None,"P2":None}
 													},
 											"RIGHT":{
+														"AXIS_FEM":			{
+																				"type":	"axis",
+																				"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
+																				"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																			},
 														"FEM_JOINT_LINE":	{"type":"line","P1":None,"P2":None}
 													}
 											},
 
 									"POST-OP":{
 											"LEFT":	{
+														"AXIS_FEM":			{
+																				"type":	"axis",
+																				"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
+																				"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																			},
 														"FEM_JOINT_LINE":	{"type":"line","P1":None,"P2":None}
 													},
 											"RIGHT":{
+														"AXIS_FEM":			{
+																				"type":	"axis",
+																				"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
+																				"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
+																			},
 														"FEM_JOINT_LINE":	{"type":"line","P1":None,"P2":None}
 													}
 											}
@@ -61,8 +81,35 @@ class ALPHA():
 				# pass
 
 
+		# self.side = "RIGHT"
+		# for item in self.dict["ALPHA"][self.op_type][self.side]:
+		# 	# get item type 
+		# 	item_type = self.dict["ALPHA"][self.op_type][self.side][item]["type"]
+		# 	print('item:{} item_type:{}'.format(item, item_type))
+
+
 		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
 		self.draw()
+
+
+	def right_click(self, event):
+		pass
+
+
+	def keyRightObjFunc(self):
+		print('set right')
+		self.side = "RIGHT"
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		self.draw()
+		self.regainHover(self.side)
+
+	def keyLeftObjFunc(self):
+		print('set left')
+		self.side = "LEFT"
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		self.draw()
+		self.regainHover(self.side)
+
 
 	def draw(self):
 
@@ -82,13 +129,13 @@ class ALPHA():
 			fem_line_p2 = self.dict["ALPHA"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
 
 
-			axis_fem_top_p1 = self.dict["UNI_FEM_VAL"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
-			axis_fem_top_p2 = self.dict["UNI_FEM_VAL"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
-			axis_fem_top_m1 = self.dict["UNI_FEM_VAL"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
+			axis_fem_top_p1 = self.dict["ALPHA"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
+			axis_fem_top_p2 = self.dict["ALPHA"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
+			axis_fem_top_m1 = self.dict["ALPHA"][self.op_type][side]["AXIS_FEM"]["TOP"]["M1"]
 			
-			axis_fem_bot_p1 = self.dict["UNI_FEM_VAL"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
-			axis_fem_bot_p2 = self.dict["UNI_FEM_VAL"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
-			axis_fem_bot_m1 = self.dict["UNI_FEM_VAL"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
+			axis_fem_bot_p1 = self.dict["ALPHA"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
+			axis_fem_bot_p2 = self.dict["ALPHA"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
+			axis_fem_bot_m1 = self.dict["ALPHA"][self.op_type][side]["AXIS_FEM"]["BOT"]["M1"]
 
 			# FEM JOINT LINE
 			if fem_line_p1 != None:
@@ -172,9 +219,50 @@ class ALPHA():
 			# get item type 
 			item_type = self.dict["ALPHA"][self.op_type][self.side][item]["type"]
 
+			# axis has two midpoints
+			if item_type == "axis":
+				# print("axis" + item)
+				# axis has a top and a bottom
+
+				# check if P1 is None
+				if self.dict["ALPHA"][self.op_type][self.side][item]["TOP"]["P1"] == None:					
+					self.dict["ALPHA"][self.op_type][self.side][item]["TOP"]["P1"] = P
+					self.draw_tools.setHoverPointLabel("P1_"+item+"_TOP")
+					self.draw_tools.setHoverPoint(P)
+					self.draw_tools.setHoverBool(True)
+					return True
+
+				# check if P2 is None				
+				if self.dict["ALPHA"][self.op_type][self.side][item]["TOP"]["P2"] == None:					
+					self.dict["ALPHA"][self.op_type][self.side][item]["TOP"]["P2"] = P
+					M = self.draw_tools.midpoint(self.dict["ALPHA"][self.op_type][self.side][item]["TOP"]["P1"], P)
+					self.dict["ALPHA"][self.op_type][self.side][item]["TOP"]["M1"] = M
+					self.draw_tools.setHoverBool(False)
+					self.draw_tools.setHoverPointLabel(None)
+					return True
+
+
+				# check if P1 is None
+				if self.dict["ALPHA"][self.op_type][self.side][item]["BOT"]["P1"] == None:					
+					self.dict["ALPHA"][self.op_type][self.side][item]["BOT"]["P1"] = P
+					self.draw_tools.setHoverPointLabel("P1_"+item+"_BOT")
+					self.draw_tools.setHoverPoint(P)
+					self.draw_tools.setHoverBool(True)
+					return True
+
+				# check if P2 is None				
+				if self.dict["ALPHA"][self.op_type][self.side][item]["BOT"]["P2"] == None:					
+					self.dict["ALPHA"][self.op_type][self.side][item]["BOT"]["P2"] = P
+					M = self.draw_tools.midpoint(self.dict["ALPHA"][self.op_type][self.side][item]["BOT"]["P1"], P)
+					self.dict["ALPHA"][self.op_type][self.side][item]["BOT"]["M1"] = M
+					self.draw_tools.setHoverBool(False)
+					self.draw_tools.setHoverPointLabel(None)
+					return True	
+
+
 			# line has P1 and P2
 			if item_type == "line":
-
+				print("line added")
 				# check if P1 is None				
 				if self.dict["ALPHA"][self.op_type][self.side][item]["P1"] == None:
 					
@@ -255,7 +343,7 @@ class ALPHA():
 
 		if self.draw_hover:
 			side_pre = self.side[0]+"_"
-			if hover_label == "P0_FEM_JOINT_LINE":
+			if hover_label == "P0_FEM_JOINT_LINE" or hover_label == "P0_AXIS_FEM":
 				self.draw_tools.clear_by_tag("hover_line")
 				self.draw_tools.create_mypoint(P_mouse, "red", [self.tag, "hover_line"], hover_point=True, point_thickness=self.point_size)
 				if self.draw_labels:
@@ -264,33 +352,96 @@ class ALPHA():
 		if hover_label == "P1_ALPHA":
 			self.draw_tools.clear_by_tag("hover_line")			
 			self.draw_tools.create_myline(P_stored, P_mouse, "hover_line")
+
+
+		if hover_label == "P1_AXIS_FEM_TOP":
+			self.draw_tools.clear_by_tag("hover_line")
+			m = self.draw_tools.midpoint(P_stored, P_mouse)
+			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
+
+			# bot_axis_tib_m1 = self.dict[self.name][self.op_type][self.side]["AXIS_FEM"]["BOT"]["M1"]
+			axis_fem_bot_m1 = self.dict["ALPHA"][self.op_type][self.side]["AXIS_FEM"]["BOT"]["M1"]
+
+			if axis_fem_bot_m1 != None:
+				# join center points of axes
+				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
+				U_m1, D_m1 = self.draw_tools.retPointsUpDown(m, axis_fem_bot_m1)
+				p_top = self.draw_tools.line_intersection((D_m1, U_m1), (xbot, ybot))
+				self.draw_tools.create_myline(U_m1, p_top, "hover_line")
+
+
+		if hover_label == "P1_AXIS_FEM_BOT":
+			self.draw_tools.clear_by_tag("hover_line")
+			m = self.draw_tools.midpoint(P_stored, P_mouse)
+			self.draw_tools.create_midpoint_line(P_stored, P_mouse, m, "hover_line", point_thickness=self.point_size)
+
+			axis_fem_top_m1 = self.dict["ALPHA"][self.op_type][self.side]["AXIS_FEM"]["TOP"]["M1"]
+
+			if axis_fem_top_m1 != None:				
+				# join center points of axes
+				xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
+				U_m1, D_m1 = self.draw_tools.retPointsUpDown(axis_fem_top_m1, m)
+				p_top = self.draw_tools.line_intersection((D_m1, U_m1), (xbot, ybot))
+				self.draw_tools.create_myline(U_m1, p_top, "hover_line")
 	
 	def escapeObjFunc(self):
 		self.side = None
 		self.draw_tools.setHoverPointLabel(None)
 		self.draw_tools.setHoverBool(False)
+		self.controller.updateMenuLabel("CHOOSE SIDE", self.menu_label)
 
 
 	def getNextLabel(self):
 		if self.side != None:
+			
+
+			# print(json.dumps(self.dict["ALPHA"][self.op_type][self.side], indent = 3))
+
 			for item in self.dict["ALPHA"][self.op_type][self.side]:
+
 				
 				# get item type 
 				item_type = self.dict["ALPHA"][self.op_type][self.side][item]["type"]
+				print('item:{} item_type:{}'.format(item, item_type))
+
 
 				# line has P1 and P2
 				if item_type == "line":
 
 					# check if P1 is None				
-					if self.dict["ALPHA"][self.op_type][self.side][item]["P1"] == None:
+					if self.dict["ALPHA"][self.op_type][self.side]["FEM_JOINT_LINE"]["P1"] == None:
 						return (self.side + " " + item + " P1")
 
 
 					# check if P2 is None				
-					if self.dict["ALPHA"][self.op_type][self.side][item]["P2"] == None:
+					if self.dict["ALPHA"][self.op_type][self.side]["FEM_JOINT_LINE"]["P2"] == None:
 						return (self.side + " " + item + " P2")
 
-				return (self.side + " Done")
+
+				# axis has two midpoints
+				if item_type == "axis":
+					# print("axis" + item)
+					# axis has a top and a bottom
+
+					# check if P1 is None
+					if self.dict["ALPHA"][self.op_type][self.side][item]["TOP"]["P1"] == None:						
+						return (self.side + " " + item + " P1")
+
+					# check if P2 is None				
+					if self.dict["ALPHA"][self.op_type][self.side][item]["TOP"]["P2"] == None:						
+						return (self.side + " " + item + " P2")
+
+					# check if P1 is None
+					if self.dict["ALPHA"][self.op_type][self.side][item]["BOT"]["P1"] == None:						
+						return (self.side + " " + item + " P1")
+
+					# check if P2 is None				
+					if self.dict["ALPHA"][self.op_type][self.side][item]["BOT"]["P2"] == None:						
+						return (self.side + " " + item + " P2")
+
+				
+
+			return (self.side + " Done")
 		return None
 
 
@@ -299,8 +450,41 @@ class ALPHA():
 		print(action)
 		if action == "SET-LEFT":
 			self.side = "LEFT"
+			self.draw()
+			self.regainHover(self.side)
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+			return # avoid json_save
 
 		if action == "SET-RIGHT":
+			self.side = "RIGHT"
+			self.draw()
+			self.regainHover(self.side)
+			self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+			return # avoid json_save
+
+
+		if action == "DEL-LEFT-FEM-TOP":
+			self.dict[self.name][self.op_type]["LEFT"]["AXIS_FEM"]["TOP"]["P1"] = None
+			self.dict[self.name][self.op_type]["LEFT"]["AXIS_FEM"]["TOP"]["P2"] = None
+			self.dict[self.name][self.op_type]["LEFT"]["AXIS_FEM"]["TOP"]["M1"] = None
+			self.side = "LEFT"
+
+		if action == "DEL-RIGHT-FEM-TOP":
+			self.dict[self.name][self.op_type]["RIGHT"]["AXIS_FEM"]["TOP"]["P1"] = None
+			self.dict[self.name][self.op_type]["RIGHT"]["AXIS_FEM"]["TOP"]["P2"] = None
+			self.dict[self.name][self.op_type]["RIGHT"]["AXIS_FEM"]["TOP"]["M1"] = None
+			self.side = "RIGHT"
+
+		if action == "DEL-LEFT-FEM-BOT":
+			self.dict[self.name][self.op_type]["LEFT"]["AXIS_FEM"]["BOT"]["P1"] = None
+			self.dict[self.name][self.op_type]["LEFT"]["AXIS_FEM"]["BOT"]["P2"] = None
+			self.dict[self.name][self.op_type]["LEFT"]["AXIS_FEM"]["BOT"]["M1"] = None
+			self.side = "LEFT"
+
+		if action == "DEL-RIGHT-FEM-BOT":
+			self.dict[self.name][self.op_type]["RIGHT"]["AXIS_FEM"]["BOT"]["P1"] = None
+			self.dict[self.name][self.op_type]["RIGHT"]["AXIS_FEM"]["BOT"]["P2"] = None
+			self.dict[self.name][self.op_type]["RIGHT"]["AXIS_FEM"]["BOT"]["M1"] = None
 			self.side = "RIGHT"
 
 		if action == "DEL-LEFT-FEM-LINE":
@@ -334,11 +518,29 @@ class ALPHA():
 	
 
 	def regainHover(self, side):
+
+		p1_axis_fem_top = self.dict["ALPHA"][self.op_type][side]["AXIS_FEM"]["TOP"]["P1"]
+		p2_axis_fem_top = self.dict["ALPHA"][self.op_type][side]["AXIS_FEM"]["TOP"]["P2"]
+		p1_axis_fem_bot = self.dict["ALPHA"][self.op_type][side]["AXIS_FEM"]["BOT"]["P1"]
+		p2_axis_fem_bot = self.dict["ALPHA"][self.op_type][side]["AXIS_FEM"]["BOT"]["P2"]
+
 		p1_fem_joint_line = self.dict["ALPHA"][self.op_type][side]["FEM_JOINT_LINE"]["P1"]
 		p2_fem_joint_line = self.dict["ALPHA"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
 
 		# find if P0 hovers are required
 		self.mainHoverUsingNextLabel()
+
+		
+
+		if p1_axis_fem_top != None and p2_axis_fem_top == None:
+			self.draw_tools.setHoverPointLabel("P1_AXIS_FEM_TOP")
+			self.draw_tools.setHoverPoint(p1_axis_fem_top)
+			self.draw_tools.setHoverBool(True)
+
+		if p1_axis_fem_bot != None and p2_axis_fem_bot == None:
+			self.draw_tools.setHoverPointLabel("P1_AXIS_FEM_BOT")
+			self.draw_tools.setHoverPoint(p1_axis_fem_bot)
+			self.draw_tools.setHoverBool(True)
 
 		if p1_fem_joint_line != None and p2_fem_joint_line == None:
 			self.draw_tools.setHoverPointLabel("P1_FEM_JOINT_LINE")
@@ -348,6 +550,8 @@ class ALPHA():
 	# similiar to draw but nothing is drawn on the canvas
 	def updateExcelValues(self):
 		pass
+
+
 
 
 	def checkbox_click(self,action, val):
@@ -370,7 +574,20 @@ class ALPHA():
 	def mainHoverUsingNextLabel(self):
 		label = self.getNextLabel()
 
-		if label == "RIGHT FEM_JOINT_LINE P1":
+		if label == "RIGHT AXIS_FEM P1":
+			self.side = "RIGHT"
+			self.hover_text = "AXIS_FEM"
+			self.draw_tools.setHoverPointLabel("P0_AXIS_FEM")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+		elif label == "LEFT AXIS_FEM P1":
+			self.side = "LEFT"
+			self.hover_text = "AXIS_FEM"
+			self.draw_tools.setHoverPointLabel("P0_AXIS_FEM")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+		elif label == "RIGHT FEM_JOINT_LINE P1":
 			self.side = "RIGHT"
 			self.hover_text = "FEM_JOINT_LINE"
 			self.draw_tools.setHoverPointLabel("P0_FEM_JOINT_LINE")

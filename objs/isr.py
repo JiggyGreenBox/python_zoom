@@ -27,7 +27,7 @@ class ISR():
 		if self.side == None:
 			print("please choose side")
 			self.controller.warningBox("Please select a Side")
-			self.controller.testbubble()
+			# self.controller.testbubble()
 			print(self.dict)
 		else:
 			ret =  self.addDict(event)
@@ -38,6 +38,23 @@ class ISR():
 		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)		
 		self.draw()
 
+	def right_click(self, event):
+		pass
+
+
+	def keyRightObjFunc(self):
+		print('set right')
+		self.side = "RIGHT"
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		self.draw()
+		self.regainHover(self.side)
+
+	def keyLeftObjFunc(self):
+		print('set left')
+		self.side = "LEFT"
+		self.controller.updateMenuLabel(self.getNextLabel(), self.menu_label)
+		self.draw()
+		self.regainHover(self.side)
 
 	# menu button clicks are routed here
 	def menu_btn_click(self, action):
@@ -85,6 +102,7 @@ class ISR():
 
 		# delete excel data from pat.json	
 		self.dict["EXCEL"][self.op_type][self.side]["ISR"] = None
+		self.dict["EXCEL"][self.op_type][self.side]["HASDATA"] 	= False
 
 
 		self.draw()
@@ -322,6 +340,8 @@ class ISR():
 		self.side = None
 		self.draw_tools.setHoverPointLabel(None)
 		self.draw_tools.setHoverBool(False)
+		self.controller.updateMenuLabel("CHOOSE SIDE", self.menu_label)
+		
 
 
 	def drag_start(self, tags):
@@ -493,6 +513,32 @@ class ISR():
 
 		if label == "RIGHT P3":
 			self.side = "RIGHT"
+			self.hover_text = "P3"
+			self.draw_tools.setHoverPointLabel("P0_P3")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+
+
+		if label == "LEFT P1":
+			self.side = "LEFT"
+			self.hover_text = "P1"
+			self.draw_tools.setHoverPointLabel("P0_P1")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+
+		if label == "LEFT P2":
+			self.side = "LEFT"
+			self.hover_text = "P2"
+			self.draw_tools.setHoverPointLabel("P0_P2")
+			self.draw_tools.setHoverPoint(None)
+			self.draw_tools.setHoverBool(True)
+
+
+
+		if label == "LEFT P3":
+			self.side = "LEFT"
 			self.hover_text = "P3"
 			self.draw_tools.setHoverPointLabel("P0_P3")
 			self.draw_tools.setHoverPoint(None)

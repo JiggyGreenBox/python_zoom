@@ -15,9 +15,16 @@ class KAOL():
 		
 	def click(self, event):
 		print("click from "+self.name)
-		self.draw() 
+		self.draw()		
 
-		# print(self.slope((0,0),(10,10)))
+	def right_click(self, event):
+		pass
+
+	def keyRightObjFunc(self):
+		pass
+
+	def keyLeftObjFunc(self):
+		pass
 
 
 
@@ -45,8 +52,8 @@ class KAOL():
 			# tib_joint_p1 = self.dict["MPTA"][self.op_type][side]["TIB_JOINT_LINE"]["P1"]
 			# tib_joint_p2 = self.dict["MPTA"][self.op_type][side]["TIB_JOINT_LINE"]["P2"]
 
-			tib_joint_p1 = self.dict["MAIN"][self.op_type][side]["KJLO_LINE"]["P1"]
-			tib_joint_p2 = self.dict["MAIN"][self.op_type][side]["KJLO_LINE"]["P2"]
+			tib_joint_p1 = self.dict["MAIN"][self.op_type][side]["JOINT_LINE"]["P1"]
+			tib_joint_p2 = self.dict["MAIN"][self.op_type][side]["JOINT_LINE"]["P2"]
 
 			ankle_p1 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P1"]
 			ankle_p2 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]
@@ -181,8 +188,8 @@ class KAOL():
 
 			isTamd = False			
 
-			tib_joint_p1 = self.dict["MAIN"][self.op_type][side]["KJLO_LINE"]["P1"]
-			tib_joint_p2 = self.dict["MAIN"][self.op_type][side]["KJLO_LINE"]["P2"]
+			tib_joint_p1 = self.dict["MAIN"][self.op_type][side]["JOINT_LINE"]["P1"]
+			tib_joint_p2 = self.dict["MAIN"][self.op_type][side]["JOINT_LINE"]["P2"]
 
 			ankle_p1 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P1"]
 			ankle_p2 = self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]

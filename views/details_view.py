@@ -35,7 +35,11 @@ class DETAILS_View(tk.Frame):
 		self.im_result_name = ""
 
 
-		vcmd = (self.register(self.callback))
+		self.sex 		= tk.StringVar()
+		self.sv_fname 	= tk.StringVar()
+		self.sv_lname 	= tk.StringVar()
+		self.sv_age 	= tk.StringVar()
+		
 
 		tk.Label(self, text="PATIENT DETAILS", font=("TkDefaultFont", 12)).grid(sticky="W", column=0, row=0, pady=(30, 10), padx=(10,0))
 
@@ -44,9 +48,9 @@ class DETAILS_View(tk.Frame):
 		tk.Label(self, text="Age").grid(sticky="W", row=3, padx=(10,0))
 		tk.Label(self, text="Sex").grid(sticky="W", row=4, padx=(10,0))
 
-		self.e_fname = tk.Entry(self)
-		self.e_lname = tk.Entry(self)		
-		self.e_age = tk.Entry(self, validate='all', validatecommand=(vcmd, '%P')) 
+		self.e_fname 	= tk.Entry(self, textvariable=self.sv_fname)
+		self.e_lname	= tk.Entry(self, textvariable=self.sv_lname)
+		self.e_age 		= tk.Entry(self, textvariable=self.sv_age)
 
 
 
@@ -56,15 +60,15 @@ class DETAILS_View(tk.Frame):
 
 
 
-		self.sex = tk.StringVar()
+		
 		m_btn = tk.Radiobutton(self, text='M', variable=self.sex, value="M",tristatevalue="x")
 		m_btn.grid(sticky="W", row=4, column=1)
 		f_btn = tk.Radiobutton(self, text='F', variable=self.sex, value="F",tristatevalue="x")
 		f_btn.grid(sticky="W", row=5, column=1)
 
 
-		submit_btn = ttk.Button(self, text="SAVE", command=lambda: self.save())
-		submit_btn.grid(column=0, row=6)
+		# submit_btn = ttk.Button(self, text="SAVE", command=lambda: self.save())
+		# submit_btn.grid(column=0, row=6)
 
 
 
@@ -166,6 +170,9 @@ class DETAILS_View(tk.Frame):
 		else:
 			return False
 
+	def callback2(self, sv):
+		print(sv.get())
+
 	def is_set_med_image(self):
 		# This class has no image related to it
 		# exception for DETAILS_View
@@ -256,6 +263,16 @@ class DETAILS_View(tk.Frame):
 		self.post_lat_var.set(self.master_dict["POINT_SIZES"]["POST-LAT"])
 		self.post_sky_var.set(self.master_dict["POINT_SIZES"]["POST-SKY"])
 
+		if self.master_dict["DETAILS"]["F_NAME"] != None:
+			self.sv_fname.set(self.master_dict["DETAILS"]["F_NAME"])
+		if self.master_dict["DETAILS"]["L_NAME"] != None:
+			self.sv_lname.set(self.master_dict["DETAILS"]["L_NAME"])
+		if self.master_dict["DETAILS"]["AGE"] != None:
+			self.sv_age.set(self.master_dict["DETAILS"]["AGE"])
+
+		if self.master_dict["DETAILS"]["SEX"] != None:
+			self.sex.set(self.master_dict["DETAILS"]["SEX"])
+
 		# self.pre_scanno_var.trace("w", lambda name, index, mode, dict_key="PRE-SCANNO", var=self.pre_scanno_var: self.update_pointsize_dict(dict_key, var))
 		# self.post_scanno_var.trace("w", lambda name, index, mode, dict_key="POST-SCANNO", var=self.post_scanno_var: self.update_pointsize_dict(dict_key, var))
 
@@ -267,6 +284,15 @@ class DETAILS_View(tk.Frame):
 		self.post_ap_var.trace("w", lambda name, index, mode, dict_key="POST-AP", var=self.post_ap_var: self.update_pointsize_dict(dict_key, var))
 		self.post_lat_var.trace("w", lambda name, index, mode, dict_key="POST-LAT", var=self.post_lat_var: self.update_pointsize_dict(dict_key, var))
 		self.post_sky_var.trace("w", lambda name, index, mode, dict_key="POST-SKY", var=self.post_sky_var: self.update_pointsize_dict(dict_key, var))
+
+
+		# trace entrys
+		self.sv_fname.trace_add("write", lambda name, index, mode, entry_type="F-NAME", var=self.sv_fname: self.entry_callback(entry_type, self.sv_fname))
+		self.sv_lname.trace_add("write", lambda name, index, mode, entry_type="L-NAME", var=self.sv_lname: self.entry_callback(entry_type, self.sv_lname))
+		self.sv_age.trace_add("write", lambda name, index, mode, entry_type="AGE", var=self.sv_age: self.entry_callback(entry_type, self.sv_age))
+
+
+		self.sex.trace_add("write", lambda name, index, mode, var=self.sex: self.radio_callback(self.sex))
 
 
 
@@ -294,6 +320,36 @@ class DETAILS_View(tk.Frame):
 			except Exception as e:
 				print(e)
 				# raise e
+
+
+
+	def entry_callback(self, entry_type, var):
+		print('{} entry_type update {}'.format(entry_type, var.get()))
+
+
+		val = var.get().strip()
+		if val != "":
+			if entry_type == "F-NAME":
+				self.master_dict["DETAILS"]["F_NAME"] = val
+				self.controller.save_json()
+			elif entry_type == "L-NAME":
+				self.master_dict["DETAILS"]["L_NAME"] = val
+				self.controller.save_json()
+			elif entry_type == "AGE":
+				self.master_dict["DETAILS"]["AGE"] = val
+				self.controller.save_json()
+
+
+	def radio_callback(self, var):
+
+		sex = var.get().strip()
+
+		if sex != None:
+			self.master_dict["DETAILS"]["SEX"] = sex
+			self.controller.save_json()
+
+		print('radio callback {}'.format(sex))
+
 
 
 	def set_stitch_images(self, btn_type):
@@ -401,6 +457,15 @@ class DETAILS_View(tk.Frame):
 		print('details_tryPsFile')
 		# get into the view to access canvas
 		self.controller.app_tryPsFile()
+
+
+
+	def escapeFunc(self):
+		pass
+	def keySetRight(self):
+		pass
+	def keySetLeft(self):
+		pass
 
 				
 				

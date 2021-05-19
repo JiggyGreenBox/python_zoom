@@ -49,17 +49,30 @@ class ALPHA_Menu(tk.Frame):
 		del_label.grid(column=1, row=4,columnspan=2,pady=(100, 0),sticky=N)
 
 
-		button = ttk.Button(self, text="FEM LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-FEM-LINE"))
+		button = ttk.Button(self, text="FEM TOP", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-FEM-TOP"))
 		button.grid(column=1, row=5)
-
-		button = ttk.Button(self, text="FEM LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-FEM-LINE"))
+		button = ttk.Button(self, text="FEM TOP", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-FEM-TOP"))
 		button.grid(column=2, row=5)
 
+
+		button = ttk.Button(self, text="FEM BOT", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-FEM-BOT"))
+		button.grid(column=1, row=6)
+		button = ttk.Button(self, text="FEM BOT", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-FEM-BOT"))
+		button.grid(column=2, row=6)
+
+
+
+		button = ttk.Button(self, text="FEM LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-FEM-LINE"))
+		button.grid(column=1, row=7)
+
+		button = ttk.Button(self, text="FEM LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-FEM-LINE"))
+		button.grid(column=2, row=7)
+
 		label_cb = Checkbutton(self, text="LABELS", variable=self.label_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_LABEL", self.label_var))
-		label_cb.grid(padx=[5,0], pady=[10,0], sticky="W", column=1, row=6)
+		label_cb.grid(padx=[5,0], pady=[10,0], sticky="W", column=1, row=8)
 
 		hover_cb = Checkbutton(self, text="HOVER", variable=self.hover_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_HOVER", self.hover_var))
-		hover_cb.grid(padx=[5,0], pady=[10,0], sticky="W", column=2, row=6)
+		hover_cb.grid(padx=[5,0], pady=[10,0], sticky="W", column=2, row=8)
 
 		
 
