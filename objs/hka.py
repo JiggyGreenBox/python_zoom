@@ -137,6 +137,14 @@ class HKA():
 						self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
 						self.dict["EXCEL"][self.op_type][side]["HKA"]	 	= '{0:.1f}'.format(angle)
 
+						jda = None
+						if angle > 180:
+							jda = angle - 180
+						else:
+							jda = 180 - angle
+
+						self.dict["EXCEL"][self.op_type][side]["JDA"] = '{0:.1f}'.format(jda)
+
 						# save after insert
 						self.controller.save_json()
 
@@ -209,6 +217,14 @@ class HKA():
 
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
 					self.dict["EXCEL"][self.op_type][side]["HKA"]	 	= '{0:.1f}'.format(angle)
+
+					jda = None
+					if angle > 180:
+						jda = angle - 180
+					else:
+						jda = 180 - angle
+
+					self.dict["EXCEL"][self.op_type][side]["JDA"] = '{0:.1f}'.format(jda)
 
 					# save after insert
 					self.controller.save_json()

@@ -57,7 +57,7 @@ class MainWindow(ttk.Frame):
 		self.master.bind('<Key>', lambda event: self.master.after_idle(self.key_funct, event))
 
 		# check for user prefs, if not found create user_prefs.json
-		self.point_size_obj = "" 	# store json data view-wise of point sizes
+		self.user_pref_obj = "" 	# store json data view-wise of point sizes
 		self.check_user_prefs()
 
 		self.working_dir = ""		
@@ -201,6 +201,9 @@ class MainWindow(ttk.Frame):
 			# print("image is NOT set")
 
 		view.tkraise()
+		if page_name == "DETAILS_View":
+			view.updateTableValues()
+			
 
 
 	def save_json(self):
@@ -222,8 +225,8 @@ class MainWindow(ttk.Frame):
 			if file_prefs.is_file():
 				print('exists')
 				with open(file_prefs) as f:
-					self.point_size_obj = json.load(f)
-					print(self.point_size_obj)
+					self.user_pref_obj = json.load(f)
+					print(self.user_pref_obj)
 
 
 			# create if not found
@@ -241,11 +244,40 @@ class MainWindow(ttk.Frame):
 												"POST-SKY":1
 											}
 
+
+				if "IMPLANT_NAMES" not in user_json.keys():
+					user_json["IMPLANT_NAMES"] = 	{
+														"UKR":[
+															"Oxford",
+															"Sigma",
+															"Zuk",
+															"Mako",
+															"Journey"
+														],
+														"TKR":[
+															"Sigma",
+															"Attune",
+															"Persona",
+															"NexGen",
+															"Triathlon",
+															"Scorpio",
+															"Genesis",
+															"Journey"
+														]
+													}
+
+				if "MASTER_EXCEL_PATHS" not in user_json.keys():
+					user_json["MASTER_EXCEL_PATHS"] = 	{
+															"UKR_PATH": None,
+															"TKR_PATH": None
+														}
+
+
 				with open(script_dir + '/user_prefs.json', 'w', encoding='utf-8') as f:
 					json.dump(user_json, f, ensure_ascii=False, indent=4)
 
-				self.point_size_obj = json.loads(json.dumps(user_json))
-				print(self.point_size_obj)
+				self.user_pref_obj = json.loads(json.dumps(user_json))
+				print(self.user_pref_obj)
 
 
 		except Exception as e:
@@ -286,7 +318,7 @@ class MainWindow(ttk.Frame):
 														"EADFA"			:None,
 														"EADFPS"		:None,
 														"EADFDS"		:None,
-														"JCA"			:None,
+														"JDA"			:None,
 														"TAMD"			:None,
 														"MPTA"			:None,
 														"KJLO"			:None,
@@ -307,9 +339,12 @@ class MainWindow(ttk.Frame):
 														"TVAR/VAL"		:None,
 														"FFLE/EXT"		:None,
 														"TFLE/EXT"		:None,
+														"JCA"			:None,
 														"LPFA"			:None,
 														"MPFA"			:None,
-														"LDTA"			:None
+														"LDTA"			:None,
+														"ANKLE_SLOPE"	:None,
+														"pMA"			:None
 													},
 													"LEFT":{
 														"HASDATA"		:False,
@@ -323,7 +358,7 @@ class MainWindow(ttk.Frame):
 														"EADFA"			:None,
 														"EADFPS"		:None,
 														"EADFDS"		:None,
-														"JCA"			:None,
+														"JDA"			:None,
 														"TAMD"			:None,
 														"MPTA"			:None,
 														"KJLO"			:None,
@@ -344,9 +379,12 @@ class MainWindow(ttk.Frame):
 														"TVAR/VAL"		:None,
 														"FFLE/EXT"		:None,
 														"TFLE/EXT"		:None,
+														"JCA"			:None,
 														"LPFA"			:None,
 														"MPFA"			:None,
-														"LDTA"			:None
+														"LDTA"			:None,
+														"ANKLE_SLOPE"	:None,
+														"pMA"			:None
 													}
 												},
 												"POST-OP":{
@@ -362,7 +400,7 @@ class MainWindow(ttk.Frame):
 														"EADFA"			:None,
 														"EADFPS"		:None,
 														"EADFDS"		:None,
-														"JCA"			:None,
+														"JDA"			:None,
 														"TAMD"			:None,
 														"MPTA"			:None,
 														"KJLO"			:None,
@@ -383,9 +421,12 @@ class MainWindow(ttk.Frame):
 														"TVAR/VAL"		:None,
 														"FFLE/EXT"		:None,
 														"TFLE/EXT"		:None,
+														"JCA"			:None,
 														"LPFA"			:None,
 														"MPFA"			:None,
-														"LDTA"			:None
+														"LDTA"			:None,
+														"ANKLE_SLOPE"	:None,
+														"pMA"			:None
 													},
 													"LEFT":{
 														"HASDATA"		:False,
@@ -399,7 +440,7 @@ class MainWindow(ttk.Frame):
 														"EADFA"			:None,
 														"EADFPS"		:None,
 														"EADFDS"		:None,
-														"JCA"			:None,
+														"JDA"			:None,
 														"TAMD"			:None,
 														"MPTA"			:None,
 														"KJLO"			:None,
@@ -420,9 +461,12 @@ class MainWindow(ttk.Frame):
 														"TVAR/VAL"		:None,
 														"FFLE/EXT"		:None,
 														"TFLE/EXT"		:None,
+														"JCA"			:None,
 														"LPFA"			:None,
 														"MPFA"			:None,
-														"LDTA"			:None
+														"LDTA"			:None,
+														"ANKLE_SLOPE"	:None,
+														"pMA"			:None
 													}
 												}
 											}
@@ -430,18 +474,18 @@ class MainWindow(ttk.Frame):
 
 		if "POINT_SIZES" not in self.master_dict.keys():
 
-			print('point val is {}'.format(self.point_size_obj["POINT_SIZES"]["PRE-SCANNO"]))
+			print('point val is {}'.format(self.user_pref_obj["POINT_SIZES"]["PRE-SCANNO"]))
 
-			if self.point_size_obj != "":
+			if self.user_pref_obj != "":
 				self.master_dict["POINT_SIZES"] = 	{
-											"PRE-SCANNO":	self.point_size_obj["POINT_SIZES"]["PRE-SCANNO"],
-											"PRE-AP":		self.point_size_obj["POINT_SIZES"]["PRE-AP"],
-											"PRE-LAT":		self.point_size_obj["POINT_SIZES"]["PRE-LAT"],
-											"PRE-SKY":		self.point_size_obj["POINT_SIZES"]["PRE-SKY"],
-											"POST-SCANNO":	self.point_size_obj["POINT_SIZES"]["POST-SCANNO"],
-											"POST-AP":		self.point_size_obj["POINT_SIZES"]["POST-AP"],
-											"POST-LAT":		self.point_size_obj["POINT_SIZES"]["POST-LAT"],
-											"POST-SKY":		self.point_size_obj["POINT_SIZES"]["POST-SKY"]
+											"PRE-SCANNO":	self.user_pref_obj["POINT_SIZES"]["PRE-SCANNO"],
+											"PRE-AP":		self.user_pref_obj["POINT_SIZES"]["PRE-AP"],
+											"PRE-LAT":		self.user_pref_obj["POINT_SIZES"]["PRE-LAT"],
+											"PRE-SKY":		self.user_pref_obj["POINT_SIZES"]["PRE-SKY"],
+											"POST-SCANNO":	self.user_pref_obj["POINT_SIZES"]["POST-SCANNO"],
+											"POST-AP":		self.user_pref_obj["POINT_SIZES"]["POST-AP"],
+											"POST-LAT":		self.user_pref_obj["POINT_SIZES"]["POST-LAT"],
+											"POST-SKY":		self.user_pref_obj["POINT_SIZES"]["POST-SKY"]
 										}
 			else:				
 				self.master_dict["POINT_SIZES"] = 	{
@@ -567,7 +611,7 @@ class MainWindow(ttk.Frame):
 		eadfa 		= []
 		eadfps 		= []
 		eadfds 		= []
-		jca 		= []
+		jda 		= []
 		tamd 		= []
 		mpta 		= []
 		kjlo 		= []
@@ -594,7 +638,7 @@ class MainWindow(ttk.Frame):
 		post_eadfa 	= []
 		post_eadfps = []
 		post_eadfds = []
-		post_jca 	= []
+		post_jda 	= []
 		post_tamd 	= []
 		post_mpta 	= []
 		post_kjlo 	= []
@@ -616,12 +660,18 @@ class MainWindow(ttk.Frame):
 		ffleext 	= []
 		tfleext 	= []
 
+		jca 		= []
 		lpfa		= []
 		mpfa		= []
 		ldta		= []
+		a_slope 	= []
+		p_ma 		= []
+		post_jca	= []
 		post_lpfa	= []
 		post_mpfa	= []
 		post_ldta	= []
+		post_a_slope = []
+		post_p_ma 	= []
 		
 
 
@@ -643,7 +693,7 @@ class MainWindow(ttk.Frame):
 					"EADFA"			:	eadfa,
 					"EADFPS"		:	eadfps,
 					"EADFDS"		:	eadfds,
-					"JCA"			:	jca,
+					"JDA"			:	jda,
 					"TAMD"			:	tamd,
 					"MPTA"			:	mpta,
 					"KJLO"			:	kjlo,
@@ -670,7 +720,7 @@ class MainWindow(ttk.Frame):
 					"Post-EADFA"	:	post_eadfa,
 					"Post-EADFPS"	:	post_eadfps,
 					"Post-EADFDS"	:	post_eadfds,
-					"Post-JCA"		:	post_jca,
+					"Post-JDA"		:	post_jda,
 					"Post-TAMD"		:	post_tamd,
 					"Post-MPTA"		:	post_mpta,
 					"Post-KJLO"		:	post_kjlo,
@@ -691,12 +741,18 @@ class MainWindow(ttk.Frame):
 					"Post-F VAR/VAL"	:	fvarval,
 					"Post-T FLE/EXT"	:	tfleext,
 					"Post-T VAR/VAL"	:	tvarval,
+					"JCA"			:	jca,
 					"LPFA"			:	lpfa,
 					"MPFA"			:	mpfa,
 					"LDTA"			:	ldta,
+					"ANKLE_SLOPE"	:	a_slope,
+					"pMA"			:	p_ma,
+					"Post-JCA"		:	post_jca,
 					"Post-LPFA"		:	post_lpfa,
 					"Post-MPFA"		:	post_mpfa,
-					"Post-LDTA"		:	post_ldta
+					"Post-LDTA"		:	post_ldta,
+					"Post-ANKLE_SLOPE"	:	post_a_slope,
+					"Post-pMA"		: 	post_p_ma					
 				}
 
 
@@ -727,7 +783,7 @@ class MainWindow(ttk.Frame):
 				eadfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["EADFA"])
 				eadfps.append(self.master_dict["EXCEL"]["PRE-OP"][side]["EADFPS"])
 				eadfds.append(self.master_dict["EXCEL"]["PRE-OP"][side]["EADFDS"])
-				jca.append(self.master_dict["EXCEL"]["PRE-OP"][side]["JCA"])
+				jda.append(self.master_dict["EXCEL"]["PRE-OP"][side]["JDA"])
 				tamd.append(self.master_dict["EXCEL"]["PRE-OP"][side]["TAMD"])
 				mpta.append(self.master_dict["EXCEL"]["PRE-OP"][side]["MPTA"])
 				kjlo.append(self.master_dict["EXCEL"]["PRE-OP"][side]["KJLO"])
@@ -756,7 +812,7 @@ class MainWindow(ttk.Frame):
 				post_eadfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["EADFA"])
 				post_eadfps.append(self.master_dict["EXCEL"]["POST-OP"][side]["EADFPS"])
 				post_eadfds.append(self.master_dict["EXCEL"]["POST-OP"][side]["EADFDS"])
-				post_jca.append(self.master_dict["EXCEL"]["POST-OP"][side]["JCA"])
+				post_jda.append(self.master_dict["EXCEL"]["POST-OP"][side]["JDA"])
 				post_tamd.append(self.master_dict["EXCEL"]["POST-OP"][side]["TAMD"])
 				post_mpta.append(self.master_dict["EXCEL"]["POST-OP"][side]["MPTA"])
 				post_kjlo.append(self.master_dict["EXCEL"]["POST-OP"][side]["KJLO"])
@@ -779,23 +835,51 @@ class MainWindow(ttk.Frame):
 				ffleext.append(self.master_dict["EXCEL"]["POST-OP"][side]["FFLE/EXT"])
 				tfleext.append(self.master_dict["EXCEL"]["POST-OP"][side]["TFLE/EXT"])
 
-				lpfa.append(x)
-				mpfa.append(x)
-				ldta.append(x)
-				post_lpfa.append(x)
-				post_mpfa.append(x)
-				post_ldta.append(x)
+				# lpfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["LPFA"])
+				# mpfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["MPFA"])
+				# ldta.append(self.master_dict["EXCEL"]["PRE-OP"][side]["LDTA"])
+				# post_lpfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["LPFA"])
+				# post_mpfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["MPFA"])
+				# post_ldta.append(self.master_dict["EXCEL"]["POST-OP"][side]["LDTA"])
+
+
+				jca.append(self.master_dict["EXCEL"]["PRE-OP"][side]["JCA"])
+				lpfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["LPFA"])
+				mpfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["MPFA"])
+				ldta.append(self.master_dict["EXCEL"]["PRE-OP"][side]["LDTA"])
+				a_slope.append(self.master_dict["EXCEL"]["PRE-OP"][side]["ANKLE_SLOPE"])
+				p_ma.append(self.master_dict["EXCEL"]["PRE-OP"][side]["pMA"])
+				post_jca.append(self.master_dict["EXCEL"]["POST-OP"][side]["JCA"])
+				post_lpfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["LPFA"])
+				post_mpfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["MPFA"])
+				post_ldta.append(self.master_dict["EXCEL"]["POST-OP"][side]["LDTA"])
+				post_a_slope.append(self.master_dict["EXCEL"]["POST-OP"][side]["ANKLE_SLOPE"])
+				post_p_ma.append(self.master_dict["EXCEL"]["POST-OP"][side]["pMA"])
+
+
+				# jca.append(x)
+				# lpfa.append(x)
+				# mpfa.append(x)
+				# ldta.append(x)
+				# a_slope.append(x)
+				# p_ma.append(x)
+				# post_jca.append(x)
+				# post_lpfa.append(x)
+				# post_mpfa.append(x)
+				# post_ldta.append(x)
+				# post_a_slope.append(x)
+				# post_p_ma.append(x)
 
 			
 
 
 
 		# print(mtype)
-
-
+		# import pprint
+		# pprint.pprint(mdict)
 		df = pd.DataFrame(mdict)
 		# df.fillna(value=pd.np.nan, inplace=True)
-		print(df)
+		# print(df)
 		if not df.empty:
 			excel_file = Path(self.working_dir + "/output.xlsx")
 			df.to_excel(excel_file, index=False)
@@ -847,9 +931,7 @@ class MainWindow(ttk.Frame):
 			view.view_tryPsFile()			
 		except Exception as e:
 			raise e
-		
-
-
+			
 
 app = MainWindow(tk.Tk())
 app.mainloop()

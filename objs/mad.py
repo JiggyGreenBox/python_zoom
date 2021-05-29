@@ -168,6 +168,7 @@ class MAD():
 
 				L_mad, R_mad = self.draw_tools.retPointsLeftRight(mad_p1, mad_p2)
 				mad_val = None
+				percentMA = None
 
 				if side == "RIGHT":
 					# no intersection 0 condition
@@ -221,9 +222,14 @@ class MAD():
 						print('error?')
 						mad_val = '-1'
 
-					if self.dict["EXCEL"][self.op_type][side]["MAD"] == None:
+					if self.dict["EXCEL"][self.op_type]["RIGHT"]["MAD"] == None:
 						self.dict["EXCEL"][self.op_type]["RIGHT"]["HASDATA"] = True
 						self.dict["EXCEL"][self.op_type]["RIGHT"]["MAD"]	 = mad_val
+						self.controller.save_json()
+
+					if self.dict["EXCEL"][self.op_type][side]["pMA"] == None:
+						self.dict["EXCEL"][self.op_type]["RIGHT"]["HASDATA"] = True
+						self.dict["EXCEL"][self.op_type]["RIGHT"]["pMA"] = '{0:.1f}'.format(percentMA)
 						self.controller.save_json()
 
 
@@ -280,9 +286,14 @@ class MAD():
 						print('error?')
 						mad_val = '-1'
 
-					if self.dict["EXCEL"][self.op_type][side]["MAD"] == None:
+					if self.dict["EXCEL"][self.op_type]["LEFT"]["MAD"] == None:
 						self.dict["EXCEL"][self.op_type]["LEFT"]["HASDATA"] = True
-						self.dict["EXCEL"][self.op_type]["LEFT"]["MAD"]	 = mad_val
+						self.dict["EXCEL"][self.op_type]["LEFT"]["MAD"]	 = mad_val						
+						self.controller.save_json()
+
+					if self.dict["EXCEL"][self.op_type]["LEFT"]["pMA"] == None:
+						self.dict["EXCEL"][self.op_type]["LEFT"]["HASDATA"] = True
+						self.dict["EXCEL"][self.op_type]["LEFT"]["pMA"] = '{0:.1f}'.format(percentMA)
 						self.controller.save_json()
 
 
@@ -528,6 +539,7 @@ class MAD():
 
 				L_mad, R_mad = self.draw_tools.retPointsLeftRight(mad_p1, mad_p2)
 				mad_val = None
+				percentMA = None
 
 				if side == "RIGHT":
 					# no intersection 0 condition
@@ -535,10 +547,16 @@ class MAD():
 						print('MAD value: 0')
 						mad_val = '0'
 
+						percentMA = (self.draw_tools.getDistance(p_int, R_mad) / self.draw_tools.getDistance(L_mad, R_mad)) * -100
+						print('percentMA: {}'.format(percentMA))
+
 					# no intersection 5 condition
 					elif self.draw_tools.retIsPointLeft(p_int, L_mad):
 						print('MAD value: 5')
 						mad_val = '5'
+
+						percentMA = (self.draw_tools.getDistance(p_int, R_mad) / self.draw_tools.getDistance(L_mad, R_mad)) * 100
+						print('percentMA: {}'.format(percentMA))
 
 					# intersection, but confirm
 					elif self.draw_tools.retIsPointLeft(p_int, R_mad) and self.draw_tools.retIsPointRight(p_int, L_mad):
@@ -573,6 +591,7 @@ class MAD():
 					if self.dict["EXCEL"][self.op_type][side]["MAD"] == None:
 						self.dict["EXCEL"][self.op_type]["RIGHT"]["HASDATA"] = True
 						self.dict["EXCEL"][self.op_type]["RIGHT"]["MAD"]	 = mad_val
+						self.dict["EXCEL"][self.op_type]["RIGHT"]["pMA"] = '{0:.1f}'.format(percentMA)
 						self.controller.save_json()
 
 
@@ -582,10 +601,16 @@ class MAD():
 						print('MAD value: 5')
 						mad_val = '5'
 
+						percentMA = (self.draw_tools.getDistance(p_int, L_mad) / self.draw_tools.getDistance(L_mad, R_mad)) * 100
+						print('percentMA: {}'.format(percentMA))
+
 					# no intersection 5 condition
 					elif self.draw_tools.retIsPointLeft(p_int, L_mad):
 						print('MAD value: 0')
 						mad_val = '0'
+
+						percentMA = (self.draw_tools.getDistance(p_int, L_mad) / self.draw_tools.getDistance(L_mad, R_mad)) * -100
+						print('percentMA: {}'.format(percentMA))
 
 					# intersection, but confirm
 					elif self.draw_tools.retIsPointLeft(p_int, R_mad) and self.draw_tools.retIsPointRight(p_int, L_mad):
@@ -621,6 +646,7 @@ class MAD():
 					if self.dict["EXCEL"][self.op_type][side]["MAD"] == None:
 						self.dict["EXCEL"][self.op_type]["LEFT"]["HASDATA"] = True
 						self.dict["EXCEL"][self.op_type]["LEFT"]["MAD"]	 = mad_val
+						self.dict["EXCEL"][self.op_type]["LEFT"]["pMA"] = '{0:.1f}'.format(percentMA)
 						self.controller.save_json()
 
 

@@ -237,13 +237,16 @@ class LPFA():
 			# user might not toggle
 			# if none recalculate for checkbox toggle error
 			if lpfa_angle != None:
+				print('not null write')
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type][side]["LPFA"] == None:
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True					
 					self.dict["EXCEL"][self.op_type][side]["LPFA"]	 	= '{0:.1f}'.format(lpfa_angle)
 					self.controller.save_json()
 			else:
+				print('null calculate')
 				if isHip and isKnee and isTroHip:
+					print('points exist')
 					if side == "RIGHT":
 						lpfa_angle = self.draw_tools.getAnglePoints(knee, hip, tro_hip)
 					else:

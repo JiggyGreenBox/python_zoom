@@ -4,3 +4,4 @@
 app.spec
 build/
 dist/
+user_prefs.json

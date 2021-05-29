@@ -8,5 +8,28 @@
         "POST-AP": 1,
         "POST-LAT": 1,
         "POST-SKY": 1
+    },
+    "IMPLANT_NAMES": {
+        "UKR": [
+            "Oxford",
+            "Sigma",
+            "Zuk",
+            "Mako",
+            "Journey"
+        ],
+        "TKR": [
+            "Sigma",
+            "Attune",
+            "Persona",
+            "NexGen",
+            "Triathlon",
+            "Scorpio",
+            "Genesis",
+            "Journey"
+        ]
+    },
+    "MASTER_EXCEL_PATHS": {
+        "UKR_PATH": "C:/Users/jiggy/Desktop/master_excel/UKR.xlsx",
+        "TKR_PATH": "C:/Users/jiggy/Desktop/master_excel/TKR.xlsx"
     }
 }
