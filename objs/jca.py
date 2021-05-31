@@ -138,8 +138,54 @@ class JCA():
 
 		self.point_size = self.controller.getViewPointSize()
 		
+		# # loop left and right
+		# for side in ["LEFT","RIGHT"]:
+
+		# 	isTib 	= False
+		# 	isFem 	= False
+
+		# 	tib_joint_p1 = self.dict["MAIN"][self.op_type][side]["TIB_JOINT_LINE"]["P1"]
+		# 	tib_joint_p2 = self.dict["MAIN"][self.op_type][side]["TIB_JOINT_LINE"]["P2"]
+
+		# 	fem_joint_p1 = self.dict["MAIN"][self.op_type][side]["FEM_JOINT_LINE"]["P1"]
+		# 	fem_joint_p2 = self.dict["MAIN"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
+
+
+		# 	if fem_joint_p1 != None and fem_joint_p2 != None:				
+		# 		isFem = True
+			
+		# 	if tib_joint_p1 != None and tib_joint_p2 != None:
+		# 		isTib = True
+
+
+
+
+		# 	xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
+
+		# 	if isTib and isFem:
+
+		# 		p_int = self.draw_tools.line_intersection(
+		# 			(tib_joint_p1, tib_joint_p2),
+		# 			(fem_joint_p1, fem_joint_p2))
+
+		# 		angle = self.draw_tools.getSmallestAngle(tib_joint_p1, p_int, fem_joint_p1)
+
+				
+		# 		# check if value exists
+		# 		if self.dict["EXCEL"][self.op_type][side]["JCA"] == None:
+
+		# 			self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
+		# 			self.dict["EXCEL"][self.op_type][side]["JCA"]	 	= '{0:.1f}'.format(angle)
+
+		# 			# save after insert
+		# 			self.controller.save_json()
+
+
 		# loop left and right
 		for side in ["LEFT","RIGHT"]:
+
+			isFemTop 	= False
+			isFemBot 	= False
 
 			isTib 	= False
 			isFem 	= False
@@ -151,13 +197,13 @@ class JCA():
 			fem_joint_p2 = self.dict["MAIN"][self.op_type][side]["FEM_JOINT_LINE"]["P2"]
 
 
-			if fem_joint_p1 != None and fem_joint_p2 != None:				
-				isFem = True
 			
+			if fem_joint_p1 != None and fem_joint_p2 != None:
+				isFem = True
+
+
 			if tib_joint_p1 != None and tib_joint_p2 != None:
 				isTib = True
-
-
 
 
 			xtop, ytop, xbot, ybot = self.draw_tools.getImageCorners()
@@ -168,14 +214,24 @@ class JCA():
 					(tib_joint_p1, tib_joint_p2),
 					(fem_joint_p1, fem_joint_p2))
 
-				angle = self.draw_tools.getSmallestAngle(tib_joint_p1, p_int, fem_joint_p1)
+				# angle = self.draw_tools.getSmallestAngle(tib_joint_p1, p_int, fem_joint_p1)
 
 				
+
+				L_fem, R_fem = self.draw_tools.retPointsLeftRight(fem_joint_p1, fem_joint_p2)
+				L_tib, R_tib = self.draw_tools.retPointsLeftRight(tib_joint_p1, tib_joint_p2)
+
+				if side == "RIGHT":
+					# angle2 = self.draw_tools.create_myAngle(L_tib, p_int, L_fem, self.tag)
+					angle = self.draw_tools.getSmallestAngle(L_tib, p_int, L_fem)
+				elif side == "LEFT":
+					# angle2 = self.draw_tools.create_myAngle(R_fem, p_int, R_tib, self.tag)
+					angle = self.draw_tools.getSmallestAngle(R_fem, p_int, R_tib)
+
+
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type][side]["JCA"] == None:
-
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
 					self.dict["EXCEL"][self.op_type][side]["JCA"]	 	= '{0:.1f}'.format(angle)
-
-					# save after insert
 					self.controller.save_json()
+

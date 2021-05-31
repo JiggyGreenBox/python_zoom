@@ -227,20 +227,28 @@ class KJLO():
 
 			if self.isSingleLeg("LEFT"):
 				L_ankle 		= self.dict["KJLO"][self.op_type]["LEFT"]["ANKLE"]["M1"]	
+				L_ankle_p1 		= self.dict["KJLO"][self.op_type]["LEFT"]["ANKLE"]["P1"]
+				L_ankle_p2 		= self.dict["KJLO"][self.op_type]["LEFT"]["ANKLE"]["P2"]
 				L_tib_joint_p1 	= self.dict["KJLO"][self.op_type]["LEFT"]["JOINT_LINE"]["P1"]
 				L_tib_joint_p2	= self.dict["KJLO"][self.op_type]["LEFT"]["JOINT_LINE"]["P2"]
 			else:
 				L_ankle 		= self.dict["MAIN"][self.op_type]["LEFT"]["ANKLE"]["M1"]	
+				L_ankle_p1 		= self.dict["MAIN"][self.op_type]["LEFT"]["ANKLE"]["P1"]
+				L_ankle_p2 		= self.dict["MAIN"][self.op_type]["LEFT"]["ANKLE"]["P2"]
 				L_tib_joint_p1 	= self.dict["MAIN"][self.op_type]["LEFT"]["JOINT_LINE"]["P1"]
 				L_tib_joint_p2 	= self.dict["MAIN"][self.op_type]["LEFT"]["JOINT_LINE"]["P2"]
 				
 
 			if self.isSingleLeg("RIGHT"):
 				R_ankle			= self.dict["KJLO"][self.op_type]["RIGHT"]["ANKLE"]["M1"]
+				R_ankle_p1 		= self.dict["KJLO"][self.op_type]["RIGHT"]["ANKLE"]["P1"]
+				R_ankle_p2 		= self.dict["KJLO"][self.op_type]["RIGHT"]["ANKLE"]["P2"]
 				R_tib_joint_p1 	= self.dict["KJLO"][self.op_type]["RIGHT"]["JOINT_LINE"]["P1"]
 				R_tib_joint_p2 	= self.dict["KJLO"][self.op_type]["RIGHT"]["JOINT_LINE"]["P2"]
 			else:
 				R_ankle 		= self.dict["MAIN"][self.op_type]["RIGHT"]["ANKLE"]["M1"]
+				R_ankle_p1 		= self.dict["MAIN"][self.op_type]["RIGHT"]["ANKLE"]["P1"]
+				R_ankle_p2 		= self.dict["MAIN"][self.op_type]["RIGHT"]["ANKLE"]["P2"]
 				R_tib_joint_p1 	= self.dict["MAIN"][self.op_type]["RIGHT"]["JOINT_LINE"]["P1"]
 				R_tib_joint_p2 	= self.dict["MAIN"][self.op_type]["RIGHT"]["JOINT_LINE"]["P2"]
 
@@ -311,16 +319,32 @@ class KJLO():
 				self.draw_tools.create_mytext(p_int_L, '{0:.1f}'.format(L_angle), [self.tag,"ANGLE_KJLO"], x_offset=-60, y_offset=-60, color="blue")
 
 
+				# ankle slope
+				LL_ankle_p , RL_ankle_p = self.draw_tools.retPointsLeftRight(L_ankle_p1, L_ankle_p2)
+				a1 = self.draw_tools.getAnglePoints(R_ankle, L_ankle, LL_ankle_p)
+				a2 = self.draw_tools.getAnglePoints(LL_ankle_p, L_ankle, R_ankle)
+				if a1 > a2:
+					L_ankle_slope = self.draw_tools.create_myAngle(LL_ankle_p, L_ankle, R_ankle, [self.tag,"ANGLE_KJLO"])
+				else:
+					L_ankle_slope = self.draw_tools.create_myAngle(R_ankle, L_ankle, LL_ankle_p, [self.tag,"ANGLE_KJLO"])
+
+				if self.draw_tools.retIsPointUp(L_ankle, LL_ankle_p):
+					L_ankle_slope = L_ankle_slope * -1
+
+				self.draw_tools.create_mytext(RL_ankle_p, '{0:.1f}'.format(L_ankle_slope), [self.tag,"ANGLE_KJLO"], x_offset=0, y_offset=40, color="blue")
+
+
+
 				if not self.isSingleLeg("LEFT"):
 					# check if value exists
-					if self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"] == None:
-						# print("enter left")
-
+					if self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"] == None:						
 						self.dict["EXCEL"][self.op_type]["LEFT"]["HASDATA"] 	= True
 						self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"]	 	= '{0:.1f}'.format(L_angle)
-
-						# save after insert
-						self.controller.save_json()	
+						self.controller.save_json()
+					if self.dict["EXCEL"][self.op_type]["LEFT"]["ANKLE_SLOPE"] == None:
+						self.dict["EXCEL"][self.op_type]["LEFT"]["HASDATA"] 	= True
+						self.dict["EXCEL"][self.op_type]["LEFT"]["ANKLE_SLOPE"]	 	= '{0:.1f}'.format(L_ankle_slope)
+						self.controller.save_json()
 
 
 			if R_tib_joint_p1 != None and R_tib_joint_p2 != None:
@@ -338,16 +362,32 @@ class KJLO():
 				self.draw_tools.create_mytext(p_int_R, '{0:.1f}'.format(R_angle), [self.tag,"ANGLE_KJLO"], x_offset=60, y_offset=-60, color="blue")
 
 
+				# ankle slope
+				LR_ankle_p , RR_ankle_p = self.draw_tools.retPointsLeftRight(R_ankle_p1, R_ankle_p2)
+				a1 = self.draw_tools.getAnglePoints(L_ankle, R_ankle, RR_ankle_p)
+				a2 = self.draw_tools.getAnglePoints(RR_ankle_p, R_ankle, L_ankle)
+				if a1 > a2:
+					R_ankle_slope = self.draw_tools.create_myAngle(RR_ankle_p, R_ankle, L_ankle, [self.tag,"ANGLE_KJLO"])
+				else:
+					R_ankle_slope = self.draw_tools.create_myAngle(L_ankle, R_ankle, RR_ankle_p, [self.tag,"ANGLE_KJLO"])
+
+
+				if self.draw_tools.retIsPointUp(R_ankle, RR_ankle_p):
+					R_ankle_slope = R_ankle_slope * -1
+				self.draw_tools.create_mytext(LR_ankle_p, '{0:.1f}'.format(R_ankle_slope), [self.tag,"ANGLE_KJLO"], x_offset=0, y_offset=40, color="blue")
+
+
 				if not self.isSingleLeg("RIGHT"):
 					# check if value exists
 					if self.dict["EXCEL"][self.op_type]["RIGHT"]["KJLO"] == None:
-						# print("enter right")
-
 						self.dict["EXCEL"][self.op_type]["RIGHT"]["HASDATA"] 	= True
 						self.dict["EXCEL"][self.op_type]["RIGHT"]["KJLO"]	 	= '{0:.1f}'.format(R_angle)
+						self.controller.save_json()
 
-						# save after insert
-						self.controller.save_json()	
+					if self.dict["EXCEL"][self.op_type]["RIGHT"]["ANKLE_SLOPE"] == None:
+						self.dict["EXCEL"][self.op_type]["RIGHT"]["HASDATA"] 	= True
+						self.dict["EXCEL"][self.op_type]["RIGHT"]["ANKLE_SLOPE"]	 	= '{0:.1f}'.format(R_ankle_slope)
+						self.controller.save_json()
 
 
 
@@ -465,7 +505,8 @@ class KJLO():
 			if self.isSingleLeg():
 				self.dict["KJLO"][self.op_type]["LEFT"]["JOINT_LINE"]["P1"] = None
 				self.dict["KJLO"][self.op_type]["LEFT"]["JOINT_LINE"]["P2"] = None
-				self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"] = None 	# delete excel data from pat.json
+				self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"] 		= None 	# delete excel data from pat.json
+				self.dict["EXCEL"][self.op_type]["LEFT"]["ANKLE_SLOPE"] = None 	# delete excel data from pat.json
 				self.dict["EXCEL"][self.op_type][self.side]["HASDATA"] 	= False
 				self.draw()
 				self.controller.save_json()
@@ -476,7 +517,8 @@ class KJLO():
 				self.dict["KJLO"][self.op_type]["RIGHT"]["JOINT_LINE"]["P1"] = None
 				self.dict["KJLO"][self.op_type]["RIGHT"]["JOINT_LINE"]["P2"] = None
 				self.dict["EXCEL"][self.op_type]["RIGHT"]["KJLO"] = None 	# delete excel data from pat.json
-				self.dict["EXCEL"][self.op_type][self.side]["HASDATA"] 	= False
+				self.dict["EXCEL"][self.op_type]["RIGHT"]["ANKLE_SLOPE"] = None 	# delete excel data from pat.json
+				self.dict["EXCEL"][self.op_type][self.side]["HASDATA"] = False
 				self.draw()
 				self.controller.save_json()
 
@@ -679,20 +721,28 @@ class KJLO():
 
 			if self.isSingleLeg("LEFT"):
 				L_ankle 		= self.dict["KJLO"][self.op_type]["LEFT"]["ANKLE"]["M1"]	
+				L_ankle_p1 		= self.dict["KJLO"][self.op_type]["LEFT"]["ANKLE"]["P1"]
+				L_ankle_p2 		= self.dict["KJLO"][self.op_type]["LEFT"]["ANKLE"]["P2"]
 				L_tib_joint_p1 	= self.dict["KJLO"][self.op_type]["LEFT"]["JOINT_LINE"]["P1"]
 				L_tib_joint_p2	= self.dict["KJLO"][self.op_type]["LEFT"]["JOINT_LINE"]["P2"]
 			else:
 				L_ankle 		= self.dict["MAIN"][self.op_type]["LEFT"]["ANKLE"]["M1"]	
+				L_ankle_p1 		= self.dict["MAIN"][self.op_type]["LEFT"]["ANKLE"]["P1"]
+				L_ankle_p2 		= self.dict["MAIN"][self.op_type]["LEFT"]["ANKLE"]["P2"]
 				L_tib_joint_p1 	= self.dict["MAIN"][self.op_type]["LEFT"]["JOINT_LINE"]["P1"]
 				L_tib_joint_p2 	= self.dict["MAIN"][self.op_type]["LEFT"]["JOINT_LINE"]["P2"]
 				
 
 			if self.isSingleLeg("RIGHT"):
 				R_ankle			= self.dict["KJLO"][self.op_type]["RIGHT"]["ANKLE"]["M1"]
+				R_ankle_p1 		= self.dict["KJLO"][self.op_type]["RIGHT"]["ANKLE"]["P1"]
+				R_ankle_p2 		= self.dict["KJLO"][self.op_type]["RIGHT"]["ANKLE"]["P2"]
 				R_tib_joint_p1 	= self.dict["KJLO"][self.op_type]["RIGHT"]["JOINT_LINE"]["P1"]
 				R_tib_joint_p2 	= self.dict["KJLO"][self.op_type]["RIGHT"]["JOINT_LINE"]["P2"]
 			else:
 				R_ankle 		= self.dict["MAIN"][self.op_type]["RIGHT"]["ANKLE"]["M1"]
+				R_ankle_p1 		= self.dict["MAIN"][self.op_type]["RIGHT"]["ANKLE"]["P1"]
+				R_ankle_p2 		= self.dict["MAIN"][self.op_type]["RIGHT"]["ANKLE"]["P2"]
 				R_tib_joint_p1 	= self.dict["MAIN"][self.op_type]["RIGHT"]["JOINT_LINE"]["P1"]
 				R_tib_joint_p2 	= self.dict["MAIN"][self.op_type]["RIGHT"]["JOINT_LINE"]["P2"]
 
@@ -750,12 +800,28 @@ class KJLO():
 				# L_angle = self.draw_tools.create_myAngle(LR_tib, p_int_L, L_ankle, [self.tag,"ANGLE_KJLO"])
 				L_angle = self.draw_tools.getAnglePoints(LR_tib, p_int_L, L_ankle)
 
+				# ankle slope
+				LL_ankle_p , RL_ankle_p = self.draw_tools.retPointsLeftRight(L_ankle_p1, L_ankle_p2)
+				a1 = self.draw_tools.getAnglePoints(R_ankle, L_ankle, LL_ankle_p)
+				a2 = self.draw_tools.getAnglePoints(LL_ankle_p, L_ankle, R_ankle)
+				if a1 > a2:
+					L_ankle_slope = a2
+				else:
+					L_ankle_slope = a1
+
+				if self.draw_tools.retIsPointUp(L_ankle, LL_ankle_p):
+					L_ankle_slope = L_ankle_slope * -1
+
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"] == None:
 					self.dict["EXCEL"][self.op_type]["LEFT"]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"]	 	= '{0:.1f}'.format(L_angle)
-					# save after insert
-					self.controller.save_json()	
+					self.dict["EXCEL"][self.op_type]["LEFT"]["KJLO"]	 	= '{0:.1f}'.format(L_angle)					
+					self.controller.save_json()
+
+				if self.dict["EXCEL"][self.op_type]["LEFT"]["ANKLE_SLOPE"] == None:
+						self.dict["EXCEL"][self.op_type]["LEFT"]["HASDATA"] 	= True
+						self.dict["EXCEL"][self.op_type]["LEFT"]["ANKLE_SLOPE"]	= '{0:.1f}'.format(L_ankle_slope)
+						self.controller.save_json()
 
 
 			if R_tib_joint_p1 != None and R_tib_joint_p2 != None:
@@ -772,12 +838,26 @@ class KJLO():
 				# R_angle = self.draw_tools.create_myAngle(R_ankle, p_int_R, RL_tib, [self.tag,"ANGLE_KJLO"])
 				R_angle = self.draw_tools.getAnglePoints(R_ankle, p_int_R, RL_tib)
 
+				# ankle slope
+				LR_ankle_p , RR_ankle_p = self.draw_tools.retPointsLeftRight(R_ankle_p1, R_ankle_p2)
+				a1 = self.draw_tools.getAnglePoints(L_ankle, R_ankle, RR_ankle_p)
+				a2 = self.draw_tools.getAnglePoints(RR_ankle_p, R_ankle, L_ankle)
+				if a1 > a2:
+					R_ankle_slope = a2
+				else:
+					R_ankle_slope = a1
+
+				if self.draw_tools.retIsPointUp(R_ankle, RR_ankle_p):
+					R_ankle_slope = R_ankle_slope * -1
+
 				# check if value exists
-				if self.dict["EXCEL"][self.op_type]["RIGHT"]["KJLO"] == None:
-					# print("enter right")
+				if self.dict["EXCEL"][self.op_type]["RIGHT"]["KJLO"] == None:					
 					self.dict["EXCEL"][self.op_type]["RIGHT"]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type]["RIGHT"]["KJLO"]	 	= '{0:.1f}'.format(R_angle)
-					# save after insert
+					self.dict["EXCEL"][self.op_type]["RIGHT"]["KJLO"]	 	= '{0:.1f}'.format(R_angle)					
 					self.controller.save_json()
+				if self.dict["EXCEL"][self.op_type]["RIGHT"]["ANKLE_SLOPE"] == None:
+						self.dict["EXCEL"][self.op_type]["RIGHT"]["HASDATA"] 	 = True
+						self.dict["EXCEL"][self.op_type]["RIGHT"]["ANKLE_SLOPE"] = '{0:.1f}'.format(R_ankle_slope)
+						self.controller.save_json()
 
 						

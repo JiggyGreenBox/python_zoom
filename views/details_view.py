@@ -34,6 +34,12 @@ from pathlib import Path
 import threading
 import queue
 
+# validate date
+# from dateutil.parser import parse
+import datetime
+
+
+from app_logger import logger
 
 class DETAILS_View(tk.Frame):
 	def __init__(self, parent, controller, master_dict):
@@ -559,7 +565,7 @@ class PatMeasurementsFrame(ttk.Frame):
 						"LPFA",
 						"MPFA",
 						"LDTA",
-						# "ANKLE_SLOPE",
+						"ANKLE_SLOPE",
 						"pMA"]
 
 
@@ -573,13 +579,23 @@ class PatMeasurementsFrame(ttk.Frame):
 
 				if preR != None:
 					self.table_trace_dict[label][0].set(preR)
+				else:
+					self.table_trace_dict[label][0].set("")
+
 				if preL != None:
 					self.table_trace_dict[label][1].set(preL)
+				else:
+					self.table_trace_dict[label][1].set("")
 
 				if postR != None:
 					self.table_trace_dict[label][2].set(postR)
+				else:
+					self.table_trace_dict[label][2].set("")
+					
 				if postL != None:
 					self.table_trace_dict[label][3].set(postL)
+				else:
+					self.table_trace_dict[label][3].set("")
 			except Exception as e:
 				# raise e
 				print(e)
@@ -628,6 +644,9 @@ class PatDetailsFrame(ttk.Frame):
 		self.sv_r_pros = tk.StringVar()		# prothesis drop-down
 		self.sv_l_pros = tk.StringVar()		# prothesis drop-down
 
+		self.sv_r_cal = tk.StringVar()		# r-cal drop-down
+		self.sv_l_cal = tk.StringVar()		# l-cal drop-down
+
 		# vars for date entry
 		self.r_cal = None
 		self.l_cal = None
@@ -646,6 +665,10 @@ class PatDetailsFrame(ttk.Frame):
 
 		self.sv_r_pros.trace_add("write", lambda name, index, mode, entry_type="R-PROS", var=self.sv_r_pros: self.entry_callback(entry_type, self.sv_r_pros))
 		self.sv_l_pros.trace_add("write", lambda name, index, mode, entry_type="L-PROS", var=self.sv_l_pros: self.entry_callback(entry_type, self.sv_l_pros))
+
+		# cal
+		self.sv_r_cal.trace_add("write", lambda name, index, mode, entry_type="R-CAL", var=self.sv_r_cal: self.entry_callback(entry_type, self.sv_r_cal))
+		self.sv_l_cal.trace_add("write", lambda name, index, mode, entry_type="L-CAL", var=self.sv_l_cal: self.entry_callback(entry_type, self.sv_l_cal))
 
 
 		self.constructUpperDetails(self.upper_details)
@@ -689,9 +712,11 @@ class PatDetailsFrame(ttk.Frame):
 
 
 		if r_sx != None and self.r_cal != None:
-			self.r_cal.set_date(r_sx)
+			if r_sx != '':
+				self.r_cal.set_date(r_sx)
 		if l_sx != None and self.l_cal != None:
-			self.l_cal.set_date(l_sx)
+			if l_sx != '':
+				self.l_cal.set_date(l_sx)
 
 
 	def constructUpperDetails(self, frame):
@@ -716,7 +741,7 @@ class PatDetailsFrame(ttk.Frame):
 
 		
 		self.e_age = ttk.Entry(age_sex_frame, width=8, textvariable=self.sv_age)
-		self.e_age.pack(side="left", padx=5)
+		self.e_age.pack(side="left", padx=5, pady=5)
 
 		tk.Label(age_sex_frame, text="Sex").pack(side="left", padx=(60,0))
 		rb1 = ttk.Radiobutton(age_sex_frame, text='M', value='M', variable=self.sv_sex)
@@ -761,23 +786,46 @@ class PatDetailsFrame(ttk.Frame):
 		# self.r_klgrade['values'] = self.parent.controller.user_pref_obj['IMPLANT_NAMES']['UKR']
 		# self.r_klgrade 	= ttk.Entry(frame, width=15)
 		# self.l_klgrade 	= ttk.Entry(frame, width=15)
-		self.r_klgrade.grid(row=1, column=1)
-		self.l_klgrade.grid(row=1, column=2)
-
+		self.r_klgrade.grid(row=1, column=1, padx=5, pady=5)
+		self.l_klgrade.grid(row=1, column=2, padx=5, pady=5)
 
 
 		tk.Label(frame, text="SX DATE").grid(sticky="W", row=2, column=0)
 		self.r_cal = DateEntry(frame, width=12, background='darkblue',
 				foreground='white', borderwidth=2,
-				date_pattern='dd/mm/yyyy')
-		self.r_cal.grid(row=2, column=1)
+				date_pattern='dd-mm-yyyy', textvariable=self.sv_r_cal)
+		self.r_cal.grid(row=2, column=1, padx=5, pady=5)
 		self.l_cal = DateEntry(frame, width=12, background='darkblue',
 				foreground='white', borderwidth=2,
-				date_pattern='dd/mm/yyyy')
-		self.l_cal.grid(row=2, column=2)
+				date_pattern='dd-mm-yyyy', textvariable=self.sv_l_cal)
+		self.l_cal.grid(row=2, column=2, padx=5, pady=5)
 
-		self.r_cal.bind("<<DateEntrySelected>>", self.onchange_r_cal)
-		self.l_cal.bind("<<DateEntrySelected>>", self.onchange_l_cal)
+		# initalize blank date
+		self.r_cal.delete(0, "end")
+		self.l_cal.delete(0, "end")
+		self.r_cal.configure(validate='none')
+		self.l_cal.configure(validate='none')
+
+
+
+		# tk.Label(frame, text="SX DATE").grid(sticky="W", row=2, column=0)
+		# self.r_cal = DateEntry(frame, width=12, background='darkblue',
+		# 		foreground='white', borderwidth=2,
+		# 		date_pattern='dd/mm/yyyy')
+		# self.r_cal.grid(row=2, column=1, padx=5, pady=5)
+		# self.l_cal = DateEntry(frame, width=12, background='darkblue',
+		# 		foreground='white', borderwidth=2,
+		# 		date_pattern='dd/mm/yyyy')
+		# self.l_cal.grid(row=2, column=2, padx=5, pady=5)
+
+		# # initalize blank date
+		# self.r_cal.delete(0, "end")
+		# self.l_cal.delete(0, "end")
+		# self.r_cal.configure(validate='none')
+		# self.l_cal.configure(validate='none')
+
+		# self.r_cal.bind("<<DateEntrySelected>>", self.onchange_r_cal)
+		# self.l_cal.bind("<<DateEntrySelected>>", self.onchange_l_cal)
 
 
 		tk.Label(frame, text="PROSTHESIS").grid(sticky="W", row=3, column=0)
@@ -893,6 +941,8 @@ class PatDetailsFrame(ttk.Frame):
 	def entry_callback(self, entry_type, var):
 		print('{} entry_type update {}'.format(entry_type, var.get()))
 		val = var.get().strip()
+
+		# only calendar entries can be blank
 		if val != "":
 			if entry_type == "F-NAME":
 				self.master_dict["DETAILS"]["F_NAME"] = val
@@ -918,6 +968,22 @@ class PatDetailsFrame(ttk.Frame):
 				self.parent.controller.save_json()
 			elif entry_type == "L-PROS":
 				self.master_dict["DETAILS"]["L_PROS"] = val
+				self.parent.controller.save_json()
+
+
+		# init some error
+		if self.master_dict:
+			# val can be blank
+			if entry_type == "R-CAL":
+				if not self.is_date(val):
+					val = ""
+				self.master_dict["DETAILS"]["R_SX_DATE"] = val
+				self.parent.controller.save_json()
+
+			elif entry_type == "L-CAL":
+				if not self.is_date(val):
+					val = ""
+				self.master_dict["DETAILS"]["L_SX_DATE"] = val
 				self.parent.controller.save_json()
 			
 	def radio_callback(self, var):
@@ -951,6 +1017,27 @@ class PatDetailsFrame(ttk.Frame):
 		self.master_dict["DETAILS"]["L_SX_DATE"] = self.l_cal.get_date().strftime('%d/%m/%Y')
 		self.parent.controller.save_json()
 
+
+
+	def is_date(self, string, fuzzy=False):
+		"""
+		Return whether the string can be interpreted as a date.
+
+		:param string: str, string to check for date
+		:param fuzzy: bool, ignore unknown tokens in string if True
+		"""
+		# try: 
+		# 	parse(string, fuzzy=fuzzy)
+		# 	return True
+
+		# except ValueError:
+		# 	return False
+		try:
+			datetime.datetime.strptime(string, '%d-%m-%Y')
+			return True
+		except ValueError:
+			# raise ValueError("Incorrect data format, should be YYYY-MM-DD")
+			return False
 
 	def warningBox(self, message):
 		'''Display a warning box with message'''
@@ -1344,7 +1431,8 @@ class PatDetailsFrame(ttk.Frame):
 				post_eadfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["EADFA"])
 				post_eadfps.append(self.master_dict["EXCEL"]["POST-OP"][side]["EADFPS"])
 				post_eadfds.append(self.master_dict["EXCEL"]["POST-OP"][side]["EADFDS"])
-				post_jda.append(self.master_dict["EXCEL"]["POST-OP"][side]["JDA"])
+				# post_jda.append(self.master_dict["EXCEL"]["POST-OP"][side]["JDA"])
+				post_jda.append(x)
 				post_tamd.append(self.master_dict["EXCEL"]["POST-OP"][side]["TAMD"])
 				post_mpta.append(self.master_dict["EXCEL"]["POST-OP"][side]["MPTA"])
 				post_kjlo.append(self.master_dict["EXCEL"]["POST-OP"][side]["KJLO"])
@@ -1520,6 +1608,7 @@ class ThreadedTask(threading.Thread):
 			# raise e
 			print(e)
 			self.queue.put("Possible File open")
+			logger.exception("Possible File open")
 		
 
 		# self.queue.put("Task finished")

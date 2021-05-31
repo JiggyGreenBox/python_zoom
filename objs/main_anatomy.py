@@ -189,12 +189,12 @@ class MAIN:
 		if action == "DEL-LEFT-HIP":
 			self.dict["MAIN"][self.op_type]["LEFT"]["HIP"]["P1"] = None
 			self.side = "LEFT"
-			self.deleteExcelValues(["HKA", "MNSA", "MAD", "VCA", "mLDFA", "EADFA", "EADFPS", "EADFDS"], self.side)
+			self.deleteExcelValues(["HKA", "JDA", "MNSA", "MAD", "pMA", "VCA", "mLDFA", "EADFA", "EADFPS", "EADFDS", "LPFA", "MPFA"], self.side)
 
 		if action == "DEL-RIGHT-HIP":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["HIP"]["P1"] = None
 			self.side = "RIGHT"
-			self.deleteExcelValues(["HKA", "MNSA", "MAD", "VCA", "mLDFA", "EADFA", "EADFPS", "EADFDS"], self.side)
+			self.deleteExcelValues(["HKA", "JDA", "MNSA", "MAD", "pMA", "VCA", "mLDFA", "EADFA", "EADFPS", "EADFDS", "LPFA", "MPFA"], self.side)
 
 
 		if action == "DEL-LEFT-NECK-AXIS":			
@@ -231,23 +231,23 @@ class MAIN:
 		if action == "DEL-LEFT-FEM-CENTRE":
 			self.dict["MAIN"][self.op_type]["LEFT"]["FEM_KNEE"]["P1"] = None
 			self.side = "LEFT"
-			self.deleteExcelValues(["HKA", "VCA", "mLDFA", "EADFA", "EADFPS", "EADFDS"], self.side)
+			self.deleteExcelValues(["HKA", "JDA", "VCA", "mLDFA", "EADFA", "EADFPS", "EADFDS", "LPFA", "MPFA"], self.side)
 
 		if action == "DEL-RIGHT-FEM-CENTRE":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["FEM_KNEE"]["P1"] = None
 			self.side = "RIGHT"
-			self.deleteExcelValues(["HKA", "VCA", "mLDFA", "EADFA", "EADFPS", "EADFDS"], self.side)
+			self.deleteExcelValues(["HKA", "JDA", "VCA", "mLDFA", "EADFA", "EADFPS", "EADFDS", "LPFA", "MPFA"], self.side)
 
 
 		if action == "DEL-LEFT-TIB-CENTRE":
 			self.dict["MAIN"][self.op_type]["LEFT"]["TIB_KNEE"]["P1"] = None
 			self.side = "LEFT"
-			self.deleteExcelValues(["HKA", "TAMD", "MPTA", "EADTA", "EADTPS", "EADTDS", "LDTA"], self.side)
+			self.deleteExcelValues(["HKA", "JDA", "TAMD", "MPTA", "EADTA", "EADTPS", "EADTDS", "LDTA"], self.side)
 
 		if action == "DEL-RIGHT-TIB-CENTRE":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["TIB_KNEE"]["P1"] = None
 			self.side = "RIGHT"
-			self.deleteExcelValues(["HKA", "TAMD", "MPTA", "EADTA", "EADTPS", "EADTDS", "LDTA"], self.side)
+			self.deleteExcelValues(["HKA", "JDA", "TAMD", "MPTA", "EADTA", "EADTPS", "EADTDS", "LDTA"], self.side)
 
 		if action == "DEL-LEFT-ANKLE":
 			self.dict["MAIN"][self.op_type]["LEFT"]["ANKLE"]["P1"] = None
@@ -255,9 +255,9 @@ class MAIN:
 			self.dict["MAIN"][self.op_type]["LEFT"]["ANKLE"]["M1"] = None
 			self.side = "LEFT"
 			# self.deleteExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL",  "EADTA", "EADTPS", "EADTDS"], self.side)
-			self.deleteExcelValues(["HKA", "TAMD", "MAD", "MPTA", "KAOL",  "EADTA", "EADTPS", "EADTDS", "LDTA"], self.side)
+			self.deleteExcelValues(["HKA", "JDA", "TAMD", "MAD", "pMA", "MPTA", "KAOL",  "EADTA", "EADTPS", "EADTDS", "LDTA"], self.side)
 			# KJLO delete both values
-			self.deleteExcelValues(["KJLO"])
+			self.deleteExcelValues(["KJLO", "ANKLE_SLOPE"])
 
 			# delete any old values of single leg
 			self.dict["KJLO"][self.op_type]["LEFT"]["ANKLE"]["P1"] = None
@@ -270,9 +270,9 @@ class MAIN:
 			self.dict["MAIN"][self.op_type]["RIGHT"]["ANKLE"]["M1"] = None
 			self.side = "RIGHT"
 			# self.deleteExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL",  "EADTA", "EADTPS", "EADTDS"], self.side)
-			self.deleteExcelValues(["HKA", "TAMD", "MAD", "MPTA", "KAOL",  "EADTA", "EADTPS", "EADTDS", "LDTA"], self.side)
+			self.deleteExcelValues(["HKA", "JDA", "TAMD", "MAD", "pMA", "MPTA", "KAOL",  "EADTA", "EADTPS", "EADTDS", "LDTA"], self.side)
 			# KJLO delete both values
-			self.deleteExcelValues(["KJLO"])
+			self.deleteExcelValues(["KJLO", "ANKLE_SLOPE"])
 
 			# delete any old values of single leg
 			self.dict["KJLO"][self.op_type]["RIGHT"]["ANKLE"]["P1"] = None
@@ -389,12 +389,12 @@ class MAIN:
 			self.dict["MAIN"][self.op_type]["RIGHT"]["MAD_LINE"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["MAD_LINE"]["P2"] = None
 			self.side = "RIGHT"
-			self.deleteExcelValues(["MAD"], self.side)			
+			self.deleteExcelValues(["MAD", "pMA"], self.side)			
 		if action == "DEL-LEFT-MAD-LINE":
 			self.dict["MAIN"][self.op_type]["LEFT"]["MAD_LINE"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["MAD_LINE"]["P2"] = None
 			self.side = "LEFT"
-			self.deleteExcelValues(["MAD"], self.side)
+			self.deleteExcelValues(["MAD", "pMA"], self.side)
 
 
 
@@ -1319,17 +1319,17 @@ class MAIN:
 		if self.drag_label == "HIP":
 			self.dict["MAIN"][self.op_type][self.drag_side]["HIP"]["P1"] = P_mouse
 			# self.deleteExcelValues(["HKA", "MNSA", "VCA", "mLDFA"], self.drag_side)		# clear excel values
-			self.deleteExcelValues(["HKA", "MNSA", "MAD", "VCA", "mLDFA", "EADFA", "EADFPS", "EADFDS"], self.drag_side)			
+			self.deleteExcelValues(["HKA", "JDA", "MNSA", "MAD", "pMA", "VCA", "mLDFA", "EADFA", "EADFPS", "EADFDS", "LPFA", "MPFA"], self.drag_side)			
 			self.controller.calculateExcel(["HKA", "MNSA", "MAD", "VCA", "MLDFA", "EADF"])
 			
 		elif self.drag_label == "FEM_KNEE":
 			self.dict["MAIN"][self.op_type][self.drag_side]["FEM_KNEE"]["P1"] = P_mouse
-			self.deleteExcelValues(["HKA", "VCA", "mLDFA", "EADFA", "EADFPS", "EADFDS"], self.drag_side)		# clear excel values
+			self.deleteExcelValues(["HKA", "JDA", "VCA", "mLDFA", "EADFA", "EADFPS", "EADFDS", "LPFA", "MPFA"], self.drag_side)		# clear excel values
 			self.controller.calculateExcel(["HKA", "VCA", "MLDFA", "EADF"])
 
 		elif self.drag_label == "TIB_KNEE":
 			self.dict["MAIN"][self.op_type][self.drag_side]["TIB_KNEE"]["P1"] = P_mouse
-			self.deleteExcelValues(["HKA", "TAMD", "MPTA", "EADTA", "EADTPS", "EADTDS", "LDTA"], self.drag_side)		# clear excel values
+			self.deleteExcelValues(["HKA", "JDA", "TAMD", "MPTA", "EADTA", "EADTPS", "EADTDS", "LDTA"], self.drag_side)		# clear excel values
 			self.controller.calculateExcel(["HKA", "TAMD", "MPTA", "EADT"])
 
 
@@ -1337,17 +1337,18 @@ class MAIN:
 			self.dict["MAIN"][self.op_type][self.drag_side]["ANKLE"]["P1"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["ANKLE"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
 			# self.deleteExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL", "EADTA", "EADTPS", "EADTDS"], self.drag_side)		# clear excel values
-			self.deleteExcelValues(["HKA", "TAMD", "MAD", "MPTA", "KAOL",  "EADTA", "EADTPS", "EADTDS", "LDTA"], self.drag_side)
+			self.deleteExcelValues(["HKA", "JDA", "TAMD", "MAD", "pMA", "MPTA", "KAOL",  "EADTA", "EADTPS", "EADTDS", "LDTA"], self.drag_side)
 			# KJLO delete both values
-			self.deleteExcelValues(["KJLO"])
+			self.deleteExcelValues(["KJLO", "ANKLE_SLOPE"])
+
 			self.controller.calculateExcel(["HKA", "TAMD", "MAD", "MPTA", "KJLO", "KAOL", "EADT"])
 		elif self.drag_label == "P2_ANKLE":
 			self.dict["MAIN"][self.op_type][self.drag_side]["ANKLE"]["P2"] = P_mouse
 			self.dict["MAIN"][self.op_type][self.drag_side]["ANKLE"]["M1"] = self.draw_tools.midpoint(self.drag_point, P_mouse)
 			# self.deleteExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL", "EADTA", "EADTPS", "EADTDS"], self.drag_side)		# clear excel values
-			self.deleteExcelValues(["HKA", "TAMD", "MAD", "MPTA", "KAOL",  "EADTA", "EADTPS", "EADTDS", "LDTA"], self.drag_side)
+			self.deleteExcelValues(["HKA", "JDA", "TAMD", "MAD", "pMA", "MPTA", "KAOL",  "EADTA", "EADTPS", "EADTDS", "LDTA"], self.drag_side)
 			# KJLO delete both values
-			self.deleteExcelValues(["KJLO"])
+			self.deleteExcelValues(["KJLO", "ANKLE_SLOPE"])
 			self.controller.calculateExcel(["HKA", "TAMD", "MAD", "MPTA", "KJLO", "KAOL", "EADT"])
 
 
@@ -1451,11 +1452,11 @@ class MAIN:
 
 		elif self.drag_label == "P1_MAD_LINE":
 			self.dict["MAIN"][self.op_type][self.drag_side]["MAD_LINE"]["P1"] = P_mouse
-			self.deleteExcelValues(["MAD",], self.drag_side)		# clear excel values
+			self.deleteExcelValues(["MAD", "pMA"], self.drag_side)		# clear excel values
 			self.controller.calculateExcel(["MAD"])
 		elif self.drag_label == "P2_MAD_LINE":
 			self.dict["MAIN"][self.op_type][self.drag_side]["MAD_LINE"]["P2"] = P_mouse
-			self.deleteExcelValues(["MAD",], self.drag_side)		# clear excel values
+			self.deleteExcelValues(["MAD", "pMA"], self.drag_side)		# clear excel values
 			self.controller.calculateExcel(["MAD"])
 
 		self.controller.save_json()

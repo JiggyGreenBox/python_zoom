@@ -5,3 +5,4 @@ app.spec
 build/
 dist/
 user_prefs.json
+logfile.log

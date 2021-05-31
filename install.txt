@@ -28,3 +28,8 @@ pyinstaller .\app.py --upx-dir=<Dir of upx after extraction(upx.exe not required
 // adding font to app.spec
 // https://stackoverflow.com/questions/63585632/how-to-add-a-truetype-font-file-to-a-pyinstaller-executable-for-use-with-pygame
 a.datas += [('ttf file','path\\to\\ttf\\file', "DATA")]
+
+
+
+// tkcalendar needs babel.numbers to be added to app.spec file
+hiddenimports=["babel.numbers"]
