@@ -19,6 +19,7 @@ from menus.mad_menu import MAD_Menu
 from menus.eadf_menu import EADF_Menu
 from menus.eadt_menu import EADT_Menu
 from menus.lpfa_menu import LPFA_Menu
+from menus.draw_menu import DRAW_Menu
 from menus.main_menu import MAIN_Menu
 
 # objs
@@ -37,6 +38,7 @@ from objs.mad import MAD
 from objs.eadf import EADF
 from objs.eadt import EADT
 from objs.lpfa import LPFA
+from objs.draw_obj import DRAW
 from objs.main_anatomy import MAIN
 
 # choose file
@@ -73,7 +75,8 @@ class PRE_SCANNO_View(tk.Frame):
 		self.topbar.pack(anchor=E, fill=X, expand=False, side=TOP)
 
 		# make buttons in the topbar
-		for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","JCA","KJLO","KAOL","MAD","EADF","EADT","LPFA"]):
+		for x,text in enumerate(["DRAW","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","JCA","KJLO","KAOL","MAD","EADF","EADT","LPFA", "MAIN"]):
+		# for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","JCA","KJLO","KAOL","MAD","EADF","EADT","LPFA", "DRAW"]):
 		# for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","ALDFA","MLDFA","TAMD","MPTA","KJLO", "KAOL"]):
 			# print(text)
 			button = ttk.Button(self.topbar, text=text, command=lambda text=text: self.show_menu(text))
@@ -109,6 +112,7 @@ class PRE_SCANNO_View(tk.Frame):
 					EADF_Menu,
 					EADT_Menu,
 					LPFA_Menu,
+					DRAW_Menu,
 					MAIN_Menu
 				):
 			page_name = M.__name__
@@ -138,6 +142,7 @@ class PRE_SCANNO_View(tk.Frame):
 					EADF,
 					EADT,
 					LPFA,
+					DRAW,
 					MAIN
 				):
 			obj_name = Obj.__name__
@@ -263,6 +268,23 @@ class PRE_SCANNO_View(tk.Frame):
 	def menu_btn_click(self, obj_name, action):
 		'''Route menu click to object page'''		
 		self.objects[obj_name].menu_btn_click(action)
+
+
+	def menu_to_obj(self, obj_name, key, val):
+		'''Route menu click to object page'''		
+		try:
+			self.objects[obj_name].menu_to_obj(key, val)
+		except Exception as e:
+			print(e)
+
+	def obj_to_menu(self, menu_name, key, val):
+		'''update menu from object'''		
+		try:
+			self.menus[menu_name].obj_to_menu(key, val)
+		except Exception as e:
+			print(e)
+
+		
 
 
 	def unsetObjs(self, obj_name):

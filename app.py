@@ -776,7 +776,7 @@ class MainWindow(ttk.Frame):
 				x = ""
 
 				# master list				
-				if self.master_dict["EXCEL"]["PRE-OP"][side]["HASDATA"] == True:
+				if self.master_dict["EXCEL"]["PRE-OP"][side]["HASDATA"] == True or self.master_dict["EXCEL"]["POST-OP"][side]["HASDATA"] == True:
 					name.append(disp_name)
 					age.append(disp_age)
 					gender.append(disp_sex)
@@ -821,7 +821,7 @@ class MainWindow(ttk.Frame):
 					ppba.append(self.master_dict["EXCEL"]["PRE-OP"][side]["PPBA"])
 					miscell.append(x)
 
-							
+				
 					post_hka.append(self.master_dict["EXCEL"]["POST-OP"][side]["HKA"])
 					post_mad.append(self.master_dict["EXCEL"]["POST-OP"][side]["MAD"])
 					post_mnsa.append(self.master_dict["EXCEL"]["POST-OP"][side]["MNSA"])
@@ -902,7 +902,7 @@ class MainWindow(ttk.Frame):
 			df = df.apply(pd.to_numeric, errors='ignore')
 			# pd.to_datetime(df['DATE'])
 			# df.fillna(value=pd.np.nan, inplace=True)
-			print(df['DATE'])			
+			# print(df['DATE'])			
 			if not df.empty:
 				excel_file = Path(self.working_dir + "/output.xlsx")
 				# writer=pd.ExcelWriter(excel_file, engine='openpyxl',  date_format='dd mmmm yyyy', datetime_formatstr='dd mmmm yyyy')

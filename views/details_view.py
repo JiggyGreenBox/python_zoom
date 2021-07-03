@@ -15,7 +15,8 @@ import os
 
 # stitch images
 import sys
-from PIL import Image
+# from PIL import Image
+from PIL import Image, ImageTk
 
 # date entry
 # from tkcalendar import Calendar, DateEntry
@@ -55,10 +56,9 @@ class DETAILS_View(tk.Frame):
 		self.pat_deets = PatDetailsFrame(self)		
 		self.pat_deets.pack(side="left", anchor="nw") # stick to the top
 		
-		self.pat_mments = PatMeasurementsFrame(self)		
+		self.pat_mments = PatMeasurementsFrame(self)
+		self.pat_mments.setController(controller)
 		self.pat_mments.pack(side="left", anchor="nw", padx=(30,0)) # stick to the top
-
-
 
 
 		
@@ -156,7 +156,7 @@ class DETAILS_View(tk.Frame):
 		# exception for DETAILS_View
 		return True
 
-	def update_dict(self, master_dict):		
+	def update_dict(self, master_dict):
 		# update dictionaries
 		self.master_dict = master_dict
 
@@ -413,6 +413,8 @@ class PatMeasurementsFrame(ttk.Frame):
 		tk.Frame.__init__(self, parent, *args, **kwargs)
 		self.parent = parent
 
+		self.controller = None
+
 		self.master_dict = {}
 		# tk.Label(self, text="PATIENT MEASUREMENTS", font=("TkDefaultFont", 12)).grid(sticky="W", column=0, row=0, columnspan=5)
 
@@ -421,16 +423,23 @@ class PatMeasurementsFrame(ttk.Frame):
 		# self.frame_lat	= tk.Frame(self, width=300,bg="yellow")
 		# self.frame_sky	= tk.Frame(self, width=300,bg="red")
 
-		self.frame_scano = tk.Frame(self, width=300, padx=20,pady=20)
-		self.frame_ap	= tk.Frame(self, width=30, padx=30,pady=20)
+		self.frame_scano = tk.Frame(self, width=300, padx=30,pady=0)
+		self.frame_ap	= tk.Frame(self, width=30, padx=30,pady=0)
 
 		# frame_scano.pack(side='top', anchor="nw")
 		# frame_ap.pack(side='top', anchor="ne")
 		# frame_lat.pack(side='bottom', anchor="sw")
 		# frame_sky.pack(side='bottom', anchor="se")
 
-		self.frame_scano.grid(row=0,column=0, rowspan=3)
-		self.frame_ap.grid(row=0,column=1, sticky="N")		
+		# self.frame_scano.grid(row=0,column=0, rowspan=3)
+		self.frame_scano.grid(row=0,column=0, sticky="N", pady=(20,0))
+		self.frame_ap.grid(row=0,column=1, sticky="N", pady=(20,0))
+
+		self.img_stitch = ImageStitchFrame(self)
+		self.img_stitch.grid(sticky="W", row=1, column=0, padx=30, pady=0)
+
+		self.p_size = PointSizeFrame(self)
+		self.p_size.grid(sticky="NW", row=1, column=1, padx=40, pady=0)
 
 		self.table_trace_dict = {}
 
@@ -441,10 +450,15 @@ class PatMeasurementsFrame(ttk.Frame):
 		
 
 
-	def update_dict(self, master_dict):		
+	def update_dict(self, master_dict):
 		self.master_dict = master_dict
 		self.updateTableFromDict()
+		self.p_size.update_dict(master_dict)
 
+	def setController(self, controller):
+		self.controller = controller
+		self.img_stitch.setController(controller)
+		self.p_size.setController(controller)
 
 	def populateFrame(self, frame, label_list):
 
@@ -618,15 +632,15 @@ class PatDetailsFrame(ttk.Frame):
 		self.upper_details = tk.Frame(self, height=100, width=300)
 		self.lower_details	= tk.Frame(self, height=100, width=300)
 		self.excel_frame	= tk.Frame(self, height=100, width=300)
-		self.frame_sky	= tk.Frame(self, height=100, width=300)
+		# self.frame_sky	= tk.Frame(self, height=100, width=300)
 
 		self.upper_details.grid(sticky="W", row=0, column=0, padx=20, pady=(20,0))
 		self.lower_details.grid(sticky="W", row=1, column=0, padx=20, pady=(10,20))
 		self.excel_frame.grid(sticky="W", row=2, column=0, padx=20, pady=20)
-		self.frame_sky.grid(sticky="W", row=3, column=0, padx=20, pady=20)
+		# self.frame_sky.grid(sticky="W", row=3, column=0, padx=20, pady=20)
 
-
-
+		# self.p_size = PointSizeFrame(self)
+		# self.p_size.grid(sticky="W", row=3, column=0, padx=20, pady=0)
 
 		self.tkr_excel_file = None
 		self.ukr_excel_file = None
@@ -873,6 +887,8 @@ class PatDetailsFrame(ttk.Frame):
 
 		self.m_excel_btn = ttk.Button(frame, text="EXPORT TO MASTER", command=self.btn_export_master)
 		self.m_excel_btn.grid(sticky="W",row=8, column=0)
+
+		# ttk.Spinbox(self, from_= 1, to = 30, width=5).grid(column=0, row=9)
 
 		# check if master excel paths exist
 		jsonFile = open("user_prefs.json", "r") # Open the JSON file for reading
@@ -1571,6 +1587,322 @@ class PatDetailsFrame(ttk.Frame):
 		# save the workbook
 		writer.save()
 
+
+
+class ImageStitchFrame(ttk.Frame):
+	def __init__(self, parent, *args, **kwargs):
+		tk.Frame.__init__(self, parent, *args, **kwargs)
+		self.parent = parent
+
+		self.controller = None
+
+		# self.img_holder = tk.Frame(self, height=180, width=240, background="green")
+		# self.img_holder.grid(sticky="NSWE", row=0, column=0, padx=(20,0))
+		self.img_holder = tk.Frame(self, height=180, width=240)
+		self.img_holder.grid(sticky="NSWE", row=0, column=0)
+
+		img = ImageTk.PhotoImage(Image.open("placeholder.png"))
+		# print(img.size)
+		# print(Image.open("placeholder.png").size[0])
+		# print(Image.open("placeholder.png").size[1])
+
+		self.img_label = Label(self.img_holder, image=img)
+		self.img_label.image = img # important line of code showing how dumb tkinter is
+		self.img_label.grid(sticky="NSWE", row=0, column=0)
+
+		# self.btn_holder = tk.Frame(self, height=180, width=240, background="blue")
+		self.btn_holder = tk.Frame(self, height=180, width=240)
+		self.btn_holder.grid(sticky="NSWE", row=0, column=1, padx=(7,0))
+
+		# paths for stitching
+		self.im1_path = None
+		self.im2_path = None
+
+		# only write to disk after certain
+		# keep Image.open in memory
+		self.im1 = None
+		self.im2 = None
+
+		set_im1 = ttk.Button(self.btn_holder, text="IMG 1", command=lambda: self.set_stitch_images("IM1"))
+		set_im2 = ttk.Button(self.btn_holder, text="IMG 2", command=lambda: self.set_stitch_images("IM2"))
+		rot_im1 = ttk.Button(self.btn_holder, text="ROT 1", command=lambda: self.logic_rotate_image("IM1"))
+		rot_im2 = ttk.Button(self.btn_holder, text="ROT 2", command=lambda: self.logic_rotate_image("IM2"))
+
+
+		self.stitch_file_name = ttk.Entry(self.btn_holder, width=25)
+
+		save_im = ttk.Button(self.btn_holder, text="SAVE", command=lambda: self.save_images())
+		clear_im = ttk.Button(self.btn_holder, text="CLEAR", command=lambda: self.clear_images())
+
+		
+		set_im1.grid(sticky="NW", row=0, column=0, padx=(2,0), pady=(1,0))
+		set_im2.grid(sticky="NW", row=0, column=1, padx=(2,0), pady=(1,0))
+		rot_im1.grid(sticky="NW", row=1, column=0, padx=(2,0), pady=(3,0))
+		rot_im2.grid(sticky="NW", row=1, column=1, padx=(2,0), pady=(3,0))
+
+		tk.Label(self.btn_holder, text="Image Name:").grid(sticky="NW", row=2, column=0, padx=(2,0), columnspan=2, pady=(6,0))
+		self.stitch_file_name.grid(sticky="NW", row=3, column=0, padx=(2,0), columnspan=2, pady=(2,0))
+
+
+		save_im.grid(sticky="NW", row=4, column=0, padx=(2,0), pady=(8,0))
+		clear_im.grid(sticky="NW", row=4, column=1, padx=(2,0), pady=(8,0))
+
+	def setController(self, controller):
+		self.controller = controller
+
+	def set_stitch_images(self, imtype):
+
+		if self.controller != None:
+
+			if imtype == "IM1" or imtype == "IM2":
+
+				# get image
+				image = filedialog.askopenfilename(initialdir=self.controller.working_dir)
+
+				if isinstance(image, str) and image != "":
+
+					dir_name = os.path.dirname(image)
+					rel_path = os.path.relpath(image, dir_name)
+
+					# only allow images from the working dir
+					if self.controller.working_dir != dir_name:
+						self.warningBox("Image not from working directory")
+						return
+
+					if imtype == "IM1":
+						self.im1_path = self.controller.working_dir + "/" + rel_path
+						self.im1 = Image.open(self.im1_path)
+
+						# single image
+						if self.im2_path == None:
+							self.setFrameImage(self.im1)
+						else:
+							# self.setFrameImage(self.joinImages(self.im1_path, self.im2_path))
+							self.setFrameImage(self.joinImages(self.im1, self.im2))
+
+					elif imtype == "IM2":
+						self.im2_path = self.controller.working_dir + "/" + rel_path
+						self.im2 = Image.open(self.im2_path)
+
+						# single image
+						if self.im1_path == None:
+							self.setFrameImage(self.im2)
+						else:
+							# self.setFrameImage(self.joinImages(self.im1_path, self.dim2_path))
+							self.setFrameImage(self.joinImages(self.im1, self.im2))
+		
+	def logic_rotate_image(self, imtype):
+		if self.controller != None:
+
+			if imtype == "IM1" and self.im1_path != None:
+				
+				# rotate image only
+				if self.im2_path == None:
+					self.im1 = self.rotate_img(self.im1, 90)
+					self.setFrameImage(self.im1)
+				else:
+					# rotate image join and display
+					self.im1 = self.rotate_img(self.im1, 90)
+					self.setFrameImage(self.joinImages(self.im1, self.im2))
+
+
+
+			elif imtype == "IM2" and self.im2_path != None:
+				# rotate image only
+				if self.im1_path == None:
+					self.im2 = self.rotate_img(self.im2, 90)
+					self.setFrameImage(self.im2)				
+				else:
+					# rotate image join and display
+					self.im2 = self.rotate_img(self.im2, 90)
+					self.setFrameImage(self.joinImages(self.im1, self.im2))
+
+	def clear_images(self):
+		self.im1_path = None
+		self.im2_path = None
+
+		self.im1 = None
+		self.im2 = None
+
+		img = ImageTk.PhotoImage(Image.open("placeholder.png"))
+		self.img_label.configure(image=img)
+		self.img_label.image = img
+
+		self.stitch_file_name.delete(0, tk.END)
+
+
+	def save_images(self):
+				
+		im_name = self.stitch_file_name.get().strip()
+		if im_name == "":
+			self.warningBox("Stitched Image-name not set")
+			return
+		im_name = self.controller.working_dir + "/" + im_name + '.jpg'
+			
+		if self.im1 != None and self.im2 != None:			
+			new_im = self.joinImages(self.im1, self.im2)
+			new_im.save(im_name)
+			self.clear_images()
+			self.warningBox("Success")
+
+
+		
+
+	def rotate_img(self, img, rt_degr):
+		return img.rotate(rt_degr, expand=1)
+
+
+	def joinImages(self, im1, im2):
+		# images = [Image.open(x) for x in [im1, im2]]
+		images = [im1, im2]
+		# images = [Image.open(x) for x in ['post_ap.jpg','post_lat.jpg']]
+
+		
+		widths, heights = zip(*(i.size for i in images))
+
+		total_width = sum(widths)
+		max_height = max(heights)
+
+		new_im = Image.new('RGB', (total_width, max_height))
+
+		x_offset = 0
+		for im in images:
+			new_im.paste(im, (x_offset,0))
+			x_offset += im.size[0]
+
+		return new_im
+
+	def setFrameImage(self, img_path):
+		# open image
+		# img = Image.open(img_path)
+
+		img = img_path
+
+		print('width: {}'.format(img.size[0]))
+		print('height: {}'.format(img.size[1]))
+
+		w = img.size[0]
+		h = img.size[1]		
+
+		size = None
+
+		if w > h:
+			new_h = int(240 * h / w)
+			size = (240, new_h)
+		else:
+			new_w = int(180 * w / h)
+			size = (new_w, 180)
+
+		frame_width  = 240
+		# set new size 
+		# frame_width  = 240
+		# frame_height = frame_width * height / width
+		frame_height = 240 * img.size[1] / img.size[0]
+
+		print('frame_width: {}'.format(frame_width))
+		print('frame_height: {}'.format(frame_height))
+
+		thumb = img.resize(size, Image.ANTIALIAS)
+		# print(frame_height)
+		# resize
+		# img.thumbnail((240, 240), Image.ANTIALIAS)
+		photo_thumb = ImageTk.PhotoImage(thumb)
+		self.img_label.configure(image=photo_thumb)
+		self.img_label.image = photo_thumb
+
+
+	def warningBox(self, message):
+		'''Display a warning box with message'''
+		messagebox.showwarning("Warning", message)
+
+
+
+class PointSizeFrame(ttk.Frame):
+	def __init__(self, parent, *args, **kwargs):
+		tk.Frame.__init__(self, parent, *args, **kwargs)
+		self.parent = parent
+
+		self.pre_scanno_var		= StringVar()
+		self.post_scanno_var	= StringVar()
+		self.pre_ap_var	 		= StringVar()
+		self.post_ap_var	 	= StringVar()
+		self.pre_lat_var	 	= StringVar()
+		self.post_lat_var		= StringVar()
+		self.pre_sky_var		= StringVar()		
+		self.post_sky_var		= StringVar()
+
+		colwidth = 80
+		# self.grid_columnconfigure(1, minsize=colwidth)
+
+		self.grid_columnconfigure(0, minsize=colwidth)
+
+		tk.Label(self, text="POINT SIZES", font=("TkDefaultFont", 12)).grid(sticky="W", column=0, row=0, columnspan=2,pady=(20,0))
+
+		tk.Label(self, text="POST").grid(sticky="E", column=1, row=1)
+		tk.Label(self, text="PRE").grid(sticky="E", column=2, row=1)
+
+		tk.Label(self, text="SCANNO").grid(sticky="W", column=0, row=2)
+		tk.Label(self, text="AP").grid(sticky="W", column=0, row=3)
+		tk.Label(self, text="LAT").grid(sticky="W", column=0, row=4)
+		tk.Label(self, text="SKY").grid(sticky="W", column=0, row=5)
+
+		ttk.Spinbox(self, textvariable=self.pre_scanno_var, from_= 1, to = 30, width=5).grid(column=1, row=2, padx=5, pady=2)
+		ttk.Spinbox(self, textvariable=self.post_scanno_var, from_= 1, to = 30, width=5).grid(column=2, row=2, padx=5, pady=2)
+		ttk.Spinbox(self, textvariable=self.pre_ap_var, from_= 1, to = 30, width=5).grid(column=1, row=3, padx=5, pady=2)
+		ttk.Spinbox(self, textvariable=self.post_ap_var, from_= 1, to = 30, width=5).grid(column=2, row=3, padx=5, pady=2)
+		ttk.Spinbox(self, textvariable=self.pre_lat_var, from_= 1, to = 30, width=5).grid(column=1, row=4, padx=5, pady=2)
+		ttk.Spinbox(self, textvariable=self.post_lat_var, from_= 1, to = 30, width=5).grid(column=2, row=4, padx=5, pady=2)
+		ttk.Spinbox(self, textvariable=self.pre_sky_var, from_= 1, to = 30, width=5).grid(column=1, row=5, padx=5, pady=2)
+		ttk.Spinbox(self, textvariable=self.post_sky_var, from_= 1, to = 30, width=5).grid(column=2, row=5, padx=5, pady=2)
+
+
+	def update_dict(self, master_dict):
+		self.master_dict = master_dict
+
+		self.pre_scanno_var.set(self.master_dict["POINT_SIZES"]["PRE-SCANNO"])
+		self.pre_ap_var.set(self.master_dict["POINT_SIZES"]["PRE-AP"])
+		self.pre_lat_var.set(self.master_dict["POINT_SIZES"]["PRE-LAT"])
+		self.pre_sky_var.set(self.master_dict["POINT_SIZES"]["PRE-SKY"])
+		self.post_scanno_var.set(self.master_dict["POINT_SIZES"]["POST-SCANNO"])
+		self.post_ap_var.set(self.master_dict["POINT_SIZES"]["POST-AP"])
+		self.post_lat_var.set(self.master_dict["POINT_SIZES"]["POST-LAT"])
+		self.post_sky_var.set(self.master_dict["POINT_SIZES"]["POST-SKY"])
+
+		self.pre_scanno_var.trace_add("write", lambda name, index, mode, dict_key="PRE-SCANNO", var=self.pre_scanno_var: self.update_pointsize_dict(dict_key, var))
+		self.pre_ap_var.trace_add("write", lambda name, index, mode, dict_key="PRE-AP", var=self.pre_ap_var: self.update_pointsize_dict(dict_key, var))
+		self.pre_lat_var.trace_add("write", lambda name, index, mode, dict_key="PRE-LAT", var=self.pre_lat_var: self.update_pointsize_dict(dict_key, var))
+		self.pre_sky_var.trace_add("write", lambda name, index, mode, dict_key="PRE-SKY", var=self.pre_sky_var: self.update_pointsize_dict(dict_key, var))
+		self.post_scanno_var.trace_add("write", lambda name, index, mode, dict_key="POST-SCANNO", var=self.post_scanno_var: self.update_pointsize_dict(dict_key, var))
+		self.post_ap_var.trace_add("write", lambda name, index, mode, dict_key="POST-AP", var=self.post_ap_var: self.update_pointsize_dict(dict_key, var))
+		self.post_lat_var.trace_add("write", lambda name, index, mode, dict_key="POST-LAT", var=self.post_lat_var: self.update_pointsize_dict(dict_key, var))
+		self.post_sky_var.trace_add("write", lambda name, index, mode, dict_key="POST-SKY", var=self.post_sky_var: self.update_pointsize_dict(dict_key, var))
+
+	def setController(self, controller):
+		self.controller = controller
+
+	def update_pointsize_dict(self, dict_key, var):
+		print('{} key update {}'.format(dict_key, var.get()))
+
+		# no blank vals
+		if var.get() != "":
+			# try int cast
+			try: 
+				# make sure positive
+				# and in range of 5 - 30
+				int_check = int(var.get())
+				# int_check = float(var.get())
+				if int_check > 0 and int_check < 31:
+					self.master_dict["POINT_SIZES"][dict_key] = int_check
+
+					# pass the dictkey which is also the view(page_name) which updates all objects with new point size
+					self.controller.redrawNewPointSize(dict_key)
+					
+					# save the new point size to disk
+					self.controller.save_json()
+
+			# int cast failed, must be text entry
+			except Exception as e:
+				print(e)
 
 class ThreadedTask(threading.Thread):
 	def __init__(self, queue, master_dict, utkr_val, excel_path):
