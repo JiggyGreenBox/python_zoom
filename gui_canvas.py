@@ -8,6 +8,9 @@ from tkinter import ttk
 from tkinter import *
 from PIL import Image, ImageTk
 
+# find if os is mac
+from sys import platform
+
 # debug
 # from itertools import count
 
@@ -59,12 +62,19 @@ class CanvasImage:
 		vbar.configure(command=self.__scroll_y)
 		# Bind events to the Canvas
 		self.canvas.bind('<Configure>', lambda event: self.__show_image())  # canvas is resized
-		self.canvas.bind('<ButtonPress-2>', self.__move_from)  # remember canvas position
-		# self.canvas.bind('<ButtonPress-3>', self.jiggy)  # remember canvas position
-		self.canvas.bind('<B2-Motion>',     self.__move_to)  # move canvas to the new position
+		if platform == "darwin":
+			self.canvas.bind('<ButtonPress-3>', self.__move_from)  # remember canvas position
+			self.canvas.bind('<B3-Motion>',     self.__move_to)  # move canvas to the new position
+		else:
+			self.canvas.bind('<ButtonPress-2>', self.__move_from)  # remember canvas position
+			self.canvas.bind('<B2-Motion>',     self.__move_to)  # move canvas to the new position
+
+		# self.canvas.bind('<ButtonPress-3>', self.__move_from)  # remember canvas position
+		# self.canvas.bind('<B3-Motion>',     self.__move_to)  # move canvas to the new position
 		self.canvas.bind('<MouseWheel>', self.__wheel)  # zoom for Windows and MacOS, but not Linux
 		self.canvas.bind('<Button-5>',   self.__wheel)  # zoom for Linux, wheel scroll down
 		self.canvas.bind('<Button-4>',   self.__wheel)  # zoom for Linux, wheel scroll up
+		# self.canvas.bind('<ButtonPress-3>', self.jiggy)  # remember canvas position
 		# Handle keystrokes in idle mode, because program slows down on a weak computers,
 		# when too many key stroke events in the same time
 		self.canvas.bind('<Key>', lambda event: self.canvas.after_idle(self.__keystroke, event))
@@ -261,16 +271,28 @@ class CanvasImage:
 		y = self.canvas.canvasy(event.y)
 		if self.outside(x, y): return  # zoom only inside image area
 		scale = 1.0
-		# Respond to Linux (event.num) or Windows (event.delta) wheel event
-		if event.num == 5 or event.delta == -120:  # scroll down, smaller
-			if round(self.__min_side * self.imscale) < 30: return  # image is less than 30 pixels
-			self.imscale /= self.__delta
-			scale        /= self.__delta
-		if event.num == 4 or event.delta == 120:  # scroll up, bigger
-			i = min(self.canvas.winfo_width(), self.canvas.winfo_height()) >> 1
-			if i < self.imscale: return  # 1 pixel is bigger than the visible area
-			self.imscale *= self.__delta
-			scale        *= self.__delta
+		if platform == "darwin":
+			if event.delta < 0:
+				if round(self.__min_side * self.imscale) < 30: return  # image is less than 30 pixels
+				self.imscale /= self.__delta
+				scale        /= self.__delta
+			else:
+				i = min(self.canvas.winfo_width(), self.canvas.winfo_height()) >> 1
+				if i < self.imscale: return  # 1 pixel is bigger than the visible area
+				self.imscale *= self.__delta
+				scale        *= self.__delta
+		else:
+			# Respond to Linux (event.num) or Windows (event.delta) wheel event
+			print('event.num: {}, event.delta: {}'.format(event.num, event.delta))
+			if event.num == 5 or event.delta == -120:  # scroll down, smaller
+				if round(self.__min_side * self.imscale) < 30: return  # image is less than 30 pixels
+				self.imscale /= self.__delta
+				scale        /= self.__delta
+			if event.num == 4 or event.delta == 120:  # scroll up, bigger
+				i = min(self.canvas.winfo_width(), self.canvas.winfo_height()) >> 1
+				if i < self.imscale: return  # 1 pixel is bigger than the visible area
+				self.imscale *= self.__delta
+				scale        *= self.__delta
 		# Take appropriate image from the pyramid
 		k = self.imscale * self.__ratio  # temporary coefficient
 		self.__curr_img = min((-1) * int(math.log(k, self.__reduction)), len(self.__pyramid) - 1)

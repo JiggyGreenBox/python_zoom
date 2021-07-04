@@ -12,6 +12,7 @@ git checkout pre_post_dict
 pip install Pillow
 pip install pandas
 pip install openpyxl
+pip install tkcalendars
 
 // python executable
 where python
@@ -33,3 +34,22 @@ a.datas += [('ttf file','path\\to\\ttf\\file', "DATA")]
 
 // tkcalendar needs babel.numbers to be added to app.spec file
 hiddenimports=["babel.numbers"]
+
+
+// mac build
+// python version 3.9.1
+x-code tools
+	xcode-select --install
+
+install homebrew
+
+brew install xz
+
+install pyenv
+	export ...
+	export ...
+	eval "$(pyenv init --path)"
+
+PYENV SETTINGS
+	https://stackoverflow.com/questions/60469202/unable-to-install-tkinter-with-pyenv-pythons-on-macos
+	add enabled shared for pyinstaller to work

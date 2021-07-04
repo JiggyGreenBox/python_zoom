@@ -11,6 +11,9 @@ import math
 # for PIL draw
 from PIL import Image, ImageDraw, ImageFont
 
+# identify mac os and flip keys
+from sys import platform
+
 class DrawTools(CanvasImage):
 	""" Class of Polygons. Inherit CanvasImage class """
 
@@ -41,7 +44,14 @@ class DrawTools(CanvasImage):
 
 
 		self.canvas.bind('<Motion>', self.hover)  # remember canvas position
-		self.canvas.bind('<ButtonPress-3>', self.righclickfunc)
+
+		if platform == "darwin":
+			# right click is btn 2 on mac
+			self.canvas.bind('<ButtonPress-2>', self.righclickfunc)
+		else:
+			self.canvas.bind('<ButtonPress-3>', self.righclickfunc)
+
+
 
 		self.isHover = False
 		self.hover_label = ""
