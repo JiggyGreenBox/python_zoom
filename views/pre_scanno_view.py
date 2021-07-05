@@ -56,6 +56,8 @@ import os
 # make export dir if not exist
 from pathlib import Path
 
+# identify mac os and flip keys
+from sys import platform
 
 
 class PRE_SCANNO_View(tk.Frame):
@@ -75,12 +77,21 @@ class PRE_SCANNO_View(tk.Frame):
 		self.topbar.pack(anchor=E, fill=X, expand=False, side=TOP)
 
 		# make buttons in the topbar
-		for x,text in enumerate(["DRAW","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","JCA","KJLO","KAOL","MAD","EADF","EADT","LPFA", "MAIN"]):
-		# for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","JCA","KJLO","KAOL","MAD","EADF","EADT","LPFA", "DRAW"]):
+		# for x,text in enumerate(["DRAW","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","JCA","KJLO","KAOL","MAD","EADF","EADT","LPFA", "MAIN"]):
+		for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","JCA","KJLO","KAOL","MAD","EADF","EADT","LPFA", "DRAW"]):
 		# for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","ALDFA","MLDFA","TAMD","MPTA","KJLO", "KAOL"]):
 			# print(text)
-			button = ttk.Button(self.topbar, text=text, command=lambda text=text: self.show_menu(text))
-			button.grid(column=x, row=1)
+
+			if platform == "darwin":
+				if x < 9:
+					button = ttk.Button(self.topbar, text=text, command=lambda text=text: self.show_menu(text))
+					button.grid(column=x, row=1)
+				else:
+					button = ttk.Button(self.topbar, text=text, command=lambda text=text: self.show_menu(text))
+					button.grid(column=x-9, row=2)
+			else:
+				button = ttk.Button(self.topbar, text=text, command=lambda text=text: self.show_menu(text))
+				button.grid(column=x, row=1)
 
 
 		# left navbar

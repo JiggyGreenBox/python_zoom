@@ -29,7 +29,10 @@
         ]
     },
     "MASTER_EXCEL_PATHS": {
-        "UKR_PATH": "C:/Users/jiggy/Desktop/master_excel/UKR.xlsx",
-        "TKR_PATH": "C:/Users/jiggy/Desktop/master_excel/TKR.xlsx"
+        "UKR_PATH": "/Users/sourabh/Desktop/UKR.xlsx",
+        "TKR_PATH": "/Users/sourabh/Desktop/TKR.xlsx"
+    },
+    "THEME": {
+        "AUTO_SWITCH":1
     }
 }

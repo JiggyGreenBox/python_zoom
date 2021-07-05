@@ -39,8 +39,13 @@ import queue
 # from dateutil.parser import parse
 import datetime
 
-
 from app_logger import logger
+
+# identify mac os and flip keys
+from sys import platform
+
+# change row color for dark mode and light mode
+import darkdetect
 
 class DETAILS_View(tk.Frame):
 	def __init__(self, parent, controller, master_dict):
@@ -58,82 +63,10 @@ class DETAILS_View(tk.Frame):
 		
 		self.pat_mments = PatMeasurementsFrame(self)
 		self.pat_mments.setController(controller)
-		self.pat_mments.pack(side="left", anchor="nw", padx=(30,0)) # stick to the top
-
-
-		
-		# # for stitching images
-		# self.im1 = ""
-		# self.im2 = ""
-		# self.im_result_name = ""
-
-
-		# tk.Label(self, text="POINT SIZES", font=("TkDefaultFont", 12)).grid(sticky="W", column=0, row=7, pady=(60, 10), padx=(10,0))
-
-		
-		# self.pre_scanno_var		= StringVar()
-		# self.pre_ap_var	 		= StringVar()
-		# self.pre_lat_var	 	= StringVar()
-		# self.pre_sky_var		= StringVar()
-		# self.post_scanno_var	= StringVar()
-		# self.post_ap_var	 	= StringVar()
-		# self.post_lat_var		= StringVar()
-		# self.post_sky_var		= StringVar()
-
-
-
-		# tk.Label(self, text="PRE-SCANNO").grid(sticky="W", column=0, row=8, padx=(10,0))
-		# sp1 = Spinbox(self, textvariable=self.pre_scanno_var, from_= 1, to = 30, width=10).grid(column=1, row=8)
-
-		# tk.Label(self, text="PRE-AP").grid(sticky="W", column=0, row=9, padx=(10,0))
-		# sp2 = Spinbox(self, textvariable=self.pre_ap_var, from_= 1, to = 30, width=10).grid(column=1, row=9)
-
-		# tk.Label(self, text="PRE-LAT").grid(sticky="W", column=0, row=10, padx=(10,0))
-		# sp3 = Spinbox(self, textvariable=self.pre_lat_var, from_= 1, to = 30, width=10).grid(column=1, row=10)
-
-		# tk.Label(self, text="PRE-SKY").grid(sticky="W", column=0, row=11, padx=(10,0))
-		# sp4 = Spinbox(self, textvariable=self.pre_sky_var, from_= 1, to = 30, width=10).grid(column=1, row=11)
-
-		# tk.Label(self, text="POST-SCANNO").grid(sticky="W", column=0, row=12, padx=(10,0), pady=(20, 0))
-		# sp5 = Spinbox(self, textvariable=self.post_scanno_var, from_= 1, to = 30, width=10).grid(column=1, row=12, pady=(20, 0))
-
-		# tk.Label(self, text="POST-AP").grid(sticky="W", column=0, row=13, padx=(10,0))
-		# sp6 = Spinbox(self, textvariable=self.post_ap_var, from_= 1, to = 30, width=10).grid(column=1, row=13)
-
-		# tk.Label(self, text="POST-LAT").grid(sticky="W", column=0, row=14, padx=(10,0))
-		# sp7 = Spinbox(self, textvariable=self.post_lat_var, from_= 1, to = 30, width=10).grid(column=1, row=14)
-
-		# tk.Label(self, text="POST-SKY").grid(sticky="W", column=0, row=15, padx=(10,0))
-		# sp8 = Spinbox(self, textvariable=self.post_sky_var, from_= 1, to = 30, width=10).grid(column=1, row=15)
-
-		# # tk.Label(self, text="v0.4").grid(sticky="W", row=16, pady=(30,0), padx=(10,0))
-		# tk.Label(self, text=self.controller.app_version).grid(sticky="W", row=16, pady=(30,0), padx=(10,0))
-
-
-
-
-		# tk.Label(self, text="IMAGE STITCH", font=("TkDefaultFont", 12)).grid(sticky="W", column=3, row=0, pady=(30, 10), padx=(80,0), columnspan=3)
-		
-		# btn_set_im1 = ttk.Button(self, text="IMG 1", width=10, command=lambda: self.set_stitch_images("im1"))
-		# btn_set_im1.grid(sticky="W", column=3, row=3, padx=(80,0))
-		# btn_set_im2 = ttk.Button(self, text="IMG 2", width=10, command=lambda: self.set_stitch_images("im2"))
-		# btn_set_im2.grid(sticky="W", column=4, row=3)
-		# btn_stitch 	= ttk.Button(self, text="GO", width=10, command=lambda: self.set_stitch_images("go"))
-		# btn_stitch.grid(sticky="W", column=5, row=3)
-
-
-		# btn_rot_im1 = ttk.Button(self, text="ROT 1", width=10, command=lambda: self.rotateStichImage("im1"))
-		# btn_rot_im1.grid(sticky="W", column=3, row=4, padx=(80,0))
-		# btn_rot_im2 = ttk.Button(self, text="ROT 2", width=10, command=lambda: self.rotateStichImage("im2"))
-		# btn_rot_im2.grid(sticky="W", column=4, row=4)
-
-
-
-		# self.label1 = tk.Label(self, text="Img Name:").grid(sticky="W", column=3, row=1, padx=(80,0))
-		# self.img_stitch_name = tk.Entry(self)
-		# self.img_stitch_name.grid(sticky="W", column=3, row=2, padx=(80,0), columnspan=3)
-
-
+		if platform == "darwin":
+			self.pat_mments.pack(side="left", anchor="nw", padx=(0,0)) # stick to the top
+		else:
+			self.pat_mments.pack(side="left", anchor="nw", padx=(30,0)) # stick to the top
 
 
 	def updateTableValues(self):
@@ -190,73 +123,11 @@ class DETAILS_View(tk.Frame):
 			self.controller.save_json()
 
 
-	def updateSpinboxes(self):
-		self.pre_scanno_var.set(self.master_dict["POINT_SIZES"]["PRE-SCANNO"])
-		self.pre_ap_var.set(self.master_dict["POINT_SIZES"]["PRE-AP"])
-		self.pre_lat_var.set(self.master_dict["POINT_SIZES"]["PRE-LAT"])
-		self.pre_sky_var.set(self.master_dict["POINT_SIZES"]["PRE-SKY"])
-		self.post_scanno_var.set(self.master_dict["POINT_SIZES"]["POST-SCANNO"])
-		self.post_ap_var.set(self.master_dict["POINT_SIZES"]["POST-AP"])
-		self.post_lat_var.set(self.master_dict["POINT_SIZES"]["POST-LAT"])
-		self.post_sky_var.set(self.master_dict["POINT_SIZES"]["POST-SKY"])
-
-		if self.master_dict["DETAILS"]["F_NAME"] != None:
-			self.sv_fname.set(self.master_dict["DETAILS"]["F_NAME"])
-		if self.master_dict["DETAILS"]["L_NAME"] != None:
-			self.sv_lname.set(self.master_dict["DETAILS"]["L_NAME"])
-		if self.master_dict["DETAILS"]["AGE"] != None:
-			self.sv_age.set(self.master_dict["DETAILS"]["AGE"])
-
-		if self.master_dict["DETAILS"]["SEX"] != None:
-			self.sex.set(self.master_dict["DETAILS"]["SEX"])
-
-		# self.pre_scanno_var.trace("w", lambda name, index, mode, dict_key="PRE-SCANNO", var=self.pre_scanno_var: self.update_pointsize_dict(dict_key, var))
-		# self.post_scanno_var.trace("w", lambda name, index, mode, dict_key="POST-SCANNO", var=self.post_scanno_var: self.update_pointsize_dict(dict_key, var))
-
-		self.pre_scanno_var.trace("w", lambda name, index, mode, dict_key="PRE-SCANNO", var=self.pre_scanno_var: self.update_pointsize_dict(dict_key, var))
-		self.pre_ap_var.trace("w", lambda name, index, mode, dict_key="PRE-AP", var=self.pre_ap_var: self.update_pointsize_dict(dict_key, var))
-		self.pre_lat_var.trace("w", lambda name, index, mode, dict_key="PRE-LAT", var=self.pre_lat_var: self.update_pointsize_dict(dict_key, var))
-		self.pre_sky_var.trace("w", lambda name, index, mode, dict_key="PRE-SKY", var=self.pre_sky_var: self.update_pointsize_dict(dict_key, var))
-		self.post_scanno_var.trace("w", lambda name, index, mode, dict_key="POST-SCANNO", var=self.post_scanno_var: self.update_pointsize_dict(dict_key, var))
-		self.post_ap_var.trace("w", lambda name, index, mode, dict_key="POST-AP", var=self.post_ap_var: self.update_pointsize_dict(dict_key, var))
-		self.post_lat_var.trace("w", lambda name, index, mode, dict_key="POST-LAT", var=self.post_lat_var: self.update_pointsize_dict(dict_key, var))
-		self.post_sky_var.trace("w", lambda name, index, mode, dict_key="POST-SKY", var=self.post_sky_var: self.update_pointsize_dict(dict_key, var))
-
-
-		# trace entrys
-		self.sv_fname.trace_add("write", lambda name, index, mode, entry_type="F-NAME", var=self.sv_fname: self.entry_callback(entry_type, self.sv_fname))
-		self.sv_lname.trace_add("write", lambda name, index, mode, entry_type="L-NAME", var=self.sv_lname: self.entry_callback(entry_type, self.sv_lname))
-		self.sv_age.trace_add("write", lambda name, index, mode, entry_type="AGE", var=self.sv_age: self.entry_callback(entry_type, self.sv_age))
-
-
-		self.sex.trace_add("write", lambda name, index, mode, var=self.sex: self.radio_callback(self.sex))
+	
 
 
 
-	def update_pointsize_dict(self, dict_key, var):
-		print('{} key update {}'.format(dict_key, var.get()))
-
-		# no blank vals
-		if var.get() != "":
-			# try int cast
-			try: 
-				# make sure positive
-				# and in range of 5 - 30
-				int_check = int(var.get())
-				# int_check = float(var.get())
-				if int_check > 0 and int_check < 31:
-					self.master_dict["POINT_SIZES"][dict_key] = int_check
-
-					# pass the dictkey which is also the view(page_name) which updates all objects with new point size
-					self.controller.redrawNewPointSize(dict_key)
-					
-					# save the new point size to disk
-					self.controller.save_json()
-
-			# int cast failed, must be text entry
-			except Exception as e:
-				print(e)
-				# raise e
+	
 
 
 
@@ -287,95 +158,6 @@ class DETAILS_View(tk.Frame):
 
 		print('radio callback {}'.format(sex))
 
-
-
-	def set_stitch_images(self, btn_type):
-		if btn_type == "im1" or btn_type == "im2":
-			print("set images")
-
-
-			# get image
-			image = filedialog.askopenfilename(initialdir=self.controller.working_dir)
-
-			if isinstance(image, str) and image != "":
-
-				dir_name = os.path.dirname(image)
-				rel_path = os.path.relpath(image, dir_name)
-
-				# only allow images from the working dir
-				if self.controller.working_dir != dir_name:
-					print("mis-match")
-					self.warningBox("Image not from working directory")
-					return
-
-				if btn_type == "im1":
-					self.im1 = rel_path
-				elif btn_type == "im2":
-					self.im2 = rel_path
-
-		if btn_type == "go":
-			# check if images are set
-			if self.im1 == "":
-				self.warningBox("Image 1 Not Selected")
-				return
-			if self.im2 == "":
-				self.warningBox("Image 2 Not Selected")
-				return
-
-			# check if result image name is set
-			im_name = self.img_stitch_name.get().strip()
-			im_name = self.controller.working_dir + "/" + im_name + '.jpg'
-			if im_name == "":
-				self.warningBox("Stitched Image-name not set")
-				return
-
-
-			images = [Image.open(x) for x in [(self.controller.working_dir + "/" + self.im1), (self.controller.working_dir + "/" + self.im2)]]
-			# images = [Image.open(x) for x in ['post_ap.jpg','post_lat.jpg']]
-
-			
-			widths, heights = zip(*(i.size for i in images))
-
-			total_width = sum(widths)
-			max_height = max(heights)
-
-			new_im = Image.new('RGB', (total_width, max_height))
-
-			x_offset = 0
-			for im in images:
-				new_im.paste(im, (x_offset,0))
-				x_offset += im.size[0]
-
-			new_im.save(im_name)
-			self.im1 = ""
-			self.im2 = ""
-			self.img_stitch_name.delete(0, tk.END)
-			self.warningBox("Success")
-
-
-	def rotateStichImage(self, btn_type):
-		im_path = ""
-		if btn_type == "im1":
-			if self.im1 == "":
-				self.warningBox("Image 1 Not Selected")
-				return
-			im_path = self.controller.working_dir + "/" + self.im1
-
-		elif btn_type == "im2":
-			if self.im2 == "":
-				self.warningBox("Image 2 Not Selected")
-				return
-			im_path = self.controller.working_dir + "/" + self.im2
-
-		if im_path != "":
-			img_rt_90 = self.rotate_img(im_path, 90)
-			img_rt_90.save(im_path)
-			self.warningBox("Rotated 90")
-
-
-	def rotate_img(self, img_path, rt_degr):
-		img = Image.open(img_path)
-		return img.rotate(rt_degr, expand=1)
 
 
 
@@ -472,8 +254,20 @@ class PatMeasurementsFrame(ttk.Frame):
 
 		rownum = 2
 		colwidth = 80
+		paddx = 10
+		if platform == "darwin":
+			colwidth = 32
+			paddx = 3
+
 
 		bg = True
+		toggle = False
+		try:
+			if self.parent.controller.user_pref_obj['THEME']['AUTO_SWITCH'] == 1:
+				toggle = True;
+		except Exception as e:
+			print(e)
+		
 
 		for label in label_list:
 
@@ -485,12 +279,12 @@ class PatMeasurementsFrame(ttk.Frame):
 			# add vars to dict for easy update later
 			self.table_trace_dict[label] = [sv_preR,sv_preL,sv_postR,sv_postL]
 			
-			lab0 = tk.Label(frame, text=label, width=9, anchor='w', padx=10, pady=4)
+			lab0 = tk.Label(frame, text=label, width=9, anchor='w', padx=paddx, pady=4)
 						
-			lab1 = tk.Label(frame, textvariable=sv_preR, width=9, anchor='e', padx=10, pady=4)			
-			lab2 = tk.Label(frame, textvariable=sv_preL, width=9, anchor='e', padx=10, pady=4)
-			lab3 = tk.Label(frame, textvariable=sv_postR, width=9, anchor='e', padx=10, pady=4)
-			lab4 = tk.Label(frame, textvariable=sv_postL, width=9, anchor='e', padx=10, pady=4)
+			lab1 = tk.Label(frame, textvariable=sv_preR, width=9, anchor='e', padx=paddx, pady=4)			
+			lab2 = tk.Label(frame, textvariable=sv_preL, width=9, anchor='e', padx=paddx, pady=4)
+			lab3 = tk.Label(frame, textvariable=sv_postR, width=9, anchor='e', padx=paddx, pady=4)
+			lab4 = tk.Label(frame, textvariable=sv_postL, width=9, anchor='e', padx=paddx, pady=4)
 
 			lab0.grid(sticky="W", row=rownum, column=0)
 			lab1.grid(sticky="E", row=rownum, column=1)
@@ -521,15 +315,40 @@ class PatMeasurementsFrame(ttk.Frame):
 			# l4 = tk.Label(frame, text=postL, width=9, anchor='e', padx=10, pady=4)
 			# l4.grid(sticky="E", row=rownum, column=4)
 
-			if bg:
-				lab0['bg'] = '#ffffff'
-				lab1['bg'] = '#ffffff'
-				lab2['bg'] = '#ffffff'
-				lab3['bg'] = '#ffffff'
-				lab4['bg'] = '#ffffff'
-			bg = not bg
+			if platform == "darwin":
+				if toggle:
+					# check if flag from prefs is enabled
+					# do nothing is prefs not found
+					
+					# check if prefs are set
+					# print(self.parent.controller.user_pref_obj['THEME']['AUTO_SWITCH'])
+					if darkdetect.isDark():
+						if bg:
+							lab0['bg'] = '#212124'
+							lab1['bg'] = '#212124'
+							lab2['bg'] = '#212124'
+							lab3['bg'] = '#212124'
+							lab4['bg'] = '#212124'
+						bg = not bg
+					else:
+						if bg:
+							lab0['bg'] = '#ffffff'
+							lab1['bg'] = '#ffffff'
+							lab2['bg'] = '#ffffff'
+							lab3['bg'] = '#ffffff'
+							lab4['bg'] = '#ffffff'
+						bg = not bg
+			else:
+				# windows
+				if bg:
+					lab0['bg'] = '#ffffff'
+					lab1['bg'] = '#ffffff'
+					lab2['bg'] = '#ffffff'
+					lab3['bg'] = '#ffffff'
+					lab4['bg'] = '#ffffff'
+				bg = not bg
 
-			
+
 			frame.grid_columnconfigure(1, minsize=colwidth)
 			frame.grid_columnconfigure(2, minsize=colwidth)
 			frame.grid_columnconfigure(3, minsize=colwidth)
@@ -681,8 +500,8 @@ class PatDetailsFrame(ttk.Frame):
 		self.sv_l_pros.trace_add("write", lambda name, index, mode, entry_type="L-PROS", var=self.sv_l_pros: self.entry_callback(entry_type, self.sv_l_pros))
 
 		# cal
-		self.sv_r_cal.trace_add("write", lambda name, index, mode, entry_type="R-CAL", var=self.sv_r_cal: self.entry_callback(entry_type, self.sv_r_cal))
-		self.sv_l_cal.trace_add("write", lambda name, index, mode, entry_type="L-CAL", var=self.sv_l_cal: self.entry_callback(entry_type, self.sv_l_cal))
+		# self.sv_r_cal.trace_add("write", lambda name, index, mode, entry_type="R-CAL", var=self.sv_r_cal: self.entry_callback(entry_type, self.sv_r_cal))
+		# self.sv_l_cal.trace_add("write", lambda name, index, mode, entry_type="L-CAL", var=self.sv_l_cal: self.entry_callback(entry_type, self.sv_l_cal))
 
 
 		self.constructUpperDetails(self.upper_details)
@@ -742,8 +561,17 @@ class PatDetailsFrame(ttk.Frame):
 
 		tk.Label(frame, text="First Name").grid(sticky="W", row=1, column=0)
 		tk.Label(frame, text="Last Name").grid(sticky="W", row=2, column=0)
-		self.e_fname 	= ttk.Entry(frame, width=40, textvariable=self.sv_fname)
-		self.e_lname	= ttk.Entry(frame, width=40, textvariable=self.sv_lname)
+
+		if platform == "darwin":
+			m_width = 25
+			e_width = 5
+		else:
+			m_width = 40
+			e_width = 8
+
+
+		self.e_fname 	= ttk.Entry(frame, width=m_width, textvariable=self.sv_fname)
+		self.e_lname	= ttk.Entry(frame, width=m_width, textvariable=self.sv_lname)
 		self.e_fname.grid(sticky="W",row=1, column=1, padx=5, pady=5)
 		self.e_lname.grid(sticky="W",row=2, column=1, padx=5, pady=5)
 
@@ -754,7 +582,7 @@ class PatDetailsFrame(ttk.Frame):
 		age_sex_frame.grid(sticky="W",row=3, column=1)
 
 		
-		self.e_age = ttk.Entry(age_sex_frame, width=8, textvariable=self.sv_age)
+		self.e_age = ttk.Entry(age_sex_frame, width=e_width, textvariable=self.sv_age)
 		self.e_age.pack(side="left", padx=5, pady=5)
 
 		tk.Label(age_sex_frame, text="Sex").pack(side="left", padx=(60,0))
@@ -785,12 +613,15 @@ class PatDetailsFrame(ttk.Frame):
 
 		frame.grid_columnconfigure(0, minsize=80)
 
-
+		if platform == "darwin":
+			m_width = 9
+		else:
+			m_width = 12
 
 		tk.Label(frame, text="K-L GRADE").grid(sticky="W", row=1, column=0)
 
-		self.r_klgrade = ttk.Combobox(frame, width = 12, textvariable = self.sv_r_kl, state="readonly")
-		self.l_klgrade = ttk.Combobox(frame, width = 12, textvariable = self.sv_l_kl, state="readonly")
+		self.r_klgrade = ttk.Combobox(frame, width = m_width, textvariable = self.sv_r_kl, state="readonly")
+		self.l_klgrade = ttk.Combobox(frame, width = m_width, textvariable = self.sv_l_kl, state="readonly")
 
 		print(self.parent.controller.user_pref_obj['IMPLANT_NAMES']['UKR'])
 
@@ -805,11 +636,11 @@ class PatDetailsFrame(ttk.Frame):
 
 
 		tk.Label(frame, text="SX DATE").grid(sticky="W", row=2, column=0)
-		self.r_cal = DateEntry(frame, width=12, background='darkblue',
+		self.r_cal = DateEntry(frame, width=m_width, background='darkblue',
 				foreground='white', borderwidth=2,
 				date_pattern='dd-mm-yyyy', textvariable=self.sv_r_cal)
 		self.r_cal.grid(row=2, column=1, padx=5, pady=5)
-		self.l_cal = DateEntry(frame, width=12, background='darkblue',
+		self.l_cal = DateEntry(frame, width=m_width, background='darkblue',
 				foreground='white', borderwidth=2,
 				date_pattern='dd-mm-yyyy', textvariable=self.sv_l_cal)
 		self.l_cal.grid(row=2, column=2, padx=5, pady=5)
@@ -847,8 +678,8 @@ class PatDetailsFrame(ttk.Frame):
 		# ttk.Entry(frame, width=15).grid(row=3, column=2, padx=5, pady=5)
 
 		
-		self.r_pros = ttk.Combobox(frame, width = 12, textvariable = self.sv_r_pros)
-		self.l_pros = ttk.Combobox(frame, width = 12, textvariable = self.sv_l_pros)
+		self.r_pros = ttk.Combobox(frame, width = m_width, textvariable = self.sv_r_pros)
+		self.l_pros = ttk.Combobox(frame, width = m_width, textvariable = self.sv_l_pros)
 
 		# self.r_pros['values'] = self.parent.controller.user_pref_obj['IMPLANT_NAMES']['UKR']
 		# self.l_pros['values'] =	self.parent.controller.user_pref_obj['IMPLANT_NAMES']['TKR']
@@ -863,15 +694,19 @@ class PatDetailsFrame(ttk.Frame):
 
 		tk.Label(frame, text="MASTER EXCEL EXPORT", font=("TkDefaultFont", 12)).grid(sticky="W", column=0, row=0, columnspan=2)		
 
+		if platform == "darwin":
+			m_width = 35
+		else:
+			m_width = 50
 
 		tk.Label(frame, text="UKR PATH").grid(sticky="W", row=1, column=0)
-		self.ukr_excel_entry =  ttk.Entry(frame, width=50)
+		self.ukr_excel_entry =  ttk.Entry(frame, width=m_width)
 		self.ukr_excel_entry.grid(sticky="W",row=2, column=0)
 		ttk.Button(frame, text="SET PATH", command=self.set_ukr_dir).grid(sticky="W",row=3, column=0, pady=5)		
 
 
 		tk.Label(frame, text="TKR PATH").grid(sticky="W", row=4, column=0, pady=(8,0))
-		self.tkr_excel_entry =  ttk.Entry(frame, width=50)
+		self.tkr_excel_entry =  ttk.Entry(frame, width=m_width)
 		self.tkr_excel_entry.grid(sticky="W",row=5, column=0)
 		ttk.Button(frame, text="SET PATH", command=self.set_tkr_dir).grid(sticky="W",row=6, column=0, pady=5)		
 
@@ -891,22 +726,27 @@ class PatDetailsFrame(ttk.Frame):
 		# ttk.Spinbox(self, from_= 1, to = 30, width=5).grid(column=0, row=9)
 
 		# check if master excel paths exist
-		jsonFile = open("user_prefs.json", "r") # Open the JSON file for reading
-		prefs = json.load(jsonFile) # Read the JSON into the buffer
-		jsonFile.close() # Close the JSON file
+		try:
+			jsonFile = open("user_prefs.json", "r") # Open the JSON file for reading
+			prefs = json.load(jsonFile) # Read the JSON into the buffer
+			jsonFile.close() # Close the JSON file
 
 
-		ukr_path = prefs["MASTER_EXCEL_PATHS"]["UKR_PATH"]
-		tkr_path = prefs["MASTER_EXCEL_PATHS"]["TKR_PATH"]
-		if ukr_path != None:			
-			self.ukr_excel_file = ukr_path
-			self.ukr_excel_entry.delete(0, tk.END)
-			self.ukr_excel_entry.insert(0, ukr_path)
+			ukr_path = prefs["MASTER_EXCEL_PATHS"]["UKR_PATH"]
+			tkr_path = prefs["MASTER_EXCEL_PATHS"]["TKR_PATH"]
+			if ukr_path != None:			
+				self.ukr_excel_file = ukr_path
+				self.ukr_excel_entry.delete(0, tk.END)
+				self.ukr_excel_entry.insert(0, ukr_path)
 
-		if tkr_path != None:
-			self.tkr_excel_file = tkr_path
-			self.tkr_excel_entry.delete(0, tk.END)
-			self.tkr_excel_entry.insert(0, tkr_path)
+			if tkr_path != None:
+				self.tkr_excel_file = tkr_path
+				self.tkr_excel_entry.delete(0, tk.END)
+				self.tkr_excel_entry.insert(0, tkr_path)
+		except Exception as e:
+			print(e)
+			# raise e
+			
 
 
 
@@ -1601,7 +1441,10 @@ class ImageStitchFrame(ttk.Frame):
 		self.img_holder = tk.Frame(self, height=180, width=240)
 		self.img_holder.grid(sticky="NSWE", row=0, column=0)
 
-		img = ImageTk.PhotoImage(Image.open("placeholder.png"))
+
+		# self.resource_path("placeholder.png")
+		#img = ImageTk.PhotoImage(Image.open("placeholder.png"))
+		img = ImageTk.PhotoImage(Image.open(self.resource_path("placeholder.png")))
 		# print(img.size)
 		# print(Image.open("placeholder.png").size[0])
 		# print(Image.open("placeholder.png").size[1])
@@ -1723,8 +1566,8 @@ class ImageStitchFrame(ttk.Frame):
 
 		self.im1 = None
 		self.im2 = None
-
-		img = ImageTk.PhotoImage(Image.open("placeholder.png"))
+		img = ImageTk.PhotoImage(Image.open(self.resource_path("placeholder.png")))
+		# img = ImageTk.PhotoImage(Image.open("placeholder.png"))
 		self.img_label.configure(image=img)
 		self.img_label.image = img
 
@@ -1746,6 +1589,14 @@ class ImageStitchFrame(ttk.Frame):
 			self.warningBox("Success")
 
 
+	# for fonts
+	def resource_path(self, relative_path):
+		try:
+			base_path = sys._MEIPASS
+		except Exception:
+			base_path = os.path.abspath(".")
+
+		return os.path.join(base_path, relative_path)
 		
 
 	def rotate_img(self, img, rt_degr):

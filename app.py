@@ -41,6 +41,9 @@ from tkinter import messagebox
 
 from app_logger import logger
 
+# identify mac os and style buttons
+from sys import platform
+
 
 class MainWindow(ttk.Frame):
 	""" Main window class """
@@ -90,7 +93,7 @@ class MainWindow(ttk.Frame):
 		self.topbar.grid(row=0, column=0, sticky="nwe") # stick to the top
 
 		# make buttons in the topbar
-		for x,text in enumerate(["DETAILS","PRE-SCANNO","PRE-AP","PRE-LAT","PRE-SKY","POST-SCANNO","POST-AP","POST-LAT","POST-SKY"]):		
+		for x,text in enumerate(["DETAILS","PRE-SCANNO","PRE-AP","PRE-LAT","PRE-SKY","POST-SCANNO","POST-AP","POST-LAT","POST-SKY"]):
 			button = ttk.Button(self.topbar, text=text, command=lambda text=text: self.show_view(text))
 			button.grid(column=x, row=1)
 
@@ -276,6 +279,11 @@ class MainWindow(ttk.Frame):
 															"UKR_PATH": None,
 															"TKR_PATH": None
 														}
+
+				if "THEME" not in user_json.keys():
+					user_json["THEME"] = 	{
+												"AUTO_SWITCH":1					
+											}
 
 
 				with open(script_dir + '/user_prefs.json', 'w', encoding='utf-8') as f:

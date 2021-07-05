@@ -12,7 +12,11 @@ git checkout pre_post_dict
 pip install Pillow
 pip install pandas
 pip install openpyxl
-pip install tkcalendars
+pip install tkcalendar
+pip install darkdetect
+
+pip install Pillow pandas openpyxl tkcalendar darkdetect
+
 
 // python executable
 where python
@@ -53,3 +57,15 @@ install pyenv
 PYENV SETTINGS
 	https://stackoverflow.com/questions/60469202/unable-to-install-tkinter-with-pyenv-pythons-on-macos
 	add enabled shared for pyinstaller to work
+
+
+env \
+PATH="$(brew --prefix tcl-tk)/bin:$PATH" \
+LDFLAGS="-L$(brew --prefix tcl-tk)/lib" \
+CPPFLAGS="-I$(brew --prefix tcl-tk)/include" \
+PKG_CONFIG_PATH="$(brew --prefix tcl-tk)/lib/pkgconfig" \
+CFLAGS="-I$(brew --prefix tcl-tk)/include" \
+PYTHON_CONFIGURE_OPTS="--with-tcltk-includes='-I$(brew --prefix tcl-tk)/include' --with-tcltk-libs='-L$(brew --prefix tcl-tk)/lib -ltcl8.6 -ltk8.6' --enable-shared" \
+pyenv install 3.9.1
+
+

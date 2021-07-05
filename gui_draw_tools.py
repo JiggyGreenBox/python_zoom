@@ -14,6 +14,11 @@ from PIL import Image, ImageDraw, ImageFont
 # identify mac os and flip keys
 from sys import platform
 
+# resource path
+import os
+import sys
+
+
 class DrawTools(CanvasImage):
 	""" Class of Polygons. Inherit CanvasImage class """
 
@@ -60,7 +65,9 @@ class DrawTools(CanvasImage):
 		self.pil_image = None
 		self.pil_draw = None
 		# self.pil_font = None
-		self.pil_font = ImageFont.truetype('Roboto-Medium.ttf', 30)
+		# self.pil_font = ImageFont.truetype('Roboto-Medium.ttf', 30)
+		self.pil_font = ImageFont.truetype(self.resource_path('Roboto-Medium.ttf'), 30)
+		# self.resource_path('Roboto-Medium.ttf')
 		# self.pil_font = (self.resource_path('Roboto-Medium.ttf'), 30)
 		# ImageFont.load_default()
 
@@ -723,7 +730,7 @@ class DrawTools(CanvasImage):
 		return ydiff
 
 	# for fonts
-	def resource_path(relative_path):
+	def resource_path(self, relative_path):
 		try:
 			base_path = sys._MEIPASS
 		except Exception:

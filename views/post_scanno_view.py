@@ -54,6 +54,9 @@ import os
 # make export dir if not exist
 from pathlib import Path
 
+# identify mac os and flip keys
+from sys import platform
+
 
 
 class POST_SCANNO_View(tk.Frame):
@@ -78,8 +81,19 @@ class POST_SCANNO_View(tk.Frame):
 		# for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","KJLO","KAOL","MAD","EADF"]):
 		# for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","ALDFA","MLDFA","TAMD","MPTA","KJLO", "KAOL"]):
 			# print(text)
-			button = ttk.Button(self.topbar, text=text, command=lambda text=text: self.show_menu(text))
-			button.grid(column=x, row=1)
+			# button = ttk.Button(self.topbar, text=text, command=lambda text=text: self.show_menu(text))
+			# button.grid(column=x, row=1)
+
+			if platform == "darwin":
+				if x < 9:
+					button = ttk.Button(self.topbar, text=text, command=lambda text=text: self.show_menu(text))
+					button.grid(column=x, row=1)
+				else:
+					button = ttk.Button(self.topbar, text=text, command=lambda text=text: self.show_menu(text))
+					button.grid(column=x-9, row=2)
+			else:
+				button = ttk.Button(self.topbar, text=text, command=lambda text=text: self.show_menu(text))
+				button.grid(column=x, row=1)
 
 
 		# left navbar
