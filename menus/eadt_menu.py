@@ -50,10 +50,10 @@ class EADT_Menu(tk.Frame):
 
 			# hover-label checkboxes
 			labels_cb = Checkbutton(self, text="LABELS", variable=self.label_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_LABEL", self.label_var))
-			labels_cb.grid(sticky="W",column=1, row=6)
+			labels_cb.grid(padx=[5,0], sticky="W",column=1, row=6)
 
 			hover_cb = Checkbutton(self, text="HOVER", variable=self.hover_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_HOVER", self.hover_var))
-			hover_cb.grid(sticky="W",column=1, row=7)
+			hover_cb.grid(padx=[5,0], sticky="W",column=1, row=7)
 			
 		else:
 
@@ -79,10 +79,10 @@ class EADT_Menu(tk.Frame):
 
 			# hover-label checkboxes
 			labels_cb = Checkbutton(self, text="LABELS", variable=self.label_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_LABEL", self.label_var))
-			labels_cb.grid(sticky="W",column=1, row=6)
+			labels_cb.grid(padx=[5,0], sticky="W",column=1, row=6)
 
 			hover_cb = Checkbutton(self, text="HOVER", variable=self.hover_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_HOVER", self.hover_var))
-			hover_cb.grid(sticky="W",column=1, row=7)
+			hover_cb.grid(padx=[5,0], sticky="W",column=1, row=7)
 
 		
 

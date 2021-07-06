@@ -4,6 +4,9 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import *
 
+# identify mac os and flip keys
+from sys import platform
+
 class DRAW_Menu(tk.Frame):
 
 	def __init__(self, parent, controller):

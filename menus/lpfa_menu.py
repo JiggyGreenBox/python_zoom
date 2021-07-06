@@ -48,7 +48,8 @@ class LPFA_Menu(tk.Frame):
 			button.grid(padx=[10,10],column=2, row=5)
 
 			label_cb = Checkbutton(self, text="MPFA", variable=self.mpfa_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_MPFA", self.mpfa_var))
-			label_cb.grid(padx=[5,0], pady=[10,0], sticky="W", column=1, row=6)
+			# label_cb.grid(padx=[5,0], pady=[10,0], sticky="W", column=1, row=6)
+			label_cb.grid(padx=[5,0], sticky="W", column=1, row=6)
 
 		else:
 
@@ -71,7 +72,8 @@ class LPFA_Menu(tk.Frame):
 			button.grid(padx=[10,10],column=2, row=5)
 
 			label_cb = Checkbutton(self, text="MPFA", variable=self.mpfa_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_MPFA", self.mpfa_var))
-			label_cb.grid(padx=[5,0], pady=[10,0], sticky="W", column=1, row=6)
+			# label_cb.grid(padx=[5,0], pady=[10,0], sticky="W", column=1, row=6)
+			label_cb.grid(padx=[5,0], sticky="W", column=1, row=6)
 
 		
 
