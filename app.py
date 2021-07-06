@@ -357,7 +357,8 @@ class MainWindow(ttk.Frame):
 														"MPFA"			:None,
 														"LDTA"			:None,
 														"ANKLE_SLOPE"	:None,
-														"pMA"			:None
+														"pMA"			:None,
+														"VANG"			:None
 													},
 													"LEFT":{
 														"HASDATA"		:False,
@@ -397,7 +398,8 @@ class MainWindow(ttk.Frame):
 														"MPFA"			:None,
 														"LDTA"			:None,
 														"ANKLE_SLOPE"	:None,
-														"pMA"			:None
+														"pMA"			:None,
+														"VANG"			:None
 													}
 												},
 												"POST-OP":{
@@ -439,7 +441,8 @@ class MainWindow(ttk.Frame):
 														"MPFA"			:None,
 														"LDTA"			:None,
 														"ANKLE_SLOPE"	:None,
-														"pMA"			:None
+														"pMA"			:None,
+														"VANG"			:None
 													},
 													"LEFT":{
 														"HASDATA"		:False,
@@ -479,7 +482,8 @@ class MainWindow(ttk.Frame):
 														"MPFA"			:None,
 														"LDTA"			:None,
 														"ANKLE_SLOPE"	:None,
-														"pMA"			:None
+														"pMA"			:None,
+														"VANG"			:None
 													}
 												}
 											}
@@ -691,9 +695,96 @@ class MainWindow(ttk.Frame):
 			post_ldta	= []
 			post_a_slope = []
 			post_p_ma 	= []
+
+			# new V-ANG
+			vang = []
+			post_vang = []
 			
 
 
+			mdict = {
+						"NAME"			:	name,
+						"AGE"			:	age,
+						"GENDER"		:	gender,
+						"SIDE"			:	leg_side,
+						"K-L GRADE"		:	k_l_grade,
+						"DATE"			:	mdate,
+						"PROSTHESIS"	:	prosthesis,
+						"HKA"			:	hka,
+						"MAD"			:	mad,
+						"MNSA"			:	mnsa,
+						"VCA"			:	vca,
+						"aFTA"			:	afta,
+						"mLDFA"			:	mldfa,
+						"aLDFA"			:	aldfa,
+						"EADFA"			:	eadfa,
+						"EADFPS"		:	eadfps,
+						"EADFDS"		:	eadfds,
+						"JDA"			:	jda,
+						"TAMD"			:	tamd,
+						"MPTA"			:	mpta,
+						"KJLO"			:	kjlo,
+						"KAOL"			:	kaol,
+						"EADTA"			:	eadta,
+						"EADTPS"		:	eadtps,
+						"EADTDS"		:	eadtds,
+						"FFLEX"			:	fflex,
+						"PCOR"			:	pcor,
+						"ACOR"			:	acor,
+						"TSLOPE"		:	tslope,
+						"ISR"			:	isr,
+						"SA"			:	sa,
+						"PTILT"			:	ptilt,
+						"PPBA"			:	ppba,
+						"MISCELL"		:	miscell,
+						"Post-HKA"		:	post_hka,
+						"Post-MAD"		:	post_mad,
+						"Post-MNSA"		:	post_mnsa,
+						"Post-VCA"		:	post_vca,
+						"Post-aFTA"		:	post_afta,
+						"Post-mLDFA"	:	post_mldfa,
+						"Post-aLDFA"	:	post_aldfa,
+						"Post-EADFA"	:	post_eadfa,
+						"Post-EADFPS"	:	post_eadfps,
+						"Post-EADFDS"	:	post_eadfds,
+						"Post-JDA"		:	post_jda,
+						"Post-TAMD"		:	post_tamd,
+						"Post-MPTA"		:	post_mpta,
+						"Post-KJLO"		:	post_kjlo,
+						"Post-KAOL"		:	post_kaol,
+						"Post-EADTA"	:	post_eadta,
+						"Post-EADTPS"	:	post_eadtps,
+						"Post-EADTDS"	:	post_eadtds,
+						"Post-FFLEX	"	:	post_fflex,
+						"Post-PCOR"		:	post_pcor,
+						"Post-ACOR"		:	post_acor,
+						"Post-TSLOPE"	:	post_tslope,
+						"Post-ISR"		:	post_isr,
+						"Post-SA"		:	post_sa,
+						"Post-PTILT"	:	post_ptilt,
+						"Post-PPBA"		:	post_ppba,
+						"Post-MISCELL"	:	post_miscel,
+						"Post-F FLE/EXT"	:	ffleext,
+						"Post-F VAR/VAL"	:	fvarval,
+						"Post-T FLE/EXT"	:	tfleext,
+						"Post-T VAR/VAL"	:	tvarval,
+						"JCA"			:	jca,
+						"LPFA"			:	lpfa,
+						"MPFA"			:	mpfa,
+						"LDTA"			:	ldta,
+						"ANKLE_SLOPE"	:	a_slope,
+						"pMA"			:	p_ma,
+						"V-ANG"			:	vang,
+						"Post-JCA"		:	post_jca,
+						"Post-LPFA"		:	post_lpfa,
+						"Post-MPFA"		:	post_mpfa,
+						"Post-LDTA"		:	post_ldta,
+						"Post-ANKLE_SLOPE"	:	post_a_slope,
+						"Post-pMA"		: 	post_p_ma,
+						"Post-V-ANG"	: 	post_vang
+					}
+
+			'''
 			mdict = {
 						"NAME"			:	name,
 						"AGE"			:	age,
@@ -771,9 +862,11 @@ class MainWindow(ttk.Frame):
 						"Post-MPFA"		:	post_mpfa,
 						"Post-LDTA"		:	post_ldta,
 						"Post-ANKLE_SLOPE"	:	post_a_slope,
-						"Post-pMA"		: 	post_p_ma					
+						"Post-pMA"		: 	post_p_ma,
+						"V-ANG"			:	vang,
+						"Post-V-ANG"	:	post_vang
 					}
-
+			'''
 
 
 			# Iterate
@@ -871,33 +964,56 @@ class MainWindow(ttk.Frame):
 					# post_mpfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["MPFA"])
 					# post_ldta.append(self.master_dict["EXCEL"]["POST-OP"][side]["LDTA"])
 
+					# without VANG
+					# jca.append(self.master_dict["EXCEL"]["PRE-OP"][side]["JCA"])
+					# lpfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["LPFA"])
+					# mpfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["MPFA"])
+					# ldta.append(self.master_dict["EXCEL"]["PRE-OP"][side]["LDTA"])
+					# a_slope.append(self.master_dict["EXCEL"]["PRE-OP"][side]["ANKLE_SLOPE"])
+					# p_ma.append(self.master_dict["EXCEL"]["PRE-OP"][side]["pMA"])
+					# post_jca.append(self.master_dict["EXCEL"]["POST-OP"][side]["JCA"])
+					# post_lpfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["LPFA"])
+					# post_mpfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["MPFA"])
+					# post_ldta.append(self.master_dict["EXCEL"]["POST-OP"][side]["LDTA"])
+					# post_a_slope.append(self.master_dict["EXCEL"]["POST-OP"][side]["ANKLE_SLOPE"])
+					# post_p_ma.append(self.master_dict["EXCEL"]["POST-OP"][side]["pMA"])
 
+
+					# with VANG in-between
 					jca.append(self.master_dict["EXCEL"]["PRE-OP"][side]["JCA"])
 					lpfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["LPFA"])
 					mpfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["MPFA"])
 					ldta.append(self.master_dict["EXCEL"]["PRE-OP"][side]["LDTA"])
 					a_slope.append(self.master_dict["EXCEL"]["PRE-OP"][side]["ANKLE_SLOPE"])
 					p_ma.append(self.master_dict["EXCEL"]["PRE-OP"][side]["pMA"])
+					vang.append(self.master_dict["EXCEL"]["PRE-OP"][side]["VANG"])
 					post_jca.append(self.master_dict["EXCEL"]["POST-OP"][side]["JCA"])
 					post_lpfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["LPFA"])
 					post_mpfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["MPFA"])
 					post_ldta.append(self.master_dict["EXCEL"]["POST-OP"][side]["LDTA"])
 					post_a_slope.append(self.master_dict["EXCEL"]["POST-OP"][side]["ANKLE_SLOPE"])
 					post_p_ma.append(self.master_dict["EXCEL"]["POST-OP"][side]["pMA"])
+					post_vang.append(self.master_dict["EXCEL"]["POST-OP"][side]["VANG"])
 
 
-					# jca.append(x)
-					# lpfa.append(x)
-					# mpfa.append(x)
-					# ldta.append(x)
-					# a_slope.append(x)
-					# p_ma.append(x)
-					# post_jca.append(x)
-					# post_lpfa.append(x)
-					# post_mpfa.append(x)
-					# post_ldta.append(x)
-					# post_a_slope.append(x)
-					# post_p_ma.append(x)
+					# with VANG at the end
+					# jca.append(self.master_dict["EXCEL"]["PRE-OP"][side]["JCA"])
+					# lpfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["LPFA"])
+					# mpfa.append(self.master_dict["EXCEL"]["PRE-OP"][side]["MPFA"])
+					# ldta.append(self.master_dict["EXCEL"]["PRE-OP"][side]["LDTA"])
+					# a_slope.append(self.master_dict["EXCEL"]["PRE-OP"][side]["ANKLE_SLOPE"])
+					# p_ma.append(self.master_dict["EXCEL"]["PRE-OP"][side]["pMA"])
+					# post_jca.append(self.master_dict["EXCEL"]["POST-OP"][side]["JCA"])
+					# post_lpfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["LPFA"])
+					# post_mpfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["MPFA"])
+					# post_ldta.append(self.master_dict["EXCEL"]["POST-OP"][side]["LDTA"])
+					# post_a_slope.append(self.master_dict["EXCEL"]["POST-OP"][side]["ANKLE_SLOPE"])
+					# post_p_ma.append(self.master_dict["EXCEL"]["POST-OP"][side]["pMA"])
+					# vang.append(self.master_dict["EXCEL"]["PRE-OP"][side]["VANG"])
+					# post_vang.append(self.master_dict["EXCEL"]["POST-OP"][side]["VANG"])
+
+
+
 
 				
 
@@ -946,7 +1062,12 @@ class MainWindow(ttk.Frame):
 
 		page_name = page_name.replace("-", "_")	+ "_View"			
 		view = self.views[page_name]
-		view.resizeRedraw()
+		# resize without setting any images
+		try:
+			view.resizeRedraw()
+		except Exception as e:
+			print(e)
+		
 
 	# draw PIL images for presentations
 	def app_draw_pil(self):

@@ -19,6 +19,8 @@ from menus.mad_menu import MAD_Menu
 from menus.eadf_menu import EADF_Menu
 from menus.eadt_menu import EADT_Menu
 from menus.lpfa_menu import LPFA_Menu
+from menus.vang_menu import VANG_Menu
+from menus.draw_menu import DRAW_Menu
 from menus.main_menu import MAIN_Menu
 
 # objs
@@ -37,6 +39,8 @@ from objs.mad import MAD
 from objs.eadf import EADF
 from objs.eadt import EADT
 from objs.lpfa import LPFA
+from objs.vang import VANG
+from objs.draw_obj import DRAW
 from objs.main_anatomy import MAIN
 
 # choose file
@@ -76,7 +80,8 @@ class POST_SCANNO_View(tk.Frame):
 		self.topbar.pack(anchor=E, fill=X, expand=False, side=TOP)
 
 		# make buttons in the topbar
-		for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","JCA","KJLO","KAOL","MAD","EADF","EADT","LPFA"]):
+		for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","JCA","KJLO","KAOL","MAD", "VANG","EADF","EADT","LPFA", "DRAW"]):
+		# for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","JCA","KJLO","KAOL","MAD","EADF","EADT","LPFA"]):
 		# for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","KJLO","KAOL","MAD","EADF","EADT"]):
 		# for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","KJLO","KAOL","MAD","EADF"]):
 		# for x,text in enumerate(["MAIN","HKA","MNSA","VCA","AFTA","ALDFA","MLDFA","TAMD","MPTA","KJLO", "KAOL"]):
@@ -122,9 +127,11 @@ class POST_SCANNO_View(tk.Frame):
 					KJLO_Menu,
 					KAOL_Menu,
 					MAD_Menu,
+					VANG_Menu,
 					EADF_Menu,
 					EADT_Menu,
 					LPFA_Menu,
+					DRAW_Menu,
 					MAIN_Menu
 				):
 			page_name = M.__name__
@@ -151,9 +158,11 @@ class POST_SCANNO_View(tk.Frame):
 					KJLO,
 					KAOL,
 					MAD,
+					VANG,
 					EADF,
 					EADT,
 					LPFA,
+					DRAW,
 					MAIN
 				):
 			obj_name = Obj.__name__
@@ -337,7 +346,7 @@ class POST_SCANNO_View(tk.Frame):
 		if excel_list == None:
 			print('normal excel')
 			for obj in self.objects:
-				if obj in ["HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","KJLO","KAOL","MAD","EADF","JCA"]:
+				if obj in ["HKA","MNSA","VCA","AFTA","MLDFA","ALDFA","TAMD","MPTA","KJLO","KAOL","MAD","EADF","JCA","VANG"]:
 					print("{} draw".format(obj))
 					self.objects[obj].updateExcelValues()
 

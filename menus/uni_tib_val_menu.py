@@ -23,10 +23,10 @@ class UNI_TIB_VAL_Menu(tk.Frame):
 
 
 		button = ttk.Button(self, text="RIGHT", command=lambda: controller.menu_btn_click(self.obj_name, "SET-RIGHT"))
-		button.grid(column=1, row=3)
+		button.grid(padx=[10,10], column=1, row=3)
 
 		button = ttk.Button(self, text="LEFT", command=lambda: controller.menu_btn_click(self.obj_name, "SET-LEFT"))
-		button.grid(column=2, row=3)
+		button.grid(padx=[10,10], column=2, row=3)
 
 
 		# delete menu
@@ -35,21 +35,21 @@ class UNI_TIB_VAL_Menu(tk.Frame):
 
 		
 		button = ttk.Button(self, text="TIB LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-FEM-LINE"))
-		button.grid(column=1, row=5)
+		button.grid(padx=[10,10], column=1, row=5)
 		button = ttk.Button(self, text="TIB LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-FEM-LINE"))
-		button.grid(column=2, row=5)
+		button.grid(padx=[10,10], column=2, row=5)
 
 
 		button = ttk.Button(self, text="TIB TOP", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-TIB-TOP"))
-		button.grid(column=1, row=6)
+		button.grid(padx=[10,10], column=1, row=6)
 		button = ttk.Button(self, text="TIB TOP", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-TIB-TOP"))
-		button.grid(column=2, row=6)
+		button.grid(padx=[10,10], column=2, row=6)
 
 
 		button = ttk.Button(self, text="TIB BOT", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-TIB-BOT"))
-		button.grid(column=1, row=7)
+		button.grid(padx=[10,10], column=1, row=7)
 		button = ttk.Button(self, text="TIB BOT", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-TIB-BOT"))
-		button.grid(column=2, row=7)
+		button.grid(padx=[10,10], column=2, row=7)
 
 
 		label_cb = Checkbutton(self, text="LABELS", variable=self.label_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_LABEL", self.label_var))

@@ -1,6 +1,6 @@
 {
     "POINT_SIZES": {
-        "PRE-SCANNO": 5,
+        "PRE-SCANNO": 1,
         "PRE-AP": 1,
         "PRE-LAT": 1,
         "PRE-SKY": 1,
@@ -29,10 +29,10 @@
         ]
     },
     "MASTER_EXCEL_PATHS": {
-        "UKR_PATH": "/Users/sourabh/Desktop/UKR.xlsx",
-        "TKR_PATH": "/Users/sourabh/Desktop/TKR.xlsx"
+        "UKR_PATH": "C:/Users/jiggy/Desktop/master_excel/UKR_inbet.xlsx",
+        "TKR_PATH": "C:/Users/jiggy/Desktop/master_excel/TKR_inbet.xlsx"
     },
     "THEME": {
-        "AUTO_SWITCH":1
+        "AUTO_SWITCH": 1
     }
 }

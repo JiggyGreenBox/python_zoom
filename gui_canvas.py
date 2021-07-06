@@ -283,7 +283,7 @@ class CanvasImage:
 				scale        *= self.__delta
 		else:
 			# Respond to Linux (event.num) or Windows (event.delta) wheel event
-			print('event.num: {}, event.delta: {}'.format(event.num, event.delta))
+			# print('event.num: {}, event.delta: {}'.format(event.num, event.delta))
 			if event.num == 5 or event.delta == -120:  # scroll down, smaller
 				if round(self.__min_side * self.imscale) < 30: return  # image is less than 30 pixels
 				self.imscale /= self.__delta

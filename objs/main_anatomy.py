@@ -242,12 +242,12 @@ class MAIN:
 		if action == "DEL-LEFT-TIB-CENTRE":
 			self.dict["MAIN"][self.op_type]["LEFT"]["TIB_KNEE"]["P1"] = None
 			self.side = "LEFT"
-			self.deleteExcelValues(["HKA", "JDA", "TAMD", "MPTA", "EADTA", "EADTPS", "EADTDS", "LDTA"], self.side)
+			self.deleteExcelValues(["HKA", "JDA", "TAMD", "MPTA", "EADTA", "EADTPS", "EADTDS", "LDTA", "VANG"], self.side)
 
 		if action == "DEL-RIGHT-TIB-CENTRE":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["TIB_KNEE"]["P1"] = None
 			self.side = "RIGHT"
-			self.deleteExcelValues(["HKA", "JDA", "TAMD", "MPTA", "EADTA", "EADTPS", "EADTDS", "LDTA"], self.side)
+			self.deleteExcelValues(["HKA", "JDA", "TAMD", "MPTA", "EADTA", "EADTPS", "EADTDS", "LDTA", "VANG"], self.side)
 
 		if action == "DEL-LEFT-ANKLE":
 			self.dict["MAIN"][self.op_type]["LEFT"]["ANKLE"]["P1"] = None
@@ -255,7 +255,7 @@ class MAIN:
 			self.dict["MAIN"][self.op_type]["LEFT"]["ANKLE"]["M1"] = None
 			self.side = "LEFT"
 			# self.deleteExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL",  "EADTA", "EADTPS", "EADTDS"], self.side)
-			self.deleteExcelValues(["HKA", "JDA", "TAMD", "MAD", "pMA", "MPTA", "KAOL",  "EADTA", "EADTPS", "EADTDS", "LDTA"], self.side)
+			self.deleteExcelValues(["HKA", "JDA", "TAMD", "MAD", "pMA", "MPTA", "KAOL",  "EADTA", "EADTPS", "EADTDS", "LDTA", "VANG"], self.side)
 			# KJLO delete both values
 			self.deleteExcelValues(["KJLO", "ANKLE_SLOPE"])
 
@@ -270,7 +270,7 @@ class MAIN:
 			self.dict["MAIN"][self.op_type]["RIGHT"]["ANKLE"]["M1"] = None
 			self.side = "RIGHT"
 			# self.deleteExcelValues(["HKA", "TAMD", "MPTA", "KJLO", "KAOL",  "EADTA", "EADTPS", "EADTDS"], self.side)
-			self.deleteExcelValues(["HKA", "JDA", "TAMD", "MAD", "pMA", "MPTA", "KAOL",  "EADTA", "EADTPS", "EADTDS", "LDTA"], self.side)
+			self.deleteExcelValues(["HKA", "JDA", "TAMD", "MAD", "pMA", "MPTA", "KAOL",  "EADTA", "EADTPS", "EADTDS", "LDTA", "VANG"], self.side)
 			# KJLO delete both values
 			self.deleteExcelValues(["KJLO", "ANKLE_SLOPE"])
 
@@ -314,28 +314,28 @@ class MAIN:
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_TIB"]["U3"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_TIB"]["U3"]["M1"] = None
 			self.side = "LEFT"
-			self.deleteExcelValues(["aFTA", "TAMD"], self.side)
+			self.deleteExcelValues(["aFTA", "TAMD", "VANG"], self.side)
 
 		if action == "DEL-RIGHT-TIB-U3":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_TIB"]["U3"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_TIB"]["U3"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_TIB"]["U3"]["M1"] = None
 			self.side = "RIGHT"
-			self.deleteExcelValues(["aFTA", "TAMD"], self.side)
+			self.deleteExcelValues(["aFTA", "TAMD", "VANG"], self.side)
 
 		if action == "DEL-LEFT-TIB-L3":
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_TIB"]["L3"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_TIB"]["L3"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["LEFT"]["AXIS_TIB"]["L3"]["M1"] = None
 			self.side = "LEFT"
-			self.deleteExcelValues(["aFTA", "TAMD"], self.side)
+			self.deleteExcelValues(["aFTA", "TAMD", "VANG"], self.side)
 
 		if action == "DEL-RIGHT-TIB-L3":
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_TIB"]["L3"]["P1"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_TIB"]["L3"]["P2"] = None
 			self.dict["MAIN"][self.op_type]["RIGHT"]["AXIS_TIB"]["L3"]["M1"] = None
 			self.side = "RIGHT"
-			self.deleteExcelValues(["aFTA", "TAMD"], self.side)
+			self.deleteExcelValues(["aFTA", "TAMD", "VANG"], self.side)
 
 
 
@@ -1582,20 +1582,30 @@ class MAIN:
 		# KAOL				joint_line, ankle
 		# EADF				fem_knee, hip, fem_neck
 		# EADT				tib_knee, ankle
+		# LPFA				fem_knee, hip
+		# MPFA				fem_U3, fem_L3, hip
+		# JDA				hip , fem_knee, tib_knee, ankle
+		# JCA				tib_joint_line, fem_joint_line
+		# MAD 				hip, ankle, mad_line
+		# pMA				hip, ankle, mad_line
+		# VANG				tib_knee, ankle, tib_U3, tib_L3
 
-
-		# hip				HKA, MNSA, VCA, MLDFA, EADF
+		# hip				HKA, MNSA, VCA, MLDFA, EADF, LPFA, MPFA
 		# fem_neck			MNSA, EADF
 		# fem_U3			MNSA, AFTA, ALDFA
 		# fem_L3			MNSA, AFTA, ALDFA
-		# fem_knee			HKA, VCA, MLDFA, EADF
-		# tib_knee			HKA, TAMD, MPTA, EADT
-		# fem_joint_line 	MLDFA, ALDFA
-		# tib_joint_line	MPTA
+		# fem_knee			HKA, JDA, VCA, MLDFA, EADF, LPFA, MFPA
+		# tib_knee			HKA, JDA, TAMD, MPTA, EADT, LDTA, VANG
+		# fem_joint_line 	MLDFA, ALDFA, JCA
+		# tib_joint_line	MPTA, JCA
 		# joint_line 		KJLO, KAOL
-		# tib_U3			AFTA, TAMD
-		# tib_L3			AFTA, TAMD
-		# ankle				HKA, TAMD, MPTA, KJLO, KAOL, EADT
+		# mad_line			MAD, pMA
+		# tib_U3			AFTA, TAMD, VANG
+		# tib_L3			AFTA, TAMD, VANG
+		# ankle				HKA, JDA, TAMD, MAD, pMA, MPTA, KJLO, KAOL, EADT, LDTA, VANG, ANKLE_SLOPE
+
+		# EADF = EADFA, EADFPS, EADFDS
+		# EADT = EADTA, EADTPS, EADTDS
 
 		for key in del_list:
 			# print(key)

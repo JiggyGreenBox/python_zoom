@@ -165,15 +165,28 @@ class EADF():
 				eadf_top, eadf_bot = self.draw_tools.retPointsUpDown(eadf_p1, eadf_p2)
 				if side == "LEFT":						
 					angle = self.draw_tools.create_myAngle(fem_knee, eadf_bot, eadf_top, [self.tag,"EADF_LINE"])
+					f_angle = abs(180 - angle)
+
+					if angle >= 180:
+						m_text = '{0:.1f} - 180 = {1:.1f}'.format(angle, f_angle)
+					else:
+						m_text = '180 - {0:.1f} = {1:.1f}'.format(angle, f_angle)
+
 				else:					
 					angle = self.draw_tools.create_myAngle(eadf_top, eadf_bot, fem_knee, [self.tag,"EADF_LINE"])
+					f_angle = abs(180 - angle)
+
+					if angle >= 180:
+						m_text = '{0:.1f} - 180 = {1:.1f}'.format(angle, f_angle)
+					else:
+						m_text = '180 - {0:.1f} = {1:.1f}'.format(angle, f_angle)
 
 				if self.draw_labels:
-					self.draw_tools.create_mytext(eadf_p1, '{0:.1f}'.format(angle), self.tag, x_offset=60, color="blue")
+					self.draw_tools.create_mytext(eadf_p1, m_text, self.tag, x_offset=60, color="blue")
 
 				if self.dict["EXCEL"][self.op_type][side]["EADFA"] == None:
 					self.dict["EXCEL"][self.op_type][side]["HASDATA"] 	= True
-					self.dict["EXCEL"][self.op_type][side]["EADFA"]	 	= '{0:.1f}'.format(angle)
+					self.dict["EXCEL"][self.op_type][side]["EADFA"]	 	= '{0:.1f}'.format(f_angle)
 					self.controller.save_json()
 
 

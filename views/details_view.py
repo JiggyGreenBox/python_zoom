@@ -227,7 +227,7 @@ class PatMeasurementsFrame(ttk.Frame):
 
 
 		self.populateFrame(self.frame_scano, ["HKA","MAD","MNSA","VCA","aFTA","mLDFA","aLDFA","EADFA","EADFPS","EADFDS","JDA","TAMD","MPTA","KJLO","KAOL","EADTA","EADTPS","EADTDS"])
-		self.populateFrame(self.frame_ap,["FFLEX","PCOR","ACOR","TSLOPE","ISR","SA","PTILT","PPBA","FVAR/VAL","TVAR/VAL","FFLE/EXT","TFLE/EXT","JCA","LPFA","MPFA","LDTA","ANKLE_SLOPE","pMA"])		
+		self.populateFrame(self.frame_ap,["FFLEX","PCOR","ACOR","TSLOPE","ISR","SA","PTILT","PPBA","FVAR/VAL","TVAR/VAL","FFLE/EXT","TFLE/EXT","JCA","LPFA","MPFA","LDTA","ANKLE_SLOPE","pMA","VANG"])		
 
 		
 
@@ -399,7 +399,8 @@ class PatMeasurementsFrame(ttk.Frame):
 						"MPFA",
 						"LDTA",
 						"ANKLE_SLOPE",
-						"pMA"]
+						"pMA",
+						"VANG"]
 
 
 		for label in refresh_list:
@@ -500,8 +501,8 @@ class PatDetailsFrame(ttk.Frame):
 		self.sv_l_pros.trace_add("write", lambda name, index, mode, entry_type="L-PROS", var=self.sv_l_pros: self.entry_callback(entry_type, self.sv_l_pros))
 
 		# cal
-		# self.sv_r_cal.trace_add("write", lambda name, index, mode, entry_type="R-CAL", var=self.sv_r_cal: self.entry_callback(entry_type, self.sv_r_cal))
-		# self.sv_l_cal.trace_add("write", lambda name, index, mode, entry_type="L-CAL", var=self.sv_l_cal: self.entry_callback(entry_type, self.sv_l_cal))
+		self.sv_r_cal.trace_add("write", lambda name, index, mode, entry_type="R-CAL", var=self.sv_r_cal: self.entry_callback(entry_type, self.sv_r_cal))
+		self.sv_l_cal.trace_add("write", lambda name, index, mode, entry_type="L-CAL", var=self.sv_l_cal: self.entry_callback(entry_type, self.sv_l_cal))
 
 
 		self.constructUpperDetails(self.upper_details)
@@ -1907,6 +1908,10 @@ class ThreadedTask(threading.Thread):
 		post_ldta	= []
 		post_a_slope = []
 		post_p_ma 	= []
+
+		# new value
+		vang = []
+		post_vang = []
 		
 
 		if etype == "UKR":
@@ -1983,12 +1988,14 @@ class ThreadedTask(threading.Thread):
 					"LDTA"			:	ldta,
 					"ANKLE_SLOPE"	:	a_slope,
 					"pMA"			:	p_ma,
+					"V-ANG"			:	vang,
 					"Post-JCA"		:	post_jca,
 					"Post-LPFA"		:	post_lpfa,
 					"Post-MPFA"		:	post_mpfa,
 					"Post-LDTA"		:	post_ldta,
 					"Post-ANKLE_SLOPE"	:	post_a_slope,
-					"Post-pMA"		: 	post_p_ma					
+					"Post-pMA"		: 	post_p_ma,
+					"Post-V-ANG"	: 	post_vang
 				}
 
 		else:
@@ -2060,12 +2067,14 @@ class ThreadedTask(threading.Thread):
 					"LDTA"			:	ldta,
 					"ANKLE_SLOPE"	:	a_slope,
 					"pMA"			:	p_ma,
+					"V-ANG"			:	vang,
 					"Post-JCA"		:	post_jca,
 					"Post-LPFA"		:	post_lpfa,
 					"Post-MPFA"		:	post_mpfa,
 					"Post-LDTA"		:	post_ldta,
 					"Post-ANKLE_SLOPE"	:	post_a_slope,
-					"Post-pMA"		: 	post_p_ma					
+					"Post-pMA"		: 	post_p_ma,
+					"Post-V-ANG"	: 	post_vang
 				}
 
 
@@ -2080,7 +2089,7 @@ class ThreadedTask(threading.Thread):
 			x = ""
 
 			# master list				
-			if self.master_dict["EXCEL"]["PRE-OP"][side]["HASDATA"] == True:
+			if self.master_dict["EXCEL"]["PRE-OP"][side]["HASDATA"] == True or self.master_dict["EXCEL"]["POST-OP"][side]["HASDATA"] == True:
 				name.append(disp_name)
 				age.append(disp_age)
 				gender.append(disp_sex)
@@ -2165,12 +2174,14 @@ class ThreadedTask(threading.Thread):
 				ldta.append(self.master_dict["EXCEL"]["PRE-OP"][side]["LDTA"])
 				a_slope.append(self.master_dict["EXCEL"]["PRE-OP"][side]["ANKLE_SLOPE"])
 				p_ma.append(self.master_dict["EXCEL"]["PRE-OP"][side]["pMA"])
+				vang.append(self.master_dict["EXCEL"]["PRE-OP"][side]["VANG"])
 				post_jca.append(self.master_dict["EXCEL"]["POST-OP"][side]["JCA"])
 				post_lpfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["LPFA"])
 				post_mpfa.append(self.master_dict["EXCEL"]["POST-OP"][side]["MPFA"])
 				post_ldta.append(self.master_dict["EXCEL"]["POST-OP"][side]["LDTA"])
 				post_a_slope.append(self.master_dict["EXCEL"]["POST-OP"][side]["ANKLE_SLOPE"])
 				post_p_ma.append(self.master_dict["EXCEL"]["POST-OP"][side]["pMA"])
+				post_vang.append(self.master_dict["EXCEL"]["POST-OP"][side]["VANG"])
 
 		# print(mtype)
 		# import pprint

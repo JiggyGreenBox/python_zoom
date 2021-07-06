@@ -21,10 +21,10 @@ class ACOR_Menu(tk.Frame):
 
 
 		button = ttk.Button(self, text="RIGHT", command=lambda: controller.menu_btn_click(self.obj_name, "SET-RIGHT"))
-		button.grid(column=1, row=3)
+		button.grid(padx=[10,10], column=1, row=3)
 
 		button = ttk.Button(self, text="LEFT", command=lambda: controller.menu_btn_click(self.obj_name, "SET-LEFT"))
-		button.grid(column=2, row=3)
+		button.grid(padx=[10,10], column=2, row=3)
 		
 		# self.label = tk.Label(self, text="CHOOSE SIDE")
 		# self.label.grid(column=1, row=1,columnspan=2,pady=50)
@@ -57,26 +57,26 @@ class ACOR_Menu(tk.Frame):
 		'''
 
 		button = ttk.Button(self, text="FEM LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-FEM-LINE"))
-		button.grid(column=1, row=5)
+		button.grid(padx=[10,10], column=1, row=5)
 		button = ttk.Button(self, text="FEM LINE", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-FEM-LINE"))
-		button.grid(column=2, row=5)
+		button.grid(padx=[10,10], column=2, row=5)
 
 		
 		button = ttk.Button(self, text="P1", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-P1"))
-		button.grid(column=1, row=6)
+		button.grid(padx=[10,10], column=1, row=6)
 		button = ttk.Button(self, text="P1", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-P1"))
-		button.grid(column=2, row=6)
+		button.grid(padx=[10,10], column=2, row=6)
 
 		
 		button = ttk.Button(self, text="P2", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-P2"))
-		button.grid(column=1, row=7)
+		button.grid(padx=[10,10], column=1, row=7)
 		button = ttk.Button(self, text="P2", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-P2"))
-		button.grid(column=2, row=7)
+		button.grid(padx=[10,10], column=2, row=7)
 
 		button = ttk.Button(self, text="P3", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-P3"))
-		button.grid(column=1, row=8)
+		button.grid(padx=[10,10], column=1, row=8)
 		button = ttk.Button(self, text="P3", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-P3"))
-		button.grid(column=2, row=8)
+		button.grid(padx=[10,10], column=2, row=8)
 
 		
 	def setLabelText(self, label_text):

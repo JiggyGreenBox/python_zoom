@@ -24,10 +24,10 @@ class SA_Menu(tk.Frame):
 
 
 		button = ttk.Button(self, text="RIGHT", command=lambda: controller.menu_btn_click(self.obj_name, "SET-RIGHT"))
-		button.grid(column=1, row=3)
+		button.grid(padx=[10,10], column=1, row=3)
 
 		button = ttk.Button(self, text="LEFT", command=lambda: controller.menu_btn_click(self.obj_name, "SET-LEFT"))
-		button.grid(column=2, row=3)
+		button.grid(padx=[10,10], column=2, row=3)
 
 		
 
@@ -37,21 +37,21 @@ class SA_Menu(tk.Frame):
 
 
 		button = ttk.Button(self, text="P1", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-P1"))
-		button.grid(column=1, row=5)
+		button.grid(padx=[10,10], column=1, row=5)
 		button = ttk.Button(self, text="P1", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-P1"))
-		button.grid(column=2, row=5)
+		button.grid(padx=[10,10], column=2, row=5)
 
 		
 		button = ttk.Button(self, text="P2", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-P2"))
-		button.grid(column=1, row=6)
+		button.grid(padx=[10,10], column=1, row=6)
 		button = ttk.Button(self, text="P2", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-P2"))
-		button.grid(column=2, row=6)
+		button.grid(padx=[10,10], column=2, row=6)
 
 
 		button = ttk.Button(self, text="P3", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-RIGHT-P3"))
-		button.grid(column=1, row=7)
+		button.grid(padx=[10,10], column=1, row=7)
 		button = ttk.Button(self, text="P3", command=lambda: controller.menu_btn_click(self.obj_name, "DEL-LEFT-P3"))
-		button.grid(column=2, row=7)
+		button.grid(padx=[10,10], column=2, row=7)
 
 
 		label_cb = Checkbutton(self, text="LABELS", variable=self.label_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_LABEL", self.label_var))
