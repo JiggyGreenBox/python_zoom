@@ -213,9 +213,16 @@ class PatMeasurementsFrame(ttk.Frame):
 		# frame_lat.pack(side='bottom', anchor="sw")
 		# frame_sky.pack(side='bottom', anchor="se")
 
+		if platform == "darwin":
+			top_pad = 0
+		else:
+			top_pad = 20
+
 		# self.frame_scano.grid(row=0,column=0, rowspan=3)
-		self.frame_scano.grid(row=0,column=0, sticky="N", pady=(20,0))
-		self.frame_ap.grid(row=0,column=1, sticky="N", pady=(20,0))
+		# self.frame_scano.grid(row=0,column=0, sticky="N", pady=(20,0))
+		# self.frame_ap.grid(row=0,column=1, sticky="N", pady=(20,0))
+		self.frame_scano.grid(row=0,column=0, sticky="N", pady=(top_pad,0))
+		self.frame_ap.grid(row=0,column=1, sticky="N", pady=(top_pad,0))
 
 		self.img_stitch = ImageStitchFrame(self)
 		self.img_stitch.grid(sticky="W", row=1, column=0, padx=30, pady=0)

@@ -52,7 +52,7 @@ class MainWindow(ttk.Frame):
 		""" Initialize the main Frame """
 		ttk.Frame.__init__(self, master=mainframe)
 
-		self.app_version = "v0.7"
+		self.app_version = "v0.8"
 
 		self.master.title('Knee Software ' + self.app_version)
 		# self.master.geometry('800x600')  # size of the main window

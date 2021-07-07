@@ -114,20 +114,42 @@ class HKA():
 					'''
 
 					if side == "LEFT":						
-						angle = self.draw_tools.create_myAngle(ankle_m1, hka_point, hip, self.tag)
+						angle = self.draw_tools.getAnglePoints(ankle_m1, hka_point, hip)
+						m_text = '{0:.1f}'.format(angle)
+						# hka bugfix, impossible to recreate
+						if angle < 20:
+							angle = 180.0 - angle
+
+						elif angle > 180:
+							pre_angle = self.draw_tools.getAnglePoints(hip, hka_point, ankle_m1)
+							angle = 180 - pre_angle
+							m_text = '180 - {0:.1f} = {1:.1f}'.format(pre_angle, angle)
+						else:
+							angle = self.draw_tools.create_myAngle(ankle_m1, hka_point, hip, self.tag)
+
 					else:
-						angle = self.draw_tools.create_myAngle(hip, hka_point, ankle_m1, self.tag)
+						angle = self.draw_tools.getAnglePoints(hip, hka_point, ankle_m1)
+						m_text = '{0:.1f}'.format(angle)
+						# hka bugfix, impossible to recreate
+						if angle < 20:
+							angle = 180.0 - angle
+
+						elif angle > 180:
+							pre_angle = self.draw_tools.getAnglePoints(ankle_m1, hka_point, hip)
+							angle = 180 - pre_angle
+							m_text = '180 - {0:.1f} = {1:.1f}'.format(pre_angle, angle)
+						else:
+							angle = self.draw_tools.create_myAngle(hip, hka_point, ankle_m1, self.tag)
 					
 
-					# hka bugfix, impossible to recreate
-					if angle < 20:
-						angle = 180.0 - angle
+					
+					
 
 					# , radius = 50, width = 3):
 					# self.canvas.create_text(x-r,y+r,fill="orange", text='{0:.1f}'.format(t1), tags="tag")
 					
 					# self.draw_tools.create_mytext(self.dict["MAIN"][self.op_type][side]["KNEE"]["P1"], '{0:.1f}'.format(angle), self.tag, x_offset=60)
-					self.draw_tools.create_mytext(hka_point, '{0:.1f}'.format(angle), self.tag, x_offset=60, color="blue")
+					self.draw_tools.create_mytext(hka_point, m_text, self.tag, x_offset=60, color="blue")
 					
 
 
@@ -201,16 +223,38 @@ class HKA():
 
 				# draw angle
 				angle = ""
-				if side == "LEFT":						
-					# angle = self.draw_tools.create_myAngle(ankle_m1, hka_point, hip, self.tag)
-					angle = self.draw_tools.getAnglePoints(ankle_m1, hka_point, hip)
-				else:
-					# angle = self.draw_tools.create_myAngle(hip, hka_point, ankle_m1, self.tag)
-					angle = self.draw_tools.getAnglePoints(hip, hka_point, ankle_m1)
+				# if side == "LEFT":						
+				# 	# angle = self.draw_tools.create_myAngle(ankle_m1, hka_point, hip, self.tag)
+				# 	angle = self.draw_tools.getAnglePoints(ankle_m1, hka_point, hip)
+				# else:
+				# 	# angle = self.draw_tools.create_myAngle(hip, hka_point, ankle_m1, self.tag)
+				# 	angle = self.draw_tools.getAnglePoints(hip, hka_point, ankle_m1)
 				
-				# hka bugfix, impossible to recreate
-				if angle < 20:
-					angle = 180.0 - angle
+				# # hka bugfix, impossible to recreate
+				# if angle < 20:
+				# 	angle = 180.0 - angle
+
+
+				if side == "LEFT":						
+					angle = self.draw_tools.getAnglePoints(ankle_m1, hka_point, hip)					
+					# hka bugfix, impossible to recreate
+					if angle < 20:
+						angle = 180.0 - angle
+
+					elif angle > 180:
+						pre_angle = self.draw_tools.getAnglePoints(hip, hka_point, ankle_m1)
+						angle = 180.0 - pre_angle					
+
+				else:
+					angle = self.draw_tools.getAnglePoints(hip, hka_point, ankle_m1)					
+					# hka bugfix, impossible to recreate
+					if angle < 20:
+						angle = 180.0 - angle
+
+					elif angle > 180:
+						pre_angle = self.draw_tools.getAnglePoints(ankle_m1, hka_point, hip)
+						angle = 180.0 - pre_angle					
+
 
 				# check if value exists
 				if self.dict["EXCEL"][self.op_type][side]["HKA"] == None:
