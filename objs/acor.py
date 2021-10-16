@@ -27,6 +27,9 @@ class ACOR():
 		self.draw_labels = True
 		self.draw_hover = True
 
+		self.flip_left = False
+		self.flip_right = False
+
 	def click(self, event):
 		# print("click from "+self.name)
 		# self.draw()
@@ -75,13 +78,15 @@ class ACOR():
 														"GUIDE_FEM":	{"type":"guideline","P1":None,"P2":None},
 														"P1":			{"type":"point","P1":None},
 														"P2":			{"type":"point","P1":None},
-														"P3":			{"type":"point","P1":None}
+														"P3":			{"type":"point","P1":None},
+														"FLIP":			{"state": False}
 													},
 											"RIGHT":{
 														"GUIDE_FEM":	{"type":"guideline","P1":None,"P2":None},
 														"P1":			{"type":"point","P1":None},
 														"P2":			{"type":"point","P1":None},
-														"P3":			{"type":"point","P1":None}
+														"P3":			{"type":"point","P1":None},
+														"FLIP":			{"state": False}
 													}
 											},
 									"POST-OP":
@@ -90,13 +95,15 @@ class ACOR():
 														"GUIDE_FEM":	{"type":"guideline","P1":None,"P2":None},
 														"P1":			{"type":"point","P1":None},
 														"P2":			{"type":"point","P1":None},
-														"P3":			{"type":"point","P1":None}
+														"P3":			{"type":"point","P1":None},
+														"FLIP":			{"state": False}
 													},
 											"RIGHT":{
 														"GUIDE_FEM":	{"type":"guideline","P1":None,"P2":None},
 														"P1":			{"type":"point","P1":None},
 														"P2":			{"type":"point","P1":None},
-														"P3":			{"type":"point","P1":None}
+														"P3":			{"type":"point","P1":None},
+														"FLIP":			{"state": False}
 													}
 											}
 									}
@@ -125,7 +132,8 @@ class ACOR():
 
 			for item in self.dict["ACOR"][self.op_type][side]:
 				
-				
+				if item == "FLIP":
+					continue
 
 				item_type = self.dict["ACOR"][self.op_type][side][item]["type"]
 				# print(item_type)
@@ -186,7 +194,7 @@ class ACOR():
 							# print('acor_p2 {}',format(acor_p2))
 							# print('acor_p3 {}',format(acor_p3))
 
-							self.draw_tools.create_mytext(direction_ordered_points[0], y_offset=40, color="blue", mytext="P1", mytag=[self.tag, side, "P_label"])
+							self.draw_tools.create_mytext(direction_ordered_points[0], y_offset=40, color="green", mytext="P1", mytag=[self.tag, side, "P_label"])
 							self.draw_tools.create_mytext(direction_ordered_points[1], y_offset=40, color="blue", mytext="P2", mytag=[self.tag, side, "P_label"])
 							self.draw_tools.create_mytext(direction_ordered_points[2], y_offset=40, color="blue", mytext="P3", mytag=[self.tag, side, "P_label"])
 
@@ -216,6 +224,8 @@ class ACOR():
 							pcor_val = xp3_dist / p1p3_dist
 							print('pcor_val = {}'.format(pcor_val))
 
+							m_text = 'ACOR: {0:.1f} PCOR {1:.1f}'.format(acor_val, pcor_val)
+							self.draw_tools.create_mytext(direction_ordered_points[2], y_offset=50, color="blue", mytext=m_text, mytag=[self.tag, side, "P_label"])
 							# self.draw_tools.create_mytext(self.getAnchorPoint(side), y_offset=-50, color="blue", mytext='ACOR {}'.format(acor_val), mytag=[self.tag, side, "P_label"])
 							
 							
@@ -331,6 +341,20 @@ class ACOR():
 
 	def update_dict(self, master_dict):
 		self.dict = master_dict
+		self.checkFlippedState()
+
+
+	def checkFlippedState(self):
+		print('checkFlippedState')
+		if self.dict["ACOR"][self.op_type]["LEFT"]["FLIP"]["state"] == True:
+			print('flip_left')
+			self.flip_left = True
+			self.controller.obj_to_menu(self.menu_label, "flip_left", True)
+
+		if self.dict["ACOR"][self.op_type]["RIGHT"]["FLIP"]["state"] == True:
+			print('flip_right')
+			self.flip_right = True
+			self.controller.obj_to_menu(self.menu_label, "flip_right", True)
 
 
 
@@ -338,6 +362,10 @@ class ACOR():
 
 		if self.side != None:
 			for item in self.dict["ACOR"][self.op_type][self.side]:
+
+				if item == "FLIP":
+					continue
+
 				# get item type 
 				item_type = self.dict["ACOR"][self.op_type][self.side][item]["type"]
 
@@ -647,7 +675,12 @@ class ACOR():
 		if len(temp) == 1:
 			ret_list[1] = temp[0]
 
-		if side == "LEFT":
+		# if RIGHT and flip true, flip
+		# if LEFT and flip false, flip
+
+		if side == "LEFT" and not self.flip_left:
+			ret_list = ret_list[::-1]
+		elif side == "RIGHT" and self.flip_right:
 			ret_list = ret_list[::-1]
 
 		return ret_list
@@ -797,4 +830,41 @@ class ACOR():
 		pass
 	def drag_stop(self, P_mouse):
 		self.draw()
+
+
+	def checkbox_click(self,action, val):
+
+		print('checkbox {} val{}'.format(action,val.get()))
+
+		if action == "FLIP_RIGHT":
+			if val.get() == 0:
+				self.flip_right = False
+				self.dict["ACOR"][self.op_type]["RIGHT"]["FLIP"]["state"] = False
+				self.dict["EXCEL"][self.op_type]["RIGHT"]["ACOR"] = None
+				self.dict["EXCEL"][self.op_type]["RIGHT"]["PCOR"] = None
+				self.controller.save_json()
+			elif val.get() == 1:
+				self.flip_right = True
+				print(self.dict["ACOR"][self.op_type]["RIGHT"]["FLIP"])
+				self.dict["ACOR"][self.op_type]["RIGHT"]["FLIP"]["state"] = True
+				self.dict["EXCEL"][self.op_type]["RIGHT"]["ACOR"] = None
+				self.dict["EXCEL"][self.op_type]["RIGHT"]["PCOR"] = None
+				self.controller.save_json()
+			self.draw()
+
+		if action == "FLIP_LEFT":
+			if val.get() == 0:
+				self.flip_left = False
+				self.dict["ACOR"][self.op_type]["LEFT"]["FLIP"]["state"] = False
+				self.dict["EXCEL"][self.op_type]["LEFT"]["ACOR"] = None
+				self.dict["EXCEL"][self.op_type]["LEFT"]["PCOR"] = None
+				self.controller.save_json()
+			elif val.get() == 1:
+				self.flip_left = True
+				print(self.dict["ACOR"][self.op_type]["LEFT"]["FLIP"])
+				self.dict["ACOR"][self.op_type]["LEFT"]["FLIP"]["state"] = True
+				self.dict["EXCEL"][self.op_type]["LEFT"]["ACOR"] = None
+				self.dict["EXCEL"][self.op_type]["LEFT"]["PCOR"] = None
+				self.controller.save_json()
+			self.draw()
 

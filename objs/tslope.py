@@ -27,6 +27,9 @@ class TSLOPE():
 		self.draw_labels = True
 		self.draw_hover = True
 
+		self.flip_left = False
+		self.flip_right = False
+
 	def click(self, event):
 		# print("click from "+self.name)
 		# self.draw()
@@ -251,12 +254,20 @@ class TSLOPE():
 
 					# find and draw angles
 					if side == "LEFT":
-						angle = self.draw_tools.create_myAngle(D_m1, p_int, L_p1, [self.tag, "TSLOPE_angle"],radius=30)
-						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, color="blue", x_offset=-60, y_offset=60)
+						if self.flip_left:
+							angle = self.draw_tools.create_myAngle(R_p1, p_int, D_m1, [self.tag, "TSLOPE_angle"],radius=30)
+							self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, color="blue", x_offset=-60, y_offset=60)
+						else:
+							angle = self.draw_tools.create_myAngle(D_m1, p_int, L_p1, [self.tag, "TSLOPE_angle"],radius=30)
+							self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, color="blue", x_offset=-60, y_offset=60)
 
 					if side == "RIGHT":
-						angle = self.draw_tools.create_myAngle(R_p1, p_int, D_m1, [self.tag, "TSLOPE_angle"],radius=30)
-						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, color="blue", x_offset=60, y_offset=60)
+						if self.flip_right:
+							angle = self.draw_tools.create_myAngle(D_m1, p_int, L_p1, [self.tag, "TSLOPE_angle"],radius=30)
+							self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, color="blue", x_offset=60, y_offset=60)
+						else:							
+							angle = self.draw_tools.create_myAngle(R_p1, p_int, D_m1, [self.tag, "TSLOPE_angle"],radius=30)
+							self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(angle), self.tag, color="blue", x_offset=60, y_offset=60)
 
 
 					# check if value exists
@@ -281,18 +292,22 @@ class TSLOPE():
 					C[1] = p_int[1] + dy
 
 					tflexext_angle = -1
+					print('{0:.1f}'.format(angle))
+					tflexext_angle = abs(90 - angle)
+					print('{0:.1f}'.format(tflexext_angle))
+					self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(tflexext_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
 
-					if side == "RIGHT":
-						R_perpend_border = self.draw_tools.line_intersection((C, p_int), (ytop, ybot))
-						tflexext_angle = self.draw_tools.getSmallestAngle(R_perpend_border, p_int, R_p1)
-						print('RIGHT: {0:.1f}'.format(tflexext_angle))
-						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(tflexext_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
+					# if side == "RIGHT":
+					# 	R_perpend_border = self.draw_tools.line_intersection((C, p_int), (ytop, ybot))
+					# 	tflexext_angle = self.draw_tools.getSmallestAngle(R_perpend_border, p_int, R_p1)
+					# 	print('RIGHT: {0:.1f}'.format(tflexext_angle))
+					# 	self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(tflexext_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
 
-					if side == "LEFT":
-						L_perpend_border = self.draw_tools.line_intersection((C, p_int), (xtop, xbot))
-						tflexext_angle = self.draw_tools.getSmallestAngle(L_p1, p_int, L_perpend_border)
-						print('LEFT: {0:.1f}'.format(tflexext_angle))
-						self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(tflexext_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
+					# if side == "LEFT":
+					# 	L_perpend_border = self.draw_tools.line_intersection((C, p_int), (xtop, xbot))
+					# 	tflexext_angle = self.draw_tools.getSmallestAngle(L_p1, p_int, L_perpend_border)
+					# 	print('LEFT: {0:.1f}'.format(tflexext_angle))
+					# 	self.draw_tools.create_mytext(p_int, '{0:.1f}'.format(tflexext_angle), self.tag, color="blue", x_offset=60, y_offset=-80)
 
 					# save TFLE/EXT to excel
 					if tflexext_angle != -1:							
@@ -312,7 +327,8 @@ class TSLOPE():
 																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
 																		},
-															"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None}
+															"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None},
+															"FLIP":			{"state": False}
 														},
 												"RIGHT":	{
 															"AXIS_TIB":	{
@@ -320,7 +336,8 @@ class TSLOPE():
 																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
 																		},
-															"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None}
+															"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None},
+															"FLIP":			{"state": False}
 														}
 												},
 
@@ -331,7 +348,8 @@ class TSLOPE():
 																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
 																		},
-															"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None}
+															"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None},
+															"FLIP":			{"state": False}
 														},
 												"RIGHT":	{
 															"AXIS_TIB":	{
@@ -339,7 +357,8 @@ class TSLOPE():
 																			"TOP":	{"type":"midpoint","P1":None,"P2":None, "M1":None},
 																			"BOT":	{"type":"midpoint","P1":None,"P2":None, "M1":None}
 																		},
-															"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None}
+															"TIB_JOINT_LINE":	{"type":"line","P1":None,"P2":None},
+															"FLIP":			{"state": False}
 														}
 												}
 									}
@@ -348,6 +367,9 @@ class TSLOPE():
 	def addDict(self, event):
 
 		for item in self.dict["TSLOPE"][self.op_type][self.side]:
+
+			if item == "FLIP":
+				continue
 
 			# get item type 
 			item_type = self.dict["TSLOPE"][self.op_type][self.side][item]["type"]
@@ -422,6 +444,10 @@ class TSLOPE():
 
 		if self.side != None:
 			for item in self.dict["TSLOPE"][self.op_type][self.side]:
+
+				if item == "FLIP":
+					continue
+
 				# get item type 
 				item_type = self.dict["TSLOPE"][self.op_type][self.side][item]["type"]
 
@@ -471,6 +497,21 @@ class TSLOPE():
 
 	def update_canvas(self, draw_tools):
 		self.draw_tools = draw_tools
+		self.checkFlippedState()
+
+
+	def checkFlippedState(self):
+		print('checkFlippedState')
+		if self.dict["TSLOPE"][self.op_type]["LEFT"]["FLIP"]["state"] == True:
+			print('flip_left')
+			self.flip_left = True
+			self.controller.obj_to_menu(self.menu_label, "flip_left", True)
+
+		if self.dict["TSLOPE"][self.op_type]["RIGHT"]["FLIP"]["state"] == True:
+			print('flip_right')
+			self.flip_right = True
+			self.controller.obj_to_menu(self.menu_label, "flip_right", True)
+
 
 	def hover(self, P_mouse, P_stored, hover_label):
 
@@ -785,6 +826,33 @@ class TSLOPE():
 			elif val.get() == 1:
 				self.draw_hover = True
 			self.draw()	
+
+
+		if action == "FLIP_RIGHT":
+			if val.get() == 0:
+				self.flip_right = False
+				self.dict["TSLOPE"][self.op_type]["RIGHT"]["FLIP"]["state"] = False
+				self.dict["EXCEL"][self.op_type]["RIGHT"]["TSLOPE"] = None				
+				self.controller.save_json()
+			elif val.get() == 1:
+				self.flip_right = True				
+				self.dict["TSLOPE"][self.op_type]["RIGHT"]["FLIP"]["state"] = True
+				self.dict["EXCEL"][self.op_type]["RIGHT"]["TSLOPE"] = None
+				self.controller.save_json()
+			self.draw()
+
+		if action == "FLIP_LEFT":
+			if val.get() == 0:
+				self.flip_left = False
+				self.dict["TSLOPE"][self.op_type]["LEFT"]["FLIP"]["state"] = False
+				self.dict["EXCEL"][self.op_type]["LEFT"]["TSLOPE"] = None				
+				self.controller.save_json()
+			elif val.get() == 1:
+				self.flip_left = True				
+				self.dict["TSLOPE"][self.op_type]["LEFT"]["FLIP"]["state"] = True
+				self.dict["EXCEL"][self.op_type]["LEFT"]["TSLOPE"] = None
+				self.controller.save_json()
+			self.draw()
 
 
 	def escapeObjFunc(self):

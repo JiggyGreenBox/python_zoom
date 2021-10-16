@@ -17,6 +17,10 @@ class TSLOPE_Menu(tk.Frame):
 
 		self.label_var = IntVar(value=1)
 		self.hover_var = IntVar(value=1)
+
+		self.flip_left = IntVar(value=0)
+		self.flip_right = IntVar(value=0)
+
 		# self.tflexext = IntVar(value=0)
 
 		header_label = tk.Label(self, text=self.obj_name,font=("TkDefaultFont",20))
@@ -69,6 +73,12 @@ class TSLOPE_Menu(tk.Frame):
 			hover_cb = Checkbutton(self, text="HOVER", variable=self.hover_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_HOVER", self.hover_var))
 			hover_cb.grid(padx=[5,0], pady=[10,0], sticky="W", column=2, row=8)
 
+			flip_r_cb = Checkbutton(self, text="FLIP", variable=self.flip_right,command=lambda: controller.checkbox_click(self.obj_name, "FLIP_RIGHT", self.flip_right))
+			flip_r_cb.grid(padx=[5,0], pady=[10,0], sticky="W", column=1, row=9)
+
+			flip_l_cb = Checkbutton(self, text="FLIP", variable=self.flip_left,command=lambda: controller.checkbox_click(self.obj_name, "FLIP_LEFT", self.flip_left))
+			flip_l_cb.grid(padx=[5,0], pady=[10,0], sticky="W", column=2, row=9)
+
 		else:
 
 
@@ -111,6 +121,12 @@ class TSLOPE_Menu(tk.Frame):
 			hover_cb = Checkbutton(self, text="HOVER", variable=self.hover_var,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_HOVER", self.hover_var))
 			hover_cb.grid(padx=[5,0], pady=[10,0], sticky="W", column=2, row=8)
 
+			flip_r_cb = Checkbutton(self, text="FLIP", variable=self.flip_right,command=lambda: controller.checkbox_click(self.obj_name, "FLIP_RIGHT", self.flip_right))
+			flip_r_cb.grid(padx=[5,0], pady=[10,0], sticky="W", column=1, row=9)
+
+			flip_l_cb = Checkbutton(self, text="FLIP", variable=self.flip_left,command=lambda: controller.checkbox_click(self.obj_name, "FLIP_LEFT", self.flip_left))
+			flip_l_cb.grid(padx=[5,0], pady=[10,0], sticky="W", column=2, row=9)
+
 
 		# anat_axis_cb = Checkbutton(self, text="T-FLEX/EXT", variable=self.tflexext,command=lambda: controller.checkbox_click(self.obj_name, "TOGGLE_TFLEXEXT", self.tflexext))
 		# anat_axis_cb.grid(sticky="W", column=1, row=8)
@@ -118,3 +134,13 @@ class TSLOPE_Menu(tk.Frame):
 
 	def setLabelText(self, label_text):
 		self.label.config(text=label_text)
+
+
+	def obj_to_menu(self, key, val):
+		print('key: {} : val:{}'.format(key,val))
+
+		if key == "flip_left":
+			self.flip_left.set(1)
+
+		if key == "flip_right":
+			self.flip_right.set(1)

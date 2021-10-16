@@ -204,6 +204,12 @@ class PRE_LAT_View(tk.Frame):
 		'''Set label text for user instructions'''
 		self.menus[menu_obj].setLabelText(label_text)
 
+	def obj_to_menu(self, menu_name, key, val):
+		'''update menu from object'''		
+		try:
+			self.menus[menu_name].obj_to_menu(key, val)
+		except Exception as e:
+			print(e)
 
 	def unsetObjs(self, obj_name):
 		'''Reset variable for inactive objects'''

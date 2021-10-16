@@ -69,3 +69,6 @@ PYTHON_CONFIGURE_OPTS="--with-tcltk-includes='-I$(brew --prefix tcl-tk)/include'
 pyenv install 3.9.1
 
 
+
+murtaza anydesk id
+	

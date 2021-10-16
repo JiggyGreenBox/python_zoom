@@ -55,6 +55,9 @@ class VANG():
 
 			ankle_m1 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["M1"]
 
+			if tib_U3_m1 != None and tib_L3_m1 != None:
+				tib_U3_m1, tib_L3_m1 = self.draw_tools.retPointsUpDown(tib_U3_m1, tib_L3_m1)
+
 			# TIB AXIS
 			# U3
 			if tib_U3_p1 != None:
@@ -196,6 +199,9 @@ class VANG():
 			tib_L3_p1 = self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["L3"]["P1"]
 			tib_L3_p2 = self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["L3"]["P2"]
 			tib_L3_m1 = self.dict["MAIN"][self.op_type][side]["AXIS_TIB"]["L3"]["M1"]
+
+			if tib_U3_m1 != None and tib_L3_m1 != None:
+				tib_U3_m1, tib_L3_m1 = self.draw_tools.retPointsUpDown(tib_U3_m1, tib_L3_m1)
 
 			tib_knee 	= self.dict["MAIN"][self.op_type][side]["TIB_KNEE"]["P1"]
 

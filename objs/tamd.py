@@ -94,6 +94,9 @@ class TAMD():
 			ankle_p2 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]
 			ankle_m1 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["M1"]
 
+			if top_m1 != None and bot_m1 != None:
+				top_m1, bot_m1 =  self.draw_tools.retPointsUpDown(top_m1, bot_m1)
+
 
 			# # ------------------------
 			# # FROM TAMD
@@ -171,6 +174,9 @@ class TAMD():
 
 
 				p_int = self.draw_tools.line_intersection((bot_m1, top_m1),(tib_knee, ankle_m1))
+
+
+				# self.draw_tools.create_myAngle(top_m1, p_int, tib_knee,[self.tag,side])
 
 				angle = self.draw_tools.getSmallestAngle(top_m1, p_int, tib_knee)
 				angle2 = self.draw_tools.getAnglePoints(top_m1, p_int, tib_knee)
@@ -294,8 +300,8 @@ class TAMD():
 			ankle_p2 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["P2"]
 			ankle_m1 	= self.dict["MAIN"][self.op_type][side]["ANKLE"]["M1"]
 
-
-			
+			if top_m1 != None and bot_m1 != None:
+				top_m1, bot_m1 =  self.draw_tools.retPointsUpDown(top_m1, bot_m1)
 
 
 

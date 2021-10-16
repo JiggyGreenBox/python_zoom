@@ -16,7 +16,7 @@ import os
 # stitch images
 import sys
 # from PIL import Image
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageOps
 
 # date entry
 # from tkcalendar import Calendar, DateEntry
@@ -1479,6 +1479,9 @@ class ImageStitchFrame(ttk.Frame):
 		rot_im1 = ttk.Button(self.btn_holder, text="ROT 1", command=lambda: self.logic_rotate_image("IM1"))
 		rot_im2 = ttk.Button(self.btn_holder, text="ROT 2", command=lambda: self.logic_rotate_image("IM2"))
 
+		mir_im1 = ttk.Button(self.btn_holder, text="MIR 1", command=lambda: self.mirror_image("IM1"))
+		mir_im2 = ttk.Button(self.btn_holder, text="MIR 2", command=lambda: self.mirror_image("IM2"))
+
 
 		self.stitch_file_name = ttk.Entry(self.btn_holder, width=25)
 
@@ -1490,13 +1493,16 @@ class ImageStitchFrame(ttk.Frame):
 		set_im2.grid(sticky="NW", row=0, column=1, padx=(2,0), pady=(1,0))
 		rot_im1.grid(sticky="NW", row=1, column=0, padx=(2,0), pady=(3,0))
 		rot_im2.grid(sticky="NW", row=1, column=1, padx=(2,0), pady=(3,0))
+		mir_im1.grid(sticky="NW", row=2, column=0, padx=(2,0), pady=(3,0))
+		mir_im2.grid(sticky="NW", row=2, column=1, padx=(2,0), pady=(3,0))
 
-		tk.Label(self.btn_holder, text="Image Name:").grid(sticky="NW", row=2, column=0, padx=(2,0), columnspan=2, pady=(6,0))
-		self.stitch_file_name.grid(sticky="NW", row=3, column=0, padx=(2,0), columnspan=2, pady=(2,0))
+
+		tk.Label(self.btn_holder, text="Image Name:").grid(sticky="NW", row=3, column=0, padx=(2,0), columnspan=2, pady=(6,0))
+		self.stitch_file_name.grid(sticky="NW", row=4, column=0, padx=(2,0), columnspan=2, pady=(2,0))
 
 
-		save_im.grid(sticky="NW", row=4, column=0, padx=(2,0), pady=(8,0))
-		clear_im.grid(sticky="NW", row=4, column=1, padx=(2,0), pady=(8,0))
+		save_im.grid(sticky="NW", row=5, column=0, padx=(2,0), pady=(8,0))
+		clear_im.grid(sticky="NW", row=5, column=1, padx=(2,0), pady=(8,0))
 
 	def setController(self, controller):
 		self.controller = controller
@@ -1567,6 +1573,33 @@ class ImageStitchFrame(ttk.Frame):
 					# rotate image join and display
 					self.im2 = self.rotate_img(self.im2, 90)
 					self.setFrameImage(self.joinImages(self.im1, self.im2))
+
+	def mirror_image(self, imtype):
+		if self.controller != None:
+			
+			if imtype == "IM1" and self.im1_path != None:
+
+				# rotate image only
+				if self.im2_path == None:
+					self.im1 = ImageOps.mirror(self.im1)
+					self.setFrameImage(self.im1)
+				else:
+					# rotate image and join
+					self.im1 = ImageOps.mirror(self.im1)
+					self.setFrameImage(self.joinImages(self.im1, self.im2))
+
+			elif imtype == "IM2" and self.im2_path != None:
+				# rotate image only
+				if self.im1_path == None:
+					self.im2 = ImageOps.mirror(self.im2)
+					self.setFrameImage(self.im2)			
+				else:
+					# rotate image join and display
+					self.im2 = ImageOps.mirror(self.im2)
+					self.setFrameImage(self.joinImages(self.im1, self.im2))
+
+
+				
 
 	def clear_images(self):
 		self.im1_path = None

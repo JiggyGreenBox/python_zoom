@@ -120,7 +120,9 @@ class HKA():
 						if angle < 20:
 							angle = 180.0 - angle
 
-						elif angle > 180:
+						# angle = self.draw_tools.create_myAngle(ankle_m1, hka_point, hip, self.tag)
+
+						elif angle > 270:
 							pre_angle = self.draw_tools.getAnglePoints(hip, hka_point, ankle_m1)
 							angle = 180 - pre_angle
 							m_text = '180 - {0:.1f} = {1:.1f}'.format(pre_angle, angle)
@@ -134,12 +136,13 @@ class HKA():
 						if angle < 20:
 							angle = 180.0 - angle
 
-						elif angle > 180:
+						elif angle > 270:
 							pre_angle = self.draw_tools.getAnglePoints(ankle_m1, hka_point, hip)
 							angle = 180 - pre_angle
 							m_text = '180 - {0:.1f} = {1:.1f}'.format(pre_angle, angle)
 						else:
 							angle = self.draw_tools.create_myAngle(hip, hka_point, ankle_m1, self.tag)
+						# angle = self.draw_tools.create_myAngle(hip, hka_point, ankle_m1, self.tag)
 					
 
 					
@@ -241,7 +244,7 @@ class HKA():
 					if angle < 20:
 						angle = 180.0 - angle
 
-					elif angle > 180:
+					elif angle > 270:
 						pre_angle = self.draw_tools.getAnglePoints(hip, hka_point, ankle_m1)
 						angle = 180.0 - pre_angle					
 
@@ -251,9 +254,9 @@ class HKA():
 					if angle < 20:
 						angle = 180.0 - angle
 
-					elif angle > 180:
+					elif angle > 270:
 						pre_angle = self.draw_tools.getAnglePoints(ankle_m1, hka_point, hip)
-						angle = 180.0 - pre_angle					
+						angle = 180.0 - pre_angle		
 
 
 				# check if value exists
