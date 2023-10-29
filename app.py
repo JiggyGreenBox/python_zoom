@@ -176,6 +176,8 @@ class MainWindow(ttk.Frame):
 
 					with open(my_file) as f:
 						d = json.load(f)
+
+						self.migrate_ancient_pat_json(d)
 						self.master_dict = d
 						# print(d)
 
@@ -1033,8 +1035,10 @@ class MainWindow(ttk.Frame):
 				writer=pd.ExcelWriter(excel_file, engine='openpyxl')				
 				# df.to_excel(excel_file, index=False)
 				df.to_excel(writer, sheet_name='Sheet1', index=False)
-				writer.save()
+				#writer.save() #deprecated function save, use close instead
+				writer.close()
 		except Exception as e:
+			print(e)
 			self.warningBox("Please close excel file and try again")			
 			logger.exception("Please close excel file and try again")
 			# raise e
@@ -1094,6 +1098,47 @@ class MainWindow(ttk.Frame):
 		except Exception as e:
 			raise e
 			
+	# migrate ancient pat.json files
+	# we have changed TOP and BOT to U3 and L3 in MAIN -> Pre/Post Op -> LEFT/RIGHT -> AXIS_ TIB/FEM 
+	def migrate_ancient_pat_json(self, master_dict):
+		for op_type in ["PRE-OP", "POST-OP"]:
+			for side in ["LEFT", "RIGHT"]:
+
+				try:
+					axis_fem_top_dict = master_dict["MAIN"][op_type][side]["AXIS_FEM"]["TOP"]
+					axis_fem_bot_dict = master_dict["MAIN"][op_type][side]["AXIS_FEM"]["BOT"]
+
+					axis_tib_top_dict = master_dict["MAIN"][op_type][side]["AXIS_TIB"]["TOP"]
+					axis_tibbot_dict = master_dict["MAIN"][op_type][side]["AXIS_TIB"]["BOT"]
+
+
+					neck_axis_dict = master_dict["MAIN"][op_type][side]["NECK_AXIS"]
+
+
+					
+
+
+					master_dict["MAIN"][op_type][side]["AXIS_FEM"]["U3"] = axis_fem_top_dict
+					master_dict["MAIN"][op_type][side]["AXIS_FEM"]["L3"] = axis_fem_bot_dict
+
+					master_dict["MAIN"][op_type][side]["AXIS_TIB"]["U3"] = axis_tib_top_dict
+					master_dict["MAIN"][op_type][side]["AXIS_TIB"]["L3"] = axis_tibbot_dict
+
+					master_dict["MAIN"][op_type][side]["FEM_NECK"] = neck_axis_dict
+
+
+					master_dict["EXCEL"][op_type][side]["JCA"] = None
+					master_dict["EXCEL"][op_type][side]["LPFA"] = None
+					master_dict["EXCEL"][op_type][side]["MPFA"] = None
+					master_dict["EXCEL"][op_type][side]["LDTA"] = None
+					master_dict["EXCEL"][op_type][side]["ANKLE_SLOPE"] = None
+					master_dict["EXCEL"][op_type][side]["pMA"] = None
+					master_dict["EXCEL"][op_type][side]["VANG"] = None
+
+
+				except KeyError:
+					pass
+
 
 
 logger.info('start')
