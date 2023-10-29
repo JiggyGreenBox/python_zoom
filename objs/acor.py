@@ -346,15 +346,47 @@ class ACOR():
 
 	def checkFlippedState(self):
 		print('checkFlippedState')
-		if self.dict["ACOR"][self.op_type]["LEFT"]["FLIP"]["state"] == True:
-			print('flip_left')
+
+
+		try:
+			if self.dict["ACOR"][self.op_type]["LEFT"]["FLIP"]["state"] == True:
+				print('flip_left')
+				self.flip_left = True
+				self.controller.obj_to_menu(self.menu_label, "flip_left", True)
+		except KeyError:
+
+			flip_dict = {"state": False}
+			self.dict["ACOR"][self.op_type]["LEFT"]["FLIP"] = flip_dict
 			self.flip_left = True
 			self.controller.obj_to_menu(self.menu_label, "flip_left", True)
+			self.controller.save_json()
 
-		if self.dict["ACOR"][self.op_type]["RIGHT"]["FLIP"]["state"] == True:
+
+
+		try:
+			if self.dict["ACOR"][self.op_type]["RIGHT"]["FLIP"]["state"] == True:
+				print('flip_right')
+				self.flip_right = True
+				self.controller.obj_to_menu(self.menu_label, "flip_right", True)
+		except KeyError:
+			flip_dict = {"state": False}
+			self.dict["ACOR"][self.op_type]["RIGHT"]["FLIP"] = flip_dict
 			print('flip_right')
-			self.flip_right = True
-			self.controller.obj_to_menu(self.menu_label, "flip_right", True)
+			self.flip_right = False
+			self.controller.obj_to_menu(self.menu_label, "flip_right", False)
+			self.controller.save_json()
+
+			
+
+		# if self.dict["ACOR"][self.op_type]["LEFT"]["FLIP"]["state"] == True:
+		# 	print('flip_left')
+		# 	self.flip_left = True
+		# 	self.controller.obj_to_menu(self.menu_label, "flip_left", True)
+
+		# if self.dict["ACOR"][self.op_type]["RIGHT"]["FLIP"]["state"] == True:
+		# 	print('flip_right')
+		# 	self.flip_right = True
+		# 	self.controller.obj_to_menu(self.menu_label, "flip_right", True)
 
 
 

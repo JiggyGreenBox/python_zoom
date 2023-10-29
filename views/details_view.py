@@ -525,12 +525,36 @@ class PatDetailsFrame(ttk.Frame):
 		lname 	= self.master_dict["DETAILS"]["L_NAME"]
 		age 	= self.master_dict["DETAILS"]["AGE"]
 		sex 	= self.master_dict["DETAILS"]["SEX"]
-		r_kl 	= self.master_dict["DETAILS"]["R_KL_GRADE"]
-		l_kl 	= self.master_dict["DETAILS"]["L_KL_GRADE"]
-		r_pros 	= self.master_dict["DETAILS"]["R_PROS"]
-		l_pros 	= self.master_dict["DETAILS"]["L_PROS"]
-		r_sx 	= self.master_dict["DETAILS"]["R_SX_DATE"]
-		l_sx 	= self.master_dict["DETAILS"]["L_SX_DATE"]
+
+
+		# for old migrations
+		try:
+			r_kl 	= self.master_dict["DETAILS"]["R_KL_GRADE"]
+			l_kl 	= self.master_dict["DETAILS"]["L_KL_GRADE"]
+			r_pros 	= self.master_dict["DETAILS"]["R_PROS"]
+			l_pros 	= self.master_dict["DETAILS"]["L_PROS"]
+			r_sx 	= self.master_dict["DETAILS"]["R_SX_DATE"]
+			l_sx 	= self.master_dict["DETAILS"]["L_SX_DATE"]
+		except KeyError:
+			self.master_dict["DETAILS"]["R_KL_GRADE"] = None
+			self.master_dict["DETAILS"]["L_KL_GRADE"]  = None
+			self.master_dict["DETAILS"]["R_PROS"]  = None
+			self.master_dict["DETAILS"]["L_PROS"]  = None
+			self.master_dict["DETAILS"]["R_SX_DATE"]  = None
+			self.master_dict["DETAILS"]["L_SX_DATE"]  = None
+
+			self.parent.controller.save_json()
+
+			# is this neccessary?
+			r_kl 	= self.master_dict["DETAILS"]["R_KL_GRADE"]
+			l_kl 	= self.master_dict["DETAILS"]["L_KL_GRADE"]
+			r_pros 	= self.master_dict["DETAILS"]["R_PROS"]
+			l_pros 	= self.master_dict["DETAILS"]["L_PROS"]
+			r_sx 	= self.master_dict["DETAILS"]["R_SX_DATE"]
+			l_sx 	= self.master_dict["DETAILS"]["L_SX_DATE"]
+
+
+
 
 		if fname != None:
 			self.sv_fname.set(fname)
